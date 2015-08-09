@@ -1,11 +1,11 @@
 'use strict';
 
-var ByteUtils = require('../lib/utils/byte-utils');
+var ByteUtils = require('../../lib/utils/byte-utils');
 
 var res = {};
 
-try { res.sample = require('base64!../resources/sample.kdbx'); }
-catch (e) { res.sample = readNodeFile('../resources/sample.kdbx'); }
+try { res.sample = require('base64!../../resources/sample.kdbx'); }
+catch (e) { res.sample = readNodeFile('../../resources/sample.kdbx'); }
 
 for (var file in res) {
     if (res.hasOwnProperty(file)) {

@@ -2,7 +2,7 @@
 
 var expect = require('expect.js'),
     kdbxweb = require('../../lib/index'),
-    TestResources = require('../test-resources');
+    TestResources = require('../test-support/test-resources');
 
 describe('Kdbx', function () {
     it('should load simple file', function () {
