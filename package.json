@@ -1,0 +1,52 @@
+{
+  "name": "kdbxweb",
+  "version": "0.0.1",
+  "description": "Kdbx KeePass database reader for web",
+  "repository": "https://github.com/antelle/kdbxweb.git",
+  "main": "dist/kdbxweb.js",
+  "scripts": {
+    "postinstall": "cd node_modules/asmcrypto.js && npm install && grunt --with=utils,aes-cbc,aes-ecb,sha256",
+    "test": "npm run tests:cover",
+    "start": "npm run build",
+    "build": "npm run clean && npm run tests:cover && npm run pack:tests && npm run pack:dist-pro",
+    "build:debug": "npm run clean && npm run tests:cover && npm run pack:tests && npm run pack:dist-debug",
+    "clean": "rimraf dist",
+    "pack:dist-pro": "webpack --progress --colors --config build/config/webpack.config.js",
+    "pack:dist-debug": "webpack --progress --colors --debug --devtool source-map --output-pathinfo --config build/config/webpack.config.js",
+    "pack:tests": "webpack --progress --colors --config build/config/webpack.tests.config.js",
+    "tests:plain": "mocha -- --recursive -R spec",
+    "tests:cover": "istanbul cover _mocha -- --recursive -R spec"
+  },
+  "keywords": [
+    "kdbx",
+    "keepass"
+  ],
+  "author": "Antelle",
+  "license": "MIT",
+  "devDependencies": {
+    "arraybuffer-slice": "^0.1.2",
+    "expect.js": "^0.3.1",
+    "fs-walk": "0.0.1",
+    "istanbul": "^0.3.17",
+    "jshint": "^2.8.0",
+    "jshint-loader": "^0.8.3",
+    "mocha": "^2.2.5",
+    "rimraf": "^2.4.2",
+    "uglify-loader": "^1.2.0",
+    "webpack": "^1.11.0"
+  },
+  "dependencies": {
+    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix",
+    "pako": "^0.2.7",
+    "xmldom": "^0.1.19"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "lib",
+      "data-cover-never": [
+        "node_modules",
+        "test"
+      ]
+    }
+  }
+}

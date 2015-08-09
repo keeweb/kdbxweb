@@ -1,0 +1,26 @@
+{
+  "name": "kdbxweb",
+  "description": "Kdbx KeePass database reader for web",
+  "version": "0.0.1",
+  "authors": [
+    "Antelle <dmitryvit@gmail.com>"
+  ],
+  "main": "read-kdbx.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "kdbx",
+    "keepass"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}

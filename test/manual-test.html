@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>kdbxweb Manual Tests</title>
+    <script src="../dist/kdbxweb.js"></script>
+</head>
+<body>
+<input type="file" id="f" />
+<pre id="res"></pre>
+<script>
+    var res = document.getElementById('res');
+    function handleFileSelect(evt) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            res.innerHTML = 'working...\n';
+            var start = performance.now();
+            try {
+                window.db = Kdbx.load(e.target.result, 'demo');
+                res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db:\n';
+                res.innerHTML += JSON.stringify(db, null, 2) + '\n';
+            } catch (e) {
+                res.innerHTML += 'error: ' + e + ', ' + (performance.now() - start) + 'ms\n';
+            }
+        };
+        reader.readAsArrayBuffer(evt.target.files[0]);
+    }
+    document.getElementById('f').addEventListener('change', handleFileSelect, false);
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+workspace.xml
+.DS_Store
+node_modules/
+build/
+dist/
+coverage/
+*.log
