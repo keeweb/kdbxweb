@@ -9,6 +9,7 @@ describe('Kdbx', function () {
         var db = kdbxweb.Kdbx.load(TestResources.sample,
             new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')));
         expect(db).to.be.a(kdbxweb.Kdbx);
+        db.save();
     });
 
     it('generates error for bad arguments', function () {

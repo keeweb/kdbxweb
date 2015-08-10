@@ -48,4 +48,22 @@ describe('ProtectedValue', function() {
         var value = ProtectedValue.fromBinary(ByteUtils.stringToBytes('test'));
         expect(value.getText()).to.be('test');
     });
+
+    it('returns byte length', function() {
+        var value = ProtectedValue.fromBinary(ByteUtils.stringToBytes('test'));
+        expect(value.byteLength).to.be(4);
+    });
+
+    it('can change salt', function() {
+        var value = ProtectedValue.fromString('test');
+        expect(value.getText()).to.be('test');
+        value.setSalt(new Uint8Array([1,2,3,4]).buffer);
+        expect(value.getText()).to.be('test');
+    });
+
+    it('returns protected value as base64 string', function() {
+        var value = ProtectedValue.fromBinary(ByteUtils.stringToBytes('test'));
+        value.setSalt(new Uint8Array([1,2,3,4]).buffer);
+        expect(value.toString()).to.be('dWdwcA==');
+    });
 });
