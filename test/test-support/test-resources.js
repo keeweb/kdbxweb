@@ -10,7 +10,7 @@ catch (e) { res.sample = readNodeFile('../../resources/sample.kdbx'); }
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];
-        res[file] = ByteUtils.base64ToBytes(content).buffer;
+        res[file] = ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(content));
     }
 }
 

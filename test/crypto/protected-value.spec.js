@@ -2,7 +2,8 @@
 
 var expect = require('expect.js'),
     ProtectedValue = require('../../lib/crypto/protected-value'),
-    ByteUtils = require('../../lib/utils/byte-utils');
+    ByteUtils = require('../../lib/utils/byte-utils'),
+    asmCrypto = require('asmcrypto.js');
 
 describe('ProtectedValue', function() {
     var valueBytes = ByteUtils.stringToBytes('strvalue'),
@@ -13,19 +14,14 @@ describe('ProtectedValue', function() {
         encValueBytes[i] ^= i;
     }
 
-    it('decrypts salted value in text property', function() {
+    it('decrypts salted value in string', function() {
         var value = new ProtectedValue(encValueBytes, saltBytes);
-        expect(value.text).to.be('strvalue');
+        expect(value.getText()).to.be('strvalue');
     });
 
-    it('returns string in toString', function() {
+    it('returns string in binary', function() {
         var value = new ProtectedValue(encValueBytes, saltBytes);
-        expect(value.toString()).to.be('strvalue');
-    });
-
-    it('returns string in binary property', function() {
-        var value = new ProtectedValue(encValueBytes, saltBytes);
-        expect(value.binary).to.be.eql(valueBytes);
+        expect(value.getBinary()).to.be.eql(valueBytes);
     });
 
     it('checks substring', function() {
@@ -34,5 +30,22 @@ describe('ProtectedValue', function() {
         expect(value.includes('str')).to.be(true);
         expect(value.includes('val')).to.be(true);
         expect(value.includes('value')).to.be(true);
+    });
+
+    it('calculates SHA512 hash', function() {
+        var value = new ProtectedValue(encValueBytes, saltBytes);
+        var hash = value.getHash();
+        /* jshint camelcase:false */
+        expect(asmCrypto.bytes_to_hex(hash)).to.be('1f5c3ef76d43e72ee2c5216c36187c799b153cab3d0cb63a6f3ecccc2627f535');
+    });
+
+    it('creates value from string', function() {
+        var value = ProtectedValue.fromString('test');
+        expect(value.getText()).to.be('test');
+    });
+
+    it('creates value from binary', function() {
+        var value = ProtectedValue.fromBinary(ByteUtils.stringToBytes('test'));
+        expect(value.getText()).to.be('test');
     });
 });

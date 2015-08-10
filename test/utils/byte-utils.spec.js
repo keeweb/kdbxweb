@@ -24,18 +24,29 @@ describe('ByteUtils', function() {
         });
     });
 
+    var str = 'utf8стрƒΩ≈ç√∫˜µ≤æ∆©ƒ∂ß';
+    var strBytes = new Uint8Array([117,116,102,56,209,129,209,130,209,128,198,146,206,169,226,
+        137,136,195,167,226,136,154,226,136,171,203,156,194,181,226,137,164,195,166,226,
+        136,134,194,169,198,146,226,136,130,195,159]);
+
     describe('bytesToString', function() {
+        it('should convert Array to string', function() {
+            expect(ByteUtils.bytesToString(strBytes)).to.be(str);
+        });
+
+        it('should convert ArrayBuffer to string', function() {
+            expect(ByteUtils.bytesToString(strBytes.buffer)).to.be(str);
+        });
+    });
+
+    describe('stringToBytes', function() {
         var str = 'utf8стрƒΩ≈ç√∫˜µ≤æ∆©ƒ∂ß';
         var arr = new Uint8Array([117,116,102,56,209,129,209,130,209,128,198,146,206,169,226,
             137,136,195,167,226,136,154,226,136,171,203,156,194,181,226,137,164,195,166,226,
             136,134,194,169,198,146,226,136,130,195,159]);
 
-        it('should convert Array to string', function() {
-            expect(ByteUtils.bytesToString(arr)).to.be(str);
-        });
-
-        it('should convert ArrayBuffer to string', function() {
-            expect(ByteUtils.bytesToString(arr.buffer)).to.be(str);
+        it('should convert string to Array', function() {
+            expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
         });
     });
 
@@ -51,6 +62,20 @@ describe('ByteUtils', function() {
     describe('bytesToBase64', function() {
         it('converts base64-string to byte array', function() {
             expect(ByteUtils.bytesToBase64(bytes)).to.be.eql(base64);
+        });
+    });
+
+    describe('zeroBuffer', function() {
+        it('fills array with zeroes', function() {
+            var arr = new Uint8Array([1,2,3]);
+            ByteUtils.zeroBuffer(arr);
+            expect(arr).to.be.eql([0,0,0]);
+        });
+
+        it('fills array buffer with zeroes', function() {
+            var arr = new Uint8Array([1,2,3]);
+            ByteUtils.zeroBuffer(arr.buffer);
+            expect(arr).to.be.eql([0,0,0]);
         });
     });
 });

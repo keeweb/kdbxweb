@@ -12,6 +12,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, '../../dist'),
         filename: 'kdbxweb.js',
+        library: 'kdbxweb',
         libraryTarget: 'umd'
     },
     module: {

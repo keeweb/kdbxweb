@@ -16,7 +16,8 @@
             res.innerHTML = 'working...\n';
             var start = performance.now();
             try {
-                window.db = Kdbx.load(e.target.result, 'demo');
+                window.db = kdbxweb.Kdbx.load(e.target.result,
+                        new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')));
                 res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db:\n';
                 res.innerHTML += JSON.stringify(db, null, 2) + '\n';
             } catch (e) {
