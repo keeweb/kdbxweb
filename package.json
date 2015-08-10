@@ -14,8 +14,8 @@
     "pack:dist-pro": "webpack --progress --colors --config build/config/webpack.config.js",
     "pack:dist-debug": "webpack --progress --colors --debug --devtool source-map --output-pathinfo --config build/config/webpack.config.js",
     "pack:tests": "webpack --progress --colors --config build/config/webpack.tests.config.js",
-    "tests:plain": "mocha -- --recursive -R spec",
-    "tests:cover": "istanbul cover _mocha -- --recursive -R spec"
+    "tests:plain": "mocha --recursive -R spec",
+    "tests:cover": "istanbul cover node_modules/mocha/bin/_mocha -- --recursive -R spec"
   },
   "keywords": [
     "kdbx",
