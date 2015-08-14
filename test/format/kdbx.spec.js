@@ -6,10 +6,11 @@ var expect = require('expect.js'),
 
 describe('Kdbx', function () {
     it('should load simple file', function () {
-        var db = kdbxweb.Kdbx.load(TestResources.sample,
-            new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')));
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+        var db = kdbxweb.Kdbx.load(TestResources.sample, cred);
         expect(db).to.be.a(kdbxweb.Kdbx);
-        db.save();
+        var ab = db.save();
+        kdbxweb.Kdbx.load(ab, cred);
     });
 
     it('generates error for bad arguments', function () {

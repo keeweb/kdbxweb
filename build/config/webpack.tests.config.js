@@ -7,7 +7,7 @@ var entry = [];
 
 walk.walkSync('test', function(basedir, filename, stat) {
     if (stat.isFile() && path.extname(filename) === '.js') {
-        entry.push(path.join(basedir, filename).replace('test/', './'));
+        entry.push(path.join(basedir, filename).replace('test', '.'));
     }
 });
 
