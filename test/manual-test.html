@@ -6,18 +6,22 @@
     <script src="../dist/kdbxweb.js"></script>
 </head>
 <body>
-<input type="file" id="f" />
+<div><input type="text" placeholder="password" id="pass"></div>
+<div>key: <input type="file" id="key" /></div>
+<div>kdbx: <input type="file" id="file" /></div>
 <pre id="res"></pre>
 <script>
     var res = document.getElementById('res');
+    var keyfile;
     function handleFileSelect(evt) {
         var reader = new FileReader();
         reader.onload = function(e) {
             res.innerHTML = 'working...\n';
             var start = performance.now();
             try {
+                var pass = document.getElementById('pass').value;
                 window.db = kdbxweb.Kdbx.load(e.target.result,
-                        new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')));
+                        new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(pass), keyfile));
                 res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db:\n';
                 res.innerHTML += JSON.stringify(db, null, 2) + '\n';
             } catch (e) {
@@ -26,7 +30,13 @@
         };
         reader.readAsArrayBuffer(evt.target.files[0]);
     }
-    document.getElementById('f').addEventListener('change', handleFileSelect, false);
+    function handleKeySelect(evt) {
+        var reader = new FileReader();
+        reader.onload = function(e) { keyfile = e.target.result; };
+        reader.readAsArrayBuffer(evt.target.files[0]);
+    }
+    document.getElementById('file').addEventListener('change', handleFileSelect, false);
+    document.getElementById('key').addEventListener('change', handleKeySelect, false);
 </script>
 </body>
 </html>

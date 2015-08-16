@@ -4,8 +4,14 @@ var ByteUtils = require('../../lib/utils/byte-utils');
 
 var res = {};
 
-try { res.sample = require('base64!../../resources/sample.kdbx'); }
-catch (e) { res.sample = readNodeFile('../../resources/sample.kdbx'); }
+try { res.demoKdbx = require('base64!../../resources/demo.kdbx'); }
+catch (e) { res.demoKdbx = readNodeFile('../../resources/demo.kdbx'); }
+
+try { res.demoKey = require('base64!../../resources/demo.key'); }
+catch (e) { res.demoKey = readNodeFile('../../resources/demo.key'); }
+
+try { res.cyrillicKdbx = require('base64!../../resources/cyrillic.kdbx'); }
+catch (e) { res.cyrillicKdbx = readNodeFile('../../resources/cyrillic.kdbx'); }
 
 for (var file in res) {
     if (res.hasOwnProperty(file)) {

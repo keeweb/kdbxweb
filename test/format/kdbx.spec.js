@@ -6,8 +6,20 @@ var expect = require('expect.js'),
 
 describe('Kdbx', function () {
     it('should load simple file', function () {
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
-        var db = kdbxweb.Kdbx.load(TestResources.sample, cred);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
+        expect(db).to.be.a(kdbxweb.Kdbx);
+    });
+
+    it('should load utf8 uncompressed file', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('пароль'));
+        var db = kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred);
+        expect(db).to.be.a(kdbxweb.Kdbx);
+    });
+
+    it('should successfully load saved file', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
         expect(db).to.be.a(kdbxweb.Kdbx);
         var ab = db.save();
         kdbxweb.Kdbx.load(ab, cred);
@@ -39,7 +51,7 @@ describe('Kdbx', function () {
 
     it('generates error for bad password', function () {
         expect(function() {
-            kdbxweb.Kdbx.load(TestResources.sample,
+            kdbxweb.Kdbx.load(TestResources.demoKdbx,
                 new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')));
         }).to.throwException(function(e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
