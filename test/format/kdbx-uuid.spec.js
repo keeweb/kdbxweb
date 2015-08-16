@@ -14,12 +14,12 @@ describe('KdbxUuid', function() {
         expect(uuid.id).to.be('AQIDBAUGBwgJCgECAwQFBg==');
     });
 
-    it('creates empty uuid from less than 16 bytes', function() {
+    it('creates undefined uuid from less than 16 bytes', function() {
         var uuid = new KdbxUuid(new Uint16Array([123]).buffer);
         expect(uuid.id).to.be(undefined);
     });
 
-    it('creates empty uuid from false', function() {
+    it('creates undefined uuid from falsy', function() {
         var uuid = new KdbxUuid(0);
         expect(uuid.id).to.be(undefined);
     });
@@ -42,5 +42,17 @@ describe('KdbxUuid', function() {
         hashTable[uuid2] = 2;
         expect(hashTable[uuid1]).to.be(1);
         expect(hashTable[uuid2]).to.be(2);
+    });
+
+    it('creates empty uuid from no arg', function() {
+        var uuid = new KdbxUuid();
+        expect(uuid.toString()).to.be('AAAAAAAAAAAAAAAAAAAAAA==');
+        expect(uuid.empty).to.be(true);
+    });
+
+    it('sets empty property for empty uuid', function() {
+        var uuid = new KdbxUuid(new Uint8Array(16).buffer);
+        expect(uuid.toString()).to.be('AAAAAAAAAAAAAAAAAAAAAA==');
+        expect(uuid.empty).to.be(true);
     });
 });
