@@ -40,11 +40,6 @@ describe('ByteUtils', function() {
     });
 
     describe('stringToBytes', function() {
-        var str = 'utf8стрƒΩ≈ç√∫˜µ≤æ∆©ƒ∂ß';
-        var arr = new Uint8Array([117,116,102,56,209,129,209,130,209,128,198,146,206,169,226,
-            137,136,195,167,226,136,154,226,136,171,203,156,194,181,226,137,164,195,166,226,
-            136,134,194,169,198,146,226,136,130,195,159]);
-
         it('should convert string to Array', function() {
             expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
         });
@@ -57,11 +52,23 @@ describe('ByteUtils', function() {
         it('converts base64-string to byte array', function() {
             expect(ByteUtils.base64ToBytes(base64)).to.be.eql(bytes);
         });
+
+        it('makes use of atob when available', function() {
+            global.atob = function() { return 'a'; };
+            expect(ByteUtils.base64ToBytes(base64)).to.be.eql({ 0: 'a'.charCodeAt(0) });
+            delete global.atob;
+        });
     });
 
     describe('bytesToBase64', function() {
         it('converts base64-string to byte array', function() {
             expect(ByteUtils.bytesToBase64(bytes)).to.be.eql(base64);
+        });
+
+        it('makes use of btoa when available', function() {
+            global.btoa = function() { return 'a'; };
+            expect(ByteUtils.bytesToBase64(base64)).to.be('a');
+            delete global.btoa;
         });
     });
 
@@ -76,6 +83,31 @@ describe('ByteUtils', function() {
             var arr = new Uint8Array([1,2,3]);
             ByteUtils.zeroBuffer(arr.buffer);
             expect(arr).to.be.eql([0,0,0]);
+        });
+    });
+
+    describe('arrayToBuffer', function() {
+        it('converts array to buffer', function() {
+            var ab = ByteUtils.arrayToBuffer(new Uint8Array(4));
+            expect(ab).to.be.an(ArrayBuffer);
+            expect(ab.byteLength).to.be(4);
+        });
+
+        it('converts buffer to buffer', function() {
+            var ab = ByteUtils.arrayToBuffer(new Uint8Array(4).buffer);
+            expect(ab).to.be.an(ArrayBuffer);
+            expect(ab.byteLength).to.be(4);
+        });
+
+        it('makes sliced buffer from sliced array', function() {
+            var srcAb = new ArrayBuffer(10);
+            var arr = new Uint8Array(srcAb, 1, 4);
+            arr[0] = 1;
+            expect(arr.buffer.byteLength).to.be(10);
+            var ab = ByteUtils.arrayToBuffer(arr);
+            expect(ab).to.be.an(ArrayBuffer);
+            expect(ab.byteLength).to.be(4);
+            expect(new Uint8Array(ab)[0]).to.be(1);
         });
     });
 });

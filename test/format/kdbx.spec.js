@@ -115,8 +115,8 @@ describe('Kdbx', function () {
             },
             expanded: true,
             defaultAutoTypeSeq: '',
-            enableAutoType: undefined,
-            enableSearching: undefined,
+            enableAutoType: null,
+            enableSearching: null,
             lastTopVisibleEntry: 'HzYFsnGCkEKyrPtOa6bNMA==',
             groups: 4,
             entries: 2
@@ -138,8 +138,8 @@ describe('Kdbx', function () {
             },
             expanded: true,
             defaultAutoTypeSeq: '',
-            enableAutoType: undefined,
-            enableSearching: undefined,
+            enableAutoType: null,
+            enableSearching: null,
             lastTopVisibleEntry: 'vqcoCvE9/k6PSgutKI6snw==',
             groups: 0,
             entries: 1
@@ -195,8 +195,8 @@ describe('Kdbx', function () {
             icon: 38,
             expanded: false,
             defaultAutoTypeSeq: '',
-            enableAutoType: undefined,
-            enableSearching: undefined,
+            enableAutoType: null,
+            enableSearching: null,
             lastTopVisibleEntry: 'AAAAAAAAAAAAAAAAAAAAAA==',
             groups: 1,
             entries: 0
@@ -208,8 +208,8 @@ describe('Kdbx', function () {
             icon: 1,
             expanded: true,
             defaultAutoTypeSeq: '',
-            enableAutoType: undefined,
-            enableSearching: undefined,
+            enableAutoType: null,
+            enableSearching: null,
             lastTopVisibleEntry: 'AAAAAAAAAAAAAAAAAAAAAA==',
             groups: 0,
             entries: 0

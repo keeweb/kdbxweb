@@ -30,6 +30,7 @@ describe('ProtectedValue', function() {
         expect(value.includes('str')).to.be(true);
         expect(value.includes('val')).to.be(true);
         expect(value.includes('value')).to.be(true);
+        expect(value.includes('')).to.be(false);
     });
 
     it('calculates SHA512 hash', function() {

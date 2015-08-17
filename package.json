@@ -39,14 +39,5 @@
     "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix",
     "pako": "^0.2.7",
     "xmldom": "^0.1.19"
-  },
-  "config": {
-    "blanket": {
-      "pattern": "lib",
-      "data-cover-never": [
-        "node_modules",
-        "test"
-      ]
-    }
   }
 }

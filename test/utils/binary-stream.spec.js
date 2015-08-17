@@ -138,11 +138,21 @@ describe('BinaryStream', function() {
     });
 
     it('can expand length on write', function() {
-        var stm = new BinaryStream();
+        var stm = new BinaryStream(new Uint8Array(2).buffer);
+        stm._canExpand = true;
         stm.writeBytes(new Uint8Array([0,1,2]));
         stm.setUint8(3);
         stm.writeBytes(new Uint8Array([4]).buffer);
         expect(new Uint8Array(stm.getWrittenBytes())).to.be.eql(new Uint8Array([0,1,2,3,4]));
+    });
+
+    it('creates buffer itself and expands it', function() {
+        var stm = new BinaryStream();
+        stm.writeBytes(new Uint8Array(1021));
+        stm.writeBytes(new Uint8Array([0,1,2]));
+        stm.setUint8(3);
+        stm.writeBytes(new Uint8Array([4]).buffer);
+        expect(stm.getWrittenBytes().byteLength).to.be.eql(1026);
     });
 
     function expectArrayBuffersEqual(ab1, ab2) {
