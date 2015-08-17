@@ -144,7 +144,7 @@ describe('Kdbx', function () {
             groups: 0,
             entries: 1
         });
-        checkEntry(topGroup.groups[0].entries[0], {
+        var expEntry = {
             uuid: 'vqcoCvE9/k6PSgutKI6snw==',
             icon: 2,
             customIcon: undefined,
@@ -173,13 +173,21 @@ describe('Kdbx', function () {
                 'my field protected': 'protected val'
             },
             binaries: {
-                attachment: { ref: '0' }
+                attachment: { ref: '0', value: true }
             },
-            autoType: { enabled: true, obfuscation: 0, defaultSequence: undefined, items: [
-                { window: 'Target Window', keystrokeSequence: '{USERNAME}{TAB}{PASSWORD}{TAB}{ENTER}' }
+            autoType: { enabled: true, obfuscation: 0, defaultSequence: '{USERNAME}{TAB}{PASSWORD}{ENTER}{custom}',
+                items: [
+                { window: 'chrome', keystrokeSequence: '{USERNAME}{TAB}{PASSWORD}{ENTER}{custom}{custom-key}' }
             ] },
-            history: 0
-        });
+            history: 1
+        };
+        checkEntry(topGroup.groups[0].entries[0], expEntry);
+        delete expEntry.times;
+        expEntry.fields.Title = 'my-entry';
+        expEntry.prFields.Password = 'pass';
+        expEntry.history = 0;
+        expEntry.binaries.attachment.value = false;
+        checkEntry(topGroup.groups[0].entries[0].history[0], expEntry);
         checkGroup(topGroup.groups[1], {
             uuid: 'QF6yl7EUVk6+NgdJtyl3sg==',
             name: 'Windows',
@@ -261,7 +269,10 @@ describe('Kdbx', function () {
         });
         expect(Object.keys(entry.binaries).length).to.be(Object.keys(exp.binaries).length);
         Object.keys(exp.binaries).forEach(function(field) {
-            expect(entry.binaries[field]).to.be.eql(exp.binaries[field]);
+            expect(entry.binaries[field].ref).to.be(exp.binaries[field].ref);
+            expect(!!entry.binaries[field].value).to.be(!!exp.binaries[field].value);
         });
+        expect(entry.autoType).to.be.eql(exp.autoType);
+        expect(entry.history.length).to.be(exp.history);
     }
 });
