@@ -25,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "arraybuffer-slice": "^0.1.2",
+    "coveralls": "^2.11.4",
     "expect.js": "^0.3.1",
     "fs-walk": "0.0.1",
     "istanbul": "^0.3.17",
