@@ -53,11 +53,13 @@ describe('ByteUtils', function() {
             expect(ByteUtils.base64ToBytes(base64)).to.be.eql(bytes);
         });
 
-        it('makes use of atob when available', function() {
-            global.atob = function() { return 'a'; };
-            expect(ByteUtils.base64ToBytes(base64)).to.be.eql({ 0: 'a'.charCodeAt(0) });
-            delete global.atob;
-        });
+        if (typeof atob === 'undefined') {
+            it('makes use of atob when available', function () {
+                global.atob = function () { return 'a'; };
+                expect(ByteUtils.base64ToBytes(base64)).to.be.eql({0: 'a'.charCodeAt(0)});
+                delete global.atob;
+            });
+        }
     });
 
     describe('bytesToBase64', function() {
@@ -65,11 +67,13 @@ describe('ByteUtils', function() {
             expect(ByteUtils.bytesToBase64(bytes)).to.be.eql(base64);
         });
 
-        it('makes use of btoa when available', function() {
-            global.btoa = function() { return 'a'; };
-            expect(ByteUtils.bytesToBase64(base64)).to.be('a');
-            delete global.btoa;
-        });
+        if (typeof btoa === 'undefined') {
+            it('makes use of btoa when available', function () {
+                global.btoa = function () { return 'a'; };
+                expect(ByteUtils.bytesToBase64(base64)).to.be('a');
+                delete global.btoa;
+            });
+        }
     });
 
     describe('zeroBuffer', function() {
