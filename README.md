@@ -10,8 +10,10 @@ Not production-ready, the project is under development
 
 - runs in browser or node.js
 - no native addons
-- average file open time is 100-200ms
-- total &lt;150kB with dependencies
+- average file open time is 200ms
+- total ≈150kB with dependencies
+- full support of Kdbx features
+- protected values are stored in memory encrypted
 
 ## Browser support
 
@@ -21,7 +23,8 @@ Not production-ready, the project is under development
 ## Usage
 
 ```javascript
-var db = Kdbx.load(file, password, keyFile);
+var db = kdbxweb.Kdbx.load(data, kdbxweb.ProtectedValue.fromString('demo'));
+var data = db.save();
 ```
 
 ## Building
