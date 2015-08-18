@@ -2,7 +2,7 @@
 
 var expect = require('expect.js'),
     DomParser = require('xmldom').DOMParser,
-    XMLSerializer = require('xmldom').XMLSerializer,
+    XmlSerializer = require('xmldom').XMLSerializer,
     KdbxUuid = require('../../lib/format/kdbx-uuid'),
     ProtectedValue = require('../../lib/crypto/protected-value'),
     ByteUtils = require('../../lib/utils/byte-utils'),
@@ -55,14 +55,14 @@ describe('XmlUtils', function() {
             var xml = new DomParser().parseFromString('<root><old/></root>');
             var childNode = XmlUtils.addChildNode(xml.documentElement, 'item');
             XmlUtils.addChildNode(childNode, 'inner');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<root><old/><item><inner/></item></root>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<root><old/><item><inner/></item></root>');
         });
 
         it('adds child node to document itself', function () {
             var xml = new DomParser().parseFromString('<?xml version="1.0"?>');
             var childNode = XmlUtils.addChildNode(xml, 'root');
             XmlUtils.addChildNode(childNode, 'item');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<?xml version="1.0"?><root><item/></root>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<?xml version="1.0"?><root><item/></root>');
         });
     });
 
@@ -102,15 +102,15 @@ describe('XmlUtils', function() {
         it('sets node text', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setText(xml.documentElement, 'new');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>new</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>new</item>');
         });
 
         it('sets node empty text', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setText(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setText(xml.documentElement, null);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -132,25 +132,25 @@ describe('XmlUtils', function() {
         it('sets node bytes from array', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBytes(xml.documentElement, new Uint8Array([1, 2, 3]));
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>AQID</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>AQID</item>');
         });
 
         it('sets node bytes from base64 string', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBytes(xml.documentElement, 'AQID');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>AQID</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>AQID</item>');
         });
 
         it('sets node empty bytes', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBytes(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, null);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, '');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, new Uint8Array(0));
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -158,17 +158,17 @@ describe('XmlUtils', function() {
         it('sets node date in ISO format', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setDate(xml.documentElement, new Date('2015-08-17T21:20Z'));
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>2015-08-17T21:20:00Z</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>2015-08-17T21:20:00Z</item>');
         });
 
         it('sets node empty date', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setDate(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setDate(xml.documentElement, null);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setDate(xml.documentElement, '');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -209,25 +209,25 @@ describe('XmlUtils', function() {
         it('sets node number', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setNumber(xml.documentElement, 1);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>1</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>1</item>');
         });
 
         it('sets zero as node number', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setNumber(xml.documentElement, 0);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>0</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>0</item>');
         });
 
         it('sets node empty number', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setNumber(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, null);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, '');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, NaN);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -273,31 +273,31 @@ describe('XmlUtils', function() {
         it('sets node false', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, false);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>False</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, NaN);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>False</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, '');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>False</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, 0);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>False</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>False</item>');
         });
 
         it('sets node true', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, true);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>True</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>True</item>');
         });
 
         it('sets node null', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, null);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>null</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>null</item>');
         });
 
         it('sets node empty boolean', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -320,13 +320,13 @@ describe('XmlUtils', function() {
         it('sets node uuid', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setUuid(xml.documentElement, new KdbxUuid(new ArrayBuffer(16)));
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>AAAAAAAAAAAAAAAAAAAAAA==</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>AAAAAAAAAAAAAAAAAAAAAA==</item>');
         });
 
         it('sets node empty uuid', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setUuid(xml.documentElement, undefined);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item/>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item/>');
         });
     });
 
@@ -350,14 +350,14 @@ describe('XmlUtils', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             var pv = ProtectedValue.fromString('str');
             XmlUtils.setProtectedText(xml.documentElement, pv);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item Protected="True">text</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item Protected="True">text</item>');
             expect(xml.documentElement.protectedValue).to.be(pv);
         });
 
         it('sets node protected text as text', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setProtectedText(xml.documentElement, 'str');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>str</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>str</item>');
             expect(xml.documentElement.protectedValue).to.be(undefined);
         });
     });
@@ -400,28 +400,28 @@ describe('XmlUtils', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             var pv = ProtectedValue.fromString('str');
             XmlUtils.setProtectedBinary(xml.documentElement, pv);
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item Protected="True">text</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item Protected="True">text</item>');
             expect(xml.documentElement.protectedValue).to.be(pv);
         });
 
         it('sets node protected binary as ref', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setProtectedBinary(xml.documentElement, { ref: '123' });
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item Ref="123">text</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item Ref="123">text</item>');
             expect(xml.documentElement.protectedValue).to.be(undefined);
         });
 
         it('sets node protected binary as text', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setProtectedBinary(xml.documentElement, ByteUtils.base64ToBytes('YWJj'));
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>YWJj</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>YWJj</item>');
             expect(xml.documentElement.protectedValue).to.be(undefined);
         });
 
         it('sets node protected binary as base64 text', function() {
             var xml = new DomParser().parseFromString('<item>text</item>');
             XmlUtils.setProtectedBinary(xml.documentElement, 'YWJj');
-            expect(new XMLSerializer().serializeToString(xml)).to.be('<item>YWJj</item>');
+            expect(new XmlSerializer().serializeToString(xml)).to.be('<item>YWJj</item>');
             expect(xml.documentElement.protectedValue).to.be(undefined);
         });
     });

@@ -20,11 +20,6 @@ module.exports = {
             test: /\.js$/,
             exclude: /asmcrypto/,
             loader: 'uglify'
-        }],
-        preLoaders: [{
-            test: /\.js$/,
-            loader: 'jshint-loader',
-            exclude: /node_modules/
         }]
     },
     resolve: {
