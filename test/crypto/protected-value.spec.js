@@ -67,4 +67,9 @@ describe('ProtectedValue', function() {
         value.setSalt(new Uint8Array([1,2,3,4]).buffer);
         expect(value.toString()).to.be('dWdwcA==');
     });
+
+    it('clones itself', function() {
+        var value = ProtectedValue.fromString('test').clone();
+        expect(value.getText()).to.be('test');
+    });
 });

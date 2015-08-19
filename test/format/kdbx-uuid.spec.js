@@ -72,4 +72,10 @@ describe('KdbxUuid', function() {
         var uuid = new KdbxUuid(bytes.buffer);
         expect(uuid.toBytes()).to.be(undefined);
     });
+
+    it('generates random uuid', function() {
+        var uuid = KdbxUuid.random();
+        expect(uuid).to.be.a(KdbxUuid);
+        expect(uuid.toString()).not.to.be('AAAAAAAAAAAAAAAAAAAAAA==');
+    });
 });
