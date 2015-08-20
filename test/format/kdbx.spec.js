@@ -29,7 +29,15 @@ describe('Kdbx', function () {
         checkDb(db);
     });
 
-    it('generates error for bad arguments', function () {
+    it('should create new database', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        var ab = db.save();
+        db = kdbxweb.Kdbx.load(ab, cred);
+        expect(db.meta.generator).to.be('KdbxWeb');
+    });
+
+    it('should generate error for bad arguments', function () {
         expect(function() {
             kdbxweb.Kdbx.load('file');
         }).to.throwException(function(e) {

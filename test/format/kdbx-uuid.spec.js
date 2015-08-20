@@ -14,6 +14,11 @@ describe('KdbxUuid', function() {
         expect(uuid.id).to.be('AQIDBAUGBwgJCgECAwQFBg==');
     });
 
+    it('creates uuid base64 string', function() {
+        var uuid = new KdbxUuid('AQIDBAUGBwgJCgECAwQFBg==');
+        expect(uuid.id).to.be('AQIDBAUGBwgJCgECAwQFBg==');
+    });
+
     it('creates undefined uuid from less than 16 bytes', function() {
         var uuid = new KdbxUuid(new Uint16Array([123]).buffer);
         expect(uuid.id).to.be(undefined);
