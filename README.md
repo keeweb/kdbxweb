@@ -23,8 +23,14 @@ Not production-ready, the project is under development
 ## Usage
 
 ```javascript
-var db = kdbxweb.Kdbx.load(data, kdbxweb.ProtectedValue.fromString('demo'));
+var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
+var db = kdbxweb.Kdbx.load(data, credentials);
 var data = db.save();
+
+var newDb = kdbxweb.Kdbx.create(credentials, 'My new db');
+var group = newDb.groups[0].createGroup('subgroup');
+var entry = group.createEntry();
+var newData = newDb.save();
 ```
 
 ## Building
