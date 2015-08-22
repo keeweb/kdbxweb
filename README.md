@@ -2,10 +2,6 @@
 
 KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 databases (kdbx) in node.js or browser.
 
-# Alpha Version
-
-Not production-ready, the project is under development 
-
 ## Features
 
 - runs in browser or node.js
