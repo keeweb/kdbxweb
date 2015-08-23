@@ -1,11 +1,11 @@
 {
   "name": "kdbxweb",
   "description": "Kdbx KeePass database reader for web",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "authors": [
     "Antelle <dmitryvit@gmail.com>"
   ],
-  "main": "read-kdbx.js",
+  "main": "dist/kdbxweb.js",
   "moduleType": [
     "amd"
   ],
@@ -19,8 +19,10 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "resources",
+    ".idea",
+    "build"
   ],
-  "dependencies": {
-  }
+  "homepage": "https://github.com/antelle/kdbxweb"
 }
