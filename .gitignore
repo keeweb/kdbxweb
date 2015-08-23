@@ -1,6 +1,7 @@
 workspace.xml
 .DS_Store
 node_modules/
-dist/
+dist/*
+!dist/kdbxweb.js
 coverage/
 *.log
