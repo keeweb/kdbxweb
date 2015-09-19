@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.1.3 (2015-09-19)
+Loader bug fixed  
+
 ##### v0.1.2 (2015-09-19)
 Key processing speedup  
 

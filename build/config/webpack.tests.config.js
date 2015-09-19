@@ -30,7 +30,7 @@ module.exports = {
         root: [path.join(__dirname, '../../lib')]
     },
     resolveLoader: {
-        root: [path.join(__dirname, '../../node_modules'), path.join(__dirname, '../../build/loaders')]
+        root: [path.join(__dirname, '../../node_modules')]
     },
     node: {
         console: false,
