@@ -38,7 +38,7 @@
     "webpack": "^1.11.0"
   },
   "dependencies": {
-    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix",
+    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-2",
     "pako": "^0.2.7",
     "xmldom": "^0.1.19"
   }
