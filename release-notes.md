@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.1.4 (2015-09-27)
+Entry copy method  
+
 ##### v0.1.3 (2015-09-19)
 Loader bug fixed  
 
