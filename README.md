@@ -24,8 +24,8 @@ var db = kdbxweb.Kdbx.load(data, credentials);
 var data = db.save();
 
 var newDb = kdbxweb.Kdbx.create(credentials, 'My new db');
-var group = newDb.groups[0].createGroup('subgroup');
-var entry = group.createEntry();
+var group = newDb.createGroup(newDb.getDefaultGroup(), 'subgroup');
+var entry = newDb.createEntry(group);
 var newData = newDb.save();
 ```
 

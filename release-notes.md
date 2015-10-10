@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.1.5 (2015-10-11)
+Creation of groups and entries  
+
 ##### v0.1.4 (2015-09-27)
 Entry copy method  
 

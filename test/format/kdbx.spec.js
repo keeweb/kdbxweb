@@ -33,8 +33,8 @@ describe('Kdbx', function () {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.groups[0].createGroup('subgroup');
-        var entry = subGroup.createEntry();
+        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+        var entry = db.createEntry(subGroup);
         db.meta.customData.key = 'val';
         db.createDefaultGroup();
         db.createRecycleBin();
