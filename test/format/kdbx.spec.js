@@ -96,6 +96,22 @@ describe('Kdbx', function () {
             });
     });
 
+    it('deletes and restores an entry', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
+        var parentGroup = db.getDefaultGroup().groups[1];
+        var group = parentGroup.groups[parentGroup.groups.length - 1];
+        var recycleBin = db.getGroup(db.meta.recycleBinUuid);
+        var recycleBinLength = recycleBin.groups.length;
+        var groupLength = parentGroup.groups.length;
+        db.remove(group, parentGroup);
+        expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
+        expect(group.groups.length).to.be(groupLength - 1);
+        db.move(group, recycleBin, parentGroup);
+        expect(recycleBin.groups.length).to.be(recycleBinLength);
+        checkDb(db);
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');

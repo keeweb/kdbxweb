@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.1.6 (2015-10-11)
+Move/delete entries/groups  
+
 ##### v0.1.5 (2015-10-11)
 Creation of groups and entries  
 
