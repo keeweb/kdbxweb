@@ -112,6 +112,22 @@ describe('Kdbx', function () {
         checkDb(db);
     });
 
+    it('saves db to xml', function() {
+        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+        var entry = db.createEntry(subGroup);
+        entry.fields.Title = 'title';
+        entry.fields.UserName = 'user';
+        entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
+        entry.fields.Notes = 'notes';
+        entry.fields.URL = 'url';
+        entry.times.update();
+        var xml = db.saveXml();
+        expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');

@@ -462,4 +462,37 @@ describe('XmlUtils', function() {
             expect(new Uint8Array(item2.protectedValue._salt)).to.be.eql([2,2,2]);
         });
     });
+
+    describe('unprotectValues', function() {
+        it('unprotects protected values', function() {
+            var xml = new DomParser().parseFromString('<root><item1><inner Protected="True">MTIz</inner><i2 Protected="True"></i2></item1>' +
+                '<item2 Protected="True">NDU2</item2></root>');
+            var item1 = XmlUtils.getChildNode(xml.documentElement, 'item1');
+            var item2 = XmlUtils.getChildNode(xml.documentElement, 'item2');
+            var inner = XmlUtils.getChildNode(item1, 'inner');
+            inner.protectedValue = ProtectedValue.fromString('123');
+            item2.protectedValue = ProtectedValue.fromString('456');
+            XmlUtils.unprotectValues(xml.documentElement);
+            expect(inner.toString()).to.be('<inner ProtectInMemory="True">123</inner>');
+            expect(item2.toString()).to.be('<item2 ProtectInMemory="True">456</item2>');
+        });
+    });
+
+    describe('protectUnprotectedValues', function() {
+        it('protects unprotected values', function() {
+            var xml = new DomParser().parseFromString('<root><item1><inner ProtectInMemory="True">123</inner><i2 ProtectInMemory="True"></i2></item1>' +
+                '<item2 ProtectInMemory="True">NDU2</item2></root>');
+            var item1 = XmlUtils.getChildNode(xml.documentElement, 'item1');
+            var item2 = XmlUtils.getChildNode(xml.documentElement, 'item2');
+            var inner = XmlUtils.getChildNode(item1, 'inner');
+            var salt = new ArrayBuffer(16);
+            inner.protectedValue = ProtectedValue.fromString('123');
+            item2.protectedValue = ProtectedValue.fromString('456');
+            inner.protectedValue.setSalt(salt);
+            item2.protectedValue.setSalt(salt);
+            XmlUtils.protectUnprotectedValues(xml.documentElement);
+            expect(inner.toString()).to.be('<inner Protected="True">MTIz</inner>');
+            expect(item2.toString()).to.be('<item2 Protected="True">NDU2</item2>');
+        });
+    });
 });

@@ -1,6 +1,9 @@
 Release notes
 -------------
 ##### v0.1.7 (2015-10-17)
+Save as XML  
+
+##### v0.1.7 (2015-10-17)
 Entry creation bug fixed  
 
 ##### v0.1.6 (2015-10-11)
