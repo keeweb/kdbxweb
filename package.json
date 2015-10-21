@@ -1,6 +1,6 @@
 {
   "name": "kdbxweb",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Kdbx KeePass database reader for web",
   "repository": "https://github.com/antelle/kdbxweb.git",
   "main": "lib/index.js",
@@ -25,7 +25,6 @@
   "author": "Antelle",
   "license": "MIT",
   "devDependencies": {
-    "arraybuffer-slice": "^0.1.2",
     "base64-loader": "^1.0.0",
     "coveralls": "^2.11.4",
     "expect.js": "^0.3.1",
@@ -39,6 +38,7 @@
     "webpack": "^1.11.0"
   },
   "dependencies": {
+    "arraybuffer-slice": "^0.1.2",
     "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-3",
     "pako": "^0.2.7",
     "xmldom": "^0.1.19"
