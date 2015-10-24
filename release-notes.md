@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.1.1 (2015-10-24)
+Allow to change password and keyfile  
+
 ##### v0.1.9 (2015-10-22)
 Fixed loading in nodejs  
 
