@@ -32,6 +32,14 @@ var dataAsArrayBuffer = db.save();
 var xmlAsString = db.saveXml();
 ```
 
+##### File info
+[Header object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
+[Meta object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
+```javascript
+db.meta
+db.header
+```
+
 ##### Changing credentials
 ```javascript
 var db = kdbxweb.Kdbx.load(data, credentials);
@@ -50,6 +58,7 @@ var entry = newDb.createEntry(group);
 ```
 
 ##### Groups
+[Group object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
 ```javascript
 var defaultGroup = db.getDefaultGroup();
 var anotherGroup = db.getGroup(uuid);
@@ -81,6 +90,8 @@ if (!recycleBin) {
 ```
 
 ##### Entries
+[Entry object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
+[entry.times](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
 ```javascript
 var entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
@@ -113,7 +124,7 @@ db.remove(entry, parentGroup, toGroup);
 ```
 
 ##### ProtectedValue
-Used for passwords and custom fields  
+Used for passwords and custom fields, stored the value in memory XOR'ed  
 ```javascript
 var value = new kdbxweb.ProtectedValue(xoredByted, saltBytes);
 var valueFromString = kdbxweb.ProtectedValue.fromString('str');
@@ -133,6 +144,7 @@ try {
 ```
 
 ##### Consts
+[Consts definition](https://github.com/antelle/kdbxweb/blob/master/lib/defs/consts.js)  
 ```javascript
 kdbxweb.Consts.ErrorCodes (all thrown errors have code property)
 kdbxweb.Consts.Defaults // default db settings
