@@ -91,7 +91,7 @@ if (!recycleBin) {
 
 ##### Entries
 [Entry object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
-[entry.times](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
+[Entry.times fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
 ```javascript
 var entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
