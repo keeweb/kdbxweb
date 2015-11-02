@@ -19,6 +19,12 @@ describe('Kdbx', function () {
         expect(db).to.be.a(kdbxweb.Kdbx);
     });
 
+    it('should load a file with binary key', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.binKeyKey);
+        var db = kdbxweb.Kdbx.load(TestResources.binKeyKdbx, cred);
+        expect(db).to.be.a(kdbxweb.Kdbx);
+    });
+
     it('should successfully load saved file', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);

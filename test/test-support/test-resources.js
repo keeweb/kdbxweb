@@ -13,6 +13,12 @@ catch (e) { res.demoKey = readNodeFile('../../resources/demo.key'); }
 try { res.cyrillicKdbx = require('base64!../../resources/cyrillic.kdbx'); }
 catch (e) { res.cyrillicKdbx = readNodeFile('../../resources/cyrillic.kdbx'); }
 
+try { res.binKeyKdbx = require('base64!../../resources/binkey.kdbx'); }
+catch (e) { res.binKeyKdbx = readNodeFile('../../resources/binkey.kdbx'); }
+
+try { res.binKeyKey = require('base64!../../resources/binkey.key'); }
+catch (e) { res.binKeyKey = readNodeFile('../../resources/binkey.key'); }
+
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];
