@@ -1,7 +1,7 @@
 {
   "name": "kdbxweb",
   "description": "Kdbx KeePass database reader for web",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "authors": [
     "Antelle <dmitryvit@gmail.com>"
   ],

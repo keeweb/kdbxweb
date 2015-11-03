@@ -20,10 +20,16 @@
             var start = performance.now();
             try {
                 var pass = document.getElementById('pass').value;
-                window.db = kdbxweb.Kdbx.load(e.target.result,
-                        new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(pass), keyfile));
-                res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db:\n';
-                res.innerHTML += JSON.stringify(db, null, 2) + '\n';
+                kdbxweb.Kdbx.load(e.target.result,
+                    new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(pass), keyfile),
+                    function(db, err) {
+                        window.db = db;
+                        if (err) {
+                            res.innerHTML += 'error: ' + err + ', ' + (performance.now() - start) + 'ms\n';
+                        } else {
+                            res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db contains the db';
+                        }
+                    });
             } catch (e) {
                 res.innerHTML += 'error: ' + e + ', ' + (performance.now() - start) + 'ms\n';
             }

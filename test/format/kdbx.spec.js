@@ -5,37 +5,47 @@ var expect = require('expect.js'),
     TestResources = require('../test-support/test-resources');
 
 describe('Kdbx', function () {
-    it('should load simple file', function () {
+    it('should load simple file', function (done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
-        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
-        expect(db).to.be.a(kdbxweb.Kdbx);
-        expect(db.meta.generator).to.be('KeePass');
-        checkDb(db);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.meta.generator).to.be('KeePass');
+            checkDb(db);
+            done();
+        });
     });
 
-    it('should load utf8 uncompressed file', function() {
+    it('should load utf8 uncompressed file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('пароль'));
-        var db = kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred);
-        expect(db).to.be.a(kdbxweb.Kdbx);
+        kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
     });
 
-    it('should load a file with binary key', function() {
+    it('should load a file with binary key', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.binKeyKey);
-        var db = kdbxweb.Kdbx.load(TestResources.binKeyKdbx, cred);
-        expect(db).to.be.a(kdbxweb.Kdbx);
+        kdbxweb.Kdbx.load(TestResources.binKeyKdbx, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
     });
 
-    it('should successfully load saved file', function() {
+    it('should successfully load saved file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
-        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
-        expect(db).to.be.a(kdbxweb.Kdbx);
-        var ab = db.save();
-        db = kdbxweb.Kdbx.load(ab, cred);
-        expect(db.meta.generator).to.be('KdbxWeb');
-        checkDb(db);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            db.save(function(ab) {
+                kdbxweb.Kdbx.load(ab, cred, function(db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    checkDb(db);
+                    done();
+                });
+            });
+        });
     });
 
-    it('should create new database', function() {
+    it('should create new database', function(done) {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -57,15 +67,18 @@ describe('Kdbx', function () {
         entry.fields.CustomPlain = 'custom-plain';
         entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString('custom-protected');
         entry.times.update();
-        var ab = db.save();
-        db = kdbxweb.Kdbx.load(ab, cred);
-        expect(db.meta.generator).to.be('KdbxWeb');
-        expect(db.meta.customData.key).to.be('val');
-        expect(db.groups.length).to.be(1);
-        expect(db.groups[0].groups.length).to.be(2);
-        expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
-        //require('fs').writeFileSync('resources/test.kdbx', new Buffer(new Uint8Array(ab)));
-        //require('fs').writeFileSync('resources/test.key', new Buffer(keyFile));
+        db.save(function(ab) {
+            kdbxweb.Kdbx.load(ab, cred, function(db) {
+                expect(db.meta.generator).to.be('KdbxWeb');
+                expect(db.meta.customData.key).to.be('val');
+                expect(db.groups.length).to.be(1);
+                expect(db.groups[0].groups.length).to.be(2);
+                expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
+                //require('fs').writeFileSync('resources/test.kdbx', new Buffer(new Uint8Array(ab)));
+                //require('fs').writeFileSync('resources/test.key', new Buffer(keyFile));
+                done();
+            });
+        });
     });
 
     it('should generate error for bad arguments', function () {
@@ -93,32 +106,35 @@ describe('Kdbx', function () {
     });
 
     it('generates error for bad password', function () {
-        expect(function() {
-            kdbxweb.Kdbx.load(TestResources.demoKdbx,
-                new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')));
-        }).to.throwException(function(e) {
-                expect(e).to.be.a(kdbxweb.KdbxError);
-                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidKey);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx,
+            new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')),
+            function(db, err) {
+                expect(db).to.be(null);
+                expect(err).to.be.ok();
+                expect(err).to.be.a(kdbxweb.KdbxError);
+                expect(err.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidKey);
             });
     });
 
-    it('deletes and restores an entry', function() {
+    it('deletes and restores an entry', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
-        var db = kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
-        var parentGroup = db.getDefaultGroup().groups[1];
-        var group = parentGroup.groups[parentGroup.groups.length - 1];
-        var recycleBin = db.getGroup(db.meta.recycleBinUuid);
-        var recycleBinLength = recycleBin.groups.length;
-        var groupLength = parentGroup.groups.length;
-        db.remove(group, parentGroup);
-        expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
-        expect(group.groups.length).to.be(groupLength - 1);
-        db.move(group, recycleBin, parentGroup);
-        expect(recycleBin.groups.length).to.be(recycleBinLength);
-        checkDb(db);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            var parentGroup = db.getDefaultGroup().groups[1];
+            var group = parentGroup.groups[parentGroup.groups.length - 1];
+            var recycleBin = db.getGroup(db.meta.recycleBinUuid);
+            var recycleBinLength = recycleBin.groups.length;
+            var groupLength = parentGroup.groups.length;
+            db.remove(group, parentGroup);
+            expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
+            expect(group.groups.length).to.be(groupLength - 1);
+            db.move(group, recycleBin, parentGroup);
+            expect(recycleBin.groups.length).to.be(recycleBinLength);
+            checkDb(db);
+            done();
+        });
     });
 
-    it('saves db to xml', function() {
+    it('saves db to xml', function(done) {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -130,8 +146,10 @@ describe('Kdbx', function () {
         entry.fields.Notes = 'notes';
         entry.fields.URL = 'url';
         entry.times.update();
-        var xml = db.saveXml();
-        expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
+        db.saveXml(function(xml) {
+            expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
+            done();
+        });
     });
 
     function checkDb(db) {

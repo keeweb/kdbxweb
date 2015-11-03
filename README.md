@@ -22,22 +22,22 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ```javascript
 var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
-var db = kdbxweb.Kdbx.load(data, credentials);
+kdbxweb.Kdbx.load(data, credentials, function(db) {  });
 ```
 
 ##### Saving
 
 ```javascript
-var dataAsArrayBuffer = db.save();
-var xmlAsString = db.saveXml();
+db.save(function(dataAsArrayBuffer) {  });
+db.saveXml(function(xmlAsString) {  });
 ```
 
 ##### File info
 [Header object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
 [Meta object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
 ```javascript
-db.meta
 db.header
+db.meta
 ```
 
 ##### Changing credentials
@@ -146,7 +146,7 @@ try {
 ##### Consts
 [Consts definition](https://github.com/antelle/kdbxweb/blob/master/lib/defs/consts.js)  
 ```javascript
-kdbxweb.Consts.ErrorCodes (all thrown errors have code property)
+kdbxweb.Consts.ErrorCodes // all thrown errors have code property
 kdbxweb.Consts.Defaults // default db settings
 kdbxweb.Consts.Icons // icons map
 ```

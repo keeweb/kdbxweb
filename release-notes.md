@@ -1,5 +1,9 @@
 Release notes
 -------------
+##### v0.2.0 (2015-11-04)
+WebCrypto support  
+[!] Kdbx.load, Kdbx.save, Kdbx.saveXml are now async  
+
 ##### v0.1.12 (2015-11-02)
 Ability to use binary keyfiles  
 
