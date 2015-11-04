@@ -1,5 +1,10 @@
 Release notes
 -------------
+##### v0.2.1 (2015-11-04)
+API conststency  
+`+` entry.parentGroup, group.parentGroup  
+`!` Kdbx.move, Kdbx.remove now doesn't require parent group  
+
 ##### v0.2.0 (2015-11-04)
 WebCrypto support  
 `!` Kdbx.load, Kdbx.save, Kdbx.saveXml are now async  

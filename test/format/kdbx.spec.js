@@ -124,10 +124,10 @@ describe('Kdbx', function () {
             var recycleBin = db.getGroup(db.meta.recycleBinUuid);
             var recycleBinLength = recycleBin.groups.length;
             var groupLength = parentGroup.groups.length;
-            db.remove(group, parentGroup);
+            db.remove(group);
             expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
             expect(group.groups.length).to.be(groupLength - 1);
-            db.move(group, recycleBin, parentGroup);
+            db.move(group, parentGroup);
             expect(recycleBin.groups.length).to.be(recycleBinLength);
             checkDb(db);
             done();

@@ -73,12 +73,12 @@ var anotherGroup = db.createGroup(group, 'Subgroup');
 
 ##### Group deletion
 ```javascript
-db.remove(group, parentGroup);
+db.remove(group);
 ```
 
 ##### Group move
 ```javascript
-db.remove(group, parentGroup, toGroup);
+db.move(group, toGroup);
 ```
 
 ##### Recycle Bin
@@ -115,12 +115,12 @@ entry.times.update();
 
 ##### Entry deletion
 ```javascript
-db.remove(entry, parentGroup);
+db.remove(entry);
 ```
 
 ##### Entry move
 ```javascript
-db.remove(entry, parentGroup, toGroup);
+db.move(entry, toGroup);
 ```
 
 ##### ProtectedValue
