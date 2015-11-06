@@ -1,11 +1,10 @@
 {
   "name": "kdbxweb",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Kdbx KeePass database reader for web",
   "repository": "https://github.com/antelle/kdbxweb.git",
   "main": "lib/index.js",
   "scripts": {
-    "postinstall": "cd node_modules/asmcrypto.js && npm install && grunt --with=utils,aes-cbc,aes-ecb,sha256",
     "test": "npm run tests:cover",
     "start": "npm run build",
     "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-pro",
@@ -39,7 +38,7 @@
   },
   "dependencies": {
     "arraybuffer-slice": "^0.1.2",
-    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-3",
+    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-4",
     "pako": "^0.2.7",
     "xmldom": "^0.1.19"
   }
