@@ -19,13 +19,6 @@ module.exports = {
         filename: 'kdbxweb.test.js',
         libraryTarget: 'umd'
     },
-    module: {
-        preLoaders: [{
-            test: /\.js$/,
-            loader: 'jshint-loader',
-            exclude: /node_modules/
-        }]
-    },
     resolve: {
         root: [path.join(__dirname, '../../lib')]
     },

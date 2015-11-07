@@ -134,6 +134,20 @@ describe('Kdbx', function () {
         });
     });
 
+    it('deletes entry without recycle bin', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            var parentGroup = db.getDefaultGroup().groups[1];
+            var group = parentGroup.groups[parentGroup.groups.length - 1];
+            var deletedObjectsLength = db.deletedObjects.length;
+            db.meta.recycleBinEnabled = false;
+            db.remove(group);
+            expect(db.deletedObjects.length).to.be(deletedObjectsLength + 1);
+            expect(db.deletedObjects[db.deletedObjects.length - 1].uuid).to.be(group.uuid);
+            done();
+        });
+    });
+
     it('saves db to xml', function(done) {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);

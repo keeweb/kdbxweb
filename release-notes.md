@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.2.3 (2015-11-07)
+Support DeletedObjects  
+
 ##### v0.2.2 (2015-11-06)
 Build fix  
 `-` fixed node.js install issues  

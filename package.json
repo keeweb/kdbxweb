@@ -1,12 +1,13 @@
 {
   "name": "kdbxweb",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Kdbx KeePass database reader for web",
   "repository": "https://github.com/antelle/kdbxweb.git",
   "main": "lib/index.js",
   "scripts": {
     "test": "npm run tests:cover",
-    "start": "npm run build",
+    "start": "npm run jshint && npm run build",
+    "jshint": "jshint lib test",
     "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-pro",
     "build:debug": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug",
     "cichecks": "npm run clean && npm run pack:tests && npm run tests:cover",
