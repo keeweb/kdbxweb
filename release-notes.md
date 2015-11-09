@@ -1,5 +1,9 @@
 Release notes
 -------------
+##### v0.2.4 (2015-11-09)
+`+` Export Uuid  
+`-` Fix entry history write bug  
+
 ##### v0.2.3 (2015-11-07)
 Support DeletedObjects  
 
