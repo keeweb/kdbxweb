@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.2.5 (2015-11-10)
+Fixed KeePassX compatibility bugs  
+
 ##### v0.2.4 (2015-11-09)
 `+` Export Uuid  
 `-` Fix entry history write bug  
