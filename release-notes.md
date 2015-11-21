@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.2.6 (2015-11-21)
+History cleanup method  
+
 ##### v0.2.5 (2015-11-10)
 Fixed KeePassX compatibility bugs  
 

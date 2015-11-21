@@ -57,6 +57,12 @@ var group = newDb.createGroup(newDb.getDefaultGroup(), 'subgroup');
 var entry = newDb.createEntry(group);
 ```
 
+##### Maintenance
+
+```javascript
+db.cutHistory(); // cut history by rules defined in meta
+```
+
 ##### Groups
 [Group object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
 ```javascript
@@ -87,6 +93,11 @@ var recycleBin = db.getGroup(db.meta.recycleBinUuid);
 if (!recycleBin) {
     db.createRecycleBin();
 }
+```
+
+##### Recursive traverse
+```javascript
+group.forEachEntry(function(entry) { /* ... */ });
 ```
 
 ##### Entries

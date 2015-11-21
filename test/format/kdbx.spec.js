@@ -166,6 +166,60 @@ describe('Kdbx', function () {
         });
     });
 
+    it('cuts entry history', function() {
+        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+        var entry = db.createEntry(subGroup);
+        var i;
+        for (i = 0; i < 3; i++) {
+            entry.fields.Title = i.toString();
+            entry.pushHistory();
+        }
+        expect(entry.history[0].fields.Title).to.be('0');
+        expect(entry.history.length).to.be(3);
+        db.cutHistory();
+        expect(entry.history.length).to.be(3);
+        for (i = 3; i < 10; i++) {
+            entry.fields.Title = i.toString();
+            entry.pushHistory();
+        }
+        expect(entry.history[0].fields.Title).to.be('0');
+        expect(entry.history.length).to.be(10);
+        expect(entry.history[0].fields.Title).to.be('0');
+        db.cutHistory();
+        expect(entry.history[0].fields.Title).to.be('0');
+        expect(entry.history.length).to.be(10);
+        for (i = 10; i < 11; i++) {
+            entry.fields.Title = i.toString();
+            entry.pushHistory();
+        }
+        expect(entry.history.length).to.be(11);
+        db.cutHistory();
+        expect(entry.history[0].fields.Title).to.be('1');
+        expect(entry.history.length).to.be(10);
+        for (i = 11; i < 20; i++) {
+            entry.fields.Title = i.toString();
+            entry.pushHistory();
+        }
+        db.cutHistory();
+        expect(entry.history[0].fields.Title).to.be('10');
+        expect(entry.history.length).to.be(10);
+        for (i = 20; i < 30; i++) {
+            entry.fields.Title = i.toString();
+            entry.pushHistory();
+        }
+        db.meta.historyMaxItems = -1;
+        db.cutHistory();
+        expect(entry.history[0].fields.Title).to.be('10');
+        expect(entry.history.length).to.be(20);
+        db.meta.historyMaxItems = undefined;
+        db.cutHistory();
+        expect(entry.history[0].fields.Title).to.be('10');
+        expect(entry.history.length).to.be(20);
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');
