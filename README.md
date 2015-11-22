@@ -194,8 +194,6 @@ Areas which need more attention for now:
 
 - unit tests, especially for complex functions (like moving entry with binaries)
 - testing in general
-- better documentation
-- merge files support
 
 ## License
 
