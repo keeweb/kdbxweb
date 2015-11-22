@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.2.6 (2015-11-22)
+Custom icons cleanup  
+
 ##### v0.2.6 (2015-11-21)
 History cleanup method  
 

@@ -60,7 +60,10 @@ var entry = newDb.createEntry(group);
 ##### Maintenance
 
 ```javascript
-db.cutHistory(); // cut history by rules defined in meta
+db.cleanup({
+    historyRules: true,
+    customIcons: true
+});
 ```
 
 ##### Groups
@@ -97,7 +100,7 @@ if (!recycleBin) {
 
 ##### Recursive traverse
 ```javascript
-group.forEachEntry(function(entry) { /* ... */ });
+group.forEach(function(entry, group) { /* will be called for each entry or group */ });
 ```
 
 ##### Entries

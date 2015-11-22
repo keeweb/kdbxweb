@@ -166,7 +166,7 @@ describe('Kdbx', function () {
         });
     });
 
-    it('cuts entry history', function() {
+    it('cleanups by history rules', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -179,7 +179,7 @@ describe('Kdbx', function () {
         }
         expect(entry.history[0].fields.Title).to.be('0');
         expect(entry.history.length).to.be(3);
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history.length).to.be(3);
         for (i = 3; i < 10; i++) {
             entry.fields.Title = i.toString();
@@ -188,7 +188,7 @@ describe('Kdbx', function () {
         expect(entry.history[0].fields.Title).to.be('0');
         expect(entry.history.length).to.be(10);
         expect(entry.history[0].fields.Title).to.be('0');
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history[0].fields.Title).to.be('0');
         expect(entry.history.length).to.be(10);
         for (i = 10; i < 11; i++) {
@@ -196,14 +196,14 @@ describe('Kdbx', function () {
             entry.pushHistory();
         }
         expect(entry.history.length).to.be(11);
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history[0].fields.Title).to.be('1');
         expect(entry.history.length).to.be(10);
         for (i = 11; i < 20; i++) {
             entry.fields.Title = i.toString();
             entry.pushHistory();
         }
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history[0].fields.Title).to.be('10');
         expect(entry.history.length).to.be(10);
         for (i = 20; i < 30; i++) {
@@ -211,13 +211,40 @@ describe('Kdbx', function () {
             entry.pushHistory();
         }
         db.meta.historyMaxItems = -1;
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history[0].fields.Title).to.be('10');
+        expect(entry.history.length).to.be(20);
+        db.cleanup();
+        db.cleanup({});
         expect(entry.history.length).to.be(20);
         db.meta.historyMaxItems = undefined;
-        db.cutHistory();
+        db.cleanup({historyRules: true});
         expect(entry.history[0].fields.Title).to.be('10');
         expect(entry.history.length).to.be(20);
+    });
+
+    it('cleanups custom icons', function() {
+        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+        var entry = db.createEntry(subGroup);
+        var i;
+        for (i = 0; i < 3; i++) {
+            entry.fields.Title = i.toString();
+            entry.customIcon = 'i1';
+            entry.pushHistory();
+        }
+        entry.customIcon = 'i2';
+        subGroup.customIcon = 'i3';
+        db.meta.customIcons.i1 = 'icon1';
+        db.meta.customIcons.i2 = 'icon2';
+        db.meta.customIcons.i3 = 'icon3';
+        db.meta.customIcons.r1 = 'rem1';
+        db.meta.customIcons.r2 = 'rem2';
+        db.meta.customIcons.r3 = 'rem3';
+        db.cleanup({customIcons: true});
+        expect(db.meta.customIcons).to.eql({ i1: 'icon1', i2: 'icon2', i3: 'icon3' });
     });
 
     function checkDb(db) {
