@@ -73,13 +73,13 @@ Due to format limitations, p2p entry history merging can produce phantom records
 is supported only with one central replica.
 ```javascript
 var db = kdbxweb.Kdbx.load(data, credentials); // load local db
-// with with db
+// work with db
 db.save(); // save local db
 var editStateBeforeSave = db.getLocalEditState(); // save local editing state (serializable to JSON)
 db.close(); // close local db
 db = kdbxweb.Kdbx.load(data, credentials); // reopen it again
 db.setLocalEditState(editStateBeforeSave); // assign edit state obtained before save
-// with with db
+// work with db
 var remoteDb = kdbxweb.Kdbx.load(remoteData, credentials); // load remote db
 db.merge(remoteDb); // merge remote into local
 delete remoteDb; // don't use remoteDb anymore
