@@ -66,6 +66,32 @@ db.cleanup({
 });
 ```
 
+##### Merge
+
+Entries, groups and meta are consistent against merging in any direction with any state.  
+Due to format limitations, p2p entry history merging can produce phantom records or deletions, so correct entry history merging
+is supported only with one central replica.
+```javascript
+var db = kdbxweb.Kdbx.load(data, credentials); // load local db
+// with with db
+db.save(); // save local db
+var editStateBeforeSave = db.getLocalEditState(); // save local editing state (serializable to JSON)
+db.close(); // close local db
+db = kdbxweb.Kdbx.load(data, credentials); // reopen it again
+db.setLocalEditState(editStateBeforeSave); // assign edit state obtained before save
+// with with db
+var remoteDb = kdbxweb.Kdbx.load(remoteData, credentials); // load remote db
+db.merge(remoteDb); // merge remote into local
+delete remoteDb; // don't use remoteDb anymore
+var saved = db.save(); // save local db
+editStateBeforeSave = db.getLocalEditState(); // save local editing state again
+var pushedOk = pushToUpstream(saved); { // push db to upstream
+if (pushedOk) {
+    db.removeLocalEditState(); // clear local editing state
+    editStateBeforeSave = null; // and discard it
+}
+```
+
 ##### Groups
 [Group object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
 ```javascript
@@ -125,6 +151,8 @@ entry.pushHistory();
 entry.fgColor = '#ff0000';
 // update entry modification and access time
 entry.times.update();
+// remove states from entry history
+entry.removeHistory(index, count);
 ```
 
 ##### Entry deletion
