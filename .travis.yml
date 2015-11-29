@@ -4,8 +4,8 @@ node_js:
   - stable
 
 branches:
-  except:
-    - gh-pages
+  only:
+    - master
 
 install:
   - npm install
