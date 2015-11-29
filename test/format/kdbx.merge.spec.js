@@ -6,7 +6,8 @@ var expect = require('expect.js'),
 describe('Kdbx.merge', function () {
     var dt = {
         pre1: new Date(2014, 1, 1), created: new Date(2015, 1, 1),
-        upd1: new Date(2015, 1, 2), upd2: new Date(2015, 1, 3), upd3: new Date(2015, 1, 4)
+        upd1: new Date(2015, 1, 2), upd2: new Date(2015, 1, 3), upd3: new Date(2015, 1, 4),
+        upd4: new Date(2015, 1, 5), upd5: new Date(2015, 1, 6), upd6: new Date(2015, 1, 7)
     };
 
     var id = {
@@ -417,6 +418,32 @@ describe('Kdbx.merge', function () {
         assertDbEquals(db, exp);
     });
 
+    it('deletes group moved out of subgroup of locally deleted group', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        remote.move(remote.getDefaultGroup().groups[1].groups[0], remote.getDefaultGroup().groups[3].groups[1]);
+        tick();
+        db.move(db.getDefaultGroup().groups[1], null);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        exp.root.groups.splice(1, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes group moved out of subgroup of remotely deleted group', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        db.move(db.getDefaultGroup().groups[1].groups[0], db.getDefaultGroup().groups[3].groups[1]);
+        tick();
+        remote.move(remote.getDefaultGroup().groups[1], null);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        exp.root.groups.splice(1, 1);
+        assertDbEquals(db, exp);
+    });
+
     it('moves group moved to locally moved group', function() {
         var db = getTestDb(),
             remote = getTestDb();
@@ -447,6 +474,275 @@ describe('Kdbx.merge', function () {
         exp.root.groups[2].groups.push(exp.root.groups[3]);
         exp.root.groups.splice(3, 1);
         assertDbEquals(db, exp);
+    });
+
+    // entries
+
+    it('deletes remote entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        remote.move(remote.getDefaultGroup().entries[0], null);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        delete exp.meta.customIcons;
+        exp.root.entries.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes local entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        db.move(db.getDefaultGroup().entries[0], null);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        delete exp.meta.customIcons;
+        exp.root.entries.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('moves remote entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        remote.move(remote.getDefaultGroup().entries[0], remote.getDefaultGroup().groups[1]);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        delete exp.meta.customIcons;
+        exp.root.groups[1].entries.push(exp.root.entries[0]);
+        exp.root.entries.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('moves local entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        db.move(db.getDefaultGroup().entries[0], db.getDefaultGroup().groups[1]);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        delete exp.del;
+        delete exp.meta.customIcons;
+        exp.root.groups[1].entries.push(exp.root.entries[0]);
+        exp.root.entries.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('changes remote entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var ab = new ArrayBuffer(0);
+        var prVal = kdbxweb.ProtectedValue.fromString('secret');
+        var entry = remote.getDefaultGroup().entries[0];
+        entry.icon = 21;
+        entry.fgColor = '#aa0000';
+        entry.bgColor = '#00aa00';
+        entry.overrideUrl = '1234';
+        entry.tags = 'tags1';
+        entry.times.lastModTime = dt.upd4;
+        entry.fields = { Password: 'pass', Another: 'field', Protected: prVal };
+        entry.binaries = { bin1: { ref: id.bin1 }, bin2: bin.bin2, ab: ab };
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].icon = 21;
+        exp.root.entries[0].fgColor = '#aa0000';
+        exp.root.entries[0].bgColor = '#00aa00';
+        exp.root.entries[0].overrideUrl = '1234';
+        exp.root.entries[0].tags = 'tags1';
+        exp.root.entries[0].modified = dt.upd4;
+        exp.root.entries[0].fields = { Password: 'pass', Another: 'field', Protected: prVal };
+        exp.root.entries[0].binaries = { bin1: { ref: id.bin1 }, bin2: bin.bin2, ab: ab };
+        exp.root.entries[0].history.push({ modified: dt.upd3, tags: 'tags' });
+        assertDbEquals(db, exp);
+    });
+
+    it('ignores remote entry with same date', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var ab = new ArrayBuffer(0);
+        var prVal = kdbxweb.ProtectedValue.fromString('secret');
+        var entry = remote.getDefaultGroup().entries[0];
+        entry.icon = 21;
+        entry.fgColor = '#aa0000';
+        entry.bgColor = '#00aa00';
+        entry.overrideUrl = '1234';
+        entry.tags = 'tags1';
+        entry.fields = { Password: 'pass', Another: 'field', Protected: prVal };
+        entry.binaries = { bin1: { ref: id.bin1 }, bin2: bin.bin2, ab: ab };
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        assertDbEquals(db, exp);
+    });
+
+    it('changes local entry', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var ab = new ArrayBuffer(0);
+        var prVal = kdbxweb.ProtectedValue.fromString('secret');
+        var entry = db.getDefaultGroup().entries[0];
+        entry.pushHistory();
+        entry.icon = 21;
+        entry.fgColor = '#aa0000';
+        entry.bgColor = '#00aa00';
+        entry.overrideUrl = '1234';
+        entry.tags = 'tags1';
+        entry.times.lastModTime = dt.upd4;
+        entry.fields = { Password: 'pass', Another: 'field', Protected: prVal };
+        entry.binaries = { bin1: { ref: id.bin1 }, bin2: bin.bin2, ab: ab };
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].icon = 21;
+        exp.root.entries[0].fgColor = '#aa0000';
+        exp.root.entries[0].bgColor = '#00aa00';
+        exp.root.entries[0].overrideUrl = '1234';
+        exp.root.entries[0].tags = 'tags1';
+        exp.root.entries[0].modified = dt.upd4;
+        exp.root.entries[0].fields = { Password: 'pass', Another: 'field', Protected: prVal };
+        exp.root.entries[0].binaries = { bin1: { ref: id.bin1 }, bin2: bin.bin2, ab: ab };
+        exp.root.entries[0].history.push({ modified: dt.upd3, tags: 'tags' });
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes history state remotely', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        remote.getDefaultGroup().entries[0].removeHistory(0);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].history.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes history state locally', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        db.getDefaultGroup().entries[0].removeHistory(0);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].history.splice(0, 1);
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes all history states remotely', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        remote.getDefaultGroup().entries[0].removeHistory(0, 5);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].history = [];
+        assertDbEquals(db, exp);
+    });
+
+    it('deletes all history states locally', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        db.getDefaultGroup().entries[0].removeHistory(0, 5);
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].history = [];
+        assertDbEquals(db, exp);
+    });
+
+    it('adds past history state remotely', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var remoteEntry = remote.getDefaultGroup().entries[0];
+        var entry = db.getDefaultGroup().entries[0];
+        remoteEntry.times.lastModTime = dt.upd3;
+        entry.times.lastModTime = dt.upd4;
+        remoteEntry.pushHistory();
+        remoteEntry.times.lastModTime = dt.upd4;
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].modified = dt.upd4;
+        exp.root.entries[0].history.push({ modified: dt.upd3, tags: 'tags' });
+        assertDbEquals(db, exp);
+    });
+
+    it('adds future history state remotely and converts current state into history', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var remoteEntry = remote.getDefaultGroup().entries[0];
+        var entry = db.getDefaultGroup().entries[0];
+        remoteEntry.times.lastModTime = dt.upd4;
+        remoteEntry.tags = 't4';
+        remoteEntry.pushHistory();
+        remoteEntry.times.lastModTime = dt.upd5;
+        remoteEntry.tags = 'tRemote';
+        entry.tags = 'tLocal';
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].modified = dt.upd5;
+        exp.root.entries[0].tags = 'tRemote';
+        exp.root.entries[0].history.push({ modified: dt.upd3, tags: 'tLocal' });
+        exp.root.entries[0].history.push({ modified: dt.upd4, tags: 't4' });
+        assertDbEquals(db, exp);
+    });
+
+    it('adds history state locally and converts remote state into history', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var remoteEntry = remote.getDefaultGroup().entries[0];
+        var entry = db.getDefaultGroup().entries[0];
+        remoteEntry.times.lastModTime = dt.upd5;
+        remoteEntry.tags = 'tRemote';
+        entry.tags = 't4';
+        entry.times.lastModTime = dt.upd4;
+        entry.pushHistory();
+        entry.tags = 'tLocal';
+        entry.times.lastModTime = dt.upd6;
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].modified = dt.upd6;
+        exp.root.entries[0].tags = 'tLocal';
+        exp.root.entries[0].history.push({ modified: dt.upd4, tags: 't4' });
+        exp.root.entries[0].history.push({ modified: dt.upd5, tags: 'tRemote' });
+        assertDbEquals(db, exp);
+    });
+
+    it('can merge with old entry state without state deletions', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+        var entry = db.getDefaultGroup().entries[0];
+        entry.times.lastModTime = dt.upd4;
+        entry.tags = 't4';
+        entry.pushHistory();
+        entry.tags = 'tLocal';
+        entry.times.lastModTime = dt.upd5;
+        entry._editState = undefined;
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.entries[0].tags = 'tLocal';
+        exp.root.entries[0].modified = dt.upd5;
+        exp.root.entries[0].history.push({ modified: dt.upd3, tags: 'tags' });
+        exp.root.entries[0].history.push({ modified: dt.upd4, tags: 't4' });
+        assertDbEquals(db, exp);
+    });
+
+    // edit state management
+
+    it('saves and restores edit state', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+
+        db.getDefaultGroup().entries[0].removeHistory(0);
+        db.meta.historyMaxItems = 500;
+
+        db.removeLocalEditState();
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        assertDbEquals(db, exp);
+
+        db.getDefaultGroup().entries[0].removeHistory(0);
+        db.meta.historyMaxItems = 500;
+        var editState = db.getLocalEditState();
+        editState = JSON.parse(JSON.stringify(editState));
+        db.removeLocalEditState();
+        db.setLocalEditState(editState);
+        db.merge(remote);
+
+        exp.meta.historyMaxItems = 500;
+        exp.root.entries[0].history.splice(0, 1);
     });
 
     function getTestDbStructure() {
@@ -604,6 +900,7 @@ describe('Kdbx.merge', function () {
         entry.pushHistory();
         entry.tags = 'tags';
         entry.history[1].times.lastModTime = dt.upd2;
+        entry._editState = null;
 
         var group1 = db.createGroup(root, 'g1');
         group1.uuid = id.g1;
