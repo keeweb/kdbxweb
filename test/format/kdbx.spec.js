@@ -103,6 +103,22 @@ describe('Kdbx', function () {
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('credentials');
             });
+        expect(function() {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+            cred.setPassword('string');
+        }).to.throwException(function(e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+                expect(e.message).to.contain('password');
+            });
+        expect(function() {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+            cred.setKeyFile(123);
+        }).to.throwException(function(e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+                expect(e.message).to.contain('keyFile');
+            });
     });
 
     it('generates error for bad password', function () {
