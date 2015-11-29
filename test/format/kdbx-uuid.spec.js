@@ -83,4 +83,14 @@ describe('KdbxUuid', function() {
         expect(uuid).to.be.a(KdbxUuid);
         expect(uuid.toString()).not.to.be('AAAAAAAAAAAAAAAAAAAAAA==');
     });
+
+    it('checks equality', function() {
+        var uuid = new KdbxUuid(new Uint8Array([1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6]).buffer);
+        expect(uuid.equals('AQIDBAUGBwgJCgECAwQFBg==')).to.be(true);
+        expect(uuid.equals(new KdbxUuid('AQIDBAUGBwgJCgECAwQFBg=='))).to.be(true);
+        expect(uuid.equals(null)).to.be(false);
+        expect(uuid.equals(undefined)).to.be(false);
+        expect(uuid.equals('???')).to.be(false);
+        expect(uuid.equals(new KdbxUuid())).to.be(false);
+    });
 });
