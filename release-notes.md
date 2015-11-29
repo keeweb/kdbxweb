@@ -6,7 +6,6 @@ Merge
 `+` Kdbx.[get,set,remove]LocalEditState  
 `+` KdbxEntry.removeHistory  
 `+` KdbxGroup.forEach now accepts thisArg  
-`!` all async callbacks are now error-first  
 
 ##### v0.2.6 (2015-11-22)
 Custom icons cleanup  
