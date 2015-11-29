@@ -6,10 +6,11 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 - runs in browser or node.js
 - no native addons
-- average file open time is 200ms
+- fast encryption with WebCrypto, open time is comparable to native app
 - total ≈150kB with dependencies
 - full support of Kdbx features
 - protected values are stored in memory XOR'ed
+- conflict-free merge support
 
 ## Browser support
 
@@ -155,6 +156,7 @@ entry.times.update();
 // remove states from entry history
 entry.removeHistory(index, count);
 ```
+Important: don't modify history states directly, this will break merge.
 
 ##### Entry deletion
 ```javascript
