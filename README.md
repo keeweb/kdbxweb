@@ -71,8 +71,7 @@ db.cleanup({
 
 Entries, groups and meta are consistent against merging in any direction with any state.  
 Due to format limitations, p2p entry history merging and some non-critical fields in meta can produce phantom records or deletions, 
-so correct entry history merging is supported only with one central replica.  
-Merge limitations: entry/group sets are considered unordered. Items order is not guaranteed, reorder doesn't work at all.
+so correct entry history merging is supported only with one central replica. Items order is not guaranteed but the algorithm tries to preserve it.
 ```javascript
 var db = kdbxweb.Kdbx.load(data, credentials); // load local db
 // work with db

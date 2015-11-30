@@ -13,7 +13,7 @@ describe('Kdbx.merge', function () {
     var id = {
         trash: null, name: null, tpl: null, eDel: null, eDel1: null, icon1: null, icon2: null, cd1: null,
         bin1: null, bin2: null, bin3: null,
-        gRoot: null, g1: null, g11: null, g111: null, g112: null, g12: null, g2: null, g3: null, g31: null,
+        gRoot: null, g1: null, g11: null, g111: null, g112: null, g12: null, g2: null, g3: null, g31: null, g4: null, g5: null,
         er1: null
     };
 
@@ -473,6 +473,82 @@ describe('Kdbx.merge', function () {
         exp.root.groups[1].groups.splice(0, 1);
         exp.root.groups[2].groups.push(exp.root.groups[3]);
         exp.root.groups.splice(3, 1);
+        assertDbEquals(db, exp);
+    });
+
+    // groups: reorder
+
+    it('moves group back', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+
+        var group4 = db.createGroup(db.getDefaultGroup(), 'g4');
+        group4.uuid = id.g4;
+        group4.times.lastModTime = group4.times.locationChanged = dt.upd1;
+        var group5 = db.createGroup(db.getDefaultGroup(), 'g5');
+        group5.uuid = id.g5;
+        group5.times.lastModTime = group5.times.locationChanged = dt.upd1;
+        db.getDefaultGroup().groups.splice(1, 2, db.getDefaultGroup().groups[2], db.getDefaultGroup().groups[1]);
+        db.getDefaultGroup().groups[1].times.lastModTime = dt.upd3;
+
+        group5 = remote.createGroup(remote.getDefaultGroup(), 'g5');
+        group5.uuid = id.g5;
+        group5.times.lastModTime = group5.times.locationChanged = dt.upd2;
+        group4 = remote.createGroup(remote.getDefaultGroup(), 'g4');
+        group4.uuid = id.g4;
+        group4.times.lastModTime = group4.times.locationChanged = dt.upd1;
+
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.groups.splice(1, 2, exp.root.groups[2], exp.root.groups[1]);
+        exp.root.groups[1].modified = dt.upd3;
+        exp.root.groups.push({ uuid: id.g5, name: 'g5' });
+        exp.root.groups.push({ uuid: id.g4, name: 'g4' });
+        assertDbEquals(db, exp);
+    });
+
+    it('moves group forward', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+
+        var group4 = db.createGroup(db.getDefaultGroup(), 'g4');
+        group4.uuid = id.g4;
+        group4.times.lastModTime = group4.times.locationChanged = dt.upd1;
+        var group5 = db.createGroup(db.getDefaultGroup(), 'g5');
+        group5.uuid = id.g5;
+        group5.times.lastModTime = group5.times.locationChanged = dt.upd1;
+        db.getDefaultGroup().groups.splice(1, 2, db.getDefaultGroup().groups[2], db.getDefaultGroup().groups[1]);
+        db.getDefaultGroup().groups[2].times.lastModTime = dt.upd3;
+
+        group5 = remote.createGroup(remote.getDefaultGroup(), 'g5');
+        group5.uuid = id.g5;
+        group5.times.lastModTime = group5.times.locationChanged = dt.upd1;
+        group4 = remote.createGroup(remote.getDefaultGroup(), 'g4');
+        group4.uuid = id.g4;
+        group4.times.lastModTime = group4.times.locationChanged = dt.upd2;
+
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.groups.splice(1, 2, exp.root.groups[2], exp.root.groups[1]);
+        exp.root.groups[2].modified = dt.upd3;
+        exp.root.groups.push({ uuid: id.g5, name: 'g5' });
+        exp.root.groups.push({ uuid: id.g4, name: 'g4' });
+        assertDbEquals(db, exp);
+    });
+
+    it('inserts group at start', function() {
+        var db = getTestDb(),
+            remote = getTestDb();
+
+        var group4 = remote.createGroup(remote.getDefaultGroup(), 'g4');
+        group4.uuid = id.g4;
+        group4.times.lastModTime = group4.times.locationChanged = dt.upd2;
+        remote.getDefaultGroup().groups.splice(remote.getDefaultGroup().groups.length - 1, 1);
+        remote.getDefaultGroup().groups.unshift(group4);
+
+        db.merge(remote);
+        var exp = getTestDbStructure();
+        exp.root.groups.unshift({ uuid: id.g4, name: 'g4' });
         assertDbEquals(db, exp);
     });
 
