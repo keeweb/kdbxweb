@@ -32,7 +32,8 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
             mangle: { keep_fnames: true },
-            compress: false
+            compress: false,
+            output: { ascii_only: true }
         }),
         new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) 2015 ' + pkg.author +
             ', opensource.org/licenses/' + pkg.license)
@@ -46,6 +47,7 @@ module.exports = {
     },
     'uglify-loader': {
         mangle: {},
-        compress: {}
+        compress: {},
+        output: { ascii_only: true }
     }
 };

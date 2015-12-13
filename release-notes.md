@@ -1,6 +1,13 @@
 Release notes
 -------------
-##### v0.3.0 (not released yet)
+
+##### v0.3.2 (2015-12-13)
+ASCII-only dist  
+
+##### v0.3.1 (2015-12-02)
+Version fix  
+
+##### v0.3.0 (2015-12-02)
 Merge  
 `+` Kdbx.merge  
 `+` Kdbx.[get,set,remove]LocalEditState  
