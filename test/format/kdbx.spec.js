@@ -119,6 +119,13 @@ describe('Kdbx', function () {
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('keyFile');
             });
+        expect(function() {
+            kdbxweb.Kdbx.create('file');
+        }).to.throwException(function(e) {
+            expect(e).to.be.a(kdbxweb.KdbxError);
+            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e.message).to.contain('credentials');
+        });
     });
 
     it('generates error for bad password', function () {
