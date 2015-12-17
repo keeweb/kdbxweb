@@ -63,7 +63,8 @@ var entry = newDb.createEntry(group);
 ```javascript
 db.cleanup({
     historyRules: true,
-    customIcons: true
+    customIcons: true,
+    binaries: true
 });
 ```
 

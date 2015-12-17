@@ -183,6 +183,8 @@ describe('Kdbx.merge', function () {
         binaries[id.bin1] = bin.bin1;
         binaries[id.bin2] = bin.bin2;
         binaries[id.bin3] = bin.bin3;
+        db.groups[0].entries[0].binaries[id.bin2] = { ref: id.bin2 };
+        db.groups[0].entries[0].history[0].binaries[id.bin2] = { ref: id.bin3 };
         db.meta.binaries[id.bin2] = bin.bin2;
         remote.meta.binaries[id.bin3] = bin.bin3;
         db.merge(remote);
@@ -563,6 +565,7 @@ describe('Kdbx.merge', function () {
         delete exp.del;
         delete exp.meta.customIcons;
         exp.root.entries.splice(0, 1);
+        exp.meta.binaries = {};
         assertDbEquals(db, exp);
     });
 
@@ -575,6 +578,7 @@ describe('Kdbx.merge', function () {
         delete exp.del;
         delete exp.meta.customIcons;
         exp.root.entries.splice(0, 1);
+        exp.meta.binaries = {};
         assertDbEquals(db, exp);
     });
 

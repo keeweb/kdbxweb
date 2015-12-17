@@ -263,6 +263,29 @@ describe('Kdbx', function () {
         expect(db.meta.customIcons).to.eql({ i1: 'icon1', i2: 'icon2', i3: 'icon3' });
     });
 
+    it('cleanups binaries', function() {
+        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+        var entry = db.createEntry(subGroup);
+        var i;
+        for (i = 0; i < 3; i++) {
+            entry.fields.Title = i.toString();
+            entry.binaries.bin = { ref: 'b1' };
+            entry.pushHistory();
+        }
+        entry.binaries.bin = { ref: 'b2' };
+        var b1 = new Uint8Array([1]).buffer;
+        var b2 = new Uint8Array([2]).buffer;
+        var b3 = new Uint8Array([3]).buffer;
+        db.meta.binaries.b1 = b1;
+        db.meta.binaries.b2 = b2;
+        db.meta.binaries.b3 = b3;
+        db.cleanup({binaries: true});
+        expect(db.meta.binaries).to.eql({ b1: b1, b2: b2 });
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');

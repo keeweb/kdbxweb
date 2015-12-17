@@ -1,6 +1,9 @@
 Release notes
 -------------
 
+##### v0.3.3 (2015-12-17)
+Binaries management  
+
 ##### v0.3.2 (2015-12-13)
 ASCII-only dist  
 
