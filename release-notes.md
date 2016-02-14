@@ -1,6 +1,9 @@
 Release notes
 -------------
 
+##### v0.3.4 (2016-02-14)
+KdbxCredentials.createKeyFileWithHash  
+
 ##### v0.3.3 (2015-12-17)
 Binaries management  
 
