@@ -24,6 +24,11 @@ if (!global.crypto) {
                     resolve(data);
                 });
             }
+        },
+        getRandomValues: function(arr) {
+            for (var i = 0; i < arr.length; i++) {
+                arr[i] = Math.random() * 255;
+            }
         }
     };
 }
