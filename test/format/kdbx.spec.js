@@ -31,6 +31,38 @@ describe('Kdbx', function () {
         });
     });
 
+    it('should load a file with empty pass', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
+        kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
+    it('should load a file with empty pass and keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''), TestResources.emptyPassWithKeyFileKey);
+        kdbxweb.Kdbx.load(TestResources.emptyPassWithKeyFile, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
+    it('should load a file with no pass and keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(null, TestResources.noPassWithKeyFileKey);
+        kdbxweb.Kdbx.load(TestResources.noPassWithKeyFile, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
+    //it('should load a file with null pass', function(done) {
+    //    var cred = new kdbxweb.Credentials(null);
+    //    kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db, err) {
+    //        expect(db).to.be.a(kdbxweb.Kdbx);
+    //        done();
+    //    });
+    //});
+
     it('should successfully load saved file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
