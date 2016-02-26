@@ -1,7 +1,8 @@
 Release notes
 -------------
-##### v0.3.5 (not released yet)
+##### v0.3.5 (2016-02-26)
 `+` Allow to open db with empty password and keyfile  
+`+` Using secure random generator if it's available  
 
 ##### v0.3.4 (2016-02-14)
 KdbxCredentials.createKeyFileWithHash  
