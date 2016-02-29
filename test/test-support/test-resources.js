@@ -10,6 +10,9 @@ catch (e) { res.demoKdbx = readNodeFile('../../resources/demo.kdbx'); }
 try { res.demoKey = require('base64!../../resources/demo.key'); }
 catch (e) { res.demoKey = readNodeFile('../../resources/demo.key'); }
 
+try { res.demoXml = require('base64!../../resources/demo.xml'); }
+catch (e) { res.demoXml = readNodeFile('../../resources/demo.xml'); }
+
 try { res.cyrillicKdbx = require('base64!../../resources/cyrillic.kdbx'); }
 catch (e) { res.cyrillicKdbx = readNodeFile('../../resources/cyrillic.kdbx'); }
 

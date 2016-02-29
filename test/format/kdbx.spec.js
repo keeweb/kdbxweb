@@ -15,6 +15,16 @@ describe('Kdbx', function () {
         });
     });
 
+    // it('should import simple file', function (done) {
+    //     var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
+    //     kdbxweb.Kdbx.import(TestResources.demoXml, cred, function(db) {
+    //         expect(db).to.be.a(kdbxweb.Kdbx);
+    //         expect(db.meta.generator).to.be('KeePass');
+    //         // checkDb(db);
+    //         done();
+    //     });
+    // });
+
     it('should load utf8 uncompressed file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('пароль'));
         kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred, function(db) {
