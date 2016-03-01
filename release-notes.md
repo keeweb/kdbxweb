@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.3.6 (2016-03-01)
+`+` Kdbx.loadXml  
+
 ##### v0.3.5 (2016-02-26)
 `+` Allow to open db with empty password and keyfile  
 `+` Using secure random generator if it's available  

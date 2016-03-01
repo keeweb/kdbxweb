@@ -23,7 +23,8 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ```javascript
 var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
-kdbxweb.Kdbx.load(data, credentials, function(db) {  });
+kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials, function(db) {  });
+kdbxweb.Kdbx.loadXml(dataAsString, credentials, function(db) {  });
 ```
 
 ##### Saving
