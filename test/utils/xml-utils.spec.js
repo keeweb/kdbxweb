@@ -495,4 +495,25 @@ describe('XmlUtils', function() {
             expect(item2.toString()).to.be('<item2 Protected="True">NDU2</item2>');
         });
     });
+
+    describe('protectedPlainValues', function() {
+        it('protects plain values', function() {
+            var xml = new DomParser().parseFromString('<root><item1><inner ProtectInMemory="True">123</inner><i2 ProtectInMemory="True"></i2></item1>' +
+                '<item2 ProtectInMemory="True">456</item2></root>');
+            XmlUtils.protectedPlainValues(xml.documentElement);
+            var item1 = XmlUtils.getChildNode(xml.documentElement, 'item1');
+            var item2 = XmlUtils.getChildNode(xml.documentElement, 'item2');
+            var inner = XmlUtils.getChildNode(item1, 'inner');
+
+            expect(item1.protectedValue).to.be(undefined);
+            expect(item2.protectedValue).to.be.ok();
+            expect(inner.protectedValue).to.be.ok();
+            expect(inner.protectedValue.getText()).to.be('123');
+            expect(item2.protectedValue.getText()).to.be('456');
+            expect(inner.textContent).to.be(inner.protectedValue.toString());
+            expect(item2.textContent).to.be(item2.protectedValue.toString());
+            expect(inner.getAttribute('Protected')).to.be.ok();
+            expect(inner.getAttribute('ProtectInMemory')).not.be.ok();
+        });
+    });
 });
