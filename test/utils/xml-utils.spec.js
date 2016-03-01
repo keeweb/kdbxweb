@@ -496,11 +496,11 @@ describe('XmlUtils', function() {
         });
     });
 
-    describe('protectedPlainValues', function() {
+    describe('protectPlainValues', function() {
         it('protects plain values', function() {
             var xml = new DomParser().parseFromString('<root><item1><inner ProtectInMemory="True">123</inner><i2 ProtectInMemory="True"></i2></item1>' +
                 '<item2 ProtectInMemory="True">456</item2></root>');
-            XmlUtils.protectedPlainValues(xml.documentElement);
+            XmlUtils.protectPlainValues(xml.documentElement);
             var item1 = XmlUtils.getChildNode(xml.documentElement, 'item1');
             var item2 = XmlUtils.getChildNode(xml.documentElement, 'item2');
             var inner = XmlUtils.getChildNode(item1, 'inner');

@@ -15,9 +15,10 @@ describe('Kdbx', function () {
         });
     });
 
-    it('should import simple file', function (done) {
+    it('should load simple xml file', function (done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
-        kdbxweb.Kdbx.import(TestResources.demoXml, cred, function(db) {
+        var xml = new Buffer(TestResources.demoXml).toString('utf8');
+        kdbxweb.Kdbx.loadXml(xml, cred, function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
             expect(db.meta.generator).to.be('KeePass');
             checkDb(db);
