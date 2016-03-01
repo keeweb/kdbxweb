@@ -15,6 +15,28 @@ describe('Kdbx', function () {
         });
     });
 
+    it('should load simple xml file', function (done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
+        var xml = kdbxweb.ByteUtils.bytesToString(TestResources.demoXml).toString('utf8');
+        kdbxweb.Kdbx.loadXml(xml, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.meta.generator).to.be('KeePass');
+            checkDb(db);
+            done();
+        });
+    });
+
+    it('should generate error for malformed xml file', function (done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
+        kdbxweb.Kdbx.loadXml('malformed-xml', cred, function(db, e) {
+            expect(db).to.be(null);
+            expect(e).to.be.a(kdbxweb.KdbxError);
+            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+            expect(e.message).to.contain('bad xml');
+            done();
+        });
+    });
+
     it('should load utf8 uncompressed file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('пароль'));
         kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred, function(db) {
@@ -153,6 +175,21 @@ describe('Kdbx', function () {
             });
         expect(function() {
             kdbxweb.Kdbx.create('file');
+        }).to.throwException(function(e) {
+            expect(e).to.be.a(kdbxweb.KdbxError);
+            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e.message).to.contain('credentials');
+        });
+
+        expect(function() {
+            kdbxweb.Kdbx.loadXml(new ArrayBuffer(0));
+        }).to.throwException(function(e) {
+            expect(e).to.be.a(kdbxweb.KdbxError);
+            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e.message).to.contain('data');
+        });
+        expect(function() {
+            kdbxweb.Kdbx.loadXml('str', null);
         }).to.throwException(function(e) {
             expect(e).to.be.a(kdbxweb.KdbxError);
             expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
