@@ -343,6 +343,18 @@ describe('XmlUtils', function() {
             var res = XmlUtils.getProtectedText(xml.documentElement);
             expect(res).to.be('text');
         });
+
+        it('returns empty string as protected text for node without text', function() {
+            var xml = new DomParser().parseFromString('<item></item>');
+            var res = XmlUtils.getProtectedText(xml.documentElement);
+            expect(res).to.be('');
+        });
+
+        it('returns empty string as protected text for empty node', function() {
+            var xml = new DomParser().parseFromString('<item></item>');
+            var res = XmlUtils.getProtectedText(xml.documentElement);
+            expect(res).to.be('');
+        });
     });
 
     describe('setProtectedText', function() {
