@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.3.8 (2016-03-04)
+`+` Expose Kdbx.Consts.Signatures  
+
 ##### v0.3.7 (2016-03-04)
 `-` Preserve empty fields in entries  
 
