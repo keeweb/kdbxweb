@@ -85,5 +85,7 @@
   "yui"           : false,    // Yahoo User Interface
 
   // Custom Globals
-  "globals"       : {}        // additional predefined global variables
+  "globals"       : {         // Additional predefined global variables
+    "Promise": false
+  }
 }
