@@ -7,7 +7,7 @@ var expect = require('expect.js'),
     asmCrypto = require('asmcrypto.js');
 
 describe('KeyEncryptor', function() {
-    var subtle = global.crypto.subtle || global.crypto.webkitSubtle;
+    var subtle = global.crypto ? global.crypto.subtle || global.crypto.webkitSubtle : undefined;
 
     /* jshint camelcase:false */
     /* globals Promise */
@@ -29,7 +29,7 @@ describe('KeyEncryptor', function() {
         });
     });
 
-    if (typeof Promise !== 'undefined') {
+    if (subtle !== undefined) {
         it('uses fallback encryption if webcrypto.importKey generates promise error', function (done) {
             var oldImportKey = subtle.importKey;
             subtle.importKey = function () { return new Promise(function (resolve, reject) { reject('fail'); }); };
@@ -49,27 +49,28 @@ describe('KeyEncryptor', function() {
                 done();
             });
         });
+
+        it('uses fallback encryption if webcrypto.importKey throws an error', function (done) {
+            var oldImportKey = subtle.importKey;
+            subtle.importKey = function () { throw 'err'; };
+            KeyEncryptor.encrypt(data, key, 1, function (res) {
+                subtle.importKey = oldImportKey;
+                expect(asmCrypto.bytes_to_hex(res)).to.be('46e891c182a31d005a8990ac5d61bb2124ffe5927fa008a739a9b0d217c79717');
+                done();
+            });
+        });
+
+        it('uses fallback encryption if webcrypto.encrypt throws an error', function (done) {
+            var oldImportKey = subtle.encrypt;
+            subtle.encrypt = function () { throw 'err'; };
+            KeyEncryptor.encrypt(data, key, 1, function (res) {
+                subtle.encrypt = oldImportKey;
+                expect(asmCrypto.bytes_to_hex(res)).to.be('46e891c182a31d005a8990ac5d61bb2124ffe5927fa008a739a9b0d217c79717');
+                done();
+            });
+        });
+
     }
-
-    it('uses fallback encryption if webcrypto.importKey throws an error', function (done) {
-        var oldImportKey = subtle.importKey;
-        subtle.importKey = function () { throw 'err'; };
-        KeyEncryptor.encrypt(data, key, 1, function (res) {
-            subtle.importKey = oldImportKey;
-            expect(asmCrypto.bytes_to_hex(res)).to.be('46e891c182a31d005a8990ac5d61bb2124ffe5927fa008a739a9b0d217c79717');
-            done();
-        });
-    });
-
-    it('uses fallback encryption if webcrypto.encrypt throws an error', function (done) {
-        var oldImportKey = subtle.encrypt;
-        subtle.encrypt = function () { throw 'err'; };
-        KeyEncryptor.encrypt(data, key, 1, function (res) {
-            subtle.encrypt = oldImportKey;
-            expect(asmCrypto.bytes_to_hex(res)).to.be('46e891c182a31d005a8990ac5d61bb2124ffe5927fa008a739a9b0d217c79717');
-            done();
-        });
-    });
 
     it('decrypts two rounds with fallback algorithm', function(done) {
         KeyEncryptor.fallbackEncrypt(data, key, 2, function(res) {
