@@ -16,7 +16,7 @@ describe('KeyEncryptor', function() {
     var key = asmCrypto.hex_to_bytes('ee66af917de0b0336e659fe6bd40a337d04e3c2b3635210fa16f28fb24d563ac');
 
     it('decrypts one round with fallback algorithm', function(done) {
-        KeyEncryptor.fallbackEncrypt(data, key, 1, function(res) {
+        KeyEncryptor.fallbackEncrypt(data, key, 1).then(function(res) {
             expect(asmCrypto.bytes_to_hex(res)).to.be('46e891c182a31d005a8990ac5d61bb2124ffe5927fa008a739a9b0d217c79717');
             done();
         });
@@ -72,7 +72,7 @@ describe('KeyEncryptor', function() {
     }
 
     it('decrypts two rounds with fallback algorithm', function(done) {
-        KeyEncryptor.fallbackEncrypt(data, key, 2, function(res) {
+        KeyEncryptor.fallbackEncrypt(data, key, 2).then(function(res) {
             expect(asmCrypto.bytes_to_hex(res)).to.be('1818f732cb1a933911ec90baed252d388980cd3665e1009705e5007aa48ad916');
             done();
         });
@@ -86,7 +86,7 @@ describe('KeyEncryptor', function() {
     });
 
     it('decrypts many rounds with fallback algorithm', function(done) {
-        KeyEncryptor.fallbackEncrypt(data, key, 10021, function(res) {
+        KeyEncryptor.fallbackEncrypt(data, key, 10021).then(function(res) {
             expect(asmCrypto.bytes_to_hex(res)).to.be('64d62f7ec4a363ff0fbb4520163b478ef4d0d631b690a2e7daa6bc09bca092df');
             done();
         });

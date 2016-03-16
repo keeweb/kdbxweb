@@ -40,6 +40,7 @@
   "dependencies": {
     "arraybuffer-slice": "^0.1.2",
     "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-4",
+    "bluebird": "^3.3.4",
     "pako": "^0.2.7",
     "xmldom": "^0.1.19"
   }
