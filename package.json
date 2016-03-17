@@ -10,7 +10,7 @@
     "jshint": "jshint lib test",
     "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-pro",
     "build:debug": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug",
-    "cichecks": "npm run clean && npm run pack:tests && npm run tests:cover",
+    "cichecks": "npm run clean && npm run jshint && npm run pack:tests && npm run tests:cover",
     "clean": "rimraf dist",
     "pack:dist-pro": "webpack --progress --colors --config build/config/webpack.config.js",
     "pack:dist-debug": "webpack --progress --colors --debug --devtool source-map --output-pathinfo --config build/config/webpack.config.js",
