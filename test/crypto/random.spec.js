@@ -10,22 +10,28 @@ describe('Random', function() {
         testRandom();
     });
 
-    it('can work without built-in getRandomValues', function() {
-        var oldGetRandomValues = global.crypto.getRandomValues;
-        global.crypto.getRandomValues = null;
+    it('default implementation is working', function() {
         testRandom();
-        global.crypto.getRandomValues = oldGetRandomValues;
     });
 
-    it('can work with node.js randomBytes', function() {
-        var oldGetRandomValues = global.crypto.getRandomValues;
-        var oldRandomBytes= global.crypto.randomBytes;
-        global.crypto.getRandomValues = null;
-        global.crypto.randomBytes = function(len) { return new Uint8Array(len).buffer; };
-        testRandom();
-        global.crypto.getRandomValues = oldGetRandomValues;
-        global.crypto.randomBytes = oldRandomBytes;
-    });
+    if (global.crypto) {
+        it('can work without built-in getRandomValues', function () {
+            var oldGetRandomValues = global.crypto.getRandomValues;
+            global.crypto.getRandomValues = null;
+            testRandom();
+            global.crypto.getRandomValues = oldGetRandomValues;
+        });
+
+        it('can work with node.js randomBytes', function () {
+            var oldGetRandomValues = global.crypto.getRandomValues;
+            var oldRandomBytes = global.crypto.randomBytes;
+            global.crypto.getRandomValues = null;
+            global.crypto.randomBytes = function (len) { return new Uint8Array(len).buffer; };
+            testRandom();
+            global.crypto.getRandomValues = oldGetRandomValues;
+            global.crypto.randomBytes = oldRandomBytes;
+        });
+    }
 
     function testRandom() {
         var bytes = Random.getBytes(0);

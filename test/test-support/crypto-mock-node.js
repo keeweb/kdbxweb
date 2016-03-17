@@ -1,6 +1,6 @@
 'use strict';
 
-if (!global.crypto) {
+if (!global.crypto && typeof Buffer !== 'undefined') {
     var nodeCrypto = require('crypto');
 
     /* globals Promise */
