@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.3.9 (2016-04-03)
+`-` Fixed random keyfile generator  
+
 ##### v0.3.8 (2016-03-04)
 `+` Expose Kdbx.Consts.Signatures  
 
