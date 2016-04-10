@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.3.11 (2016-04-10)
+`-` create recycle bin if it's enabled but not yet created   
+
 ##### v0.3.10 (2016-04-03)
 `-` Fixed random keyfile generator  
 

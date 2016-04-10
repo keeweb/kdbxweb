@@ -240,6 +240,26 @@ describe('Kdbx', function () {
         });
     });
 
+    it('creates a recycle bin if it is enabled but not created', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            var parentGroup = db.getDefaultGroup().groups[1];
+            var group = parentGroup.groups[parentGroup.groups.length - 1];
+            db.meta.recycleBinUuid = new kdbxweb.KdbxUuid();
+            expect(db.meta.recycleBinUuid.empty).to.be(true);
+            var recycleBin = db.getGroup(db.meta.recycleBinUuid);
+            expect(recycleBin).to.be(undefined);
+            var groupLength = parentGroup.groups.length;
+            db.remove(group);
+            expect(db.meta.recycleBinUuid.empty).to.be(false);
+            recycleBin = db.getGroup(db.meta.recycleBinUuid);
+            expect(recycleBin).to.be.ok();
+            expect(recycleBin.groups.length).to.be(1);
+            expect(group.groups.length).to.be(groupLength - 1);
+            done();
+        });
+    });
+
     it('saves db to xml', function(done) {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
