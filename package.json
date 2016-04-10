@@ -1,6 +1,6 @@
 {
   "name": "kdbxweb",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Kdbx KeePass database reader for web",
   "repository": { "type": "git", "url": "https://github.com/antelle/kdbxweb.git" },
   "main": "lib/index.js",
