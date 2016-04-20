@@ -1,5 +1,9 @@
 Release notes
 -------------
+##### v0.4.0 (2016-04-21)
+`!` xmldom is now external dependency  
+`-` updated xmldom to patched version without encoder bug  
+
 ##### v0.3.11 (2016-04-10)
 `-` create recycle bin if it's enabled but not yet created   
 

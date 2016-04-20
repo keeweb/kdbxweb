@@ -34,6 +34,7 @@ module.exports = {
     },
     externals: {
         fs: true,
-        path: true
+        path: true,
+        xmldom: true
     }
 };

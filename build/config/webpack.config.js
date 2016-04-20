@@ -49,5 +49,8 @@ module.exports = {
         mangle: {},
         compress: {},
         output: { ascii_only: true }
+    },
+    externals: {
+        xmldom: true
     }
 };
