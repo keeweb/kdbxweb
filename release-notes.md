@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.4.1 (2016-04-21)
+`-` fixed bug in Firefox  
+
 ##### v0.4.0 (2016-04-21)
 `!` xmldom is now external dependency  
 `-` updated xmldom to patched version without encoder bug  
