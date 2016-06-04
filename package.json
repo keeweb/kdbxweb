@@ -4,7 +4,7 @@
   "description": "Kdbx KeePass database reader for web",
   "repository": {
     "type": "git",
-    "url": "https://github.com/antelle/kdbxweb.git"
+    "url": "https://github.com/keeweb/kdbxweb.git"
   },
   "main": "lib/index.js",
   "scripts": {
@@ -42,8 +42,8 @@
   },
   "dependencies": {
     "arraybuffer-slice": "^0.1.2",
-    "asmcrypto.js": "antelle/asmcrypto.js#v0.0.10-alpha-fix-4",
+    "asmcrypto.js": "keeweb/asmcrypto.js#v0.0.10-alpha-fix-4",
     "pako": "^0.2.7",
-    "xmldom": "antelle/xmldom#ec8f61f"
+    "xmldom": "keeweb/xmldom#ec8f61f"
   }
 }
