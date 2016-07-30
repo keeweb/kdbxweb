@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.4.3 (2016-07-30)
+`-` index bugfix for v4.0.2  
+
 ##### v0.4.2 (2016-07-30)
 `+` target index argument in move function  
 
