@@ -226,6 +226,24 @@ describe('Kdbx', function () {
         });
     });
 
+    it('changes group order', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+            var defaultGroup = db.getDefaultGroup();
+            expect(defaultGroup.groups.length).to.be.greaterThan(3);
+            var groupNames = defaultGroup.groups.map(function(g) { return g.name; });
+            var fromIndex = 2;
+            var toIndex = 1;
+            db.move(defaultGroup.groups[fromIndex], defaultGroup, toIndex);
+            groupNames.splice(toIndex, 0, groupNames.splice(fromIndex, 1)[0]);
+            var newGroupNames = defaultGroup.groups.map(function(g) { return g.name; });
+            expect(newGroupNames).to.eql(groupNames);
+            db.move(defaultGroup.groups[fromIndex], defaultGroup, toIndex);
+            checkDb(db);
+            done();
+        });
+    });
+
     it('deletes entry without recycle bin', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {

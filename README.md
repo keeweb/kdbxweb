@@ -117,6 +117,7 @@ db.remove(group);
 ##### Group move
 ```javascript
 db.move(group, toGroup);
+db.move(group, toGroup, atIndex);
 ```
 
 ##### Recycle Bin

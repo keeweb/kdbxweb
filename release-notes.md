@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.4.2 (2016-07-30)
+`+` target index argument in move function  
+
 ##### v0.4.1 (2016-04-21)
 `-` fixed bug in Firefox  
 
