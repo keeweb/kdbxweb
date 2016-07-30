@@ -1,4 +1,4 @@
-# KdbxWeb [![Build status](https://travis-ci.org/antelle/kdbxweb.svg?branch=master)](https://travis-ci.org/antelle/kdbxweb) [![Coverage Status](https://coveralls.io/repos/antelle/kdbxweb/badge.svg?branch=master&service=github)](https://coveralls.io/github/antelle/kdbxweb?branch=master)
+# KdbxWeb [![Build status](https://travis-ci.org/keeweb/kdbxweb.svg?branch=master)](https://travis-ci.org/keeweb/kdbxweb) [![Coverage Status](https://coveralls.io/repos/keeweb/kdbxweb/badge.svg?branch=master&service=github)](https://coveralls.io/github/keeweb/kdbxweb?branch=master)
 
 KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 databases (kdbx) in node.js or browser.
 
@@ -35,8 +35,8 @@ db.saveXml(function(xmlAsString) {  });
 ```
 
 ##### File info
-[Header object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
-[Meta object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
+[Header object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
+[Meta object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
 ```javascript
 db.header
 db.meta
@@ -96,7 +96,7 @@ if (pushedOk) {
 ```
 
 ##### Groups
-[Group object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
+[Group object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
 ```javascript
 var defaultGroup = db.getDefaultGroup();
 var anotherGroup = db.getGroup(uuid);
@@ -134,8 +134,8 @@ group.forEach(function(entry, group) { /* will be called for each entry or group
 ```
 
 ##### Entries
-[Entry object fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
-[Entry.times fields](https://github.com/antelle/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
+[Entry object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
+[Entry.times fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
 ```javascript
 var entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
@@ -191,7 +191,7 @@ try {
 ```
 
 ##### Consts
-[Consts definition](https://github.com/antelle/kdbxweb/blob/master/lib/defs/consts.js)  
+[Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.js)  
 ```javascript
 kdbxweb.Consts.ErrorCodes // all thrown errors have code property
 kdbxweb.Consts.Defaults // default db settings
