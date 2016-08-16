@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.4.4 (2016-08-16)
+`-` fix keyfiles with unicode characters  
+
 ##### v0.4.3 (2016-07-30)
 `-` index bugfix for v4.0.2  
 
