@@ -11,6 +11,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - full support of Kdbx features
 - protected values are stored in memory XOR'ed
 - conflict-free merge support
+- high code coverage
 
 ## Browser support
 
@@ -221,12 +222,9 @@ Use npm to build this project:
 To run tests:  
 `> npm test`  
 
-## Contributing
+## See it in action
 
-Areas which need more attention for now: 
-
-- unit tests, especially for complex functions (like moving entry with binaries)
-- testing in general
+This library is used in [KeeWeb](https://app.keeweb.info)
 
 ## License
 
