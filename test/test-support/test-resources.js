@@ -37,6 +37,24 @@ catch (e) { res.noPassWithKeyFile = readNodeFile('../../resources/NoPassWithKeyF
 try { res.noPassWithKeyFileKey = require('base64!../../resources/NoPassWithKeyFile.key'); }
 catch (e) { res.noPassWithKeyFileKey = readNodeFile('../../resources/NoPassWithKeyFile.key'); }
 
+try { res.key32 = require('base64!../../resources/Key32.kdbx'); }
+catch (e) { res.key32 = readNodeFile('../../resources/Key32.kdbx'); }
+
+try { res.key32KeyFile = require('base64!../../resources/Key32.key'); }
+catch (e) { res.key32KeyFile = readNodeFile('../../resources/Key32.key'); }
+
+try { res.key64 = require('base64!../../resources/Key64.kdbx'); }
+catch (e) { res.key64 = readNodeFile('../../resources/Key64.kdbx'); }
+
+try { res.key64KeyFile = require('base64!../../resources/Key64.key'); }
+catch (e) { res.key64KeyFile = readNodeFile('../../resources/Key64.key'); }
+
+try { res.key64bin = require('base64!../../resources/Key64bin.kdbx'); }
+catch (e) { res.key64bin = readNodeFile('../../resources/Key64bin.kdbx'); }
+
+try { res.key64binKeyFile = require('base64!../../resources/Key64bin.key'); }
+catch (e) { res.key64binKeyFile = readNodeFile('../../resources/Key64bin.key'); }
+
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];

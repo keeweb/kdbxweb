@@ -77,6 +77,30 @@ describe('Kdbx', function () {
         });
     });
 
+    it('should load a 32-byte keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.key32KeyFile);
+        kdbxweb.Kdbx.load(TestResources.key32, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
+    it('should load a 64-byte keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.key64KeyFile);
+        kdbxweb.Kdbx.load(TestResources.key64, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
+    it('should load a 64-byte binary keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.key64binKeyFile);
+        kdbxweb.Kdbx.load(TestResources.key64bin, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
     //it('should load a file with null pass', function(done) {
     //    var cred = new kdbxweb.Credentials(null);
     //    kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db, err) {
