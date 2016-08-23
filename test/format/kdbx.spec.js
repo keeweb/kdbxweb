@@ -101,6 +101,14 @@ describe('Kdbx', function () {
         });
     });
 
+    it('should load a xml-bom keyfile', function(done) {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.keyWithBomKeyFile);
+        kdbxweb.Kdbx.load(TestResources.keyWithBom, cred, function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            done();
+        });
+    });
+
     //it('should load a file with null pass', function(done) {
     //    var cred = new kdbxweb.Credentials(null);
     //    kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db, err) {

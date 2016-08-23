@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v0.4.6 (2016-08-23)
+`-` fix keyfiles with bom  
+
 ##### v0.4.5 (2016-08-21)
 `+` support raw 32-byte and hex 64-byte keyfiles  
 
