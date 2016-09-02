@@ -1,5 +1,10 @@
 Release notes
 -------------
+##### v1.0.0 (WIP)
+`+` KDBX4 support  
+`!` API updated  
+`!` IE11 support now requires polyfills  
+
 ##### v0.4.6 (2016-08-23)
 `-` fix keyfiles with bom  
 
