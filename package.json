@@ -43,6 +43,6 @@
   "dependencies": {
     "pako": "^1.0.3",
     "text-encoding": "github:keeweb/text-encoding#4dfb7cb0954c222852092f8b06ae4f6b4f60bfbb",
-    "xmldom": "keeweb/xmldom#ec8f61f"
+    "xmldom": "github:keeweb/xmldom#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6"
   }
 }
