@@ -114,7 +114,8 @@
     },
     "base64-loader": {
       "version": "1.0.0",
-      "from": "base64-loader@*"
+      "from": "base64-loader@>=1.0.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/base64-loader/-/base64-loader-1.0.0.tgz"
     },
     "bcrypt-pbkdf": {
       "version": "1.0.0",
@@ -444,7 +445,7 @@
     },
     "expect.js": {
       "version": "0.3.1",
-      "from": "expect.js@*",
+      "from": "expect.js@>=0.3.1 <0.4.0",
       "resolved": "https://registry.npmjs.org/expect.js/-/expect.js-0.3.1.tgz"
     },
     "extend": {
@@ -499,15 +500,8 @@
     },
     "fs-walk": {
       "version": "0.0.1",
-      "from": "fs-walk@*",
-      "resolved": "https://registry.npmjs.org/fs-walk/-/fs-walk-0.0.1.tgz",
-      "dependencies": {
-        "async": {
-          "version": "1.4.1",
-          "from": "async@*",
-          "resolved": "https://registry.npmjs.org/async/-/async-1.4.1.tgz"
-        }
-      }
+      "from": "fs-walk@0.0.1",
+      "resolved": "https://registry.npmjs.org/fs-walk/-/fs-walk-0.0.1.tgz"
     },
     "fs.realpath": {
       "version": "1.0.0",
@@ -1408,43 +1402,9 @@
     },
     "jshint-loader": {
       "version": "0.8.3",
-      "from": "jshint-loader@*",
+      "from": "jshint-loader@>=0.8.3 <0.9.0",
       "resolved": "https://registry.npmjs.org/jshint-loader/-/jshint-loader-0.8.3.tgz",
       "dependencies": {
-        "loader-utils": {
-          "version": "0.2.11",
-          "from": "loader-utils@>=0.2.0 <0.3.0",
-          "resolved": "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.11.tgz",
-          "dependencies": {
-            "big.js": {
-              "version": "3.1.3",
-              "from": "big.js@>=3.0.2 <4.0.0",
-              "resolved": "https://registry.npmjs.org/big.js/-/big.js-3.1.3.tgz"
-            },
-            "json5": {
-              "version": "0.4.0",
-              "from": "json5@>=0.4.0 <0.5.0",
-              "resolved": "https://registry.npmjs.org/json5/-/json5-0.4.0.tgz"
-            }
-          }
-        },
-        "rcloader": {
-          "version": "0.1.2",
-          "from": "rcloader@0.1.2",
-          "resolved": "https://registry.npmjs.org/rcloader/-/rcloader-0.1.2.tgz",
-          "dependencies": {
-            "lodash": {
-              "version": "2.4.2",
-              "from": "lodash@>=2.4.1 <2.5.0",
-              "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.2.tgz"
-            },
-            "rcfinder": {
-              "version": "0.1.8",
-              "from": "rcfinder@>=0.1.6 <0.2.0",
-              "resolved": "https://registry.npmjs.org/rcfinder/-/rcfinder-0.1.8.tgz"
-            }
-          }
-        },
         "strip-json-comments": {
           "version": "0.1.3",
           "from": "strip-json-comments@>=0.1.0 <0.2.0",
@@ -1504,7 +1464,7 @@
     },
     "loader-utils": {
       "version": "0.2.15",
-      "from": "loader-utils@>=0.2.7 <0.3.0",
+      "from": "loader-utils@>=0.2.0 <0.3.0",
       "resolved": "https://registry.npmjs.org/loader-utils/-/loader-utils-0.2.15.tgz"
     },
     "lodash": {
@@ -1536,6 +1496,11 @@
       "version": "3.0.9",
       "from": "lodash._isiterateecall@>=3.0.0 <4.0.0",
       "resolved": "https://registry.npmjs.org/lodash._isiterateecall/-/lodash._isiterateecall-3.0.9.tgz"
+    },
+    "lodash.clonedeep": {
+      "version": "4.5.0",
+      "from": "lodash.clonedeep@>=4.3.2 <5.0.0",
+      "resolved": "https://registry.npmjs.org/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz"
     },
     "lodash.create": {
       "version": "3.1.1",
@@ -1799,6 +1764,23 @@
       "version": "1.1.5",
       "from": "randomatic@>=1.1.3 <2.0.0",
       "resolved": "https://registry.npmjs.org/randomatic/-/randomatic-1.1.5.tgz"
+    },
+    "rcfinder": {
+      "version": "0.1.9",
+      "from": "rcfinder@>=0.1.6 <0.2.0",
+      "resolved": "https://registry.npmjs.org/rcfinder/-/rcfinder-0.1.9.tgz"
+    },
+    "rcloader": {
+      "version": "0.1.2",
+      "from": "rcloader@0.1.2",
+      "resolved": "https://registry.npmjs.org/rcloader/-/rcloader-0.1.2.tgz",
+      "dependencies": {
+        "lodash": {
+          "version": "2.4.2",
+          "from": "lodash@>=2.4.1 <2.5.0",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-2.4.2.tgz"
+        }
+      }
     },
     "readable-stream": {
       "version": "2.0.6",
@@ -2130,7 +2112,7 @@
     },
     "xmldom": {
       "version": "0.1.21",
-      "from": "keeweb/xmldom#ec8f61f",
+      "from": "keeweb/xmldom#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6",
       "resolved": "git://github.com/keeweb/xmldom.git#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6"
     },
     "xtend": {
