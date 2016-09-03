@@ -3,8 +3,7 @@
 require('../test-support/crypto-mock-node');
 
 var expect = require('expect.js'),
-    KeyEncryptor = require('../../lib/crypto/key-encryptor'),
-    asmCrypto = require('asmcrypto.js');
+    KeyEncryptor = require('../../lib/crypto/key-encryptor');
 
 describe('KeyEncryptor', function() {
     var subtle = global.crypto ? global.crypto.subtle || global.crypto.webkitSubtle : undefined;

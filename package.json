@@ -41,8 +41,8 @@
     "webpack": "^1.13.2"
   },
   "dependencies": {
-    "asmcrypto.js": "keeweb/asmcrypto.js#v0.0.10-alpha-fix-4",
     "pako": "^1.0.3",
+    "text-encoding": "github:keeweb/text-encoding#4dfb7cb0954c222852092f8b06ae4f6b4f60bfbb",
     "xmldom": "keeweb/xmldom#ec8f61f"
   }
 }

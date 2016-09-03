@@ -2,8 +2,7 @@
 
 var expect = require('expect.js'),
     ProtectedValue = require('../../lib/crypto/protected-value'),
-    ByteUtils = require('../../lib/utils/byte-utils'),
-    asmCrypto = require('asmcrypto.js');
+    ByteUtils = require('../../lib/utils/byte-utils');
 
 describe('ProtectedValue', function() {
     var valueBytes = ByteUtils.stringToBytes('strvalue'),

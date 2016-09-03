@@ -18,7 +18,6 @@ module.exports = {
     module: {
         loaders: debug ? null : [{
             test: /\.js$/,
-            exclude: /asmcrypto/,
             loader: 'uglify'
         }]
     },
