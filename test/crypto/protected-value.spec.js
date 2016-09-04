@@ -34,9 +34,9 @@ describe('ProtectedValue', function() {
 
     it('calculates SHA512 hash', function() {
         var value = new ProtectedValue(encValueBytes, saltBytes);
-        var hash = value.getHash();
-        /* jshint camelcase:false */
-        expect(asmCrypto.bytes_to_hex(hash)).to.be('1f5c3ef76d43e72ee2c5216c36187c799b153cab3d0cb63a6f3ecccc2627f535');
+        return value.getHash().then(function(hash) {
+            expect(ByteUtils.bytesToHex(hash)).to.be('1f5c3ef76d43e72ee2c5216c36187c799b153cab3d0cb63a6f3ecccc2627f535');
+        });
     });
 
     it('creates value from string', function() {
