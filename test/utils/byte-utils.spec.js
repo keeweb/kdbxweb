@@ -63,8 +63,12 @@ describe('ByteUtils', function() {
     });
 
     describe('bytesToBase64', function() {
-        it('converts base64-string to byte array', function() {
+        it('converts byte array to base64-string', function() {
             expect(ByteUtils.bytesToBase64(bytes)).to.be.eql(base64);
+        });
+
+        it('converts ArrayBuffer base64-string', function() {
+            expect(ByteUtils.bytesToBase64(bytes.buffer)).to.be.eql(base64);
         });
 
         if (typeof btoa === 'undefined') {
@@ -74,6 +78,25 @@ describe('ByteUtils', function() {
                 delete global.btoa;
             });
         }
+    });
+
+    var hexString = '737472d0bfd180d0b8d0b2d0b5d101';
+    var hexBytes = new Uint8Array([115,116,114,208,191,209,128,208,184,208,178,208,181,209,1]);
+
+    describe('hexToBytes', function() {
+        it('converts hex string to byte array', function() {
+            expect(ByteUtils.hexToBytes(hexString)).to.be.eql(hexBytes);
+        });
+    });
+
+    describe('bytesToHex', function() {
+        it('converts byte array to hex string', function() {
+            expect(ByteUtils.bytesToHex(hexBytes)).to.be.eql(hexString);
+        });
+
+        it('converts ArrayBuffer to hex string', function() {
+            expect(ByteUtils.bytesToHex(hexBytes.buffer)).to.be.eql(hexString);
+        });
     });
 
     describe('zeroBuffer', function() {

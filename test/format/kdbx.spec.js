@@ -4,7 +4,7 @@ var expect = require('expect.js'),
     kdbxweb = require('../../lib/index'),
     TestResources = require('../test-support/test-resources');
 
-describe('Kdbx', function () {
+xdescribe('Kdbx', function () {
     it('should load simple file', function (done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
