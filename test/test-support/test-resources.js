@@ -49,12 +49,6 @@ catch (e) { res.key64 = readNodeFile('../../resources/Key64.kdbx'); }
 try { res.key64KeyFile = require('base64!../../resources/Key64.key'); }
 catch (e) { res.key64KeyFile = readNodeFile('../../resources/Key64.key'); }
 
-try { res.key64bin = require('base64!../../resources/Key64bin.kdbx'); }
-catch (e) { res.key64bin = readNodeFile('../../resources/Key64bin.kdbx'); }
-
-try { res.key64binKeyFile = require('base64!../../resources/Key64bin.key'); }
-catch (e) { res.key64binKeyFile = readNodeFile('../../resources/Key64bin.key'); }
-
 try { res.keyWithBom = require('base64!../../resources/KeyWithBom.kdbx'); }
 catch (e) { res.keyWithBom = readNodeFile('../../resources/KeyWithBom.kdbx'); }
 
