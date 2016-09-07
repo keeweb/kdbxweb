@@ -5,7 +5,7 @@ var expect = require('expect.js'),
     TestResources = require('../test-support/test-resources');
 
 describe('Kdbx', function () {
-    it('should load simple file', function () {
+    it('loads simple file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -14,7 +14,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('should load simple xml file', function () {
+    xit('loads simple xml file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
         var xml = kdbxweb.ByteUtils.bytesToString(TestResources.demoXml).toString('utf8');
         return kdbxweb.Kdbx.loadXml(xml, cred).then(function(db) {
@@ -24,7 +24,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('should generate error for malformed xml file', function () {
+    xit('generates error for malformed xml file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
         return kdbxweb.Kdbx.loadXml('malformed-xml', cred, function(db, e) {
             expect(db).to.be(null);
@@ -34,63 +34,63 @@ describe('Kdbx', function () {
         });
     });
 
-    it('should load utf8 uncompressed file', function() {
+    it('loads utf8 uncompressed file', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('пароль'));
         return kdbxweb.Kdbx.load(TestResources.cyrillicKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    xit('should load a file with binary key', function() {
+    xit('loads a file with binary key', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.binKeyKey);
         return kdbxweb.Kdbx.load(TestResources.binKeyKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a file with empty pass', function() {
+    it('loads a file with empty pass', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
         return kdbxweb.Kdbx.load(TestResources.emptyPass, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a file with empty pass and keyfile', function() {
+    it('loads a file with empty pass and keyfile', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''), TestResources.emptyPassWithKeyFileKey);
         return kdbxweb.Kdbx.load(TestResources.emptyPassWithKeyFile, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a file with no pass and keyfile', function() {
+    it('loads a file with no pass and keyfile', function() {
         var cred = new kdbxweb.Credentials(null, TestResources.noPassWithKeyFileKey);
         return kdbxweb.Kdbx.load(TestResources.noPassWithKeyFile, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a 32-byte keyfile', function() {
+    it('loads a 32-byte keyfile', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.key32KeyFile);
         return kdbxweb.Kdbx.load(TestResources.key32, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a 64-byte keyfile', function() {
+    it('loads a 64-byte keyfile', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.key64KeyFile);
         return kdbxweb.Kdbx.load(TestResources.key64, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    it('should load a xml-bom keyfile', function() {
+    it('loads a xml-bom keyfile', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.keyWithBomKeyFile);
         return kdbxweb.Kdbx.load(TestResources.keyWithBom, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
         });
     });
 
-    //it('should load a file with null pass', function(done) {
+    //it('loads a file with null pass', function(done) {
     //    var cred = new kdbxweb.Credentials(null);
     //    kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db, err) {
     //        expect(db).to.be.a(kdbxweb.Kdbx);
@@ -98,7 +98,7 @@ describe('Kdbx', function () {
     //    });
     //});
 
-    xit('should successfully load saved file', function(done) {
+    xit('successfully loads saved file', function(done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -112,7 +112,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('should create new database', function(done) {
+    xit('creates new database', function(done) {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -148,7 +148,7 @@ describe('Kdbx', function () {
         });
     });
 
-    it('should generate error for bad file', function () {
+    it('generates error for bad file', function () {
         return kdbxweb.Kdbx.load('file')
             .then(function () {
                 throw 'Not expected';
@@ -160,7 +160,7 @@ describe('Kdbx', function () {
             });
     });
 
-    it('should generate error for bad credentials', function () {
+    it('generates error for bad credentials', function () {
         return kdbxweb.Kdbx.load(new ArrayBuffer(0), '123')
             .then(function () {
                 throw 'Not expected';
@@ -172,7 +172,7 @@ describe('Kdbx', function () {
             });
     });
 
-    it('should generate error for null credentials', function () {
+    it('generates error for null credentials', function () {
         return kdbxweb.Kdbx.load(new ArrayBuffer(0), null)
             .then(function () {
                 throw 'Not expected';
@@ -184,7 +184,7 @@ describe('Kdbx', function () {
             });
     });
 
-    it('should generate error for bad password', function () {
+    it('generates error for bad password', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
         return cred.setPassword('string')
             .then(function () {
@@ -197,7 +197,7 @@ describe('Kdbx', function () {
             });
     });
 
-    it('should generate error for bad keyfile', function () {
+    it('generates error for bad keyfile', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
         return cred.setKeyFile('123')
             .then(function () {
