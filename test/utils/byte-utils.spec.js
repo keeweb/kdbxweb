@@ -5,19 +5,19 @@ var expect = require('expect.js'),
 
 describe('ByteUtils', function() {
     describe('arrayBufferEquals', function() {
-        it('should return true for equal ArrayBuffers', function () {
+        it('returns true for equal ArrayBuffers', function () {
             var ab1 = new Int8Array([1,2,3]).buffer;
             var ab2 = new Int8Array([1,2,3]).buffer;
             expect(ByteUtils.arrayBufferEquals(ab1, ab2)).to.be(true);
         });
 
-        it('should return false for ArrayBuffers of different length', function () {
+        it('returns false for ArrayBuffers of different length', function () {
             var ab1 = new Int8Array([1,2,3]).buffer;
             var ab2 = new Int8Array([1,2,3,4]).buffer;
             expect(ByteUtils.arrayBufferEquals(ab1, ab2)).to.be(false);
         });
 
-        it('should return false for different ArrayBuffers', function () {
+        it('returns false for different ArrayBuffers', function () {
             var ab1 = new Int8Array([1,2,3]).buffer;
             var ab2 = new Int8Array([3,2,1]).buffer;
             expect(ByteUtils.arrayBufferEquals(ab1, ab2)).to.be(false);
@@ -30,17 +30,17 @@ describe('ByteUtils', function() {
         136,134,194,169,198,146,226,136,130,195,159]);
 
     describe('bytesToString', function() {
-        it('should convert Array to string', function() {
+        it('converts Array to string', function() {
             expect(ByteUtils.bytesToString(strBytes)).to.be(str);
         });
 
-        it('should convert ArrayBuffer to string', function() {
+        it('converts ArrayBuffer to string', function() {
             expect(ByteUtils.bytesToString(strBytes.buffer)).to.be(str);
         });
     });
 
     describe('stringToBytes', function() {
-        it('should convert string to Array', function() {
+        it('converts string to Array', function() {
             expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
         });
     });
