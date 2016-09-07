@@ -148,70 +148,93 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('should generate error for bad arguments', function () {
-        expect(function() {
-            kdbxweb.Kdbx.load('file');
-        }).to.throwException(function(e) {
+    it('should generate error for bad file', function () {
+        return kdbxweb.Kdbx.load('file')
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('data');
             });
-        expect(function() {
-            kdbxweb.Kdbx.load(new ArrayBuffer(0), '123');
-        }).to.throwException(function(e) {
+    });
+
+    it('should generate error for bad credentials', function () {
+        return kdbxweb.Kdbx.load(new ArrayBuffer(0), '123')
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('credentials');
             });
-        expect(function() {
-            kdbxweb.Kdbx.load(new ArrayBuffer(0), null);
-        }).to.throwException(function(e) {
+    });
+
+    it('should generate error for null credentials', function () {
+        return kdbxweb.Kdbx.load(new ArrayBuffer(0), null)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('credentials');
             });
-        expect(function() {
-            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
-            cred.setPassword('string');
-        }).to.throwException(function(e) {
+    });
+
+    it('should generate error for bad password', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+        return cred.setPassword('string')
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('password');
             });
-        expect(function() {
-            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
-            cred.setKeyFile(123);
-        }).to.throwException(function(e) {
+    });
+
+    it('should generate error for bad keyfile', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+        return cred.setKeyFile('123')
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('keyFile');
             });
-        expect(function() {
-            kdbxweb.Kdbx.create('file');
-        }).to.throwException(function(e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-            expect(e.message).to.contain('credentials');
-        });
-
-        expect(function() {
-            kdbxweb.Kdbx.loadXml(new ArrayBuffer(0));
-        }).to.throwException(function(e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-            expect(e.message).to.contain('data');
-        });
-        expect(function() {
-            kdbxweb.Kdbx.loadXml('str', null);
-        }).to.throwException(function(e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-            expect(e.message).to.contain('credentials');
-        });
     });
 
+        // expect(function() {
+        //     kdbxweb.Kdbx.create('file');
+        // }).to.throwException(function(e) {
+        //     expect(e).to.be.a(kdbxweb.KdbxError);
+        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+        //     expect(e.message).to.contain('credentials');
+        // });
+        //
+        // expect(function() {
+        //     kdbxweb.Kdbx.loadXml(new ArrayBuffer(0));
+        // }).to.throwException(function(e) {
+        //     expect(e).to.be.a(kdbxweb.KdbxError);
+        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+        //     expect(e.message).to.contain('data');
+        // });
+        // expect(function() {
+        //     kdbxweb.Kdbx.loadXml('str', null);
+        // }).to.throwException(function(e) {
+        //     expect(e).to.be.a(kdbxweb.KdbxError);
+        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+        //     expect(e.message).to.contain('credentials');
+        // });
+
     xit('generates error for bad password', function () {
-        kdbxweb.Kdbx.load(TestResources.demoKdbx,
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx,
             new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')),
             function(db, err) {
                 expect(db).to.be(null);
