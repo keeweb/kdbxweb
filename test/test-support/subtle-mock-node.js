@@ -22,6 +22,16 @@ if (global.process && global.process.versions && global.process.versions.node) {
                     resolve(data);
                 });
             },
+            decrypt: function(algo, key, cleartext) {
+                return new Promise(function(resolve) {
+                    var cipher = nodeCrypto.createDecipheriv('aes-256-cbc',
+                        new Buffer(new Uint8Array(key)),
+                        new Buffer(new Uint8Array(algo.iv)));
+                    var data = cipher.update(new Buffer(new Uint8Array(cleartext)));
+                    data = new Uint8Array(Buffer.concat([data, cipher.final()])).buffer;
+                    resolve(data);
+                });
+            },
             digest: function(format, data) {
                 return new Promise(function(resolve) {
                     resolve(nodeCrypto.createHash('sha256').update(Buffer.from(data)).digest().buffer);

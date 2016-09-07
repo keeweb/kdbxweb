@@ -58,7 +58,7 @@ describe('CryptoEngine', function() {
         it('throws error if sha256 is not implemented', function() {
             useNoImpl();
             return CryptoEngine.sha256(fromHex(src))
-                .then(function() { throw 'No error generated' })
+                .then(function() { throw 'No error generated'; })
                 .catch(function(e) { expect(e.message)
                     .to.be('Error NotImplemented: SHA256 not implemented'); });
         });
@@ -88,7 +88,7 @@ describe('CryptoEngine', function() {
         it('throws error if hmac-sha256 is not implemented', function() {
             useNoImpl();
             return CryptoEngine.hmacSha256(fromHex(key), fromHex(data))
-                .then(function() { throw 'No error generated' })
+                .then(function() { throw 'No error generated'; })
                 .catch(function(e) { expect(e.message)
                     .to.be('Error NotImplemented: HMAC-SHA256 not implemented'); });
         });
@@ -102,8 +102,8 @@ describe('CryptoEngine', function() {
             var rand2 = CryptoEngine.random(20);
             expect(rand2.length).to.be(20);
             expect(ByteUtils.arrayBufferEquals(rand1, rand2)).to.be(false);
-            var rand2 = CryptoEngine.random(10);
-            expect(rand2.length).to.be(10);
+            var rand3 = CryptoEngine.random(10);
+            expect(rand3.length).to.be(10);
         });
 
         if (SubtleMockNode) {
@@ -123,28 +123,34 @@ describe('CryptoEngine', function() {
     });
 
     describe('AesCbc', function() {
-        var key = '6b2796fa863a6552986c428528d053b76de7ba8e12f8c0e74edb5ed44da3f601'
+        var key = '6b2796fa863a6552986c428528d053b76de7ba8e12f8c0e74edb5ed44da3f601';
         var data = 'e567554429098a38d5f819115edffd39';
         var iv = '4db46dff4add42cb813b98de98e627c4';
         var exp = '46ab4c37d9ec594e5742971f76f7c1620bc29f2e0736b27832d6bcc5c1c39dc1';
 
-        it('encrypts with aes-cbc', function() {
+        it('encrypts-decrypts with aes-cbc', function() {
             useDefaultImpl();
             var aes = CryptoEngine.createAesCbc();
             return aes.importKey(fromHex(key)).then(function() {
                 return aes.encrypt(fromHex(data), fromHex(iv)).then(function(result) {
                     expect(toHex(result)).to.be(exp);
+                    return aes.decrypt(result, fromHex(iv)).then(function(result) {
+                        expect(toHex(result)).to.be(data);
+                    });
                 });
             });
         });
 
         if (SubtleMockNode) {
-            it('encrypts with aes-cbc with subtle', function() {
+            it('encrypts-decrypts with aes-cbc with subtle', function() {
                 useSubtleMock();
                 var aes = CryptoEngine.createAesCbc();
                 return aes.importKey(fromHex(key)).then(function() {
                     return aes.encrypt(fromHex(data), fromHex(iv)).then(function(result) {
                         expect(toHex(result)).to.be(exp);
+                        return aes.decrypt(result, fromHex(iv)).then(function(result) {
+                            expect(toHex(result)).to.be(data);
+                        });
                     });
                 });
             });
@@ -162,7 +168,7 @@ describe('CryptoEngine', function() {
         it('throws error if argon2 is not implemented', function() {
             useDefaultImpl();
             return CryptoEngine.argon2()
-                .then(function() { throw 'No error generated' })
+                .then(function() { throw 'No error generated'; })
                 .catch(function(e) { expect(e.message)
                     .to.be('Error NotImplemented: Argon2 not implemented'); });
         });
