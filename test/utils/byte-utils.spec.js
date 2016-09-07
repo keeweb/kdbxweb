@@ -87,6 +87,10 @@ describe('ByteUtils', function() {
         it('converts hex string to byte array', function() {
             expect(ByteUtils.hexToBytes(hexString)).to.be.eql(hexBytes);
         });
+
+        it('converts hex string in uppercase to byte array', function() {
+            expect(ByteUtils.hexToBytes(hexString.toUpperCase())).to.be.eql(hexBytes);
+        });
     });
 
     describe('bytesToHex', function() {
