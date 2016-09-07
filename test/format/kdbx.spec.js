@@ -4,6 +4,15 @@ var expect = require('expect.js'),
     kdbxweb = require('../../lib/index'),
     TestResources = require('../test-support/test-resources');
 
+describe('Kdbx', function () {
+    it('should load simple file', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+        });
+    });
+});
+
 xdescribe('Kdbx', function () {
     it('should load simple file', function (done) {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
