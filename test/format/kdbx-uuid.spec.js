@@ -67,6 +67,12 @@ describe('KdbxUuid', function() {
         expect(uuid.toBytes()).to.be.eql(bytes);
     });
 
+    it('returns bytes in bytes property', function() {
+        var bytes = new Uint8Array([1,2,3,4,5,6,7,8,9,10,1,2,3,4,5,6]);
+        var uuid = new KdbxUuid(bytes.buffer);
+        expect(uuid.bytes).to.be.eql(bytes);
+    });
+
     it('returns bytes in toBytes method for empty value', function() {
         var uuid = new KdbxUuid();
         expect(uuid.toBytes()).to.be.eql([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]);

@@ -37,6 +37,16 @@ describe('XmlUtils', function() {
                 expect(e.message).to.contain('bad xml');
             });
         });
+
+        it('throws error for generated parseerror element', function() {
+            expect(function() {
+                XmlUtils.parse('<root><parsererror/></root>');
+            }).to.throwException(function(e) {
+                expect(e).to.be.a(KdbxError);
+                expect(e.code).to.be(Constants.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('bad xml');
+            });
+        });
     });
 
     describe('serialize', function() {
@@ -496,6 +506,17 @@ describe('XmlUtils', function() {
             expect(inner.protectedValue).to.be.ok();
             expect(inner.protectedValue.getText()).to.be('032');
             expect(item2.protectedValue.getText()).to.be('674');
+        });
+
+        it('generates error for bad protected values', function() {
+            var xml = XmlUtils.parse('<root><inner Protected="True">MTIz</inner></root>');
+            expect(function() {
+                XmlUtils.setProtectedValues(xml.documentElement, { getSalt: function() { throw 1; } });
+            }).to.throwException(function(e) {
+                expect(e).to.be.a(KdbxError);
+                expect(e.code).to.be(Constants.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('Error FileCorrupt: bad protected value at line');
+            });
         });
     });
 
