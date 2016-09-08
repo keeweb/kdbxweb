@@ -145,7 +145,7 @@ describe('CryptoEngine', function() {
             useDefaultImpl();
             var aes = CryptoEngine.createAesCbc();
             return aes.importKey(fromHex(key)).then(function() {
-                return aes.decrypt(data, fromHex(iv)).then(function(result) {
+                return aes.decrypt(fromHex(data), fromHex(iv)).then(function(result) {
                     expect(toHex(result)).to.be(data);
                 })
                 .then(function () {
