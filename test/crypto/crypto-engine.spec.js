@@ -141,15 +141,12 @@ describe('CryptoEngine', function() {
             });
         });
 
-        it('throws error for bad key', function() {
+        it('throws error or generates wrong data for bad key', function() {
             useDefaultImpl();
             var aes = CryptoEngine.createAesCbc();
             return aes.importKey(fromHex(key)).then(function() {
                 return aes.decrypt(fromHex(data), fromHex(iv)).then(function(result) {
-                    expect(toHex(result)).to.be(data);
-                })
-                .then(function () {
-                    throw 'Not expected';
+                    expect(toHex(result)).not.to.be(data);
                 })
                 .catch(function (e) {
                     expect(e.message).to.contain('Error InvalidKey: ');
