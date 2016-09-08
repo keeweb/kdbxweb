@@ -42,7 +42,9 @@ module.exports = {
         process: false,
         Buffer: false,
         __filename: false,
-        __dirname: false
+        __dirname: false,
+        crypto: false,
+        zlib: false
     },
     'uglify-loader': {
         mangle: {},
@@ -50,6 +52,8 @@ module.exports = {
         output: { ascii_only: true }
     },
     externals: {
-        xmldom: true
+        xmldom: true,
+        crypto: true,
+        zlib: true
     }
 };

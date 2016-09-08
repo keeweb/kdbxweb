@@ -141,6 +141,22 @@ describe('CryptoEngine', function() {
             });
         });
 
+        it('throws error for bad key', function() {
+            useDefaultImpl();
+            var aes = CryptoEngine.createAesCbc();
+            return aes.importKey(fromHex(key)).then(function() {
+                return aes.decrypt(data, fromHex(iv)).then(function(result) {
+                    expect(toHex(result)).to.be(data);
+                })
+                .then(function () {
+                    throw 'Not expected';
+                })
+                .catch(function (e) {
+                    expect(e.message).to.contain('Error InvalidKey: ');
+                });
+            });
+        });
+
         if (SubtleMockNode) {
             it('encrypts-decrypts with aes-cbc with subtle', function() {
                 useSubtleMock();
@@ -151,6 +167,22 @@ describe('CryptoEngine', function() {
                         return aes.decrypt(result, fromHex(iv)).then(function(result) {
                             expect(toHex(result)).to.be(data);
                         });
+                    });
+                });
+            });
+
+            it('throws error for bad key', function() {
+                useSubtleMock();
+                var aes = CryptoEngine.createAesCbc();
+                return aes.importKey(fromHex(key)).then(function() {
+                    return aes.decrypt(data, fromHex(iv)).then(function(result) {
+                        expect(toHex(result)).to.be(data);
+                    })
+                    .then(function () {
+                        throw 'Not expected';
+                    })
+                    .catch(function (e) {
+                        expect(e.message).to.contain('Error InvalidKey: ');
                     });
                 });
             });

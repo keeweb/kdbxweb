@@ -15,7 +15,7 @@
     "build:debug": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug",
     "cichecks": "npm run clean && npm run jshint && npm run pack:tests && npm run tests:cover",
     "clean": "rimraf dist",
-    "pack:dist-pro": "webpack --progress --colors --config build/config/webpack.config.js",
+    "pack:dist-pro": "webpack --progress --colors --display-modules --config build/config/webpack.config.js",
     "pack:dist-debug": "webpack --progress --colors --debug --devtool source-map --output-pathinfo --config build/config/webpack.config.js",
     "pack:tests": "webpack --progress --colors --config build/config/webpack.tests.config.js",
     "tests:plain": "mocha --recursive -R spec",

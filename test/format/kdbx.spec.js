@@ -14,7 +14,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('loads simple xml file', function () {
+    it('loads simple xml file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
         var xml = kdbxweb.ByteUtils.bytesToString(TestResources.demoXml).toString('utf8');
         return kdbxweb.Kdbx.loadXml(xml, cred).then(function(db) {
@@ -24,14 +24,17 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('generates error for malformed xml file', function () {
+    it('generates error for malformed xml file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
-        return kdbxweb.Kdbx.loadXml('malformed-xml', cred, function(db, e) {
-            expect(db).to.be(null);
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
-            expect(e.message).to.contain('bad xml');
-        });
+        return kdbxweb.Kdbx.loadXml('malformed-xml', cred)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('bad xml');
+            });
     });
 
     it('loads utf8 uncompressed file', function() {
@@ -41,7 +44,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('loads a file with binary key', function() {
+    it('loads a file with binary key', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'), TestResources.binKeyKey);
         return kdbxweb.Kdbx.load(TestResources.binKeyKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -90,29 +93,20 @@ describe('Kdbx', function () {
         });
     });
 
-    //it('loads a file with null pass', function(done) {
-    //    var cred = new kdbxweb.Credentials(null);
-    //    kdbxweb.Kdbx.load(TestResources.emptyPass, cred, function(db, err) {
-    //        expect(db).to.be.a(kdbxweb.Kdbx);
-    //        done();
-    //    });
-    //});
-
-    xit('successfully loads saved file', function(done) {
+    it('successfully loads saved file', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
-        kdbxweb.Kdbx.load(TestResources.demoKdbx, cred, function(db) {
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
-            db.save(function(ab) {
-                kdbxweb.Kdbx.load(ab, cred, function(db) {
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
                     expect(db.meta.generator).to.be('KdbxWeb');
                     checkDb(db);
-                    done();
                 });
             });
         });
     });
 
-    xit('creates new database', function(done) {
+    it('creates new database', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -134,8 +128,8 @@ describe('Kdbx', function () {
         entry.fields.CustomPlain = 'custom-plain';
         entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString('custom-protected');
         entry.times.update();
-        db.save(function(ab) {
-            kdbxweb.Kdbx.load(ab, cred, function(db) {
+        return db.save().then(function(ab) {
+            return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
                 expect(db.meta.generator).to.be('KdbxWeb');
                 expect(db.meta.customData.key).to.be('val');
                 expect(db.groups.length).to.be(1);
@@ -143,7 +137,6 @@ describe('Kdbx', function () {
                 expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
                 //require('fs').writeFileSync('resources/test.kdbx', new Buffer(new Uint8Array(ab)));
                 //require('fs').writeFileSync('resources/test.key', new Buffer(keyFile));
-                done();
             });
         });
     });
@@ -197,7 +190,7 @@ describe('Kdbx', function () {
             });
     });
 
-    it('generates error for bad keyfile', function () {
+    it('generates error for bad keyfile', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
         return cred.setKeyFile('123')
             .then(function () {
@@ -210,37 +203,50 @@ describe('Kdbx', function () {
             });
     });
 
-        // expect(function() {
-        //     kdbxweb.Kdbx.create('file');
-        // }).to.throwException(function(e) {
-        //     expect(e).to.be.a(kdbxweb.KdbxError);
-        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-        //     expect(e.message).to.contain('credentials');
-        // });
-        //
-        // expect(function() {
-        //     kdbxweb.Kdbx.loadXml(new ArrayBuffer(0));
-        // }).to.throwException(function(e) {
-        //     expect(e).to.be.a(kdbxweb.KdbxError);
-        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-        //     expect(e.message).to.contain('data');
-        // });
-        // expect(function() {
-        //     kdbxweb.Kdbx.loadXml('str', null);
-        // }).to.throwException(function(e) {
-        //     expect(e).to.be.a(kdbxweb.KdbxError);
-        //     expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
-        //     expect(e.message).to.contain('credentials');
-        // });
+    it('generates error for create with bad credentials', function() {
+        expect(function() {
+            kdbxweb.Kdbx.create('file');
+        }).to.throwException(function(e) {
+            expect(e).to.be.a(kdbxweb.KdbxError);
+            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e.message).to.contain('credentials');
+        });
+    });
 
-    xit('generates error for bad password', function () {
+    it('generates loadXml error for bad data', function() {
+        return kdbxweb.Kdbx.loadXml(new ArrayBuffer(0))
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+                expect(e.message).to.contain('data');
+            });
+    });
+
+    it('generates loadXml error for bad credentials', function() {
+        return kdbxweb.Kdbx.loadXml('str', null)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+                expect(e.message).to.contain('credentials');
+            });
+    });
+
+    it('generates error for bad password', function () {
         return kdbxweb.Kdbx.load(TestResources.demoKdbx,
-            new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')),
-            function(db, err) {
-                expect(db).to.be(null);
-                expect(err).to.be.ok();
-                expect(err).to.be.a(kdbxweb.KdbxError);
-                expect(err.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidKey);
+            new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('badpass')))
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.ok();
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidKey);
             });
     });
 
@@ -310,7 +316,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('saves db to xml', function() {
+    it('saves db to xml', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
@@ -322,7 +328,7 @@ describe('Kdbx', function () {
         entry.fields.Notes = 'notes';
         entry.fields.URL = 'url';
         entry.times.update();
-        return db.saveXml(function(xml) {
+        return db.saveXml().then(function(xml) {
             expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
         });
     });
