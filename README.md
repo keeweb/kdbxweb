@@ -23,7 +23,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 ##### Loading
 
 ```javascript
-var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
+let credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
 kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials).then(db => ...);
 kdbxweb.Kdbx.loadXml(dataAsString, credentials).then(db => ...);
 ```
@@ -80,7 +80,7 @@ so correct entry history merging is supported only with one central replica. Ite
 let db = await kdbxweb.Kdbx.load(data, credentials); // load local db
 // work with db
 db.save(); // save local db
-var editStateBeforeSave = db.getLocalEditState(); // save local editing state (serializable to JSON)
+let editStateBeforeSave = db.getLocalEditState(); // save local editing state (serializable to JSON)
 db.close(); // close local db
 db = kdbxweb.Kdbx.load(data, credentials); // reopen it again
 db.setLocalEditState(editStateBeforeSave); // assign edit state obtained before save
