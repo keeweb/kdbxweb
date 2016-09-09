@@ -30,11 +30,15 @@ module.exports = {
         process: false,
         Buffer: false,
         __filename: false,
-        __dirname: false
+        __dirname: false,
+        crypto: false,
+        zlib: false
     },
     externals: {
         fs: true,
         path: true,
-        xmldom: true
+        xmldom: true,
+        crypto: true,
+        zlib: true
     }
 };

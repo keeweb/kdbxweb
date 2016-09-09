@@ -52,6 +52,8 @@ module.exports = {
         output: { ascii_only: true }
     },
     externals: {
+        fs: true,
+        path: true,
         xmldom: true,
         crypto: true,
         zlib: true
