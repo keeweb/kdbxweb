@@ -9,6 +9,10 @@ var expect = require('expect.js'),
     KdbxError = require('../../lib/errors/kdbx-error');
 
 describe('XmlUtils', function() {
+    function removeSpaces(str) {
+        return str.replace(/\s/g, '');
+    }
+
     describe('parse', function() {
         it('parses XML document', function() {
             var xml = XmlUtils.parse('<root><item><cd>&lt;&gt;</cd></item></root>');
@@ -108,7 +112,7 @@ describe('XmlUtils', function() {
             var xml = XmlUtils.parse('<root><old/></root>');
             var childNode = XmlUtils.addChildNode(xml.documentElement, 'item');
             XmlUtils.addChildNode(childNode, 'inner');
-            expect(XmlUtils.serialize(xml)).to.be('<root><old/><item><inner/></item></root>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<root><old/><item><inner/></item></root>');
         });
     });
 
@@ -154,9 +158,9 @@ describe('XmlUtils', function() {
         it('sets node empty text', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setText(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setText(xml.documentElement, null);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
 
         it('escapes special characters', function() {
@@ -196,13 +200,13 @@ describe('XmlUtils', function() {
         it('sets node empty bytes', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setBytes(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, null);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, '');
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setBytes(xml.documentElement, new Uint8Array(0));
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
     });
 
@@ -216,11 +220,11 @@ describe('XmlUtils', function() {
         it('sets node empty date', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setDate(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setDate(xml.documentElement, null);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setDate(xml.documentElement, '');
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
     });
 
@@ -273,13 +277,13 @@ describe('XmlUtils', function() {
         it('sets node empty number', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setNumber(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, null);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, '');
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
             XmlUtils.setNumber(xml.documentElement, NaN);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
     });
 
@@ -325,13 +329,13 @@ describe('XmlUtils', function() {
         it('sets node false', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, false);
-            expect(XmlUtils.serialize(xml)).to.be('<item>False</item>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, NaN);
-            expect(XmlUtils.serialize(xml)).to.be('<item>False</item>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, '');
-            expect(XmlUtils.serialize(xml)).to.be('<item>False</item>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item>False</item>');
             XmlUtils.setBoolean(xml.documentElement, 0);
-            expect(XmlUtils.serialize(xml)).to.be('<item>False</item>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item>False</item>');
         });
 
         it('sets node true', function() {
@@ -349,7 +353,7 @@ describe('XmlUtils', function() {
         it('sets node empty boolean', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setBoolean(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
     });
 
@@ -378,7 +382,7 @@ describe('XmlUtils', function() {
         it('sets node empty uuid', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setUuid(xml.documentElement, undefined);
-            expect(XmlUtils.serialize(xml)).to.be('<item/>');
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
         });
     });
 
