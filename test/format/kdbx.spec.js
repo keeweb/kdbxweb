@@ -106,6 +106,19 @@ describe('Kdbx', function () {
         });
     });
 
+    xit('loads kdbx4 file with argon2 kdf', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.argon2, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            // return db.save().then(function(ab) {
+            //     return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+            //         expect(db.meta.generator).to.be('KdbxWeb');
+            //         checkDb(db);
+            //     });
+            // });
+        });
+    });
+
     it('creates new database', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);

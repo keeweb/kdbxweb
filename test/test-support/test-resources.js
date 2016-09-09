@@ -55,6 +55,12 @@ catch (e) { res.keyWithBom = readNodeFile('../../resources/KeyWithBom.kdbx'); }
 try { res.keyWithBomKeyFile = require('base64!../../resources/KeyWithBom.key'); }
 catch (e) { res.keyWithBomKeyFile = readNodeFile('../../resources/KeyWithBom.key'); }
 
+try { res.argon2 = require('base64!../../resources/Argon2.kdbx'); }
+catch (e) { res.argon2 = readNodeFile('../../resources/Argon2.kdbx'); }
+
+try { res.argon2ChaCha = require('base64!../../resources/Argon2ChaCha.kdbx'); }
+catch (e) { res.argon2ChaCha = readNodeFile('../../resources/Argon2ChaCha.kdbx'); }
+
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];
