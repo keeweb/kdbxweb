@@ -38,11 +38,19 @@ describe('CryptoEngine', function() {
     describe('sha256', function() {
         var src = 'f03f102fa66d1847535a85ffc09c3911d1d56887c451832448df3cbac293be4b';
         var exp = 'affa378dae878f64d10f302df67c614ebb901601dd53a51713ffe664850c833b';
+        var expEmpty = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
 
         it('calculates sha256', function() {
             useDefaultImpl();
             return CryptoEngine.sha256(fromHex(src)).then(function(hash) {
                 expect(toHex(hash)).to.be(exp);
+            });
+        });
+
+        it('calculates sha256 of empty data', function() {
+            useDefaultImpl();
+            return CryptoEngine.sha256(new ArrayBuffer(0)).then(function(hash) {
+                expect(toHex(hash)).to.be(expEmpty);
             });
         });
 
