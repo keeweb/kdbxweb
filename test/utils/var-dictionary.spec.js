@@ -179,7 +179,7 @@ describe('VarDictionary', function() {
         });
         expect(function() {
             var dict = new VarDictionary();
-            dict.set('val', VarDictionary.ValueType.Int32, -1);
+            dict.set('val', VarDictionary.ValueType.Int32, null);
         }).to.throwException(function(e) {
             expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
         });
