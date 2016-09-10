@@ -57,6 +57,18 @@ describe('VarDictionary', function() {
         expect(dict.get('val')).to.be(undefined);
     });
 
+    it('removes item from dictionary', function() {
+        var dict = new VarDictionary();
+        expect(dict.length).to.be(0);
+        expect(dict.get('val')).to.be(undefined);
+        dict.set('val', VarDictionary.ValueType.Bool, true);
+        expect(dict.length).to.be(1);
+        expect(dict.get('val')).to.be(true);
+        dict.remove('val');
+        expect(dict.length).to.be(0);
+        expect(dict.get('val')).to.be(undefined);
+    });
+
     it('throws error for empty version', function() {
         expect(function() {
             VarDictionary.read(new BinaryStream(ByteUtils.arrayToBuffer(ByteUtils.hexToBytes('0000'))));
