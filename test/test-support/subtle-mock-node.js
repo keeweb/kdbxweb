@@ -34,7 +34,8 @@ if (global.process && global.process.versions && global.process.versions.node) {
             },
             digest: function(format, data) {
                 return new Promise(function(resolve) {
-                    resolve(nodeCrypto.createHash('sha256').update(Buffer.from(data)).digest().buffer);
+                    resolve(nodeCrypto.createHash(format.name.replace('-', '').toLowerCase())
+                        .update(Buffer.from(data)).digest().buffer);
                 });
             },
             sign: function(algo, key, data) {

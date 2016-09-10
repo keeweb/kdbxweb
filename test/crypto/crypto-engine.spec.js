@@ -72,6 +72,45 @@ describe('CryptoEngine', function() {
         });
     });
 
+    describe('sha512', function() {
+        var src = 'f03f102fa66d1847535a85ffc09c3911d1d56887c451832448df3cbac293be4b';
+        var exp = '8425338d314de7b33d2be207494bd10335c543b9e354ed9316400bf86ecca4b8' +
+            '707b22e3a7f3f32b1b0e83793137f5cdbff4c5cfd331ca66dc4887a10594257f';
+        var expEmpty = 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
+            '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e';
+
+        it('calculates sha512', function() {
+            useDefaultImpl();
+            return CryptoEngine.sha512(fromHex(src)).then(function(hash) {
+                expect(toHex(hash)).to.be(exp);
+            });
+        });
+
+        it('calculates sha512 of empty data', function() {
+            useDefaultImpl();
+            return CryptoEngine.sha512(new ArrayBuffer(0)).then(function(hash) {
+                expect(toHex(hash)).to.be(expEmpty);
+            });
+        });
+
+        if (SubtleMockNode) {
+            it('calculates sha512 with subtle', function() {
+                useSubtleMock();
+                return CryptoEngine.sha512(fromHex(src)).then(function(hash) {
+                    expect(toHex(hash)).to.be(exp);
+                });
+            });
+        }
+
+        it('throws error if sha512 is not implemented', function() {
+            useNoImpl();
+            return CryptoEngine.sha512(fromHex(src))
+                .then(function() { throw 'No error generated'; })
+                .catch(function(e) { expect(e.message)
+                    .to.be('Error NotImplemented: SHA512 not implemented'); });
+        });
+    });
+
     describe('hmacSha256', function() {
         var data = '14af83cb4ecb6e1773a0ff0fa607e2e96a43dbeeade61291c52ab3853b1dda9d';
         var key = 'c50d2f8d0d51ba443ec46f7f843bf17491b8c0a09b58437acd589b14b73aa35c';
@@ -201,7 +240,7 @@ describe('CryptoEngine', function() {
         });
     });
 
-    describe('argon2', function() {
+    xdescribe('argon2', function() {
         it('throws error if argon2 is not implemented', function() {
             useDefaultImpl();
             return CryptoEngine.argon2()

@@ -4,6 +4,7 @@ var expect = require('expect.js'),
     Consts = require('../../lib/defs/consts'),
     ByteUtils = require('../../lib/utils/byte-utils'),
     BinaryStream = require('../../lib/utils/binary-stream'),
+    Int64 = require('../../lib/utils/int64'),
     VarDictionary = require('../../lib/utils/var-dictionary');
 
 describe('VarDictionary', function() {
@@ -41,9 +42,9 @@ describe('VarDictionary', function() {
         dict.set('BoolTrue', VarDictionary.ValueType.Bool, true);
         dict.set('BoolFalse', VarDictionary.ValueType.Bool, false);
         dict.set('UInt32', VarDictionary.ValueType.UInt32, 42);
-        dict.set('UInt64', VarDictionary.ValueType.UInt64, { hi: 0xFFFFEEEE, lo: 0xDDDDCCCC });
+        dict.set('UInt64', VarDictionary.ValueType.UInt64, new Int64(0xDDDDCCCC, 0xFFFFEEEE));
         dict.set('Int32', VarDictionary.ValueType.Int32, -42);
-        dict.set('Int64', VarDictionary.ValueType.Int64, { hi: 0x11112222, lo: 0x33334444 });
+        dict.set('Int64', VarDictionary.ValueType.Int64, new Int64(0x33334444, 0x11112222));
         dict.set('String', VarDictionary.ValueType.String, 'StringValue');
         dict.set('ByteArray', VarDictionary.ValueType.Bytes, ByteUtils.hexToBytes('000102030405ff'));
         var stm = new BinaryStream();
