@@ -106,7 +106,7 @@ describe('Kdbx', function () {
         });
     });
 
-    xit('loads kdbx4 file with argon2 kdf', function() {
+    it('loads kdbx4 file with argon2 kdf', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
         return kdbxweb.Kdbx.load(TestResources.argon2, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
