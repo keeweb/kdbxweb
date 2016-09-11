@@ -6,7 +6,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 - runs in browser or node.js
 - no native addons
-- fast encryption with WebCrypto, open time is comparable to native app
+- fast encryption with WebCrypto
 - total ≈150kB with dependencies
 - full support of Kdbx features
 - protected values are stored in memory XOR'ed
@@ -17,6 +17,17 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 - modern browsers: Edge 13+, Firefox, Chrome, Safari 8+, Opera
 - node.js
+
+## Kdbx4
+
+Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations, you have to implement it manually and export to kdbxweb, if you want to support such files. Here's how:
+
+```javascript
+const argon2 = require('your-argon2-impl');
+kdbxweb.CryptoEngine.argon2 = argon2;
+```
+
+You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.js).
 
 ## Usage
 
