@@ -240,6 +240,31 @@ describe('CryptoEngine', function() {
         });
     });
 
+    describe('chacha20', function() {
+        var key = '6b2796fa863a6552986c428528d053b76de7ba8e12f8c0e74edb5ed44da3f601';
+        var data = 'e567554429098a38d5f819115edffd39';
+        var iv12 = '4db46dff4add42cb813b98de';
+        var exp12 = 'd0b413d0e71dd55db9ce29ed092724d1';
+        var iv8 = '4db46dff4add42cb';
+        var exp8 = 'ebaee4b6790192fd6e60f6294ea12c98';
+
+        it('encrypts with chacha20', function() {
+            useDefaultImpl();
+            return CryptoEngine.chacha20(ByteUtils.hexToBytes(data), ByteUtils.hexToBytes(key), ByteUtils.hexToBytes(iv12))
+                .then(function(result) {
+                    expect(toHex(result)).to.be(exp12);
+                });
+        });
+
+        it('encrypts with short iv', function() {
+            useDefaultImpl();
+            return CryptoEngine.chacha20(ByteUtils.hexToBytes(data), ByteUtils.hexToBytes(key), ByteUtils.hexToBytes(iv8))
+                .then(function(result) {
+                    expect(toHex(result)).to.be(exp8);
+                });
+        });
+    });
+
     describe('argon2', function() {
         it('throws error if argon2 is not implemented', function() {
             useDefaultImpl();

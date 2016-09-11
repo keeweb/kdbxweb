@@ -240,6 +240,12 @@ describe('XmlUtils', function() {
             expect(dt.getUTCSeconds()).to.be(5);
         });
 
+        it('returns node date from base64', function() {
+            var xml = XmlUtils.parse('<item>A5lizQ4AAAA=</item>');
+            var dt = XmlUtils.getDate(xml.documentElement);
+            expect(dt.toISOString()).to.be('2015-08-16T14:45:23.000Z');
+        });
+
         it('returns undefined for empty node', function() {
             var xml = XmlUtils.parse('<item></item>');
             var dt = XmlUtils.getDate(xml.documentElement);
