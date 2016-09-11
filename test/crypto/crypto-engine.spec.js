@@ -240,7 +240,7 @@ describe('CryptoEngine', function() {
         });
     });
 
-    xdescribe('argon2', function() {
+    describe('argon2', function() {
         it('throws error if argon2 is not implemented', function() {
             useDefaultImpl();
             return CryptoEngine.argon2()

@@ -2,9 +2,20 @@
 
 var expect = require('expect.js'),
     kdbxweb = require('../../lib/index'),
+    argon2 = require('../test-support/argon2'),
     TestResources = require('../test-support/test-resources');
 
 describe('Kdbx', function () {
+    var cryptoEngineArgon2 = kdbxweb.CryptoEngine.argon2;
+
+    before(function() {
+        kdbxweb.CryptoEngine.argon2 = argon2;
+    });
+
+    after(function() {
+        kdbxweb.CryptoEngine.argon2 = cryptoEngineArgon2;
+    });
+
     it('loads simple file', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
