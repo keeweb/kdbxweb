@@ -18,6 +18,10 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - modern browsers: Edge 13+, Firefox, Chrome, Safari 8+, Opera
 - node.js
 
+## Compatibility
+
+Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb files (for KeePass v1) are out of scope of this library.
+
 ## Kdbx4
 
 Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations, you have to implement it manually and export to kdbxweb, if you want to support such files. Here's how:
