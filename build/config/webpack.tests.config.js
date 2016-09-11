@@ -19,6 +19,12 @@ module.exports = {
         filename: 'kdbxweb.test.js',
         libraryTarget: 'umd'
     },
+    module: {
+        loaders: [{
+            test: /argon2\-asm/,
+            loader: 'exports-loader?Module'
+        }]
+    },
     resolve: {
         root: [path.join(__dirname, '../../lib')]
     },
