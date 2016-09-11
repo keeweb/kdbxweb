@@ -31,6 +31,7 @@
     "base64-loader": "^1.0.0",
     "coveralls": "^2.11.12",
     "expect.js": "^0.3.1",
+    "exports-loader": "^0.6.3",
     "fs-walk": "0.0.1",
     "istanbul": "^0.4.5",
     "jshint": "^2.9.3",

@@ -448,6 +448,18 @@
       "from": "expect.js@>=0.3.1 <0.4.0",
       "resolved": "https://registry.npmjs.org/expect.js/-/expect.js-0.3.1.tgz"
     },
+    "exports-loader": {
+      "version": "0.6.3",
+      "from": "exports-loader@latest",
+      "resolved": "https://registry.npmjs.org/exports-loader/-/exports-loader-0.6.3.tgz",
+      "dependencies": {
+        "source-map": {
+          "version": "0.1.43",
+          "from": "source-map@>=0.1.0 <0.2.0",
+          "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.43.tgz"
+        }
+      }
+    },
     "extend": {
       "version": "3.0.0",
       "from": "extend@>=3.0.0 <3.1.0",
