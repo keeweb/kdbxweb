@@ -108,6 +108,7 @@ describe('Kdbx', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
             return db.save().then(function(ab) {
                 return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
                     expect(db.meta.generator).to.be('KdbxWeb');
@@ -122,12 +123,12 @@ describe('Kdbx', function () {
         return kdbxweb.Kdbx.load(TestResources.argon2, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
             checkDb(db);
-            // return db.save().then(function(ab) {
-            //     return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
-            //         expect(db.meta.generator).to.be('KdbxWeb');
-            //         checkDb(db);
-            //     });
-            // });
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    checkDb(db);
+                });
+            });
         });
     });
 
@@ -136,12 +137,12 @@ describe('Kdbx', function () {
         return kdbxweb.Kdbx.load(TestResources.argon2ChaCha, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
             checkDb(db);
-            // return db.save().then(function(ab) {
-            //     return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
-            //         expect(db.meta.generator).to.be('KdbxWeb');
-            //         checkDb(db);
-            //     });
-            // });
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    checkDb(db);
+                });
+            });
         });
     });
 
