@@ -185,10 +185,10 @@ describe('Kdbx.merge', function () {
         binaries[id.bin3] = bin.bin3;
         db.groups[0].entries[0].binaries[id.bin2] = { ref: id.bin2 };
         db.groups[0].entries[0].history[0].binaries[id.bin2] = { ref: id.bin3 };
-        db.meta.binaries[id.bin2] = bin.bin2;
-        remote.meta.binaries[id.bin3] = bin.bin3;
+        db.binaries[id.bin2] = bin.bin2;
+        remote.binaries[id.bin3] = bin.bin3;
         db.merge(remote);
-        assertDbEquals(db, { meta: { binaries: binaries } });
+        assertDbEquals(db, { binaries: binaries });
     });
 
     it('merges custom icons', function() {
@@ -565,7 +565,7 @@ describe('Kdbx.merge', function () {
         delete exp.del;
         delete exp.meta.customIcons;
         exp.root.entries.splice(0, 1);
-        exp.meta.binaries = {};
+        exp.binaries = {};
         assertDbEquals(db, exp);
     });
 
@@ -578,7 +578,7 @@ describe('Kdbx.merge', function () {
         delete exp.del;
         delete exp.meta.customIcons;
         exp.root.entries.splice(0, 1);
-        exp.meta.binaries = {};
+        exp.binaries = {};
         assertDbEquals(db, exp);
     });
 
@@ -845,10 +845,10 @@ describe('Kdbx.merge', function () {
                 entryTemplatesGroupChanged: dt.created,
                 historyMaxItems: 10,
                 historyMaxSize: 10000,
-                binaries: {},
                 customIcons: {},
                 customData: { cd1: 'data1' }
             },
+            binaries: {},
             del: {},
             root: {
                 uuid: id.gRoot,
@@ -904,7 +904,7 @@ describe('Kdbx.merge', function () {
             }
         };
         exp.del[id.eDel] = dt.upd1;
-        exp.meta.binaries[id.bin1] = bin.bin1;
+        exp.binaries[id.bin1] = bin.bin1;
         exp.meta.customIcons[id.icon1] = bin.icon1;
         exp.meta.customIcons[id.icon2] = bin.icon2;
         return exp;
@@ -931,11 +931,11 @@ describe('Kdbx.merge', function () {
         db.meta.entryTemplatesGroupChanged = dt.created;
         db.meta._historyMaxItems = 10;
         db.meta._historyMaxSize = 10000;
-        db.meta.binaries[id.bin1] = bin.bin1;
         db.meta.customIcons[id.icon1] = bin.icon1;
         db.meta.customIcons[id.icon2] = bin.icon2;
         db.meta.customData.cd1 = 'data1';
         db.meta._editState = undefined;
+        db.binaries[id.bin1] = bin.bin1;
 
         var root = db.getDefaultGroup();
         root.uuid = id.gRoot;
@@ -1029,9 +1029,11 @@ describe('Kdbx.merge', function () {
             if (exp.meta.entryTemplatesGroupChanged) { expect(db.meta.entryTemplatesGroupChanged).to.eql(exp.meta.entryTemplatesGroupChanged); }
             if (exp.meta.historyMaxItems) { expect(db.meta.historyMaxItems).to.eql(exp.meta.historyMaxItems); }
             if (exp.meta.historyMaxSize) { expect(db.meta.historyMaxSize).to.eql(exp.meta.historyMaxSize); }
-            if (exp.meta.binaries) { expect(db.meta.binaries).to.eql(exp.meta.binaries); }
             if (exp.meta.customData) { expect(db.meta.customData).to.eql(exp.meta.customData); }
             if (exp.meta.customIcons) { expect(db.meta.customIcons).to.eql(exp.meta.customIcons); }
+        }
+        if (exp.binaries) {
+            expect(db.binaries).to.eql(exp.binaries);
         }
         if (exp.del) {
             expect(db.deletedObjects.length).to.be(Object.keys(exp.del).length);

@@ -121,6 +121,7 @@ describe('Kdbx', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.argon2, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
             // return db.save().then(function(ab) {
             //     return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
             //         expect(db.meta.generator).to.be('KdbxWeb');
@@ -134,6 +135,7 @@ describe('Kdbx', function () {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.argon2ChaCha, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
             // return db.save().then(function(ab) {
             //     return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
             //         expect(db.meta.generator).to.be('KdbxWeb');
@@ -467,11 +469,11 @@ describe('Kdbx', function () {
         var b1 = new Uint8Array([1]).buffer;
         var b2 = new Uint8Array([2]).buffer;
         var b3 = new Uint8Array([3]).buffer;
-        db.meta.binaries.b1 = b1;
-        db.meta.binaries.b2 = b2;
-        db.meta.binaries.b3 = b3;
+        db.binaries.b1 = b1;
+        db.binaries.b2 = b2;
+        db.binaries.b3 = b3;
         db.cleanup({binaries: true});
-        expect(db.meta.binaries).to.eql({ b1: b1, b2: b2 });
+        expect(db.binaries).to.eql({ b1: b1, b2: b2 });
     });
 
     function checkDb(db) {
@@ -502,8 +504,8 @@ describe('Kdbx', function () {
         expect(db.meta.memoryProtection.notes).to.be(false);
         expect(Object.keys(db.meta.customIcons).length).to.be(1);
         expect(db.meta.customIcons['rr3vZ1ozek+R4pAcLeqw5w==']).to.be.ok();
-        expect(Object.keys(db.meta.binaries).length).to.be(1);
-        expect(db.meta.binaries['0']).to.be.ok();
+        expect(Object.keys(db.binaries).length).to.be(1);
+        expect(db.binaries['0']).to.be.ok();
 
         expect(db.deletedObjects.length).to.be(1);
         expect(db.deletedObjects[0].uuid.id).to.be('LtoeZ26BBkqtr93N9tqO4g==');
