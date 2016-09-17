@@ -33,7 +33,9 @@ const argon2 = require('your-argon2-impl');
 kdbxweb.CryptoEngine.argon2 = argon2;
 ```
 
-You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.js).
+You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.js).  
+
+It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you, to choose the best one.
 
 ## Usage
 
