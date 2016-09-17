@@ -84,6 +84,9 @@ db.cleanup({
     customIcons: true,
     binaries: true
 });
+
+// upgrade the db to latest version (kdbx4 format)
+db.upgrade();
 ```
 
 ##### Merge
