@@ -25,9 +25,22 @@ describe('Int64', function() {
         expect(i.value).to.be(0x45600000123);
     });
 
+    it('creates int64 with large value', function() {
+        var i = Int64.from(0x45600000123);
+        expect(i.hi).to.be(0x456);
+        expect(i.lo).to.be(0x123);
+        expect(i.value).to.be(0x45600000123);
+    });
+
     it('throws error for too high number conversion', function() {
         var i = new Int64(0xffffffff, 0xffffffff);
         expect(function() { i = i.value; }).to.throwException(function(e) {
+            expect(e.message).to.be('too large number');
+        });
+    });
+
+    it('throws error for too high number creation', function() {
+        expect(function() { Int64.from(0xffffffffffffff); }).to.throwException(function(e) {
             expect(e.message).to.be('too large number');
         });
     });

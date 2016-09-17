@@ -217,6 +217,12 @@ describe('XmlUtils', function() {
             expect(XmlUtils.serialize(xml)).to.be('<item>2015-08-17T21:20:00Z</item>');
         });
 
+        it('sets node date in binary format', function() {
+            var xml = XmlUtils.parse('<item>text</item>');
+            XmlUtils.setDate(xml.documentElement, new Date('2015-08-16T14:45:23.000Z'), true);
+            expect(XmlUtils.serialize(xml)).to.be('<item>A5lizQ4AAAA=</item>');
+        });
+
         it('sets node empty date', function() {
             var xml = XmlUtils.parse('<item>text</item>');
             XmlUtils.setDate(xml.documentElement, undefined);
