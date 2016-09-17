@@ -146,6 +146,21 @@ describe('Kdbx', function () {
         });
     });
 
+    it('upgrades file to latest version', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            db.upgrade();
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.header.versionMajor).to.be(4);
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('creates new database', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
@@ -175,8 +190,8 @@ describe('Kdbx', function () {
                 expect(db.groups.length).to.be(1);
                 expect(db.groups[0].groups.length).to.be(2);
                 expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
-                //require('fs').writeFileSync('resources/test.kdbx', new Buffer(new Uint8Array(ab)));
-                //require('fs').writeFileSync('resources/test.key', new Buffer(keyFile));
+                // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
+                // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
             });
         });
     });
