@@ -161,6 +161,28 @@ describe('Kdbx', function () {
         });
     });
 
+    it('saves and loads custom data', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            var iconId = kdbxweb.KdbxUuid.random();
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            db.upgrade();
+            db.getDefaultGroup().groups[0].customData = { custom: 'group' };
+            db.getDefaultGroup().groups[0].customIcon = iconId;
+            db.getDefaultGroup().entries[0].customData = { custom: 'entry' };
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.header.versionMajor).to.be(4);
+                    expect(db.getDefaultGroup().groups[0].customData).to.eql({ custom: 'group' });
+                    expect(db.getDefaultGroup().groups[0].customIcon.toString()).to.eql(iconId.toString());
+                    expect(db.getDefaultGroup().entries[0].customData).to.eql({ custom: 'entry' });
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('creates new database', function() {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
@@ -205,6 +227,80 @@ describe('Kdbx', function () {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
                 expect(e.message).to.contain('data');
+            });
+    });
+
+    it('generates error for max bad version', function () {
+        var file = new Uint8Array(TestResources.demoKdbx.byteLength);
+        file.set(new Uint8Array(TestResources.demoKdbx));
+        file[10] = 5;
+        return kdbxweb.Kdbx.load(file.buffer, new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')))
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
+            });
+    });
+
+    it('generates error for min bad version', function () {
+        var file = new Uint8Array(TestResources.demoKdbx.byteLength);
+        file.set(new Uint8Array(TestResources.demoKdbx));
+        file[10] = 2;
+        return kdbxweb.Kdbx.load(file.buffer, new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo')))
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
+            });
+    });
+
+    it('generates error for bad header hash', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var file = new Uint8Array(TestResources.argon2.byteLength);
+        file.set(new Uint8Array(TestResources.argon2));
+        file[254] = 0;
+        return kdbxweb.Kdbx.load(file.buffer, cred)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('header hash mismatch');
+            });
+    });
+
+    it('generates error for bad header hmac', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var file = new Uint8Array(TestResources.argon2.byteLength);
+        file.set(new Uint8Array(TestResources.argon2));
+        file[286] = 0;
+        return kdbxweb.Kdbx.load(file.buffer, cred)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidKey);
+            });
+    });
+
+    it('generates error for saving bad version', function () {
+        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        db.header.versionMajor = 1;
+        return db.save()
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
             });
     });
 
@@ -316,6 +412,13 @@ describe('Kdbx', function () {
             db.remove(group);
             expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
             expect(group.groups.length).to.be(groupLength - 1);
+
+            var parentGroupsBackup = group.parentGroup.groups;
+            group.parentGroup.groups = [];
+            db.move(group, parentGroup); // fake move; should not happen
+            group.parentGroup.groups = parentGroupsBackup;
+            expect(recycleBin.groups.length).to.be(recycleBinLength + 1);
+
             db.move(group, parentGroup);
             expect(recycleBin.groups.length).to.be(recycleBinLength);
             checkDb(db);
