@@ -246,6 +246,13 @@ Use npm to build this project:
 To run tests:  
 `> npm test`  
 
+## 3rd party libs
+
+kdbxweb includes these 3rd party libraries:
+- [pako](https://github.com/nodeca/pako)
+- [text-encoding (forked)](https://github.com/keeweb/text-encoding)
+- [xmldom (forked)](https://github.com/keeweb/xmldom)
+
 ## See it in action
 
 This library is used in [KeeWeb](https://app.keeweb.info)
