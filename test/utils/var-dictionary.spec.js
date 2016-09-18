@@ -70,6 +70,14 @@ describe('VarDictionary', function() {
         expect(dict.get('val')).to.be(undefined);
     });
 
+    it('allows to add key twice', function() {
+        var dict = new VarDictionary();
+        dict.set('UInt32', VarDictionary.ValueType.UInt32, 42);
+        expect(dict.length).to.be(1);
+        dict.set('UInt32', VarDictionary.ValueType.UInt32, 42);
+        expect(dict.length).to.be(1);
+    });
+
     it('throws error for empty version', function() {
         expect(function() {
             VarDictionary.read(new BinaryStream(ByteUtils.arrayToBuffer(ByteUtils.hexToBytes('0000'))));
