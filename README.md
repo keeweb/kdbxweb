@@ -18,7 +18,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - modern browsers: Edge 13+, Firefox, Chrome, Safari 9+, Opera
 - node.js
 
-You can implement older browsers support by adding polyfills for WebCrypto and Promise.
+You can implement older browsers support by adding polyfills for WebCrypto and Promise, just make sure the tests are passing.
 
 ## Compatibility
 
