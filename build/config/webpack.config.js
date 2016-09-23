@@ -6,6 +6,8 @@ var path = require('path'),
 
 var debug = process.argv.indexOf('--debug') > 0;
 
+var StatsPlugin = require('stats-webpack-plugin');
+
 module.exports = {
     context: path.join(__dirname, '../../lib'),
     entry: './index.js',
@@ -35,7 +37,8 @@ module.exports = {
             output: { ascii_only: true }
         }),
         new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) 2015 ' + pkg.author +
-            ', opensource.org/licenses/' + pkg.license)
+            ', opensource.org/licenses/' + pkg.license),
+        new StatsPlugin('stats.json', { chunkModules: true })
     ],
     node: {
         console: false,

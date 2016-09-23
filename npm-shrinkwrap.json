@@ -1930,6 +1930,11 @@
         }
       }
     },
+    "stats-webpack-plugin": {
+      "version": "0.4.2",
+      "from": "stats-webpack-plugin@latest",
+      "resolved": "https://registry.npmjs.org/stats-webpack-plugin/-/stats-webpack-plugin-0.4.2.tgz"
+    },
     "stream-browserify": {
       "version": "1.0.0",
       "from": "stream-browserify@>=1.0.0 <2.0.0",
