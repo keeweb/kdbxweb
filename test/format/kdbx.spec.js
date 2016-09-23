@@ -164,6 +164,20 @@ describe('Kdbx', function () {
         });
     });
 
+    it('saves kdbx4 to xml and loads it back', function() {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            db.upgrade();
+            return db.saveXml().then(function(xml) {
+                return kdbxweb.Kdbx.loadXml(xml, cred).then(function(db) {
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('saves and loads custom data', function() {
         this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
