@@ -15,10 +15,8 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ## Browser support
 
-- modern browsers: Edge 13+, Firefox, Chrome, Safari 9+, Opera
+- modern browsers: Chrome, Firefox, Safari 9+, Opera, IE11, Edge 13+
 - node.js
-
-You can implement older browsers support by adding polyfills for WebCrypto and Promise, just make sure the tests are passing.
 
 ## Compatibility
 
@@ -249,9 +247,11 @@ To run tests:
 ## 3rd party libs
 
 kdbxweb includes these 3rd party libraries:
-- [pako](https://github.com/nodeca/pako)
-- [text-encoding (forked)](https://github.com/keeweb/text-encoding)
-- [xmldom (forked)](https://github.com/keeweb/xmldom)
+- [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
+- [text-encoding](https://github.com/inexorabletash/text-encoding) ([fork](https://github.com/keeweb/text-encoding))
+- [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
+- [promise-polyfill](https://github.com/taylorhakes/promise-polyfill) ([fork](https://github.com/keeweb/promise-polyfill))
+- [jsSHA](https://github.com/Caligatio/jsSHA) ([fork](https://github.com/keeweb/jsSHA))
 
 ## See it in action
 

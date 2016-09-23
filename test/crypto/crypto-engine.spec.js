@@ -3,7 +3,7 @@
 var expect = require('expect.js'),
     SubtleMockNode = require('../test-support/subtle-mock-node'),
     ByteUtils = require('../../lib/utils/byte-utils'),
-    CryptoEngine = require('../../lib/crypto/crypto-engine');
+    CryptoEngine = require('../../lib').CryptoEngine;
 
 function fromHex(str) {
     return ByteUtils.arrayToBuffer(ByteUtils.hexToBytes(str));
