@@ -119,7 +119,7 @@ describe('Kdbx', function () {
     });
 
     it('loads kdbx4 file with argon2 kdf', function() {
-        this.timeout(5000);
+        this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.argon2, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -134,7 +134,7 @@ describe('Kdbx', function () {
     });
 
     it('loads kdbx4 file with argon2 kdf and chacha20 encryption', function() {
-        this.timeout(5000);
+        this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.argon2ChaCha, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -149,6 +149,7 @@ describe('Kdbx', function () {
     });
 
     it('upgrades file to latest version', function() {
+        this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
             expect(db).to.be.a(kdbxweb.Kdbx);
@@ -164,6 +165,7 @@ describe('Kdbx', function () {
     });
 
     it('saves and loads custom data', function() {
+        this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
             var iconId = kdbxweb.KdbxUuid.random();
