@@ -94,6 +94,7 @@ describe('Kdbx.merge', function () {
         remote.meta.defaultUser = 'user1';
         remote.meta.defaultUserChanged = dt.upd2;
         remote.meta.mntncHistoryDays = 100;
+        remote.meta.settingsChanged = dt.upd2;
         remote.meta.keyChanged = dt.upd2;
         remote.meta.keyChangeRec = 1000;
         remote.meta.keyChangeForce = 2000;
@@ -115,6 +116,7 @@ describe('Kdbx.merge', function () {
                 defaultUser: 'user1',
                 defaultUserChanged: dt.upd2,
                 mntncHistoryDays: 100,
+                settingsChanged: dt.upd2,
                 keyChanged: dt.upd2,
                 keyChangeRec: 1000,
                 keyChangeForce: 2000,
@@ -921,6 +923,7 @@ describe('Kdbx.merge', function () {
         db.meta._defaultUser = 'user';
         db.meta.defaultUserChanged = dt.created;
         db.meta._mntncHistoryDays = 10;
+        db.meta.settingsChanged = dt.created;
         db.meta.keyChanged = dt.created;
         db.meta._keyChangeRec = 100;
         db.meta._keyChangeForce = 200;
@@ -1019,6 +1022,7 @@ describe('Kdbx.merge', function () {
             if (exp.meta.defaultUser) { expect(db.meta.defaultUser).to.eql(exp.meta.defaultUser); }
             if (exp.meta.defaultUserChanged) { expect(db.meta.defaultUserChanged).to.eql(exp.meta.defaultUserChanged); }
             if (exp.meta.mntncHistoryDays) { expect(db.meta.mntncHistoryDays).to.eql(exp.meta.mntncHistoryDays); }
+            if (exp.meta.settingsChanged) { expect(db.meta.settingsChanged).to.eql(exp.meta.settingsChanged); }
             if (exp.meta.keyChanged) { expect(db.meta.keyChanged).to.eql(exp.meta.keyChanged); }
             if (exp.meta.keyChangeRec) { expect(db.meta.keyChangeRec).to.eql(exp.meta.keyChangeRec); }
             if (exp.meta.keyChangeForce) { expect(db.meta.keyChangeForce).to.eql(exp.meta.keyChangeForce); }
