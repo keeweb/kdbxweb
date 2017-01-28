@@ -215,23 +215,25 @@ describe('Kdbx', function () {
         entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
         entry.fields.Notes = 'notes';
         entry.fields.URL = 'url';
-        entry.binaries['bin.txt'] = kdbxweb.ProtectedValue.fromString('bin.txt content');
-        entry.pushHistory();
-        entry.fields.Title = 'newtitle';
-        entry.fields.UserName = 'newuser';
-        entry.fields.Password = kdbxweb.ProtectedValue.fromString('newpass');
-        entry.fields.CustomPlain = 'custom-plain';
-        entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString('custom-protected');
-        entry.times.update();
-        return db.save().then(function(ab) {
-            return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
-                expect(db.meta.generator).to.be('KdbxWeb');
-                expect(db.meta.customData.key).to.be('val');
-                expect(db.groups.length).to.be(1);
-                expect(db.groups[0].groups.length).to.be(2);
-                expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
-                // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
-                // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
+        return db.createBinary(kdbxweb.ProtectedValue.fromString('bin.txt content')).then(function(binary) {
+            entry.binaries['bin.txt'] = binary;
+            entry.pushHistory();
+            entry.fields.Title = 'newtitle';
+            entry.fields.UserName = 'newuser';
+            entry.fields.Password = kdbxweb.ProtectedValue.fromString('newpass');
+            entry.fields.CustomPlain = 'custom-plain';
+            entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString('custom-protected');
+            entry.times.update();
+            return db.save().then(function (ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function (db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    expect(db.meta.customData.key).to.be('val');
+                    expect(db.groups.length).to.be(1);
+                    expect(db.groups[0].groups.length).to.be(2);
+                    expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
+                    // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
+                    // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
+                });
             });
         });
     });
@@ -642,7 +644,8 @@ describe('Kdbx', function () {
         expect(Object.keys(db.meta.customIcons).length).to.be(1);
         expect(db.meta.customIcons['rr3vZ1ozek+R4pAcLeqw5w==']).to.be.ok();
         expect(Object.keys(db.binaries).length).to.be(1);
-        expect(db.binaries['0']).to.be.ok();
+        expect(db.binaries.idToHash['0']).to.be.ok();
+        expect(db.binaries[db.binaries.idToHash[0]]).to.be.ok();
 
         expect(db.deletedObjects.length).to.be(1);
         expect(db.deletedObjects[0].uuid.id).to.be('LtoeZ26BBkqtr93N9tqO4g==');
@@ -723,7 +726,7 @@ describe('Kdbx', function () {
                 'my field protected': 'protected val'
             },
             binaries: {
-                attachment: { ref: '0', value: true }
+                attachment: { ref: '6de2ccb163da5f925ea9cdc1298b7c1bd6f7afbbbed41f3d52352f9efbd9db8a', value: true }
             },
             autoType: { enabled: true, obfuscation: 0, defaultSequence: '{USERNAME}{TAB}{PASSWORD}{ENTER}{custom}',
                 items: [
@@ -736,7 +739,6 @@ describe('Kdbx', function () {
         expEntry.fields.Title = 'my-entry';
         expEntry.prFields.Password = 'pass';
         expEntry.history = 0;
-        expEntry.binaries.attachment.value = false;
         checkEntry(topGroup.groups[0].entries[0].history[0], expEntry);
         checkGroup(topGroup.groups[1], {
             uuid: 'QF6yl7EUVk6+NgdJtyl3sg==',

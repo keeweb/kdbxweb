@@ -45,7 +45,8 @@ describe('KdbxHeader', function() {
         var kdbx = {
             binaries: {
                 0: new Uint8Array([1, 2]).buffer,
-                1: ProtectedValue.fromBinary(new Uint8Array([1, 2, 3]).buffer)
+                1: ProtectedValue.fromBinary(new Uint8Array([1, 2, 3]).buffer),
+                hashOrder: ['0', '1']
             }
         };
         var header = KdbxHeader.create();
@@ -137,7 +138,7 @@ describe('KdbxHeader', function() {
     });
 
     it('throws error for bad binary', function() {
-        var ctx = new KdbxContext({ kdbx: { binaries: { 0: undefined } } });
+        var ctx = new KdbxContext({ kdbx: { binaries: { 0: undefined, hashOrder: ['0'] } } });
         var header = KdbxHeader.create();
         header.upgrade();
         header.generateSalts();
@@ -159,7 +160,7 @@ describe('KdbxHeader', function() {
     });
 
     it('writes header without public custom data', function() {
-        var ctx = new KdbxContext({ kdbx: { binaries: { } } });
+        var ctx = new KdbxContext({ kdbx: { binaries: { hashOrder: [] } } });
         var header = KdbxHeader.create();
         header.upgrade();
         header.generateSalts();
