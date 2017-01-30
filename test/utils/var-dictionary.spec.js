@@ -30,6 +30,7 @@ describe('VarDictionary', function() {
         expect(dict.get('Int64').hi).to.be(0x11112222);
         expect(dict.get('Int64').lo).to.be(0x33334444);
         expect(dict.get('String')).to.be('StringValue');
+        expect(dict.keys()).to.eql(['BoolTrue', 'BoolFalse', 'UInt32', 'UInt64', 'Int32', 'Int64', 'String', 'ByteArray']);
         expect(ByteUtils.bytesToHex(dict.get('ByteArray'))).to.be('000102030405ff');
 
         stm = new BinaryStream();
