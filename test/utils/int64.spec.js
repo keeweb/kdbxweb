@@ -9,6 +9,7 @@ describe('Int64', function() {
         expect(i.hi).to.be(0);
         expect(i.lo).to.be(0);
         expect(i.value).to.be(0);
+        expect(i.valueOf()).to.be(0);
     });
 
     it('creates int64 with low part', function() {
@@ -16,6 +17,7 @@ describe('Int64', function() {
         expect(i.hi).to.be(0);
         expect(i.lo).to.be(0x123);
         expect(i.value).to.be(0x123);
+        expect(i.valueOf()).to.be(0x123);
     });
 
     it('creates int64 with low and high parts', function() {
@@ -23,6 +25,7 @@ describe('Int64', function() {
         expect(i.hi).to.be(0x456);
         expect(i.lo).to.be(0x123);
         expect(i.value).to.be(0x45600000123);
+        expect(i.valueOf()).to.be(0x45600000123);
     });
 
     it('creates int64 with large value', function() {
@@ -30,6 +33,7 @@ describe('Int64', function() {
         expect(i.hi).to.be(0x456);
         expect(i.lo).to.be(0x123);
         expect(i.value).to.be(0x45600000123);
+        expect(i.valueOf()).to.be(0x45600000123);
     });
 
     it('throws error for too high number conversion', function() {
