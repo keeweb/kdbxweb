@@ -1,6 +1,9 @@
 Release notes
 -------------
-##### v1.0.0 (WIP)
+##### v1.0.1 (2017-02-27)
+`-` fix opening db with empty binaries  
+
+##### v1.0.0 (2017-02-01)
 `+` KDBX4 support  
 `!` API updated  
 
