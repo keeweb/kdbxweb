@@ -1,0 +1,15 @@
+{
+  "ecmaFeatures": {
+    "ecmaVersion": 5
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "amd": true
+  },
+  "rules": {
+    "strict": "off",
+    "prefer-const": "off",
+    "no-var": "off"
+  }
+}
