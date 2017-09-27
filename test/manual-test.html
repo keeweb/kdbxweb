@@ -21,14 +21,11 @@
             try {
                 var pass = document.getElementById('pass').value;
                 kdbxweb.Kdbx.load(e.target.result,
-                    new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(pass), keyfile),
-                    function(db, err) {
+                    new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(pass), keyfile)).then(function(db) {
                         window.db = db;
-                        if (err) {
-                            res.innerHTML += 'error: ' + err + ', ' + (performance.now() - start) + 'ms\n';
-                        } else {
-                            res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db contains the db';
-                        }
+                        res.innerHTML += 'done: ' + Math.round(performance.now() - start) + 'ms\nwindow.db contains the db';
+                    }).catch(function(err) {
+                        res.innerHTML += 'error: ' + err + ', ' + (performance.now() - start) + 'ms\n';
                     });
             } catch (e) {
                 res.innerHTML += 'error: ' + e + ', ' + (performance.now() - start) + 'ms\n';
