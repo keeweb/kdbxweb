@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.0.2 (2017-09-29)
+`-` improved decoding performance, fix #17  
+
 ##### v1.0.1 (2017-02-27)
 `-` fix opening db with empty binaries  
 
