@@ -133,6 +133,23 @@ describe('Kdbx', function () {
         });
     });
 
+    it('loads kdbx3 file with chacha20', function() {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.aesChaCha, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.header.dataCipherUuid.toString()).to.be(kdbxweb.Consts.CipherId.ChaCha20);
+            checkDb(db);
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    expect(db.header.dataCipherUuid.toString()).to.be(kdbxweb.Consts.CipherId.ChaCha20);
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('loads kdbx4 file with argon2 kdf and chacha20 encryption', function() {
         this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);

@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.1.0 (2018-02-14)
+`+` support ChaCha2 in KDBX3  
+
 ##### v1.0.2 (2017-09-29)
 `-` improved decoding performance, fix #17  
 
