@@ -150,6 +150,21 @@ describe('Kdbx', function () {
         });
     });
 
+    it('loads kdbx4 file with aes kdf', function() {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'));
+        return kdbxweb.Kdbx.load(TestResources.aesKdfKdbx4, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.header.dataCipherUuid.toString()).to.be(kdbxweb.Consts.CipherId.Aes);
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    expect(db.header.dataCipherUuid.toString()).to.be(kdbxweb.Consts.CipherId.Aes);
+                });
+            });
+        });
+    });
+
     it('loads kdbx4 file with argon2 kdf and chacha20 encryption', function() {
         this.timeout(10000);
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);

@@ -1,7 +1,10 @@
 Release notes
 -------------
-##### v1.2.0 (2018-03-03)
+##### v1.2.2 (2018-03-03)
 `+` copyright year updated  
+
+##### v1.2.1 (2018-03-03)
+`+` support AES KDF in KDBX4  
 
 ##### v1.2.0 (2018-03-03)
 `!` dropped IE support  

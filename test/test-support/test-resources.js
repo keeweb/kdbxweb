@@ -64,6 +64,9 @@ catch (e) { res.argon2ChaCha = readNodeFile('../../resources/Argon2ChaCha.kdbx')
 try { res.aesChaCha = require('base64!../../resources/AesChaCha.kdbx'); }
 catch (e) { res.aesChaCha = readNodeFile('../../resources/AesChaCha.kdbx'); }
 
+try { res.aesKdfKdbx4 = require('base64!../../resources/AesKdfKdbx4.kdbx'); }
+catch (e) { res.aesKdfKdbx4 = readNodeFile('../../resources/AesKdfKdbx4.kdbx'); }
+
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];
