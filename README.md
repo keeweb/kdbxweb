@@ -15,7 +15,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ## Browser support
 
-- modern browsers: Chrome, Firefox, Safari 9+, Opera, IE11, Edge 13+
+- modern browsers: Chrome, Firefox, Safari, Opera, Edge
 - node.js
 
 ## Compatibility
@@ -250,8 +250,6 @@ kdbxweb includes these 3rd party libraries:
 - [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
 - [text-encoding](https://github.com/inexorabletash/text-encoding) ([fork](https://github.com/keeweb/text-encoding))
 - [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
-- [promise-polyfill](https://github.com/taylorhakes/promise-polyfill) ([fork](https://github.com/keeweb/promise-polyfill))
-- [jsSHA](https://github.com/Caligatio/jsSHA) ([fork](https://github.com/keeweb/jsSHA))
 
 ## See it in action
 

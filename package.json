@@ -1,6 +1,6 @@
 {
   "name": "kdbxweb",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Kdbx KeePass database reader for web",
   "repository": {
     "type": "git",
@@ -43,9 +43,7 @@
     "webpack": "^1.13.2"
   },
   "dependencies": {
-    "jssha": "github:keeweb/jssha#1ffad73a7e5ab7158596c090a524f29ca2aee13d",
     "pako": "github:keeweb/pako#653c0b00d8941c89d09ed4546d2179001ec44efc",
-    "promise-polyfill": "github:keeweb/promise-polyfill#1a787918fe1a118b53ccf93fcb1e47da51f4950b",
     "text-encoding": "github:keeweb/text-encoding#4dfb7cb0954c222852092f8b06ae4f6b4f60bfbb",
     "xmldom": "github:keeweb/xmldom#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6"
   }

@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.0 (2018-03-03)
+`!` dropped IE support  
+
 ##### v1.1.0 (2018-02-14)
 `+` support ChaCha2 in KDBX3  
 
