@@ -36,7 +36,7 @@ module.exports = {
             compress: false,
             output: { ascii_only: true }
         }),
-        new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) 2015 ' + pkg.author +
+        new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) ' + new Date().getFullYear() + ' ' + pkg.author +
             ', opensource.org/licenses/' + pkg.license),
         new StatsPlugin('stats.json', { chunkModules: true })
     ],

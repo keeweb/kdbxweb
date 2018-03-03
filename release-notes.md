@@ -1,6 +1,9 @@
 Release notes
 -------------
 ##### v1.2.0 (2018-03-03)
+`+` copyright year updated  
+
+##### v1.2.0 (2018-03-03)
 `!` dropped IE support  
 
 ##### v1.1.0 (2018-02-14)
