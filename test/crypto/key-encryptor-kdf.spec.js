@@ -163,7 +163,7 @@ describe('KeyEncryptorKdf', function() {
         var salt = ByteUtils.hexToBytes('5d18f8a5ae0e7ea86f0ad817f0c0d40656ef1da6367d8a88508b3c13cec0d7af');
         var result = 'af0be2c639224ad37bd2bc7967d6c3303a8a6d4b7813718918a66bde96dc3132';
         params.set('S', VarDictionary.ValueType.Bytes, salt);
-        params.set('R', VarDictionary.ValueType.UInt32, 2);
+        params.set('R', VarDictionary.ValueType.Int64, new Int64(2));
         return KeyEncryptorKdf.encrypt(key, params).then(function(res) {
             expect(ByteUtils.bytesToHex(res)).to.be(result);
         });
@@ -183,7 +183,7 @@ describe('KeyEncryptorKdf', function() {
         var params = new VarDictionary();
         params.set('$UUID', VarDictionary.ValueType.Bytes, ByteUtils.base64ToBytes(Consts.KdfId.Aes));
         params.set('S', VarDictionary.ValueType.Bytes, new ArrayBuffer(32));
-        params.set('R', VarDictionary.ValueType.Int32, -1);
+        params.set('R', VarDictionary.ValueType.Int64, new Int64(-1));
         return KeyEncryptorKdf.encrypt(data, params).then(function() { throw 'Not expected'; })
             .catch(function(e) {
                 expect(e.message).to.contain('FileCorrupt: bad aes rounds');
