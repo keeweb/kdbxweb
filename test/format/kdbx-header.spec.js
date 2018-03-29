@@ -336,4 +336,13 @@ describe('KdbxHeader', function() {
             expect(e.message).to.contain('compression');
         });
     });
+
+    it('throws error for empty files', function() {
+        expect(function() {
+            KdbxHeader.read(new BinaryStream(new ArrayBuffer(0)), new KdbxContext({}));
+        }).to.throwException(function(e) {
+            expect(e.code).to.be(Consts.ErrorCodes.FileCorrupt);
+            expect(e.message).to.contain('not enough data');
+        });
+    });
 });

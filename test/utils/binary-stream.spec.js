@@ -129,6 +129,11 @@ describe('BinaryStream', function() {
         expect(stm.pos).to.be(100);
     });
 
+    it('returns byteLength', function() {
+        var stm = new BinaryStream(arr.buffer);
+        expect(stm.byteLength).to.be(arr.buffer.byteLength);
+    });
+
     it('can read bytes without changing position', function() {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.pos).to.be(0);

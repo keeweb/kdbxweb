@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.3 (2018-03-29)
+`+` throw an error if there's not enough data in a file  
+
 ##### v1.2.2 (2018-03-03)
 `+` copyright year updated  
 
