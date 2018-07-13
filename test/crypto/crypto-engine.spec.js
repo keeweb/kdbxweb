@@ -153,6 +153,12 @@ describe('CryptoEngine', function() {
             expect(rand3.length).to.be(10);
         });
 
+        it('can fill more than 65536 bytes', function() {
+            useDefaultImpl();
+            var rand1 = CryptoEngine.random(77111);
+            expect(rand1.length).to.be(77111);
+        });
+
         if (SubtleMockNode) {
             it('generates random bytes with subtle', function() {
                 useSubtleMock();
