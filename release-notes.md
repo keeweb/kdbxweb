@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.4 (2018-07-13)
+`+` fixed large attachments error: keeweb/keeweb#922  
+
 ##### v1.2.3 (2018-03-29)
 `+` throw an error if there's not enough data in a file  
 
