@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.5 (2018-11-10)
+`+` removed usages of obsolete Buffer() constructor  
+
 ##### v1.2.4 (2018-07-13)
 `+` fixed large attachments error: keeweb/keeweb#922  
 
