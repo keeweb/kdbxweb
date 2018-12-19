@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.6 (2018-12-19)
+`*` performance improvement  
+
 ##### v1.2.5 (2018-11-10)
 `+` removed usages of obsolete Buffer() constructor  
 
