@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.2.7 (2019-03-06)
+`-` fixed header after upgrade to kdbx4  
+
 ##### v1.2.6 (2018-12-19)
 `*` performance improvement  
 
