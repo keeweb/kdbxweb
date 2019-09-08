@@ -9,6 +9,9 @@ var debug = process.argv.indexOf('--debug') > 0;
 var StatsPlugin = require('stats-webpack-plugin');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
+const banner = 'kdbxweb v' + pkg.version + ', (c) ' + new Date().getFullYear() +
+    ' ' + pkg.author + ', opensource.org/licenses/' + pkg.license;
+
 module.exports = {
     mode: 'production',
     context: path.join(__dirname, '../../lib'),
@@ -29,8 +32,9 @@ module.exports = {
         modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
     },
     plugins: [
-        new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) ' + new Date().getFullYear() + ' ' + pkg.author +
-            ', opensource.org/licenses/' + pkg.license),
+        new webpack.BannerPlugin({
+            banner: banner
+        }),
         new StatsPlugin('stats.json', { chunkModules: true })
     ],
     node: {
@@ -51,6 +55,12 @@ module.exports = {
                     mangle: {},
                     compress: {},
                     output: { ascii_only: true }
+                },
+                extractComments: {
+                    condition: /^\**!|@preserve|@license|@cc_on/i,
+                    banner() {
+                        return banner;
+                    }
                 }
             })
         ]
