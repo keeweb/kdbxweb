@@ -15,9 +15,9 @@ if (global.process && global.process.versions && global.process.versions.node) {
             encrypt: function(algo, key, cleartext) {
                 return new Promise(function(resolve) {
                     var cipher = nodeCrypto.createCipheriv('aes-256-cbc',
-                        new Buffer(new Uint8Array(key)),
-                        new Buffer(new Uint8Array(algo.iv)));
-                    var data = cipher.update(new Buffer(new Uint8Array(cleartext)));
+                        Buffer.from(new Uint8Array(key)),
+                        Buffer.from(new Uint8Array(algo.iv)));
+                    var data = cipher.update(Buffer.from(new Uint8Array(cleartext)));
                     data = new Uint8Array(Buffer.concat([data, cipher.final()])).buffer;
                     resolve(data);
                 });
@@ -25,9 +25,9 @@ if (global.process && global.process.versions && global.process.versions.node) {
             decrypt: function(algo, key, cleartext) {
                 return new Promise(function(resolve) {
                     var cipher = nodeCrypto.createDecipheriv('aes-256-cbc',
-                        new Buffer(new Uint8Array(key)),
-                        new Buffer(new Uint8Array(algo.iv)));
-                    var data = cipher.update(new Buffer(new Uint8Array(cleartext)));
+                        Buffer.from(new Uint8Array(key)),
+                        Buffer.from(new Uint8Array(algo.iv)));
+                    var data = cipher.update(Buffer.from(new Uint8Array(cleartext)));
                     data = new Uint8Array(Buffer.concat([data, cipher.final()])).buffer;
                     resolve(data);
                 });

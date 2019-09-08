@@ -55,9 +55,21 @@ describe('XmlUtils', function() {
 
     describe('serialize', function() {
         it('serializes XML document', function() {
-            var doc = XmlUtils.parse('<root><item><cd>123</cd></item></root>');
+            var doc = XmlUtils.parse('<root><item><cd>123</cd><e></e></item></root>');
             var xml = XmlUtils.serialize(doc);
-            expect(xml).to.be('<root><item><cd>123</cd></item></root>');
+            expect(xml).to.be('<root><item><cd>123</cd><e/></item></root>');
+        });
+
+        it('pretty prints XML document', function() {
+            var doc = XmlUtils.parse('<root><item><cd>123</cd><e></e></item></root>');
+            var xml = XmlUtils.serialize(doc, true);
+            expect(xml).to.be('<root>\n    <item>\n        <cd>123</cd>\n        <e/>\n    </item>\n</root>');
+        });
+
+        it('pretty prints processing instructions', function() {
+            var doc = XmlUtils.parse('<?xml version="1.0" encoding="UTF-8"?><root><item><cd>123</cd><e></e></item></root>');
+            var xml = XmlUtils.serialize(doc, true);
+            expect(xml).to.be('<?xml version="1.0" encoding="UTF-8"?>\n<root>\n    <item>\n        <cd>123</cd>\n        <e/>\n    </item>\n</root>');
         });
     });
 

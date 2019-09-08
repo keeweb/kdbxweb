@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.3.0 (2019-09-08)
+`-` pretty-printing xml option in `Kdbx::saveXml`  
+
 ##### v1.2.7 (2019-03-06)
 `-` fixed header after upgrade to kdbx4  
 

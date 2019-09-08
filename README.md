@@ -52,6 +52,11 @@ db.save().then(dataAsArrayBuffer => ...);
 db.saveXml().then(xmlAsString => ...);
 ```
 
+You can also pretty-print XML:
+```javascript
+db.saveXml(true).then(xmlAsString => ...);
+```
+
 ##### File info
 [Header object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
 [Meta object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
