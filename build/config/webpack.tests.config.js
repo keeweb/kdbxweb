@@ -12,6 +12,7 @@ walk.walkSync('test', function(basedir, filename, stat) {
 });
 
 module.exports = {
+    mode: 'production',
     context: path.join(__dirname, '../../test'),
     entry: entry,
     output: {
@@ -20,16 +21,13 @@ module.exports = {
         libraryTarget: 'umd'
     },
     module: {
-        loaders: [{
-            test: /argon2\-asm/,
+        rules: [{
+            test: /argon2-asm/,
             loader: 'exports-loader?Module'
         }]
     },
     resolve: {
-        root: [path.join(__dirname, '../../lib')]
-    },
-    resolveLoader: {
-        root: [path.join(__dirname, '../../node_modules')]
+        modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
     },
     node: {
         console: false,
@@ -46,5 +44,8 @@ module.exports = {
         xmldom: true,
         crypto: true,
         zlib: true
+    },
+    performance: {
+        hints: false
     }
 };

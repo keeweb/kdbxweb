@@ -7,8 +7,10 @@ var path = require('path'),
 var debug = process.argv.indexOf('--debug') > 0;
 
 var StatsPlugin = require('stats-webpack-plugin');
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+    mode: 'production',
     context: path.join(__dirname, '../../lib'),
     entry: './index.js',
     output: {
@@ -18,24 +20,15 @@ module.exports = {
         libraryTarget: 'umd'
     },
     module: {
-        loaders: debug ? null : [{
+        rules: debug ? [] : [{
             test: /\.js$/,
-            loader: 'uglify'
+            loader: 'uglify-loader'
         }]
     },
     resolve: {
-        root: [path.join(__dirname, '../../lib')]
+        modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
     },
-    resolveLoader: {
-        root: [path.join(__dirname, '../../node_modules')]
-    },
-    plugins: debug ? null : [
-        new webpack.optimize.OccurenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin({
-            mangle: { keep_fnames: true },
-            compress: false,
-            output: { ascii_only: true }
-        }),
+    plugins: [
         new webpack.BannerPlugin('kdbxweb v' + pkg.version + ', (c) ' + new Date().getFullYear() + ' ' + pkg.author +
             ', opensource.org/licenses/' + pkg.license),
         new StatsPlugin('stats.json', { chunkModules: true })
@@ -49,10 +42,18 @@ module.exports = {
         crypto: false,
         zlib: false
     },
-    'uglify-loader': {
-        mangle: {},
-        compress: {},
-        output: { ascii_only: true }
+    optimization: {
+        minimizer: debug ? [] : [
+            new UglifyJsPlugin({
+                cache: true,
+                parallel: true,
+                uglifyOptions: {
+                    mangle: {},
+                    compress: {},
+                    output: { ascii_only: true }
+                }
+            })
+        ]
     },
     externals: {
         fs: true,
@@ -60,5 +61,8 @@ module.exports = {
         xmldom: true,
         crypto: true,
         zlib: true
+    },
+    performance: {
+        hints: false
     }
 };

@@ -40,7 +40,9 @@
     "rimraf": "^3.0.0",
     "stats-webpack-plugin": "^0.7.0",
     "uglify-loader": "^3.0.0",
-    "webpack": "^1.13.2"
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.8"
   },
   "dependencies": {
     "pako": "github:keeweb/pako#653c0b00d8941c89d09ed4546d2179001ec44efc",
