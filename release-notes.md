@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.4.2 (2019-09-14)
+`+` default encryption rounds increased to 300000  
+
 ##### v1.4.1 (2019-09-14)
 `+` setting file KDF with `kdbx.setKdf`  
 
