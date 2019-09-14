@@ -97,6 +97,9 @@ db.upgrade();
 
 // downgrade to KDBX3
 db.setVersion(3);
+
+// set KDF to AES
+db.setKdf(kdbxweb.Consts.KdfId.Aes);
 ```
 
 ##### Merge

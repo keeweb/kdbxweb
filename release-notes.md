@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.4.1 (2019-09-14)
+`+` setting file KDF with `kdbx.setKdf`  
+
 ##### v1.4.0 (2019-09-14)
 `+` setting file version with `kdbx.setVersion`  
 

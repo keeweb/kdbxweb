@@ -190,6 +190,27 @@ describe('Kdbx', function () {
             return db.save().then(function(ab) {
                 return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
                     expect(db.header.versionMajor).to.be(4);
+                    expect(kdbxweb.ByteUtils.bytesToBase64(db.header.kdfParameters.get('$UUID')))
+                        .to.be(kdbxweb.Consts.KdfId.Argon2);
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
+    it('upgrades file to V4 with aes kdf', function() {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            db.upgrade();
+            db.setKdf(kdbxweb.Consts.KdfId.Aes);
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.header.versionMajor).to.be(4);
+                    expect(kdbxweb.ByteUtils.bytesToBase64(db.header.kdfParameters.get('$UUID')))
+                        .to.be(kdbxweb.Consts.KdfId.Aes);
                     checkDb(db);
                 });
             });

@@ -354,4 +354,13 @@ describe('KdbxHeader', function() {
             expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
         });
     });
+
+    it('throws error for bad KDF in setKdf', function() {
+        var header = KdbxHeader.create();
+        expect(function() {
+            header.setKdf('unknown');
+        }).to.throwException(function(e) {
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
+        });
+    });
 });
