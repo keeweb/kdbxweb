@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.4.0 (2019-09-14)
+`+` setting file version with `kdbx.setVersion`  
+
 ##### v1.3.0 (2019-09-08)
 `-` pretty-printing xml option in `Kdbx::saveXml`  
 

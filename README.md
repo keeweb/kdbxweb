@@ -92,8 +92,11 @@ db.cleanup({
     binaries: true
 });
 
-// upgrade the db to latest version (kdbx4 format)
+// upgrade the db to latest version (currently KDBX4)
 db.upgrade();
+
+// downgrade to KDBX3
+db.setVersion(3);
 ```
 
 ##### Merge

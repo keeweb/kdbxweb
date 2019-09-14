@@ -51,7 +51,7 @@ describe('KdbxHeader', function() {
         };
         var header = KdbxHeader.create();
         expect(header.versionMajor).to.be(3);
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.masterSeed = new Uint32Array([1,1,1,1]).buffer;
         header.transformSeed = new Uint32Array([2,2,2,2]).buffer;
         header.streamStartBytes = new Uint32Array([3,3,3,3]).buffer;
@@ -140,7 +140,7 @@ describe('KdbxHeader', function() {
     it('throws error for bad binary', function() {
         var ctx = new KdbxContext({ kdbx: { binaries: { 0: undefined, hashOrder: ['0'] } } });
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         expect(function () {
             header.writeInnerHeader(new BinaryStream(), ctx);
@@ -162,7 +162,7 @@ describe('KdbxHeader', function() {
     it('writes header without public custom data', function() {
         var ctx = new KdbxContext({ kdbx: { binaries: { hashOrder: [] } } });
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         var stm = new BinaryStream();
         header.write(stm);
@@ -176,7 +176,7 @@ describe('KdbxHeader', function() {
 
     it('validates header cipher', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.dataCipherUuid = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -187,7 +187,7 @@ describe('KdbxHeader', function() {
 
     it('validates header cipher', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.compression = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -198,7 +198,7 @@ describe('KdbxHeader', function() {
 
     it('validates master seed cipher', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.masterSeed = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -209,7 +209,7 @@ describe('KdbxHeader', function() {
 
     it('validates header encryption iv', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.encryptionIV = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -220,7 +220,7 @@ describe('KdbxHeader', function() {
 
     it('validates header kdf parameters', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.kdfParameters = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -281,7 +281,7 @@ describe('KdbxHeader', function() {
 
     it('validates inner header protected straem key', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.protectedStreamKey = undefined;
         expect(function() { header.writeInnerHeader(new BinaryStream(), new KdbxContext({})); }).to.throwException(function(e) {
@@ -292,7 +292,7 @@ describe('KdbxHeader', function() {
 
     it('validates inner header crs algorithm', function() {
         var header = KdbxHeader.create();
-        header.upgrade();
+        header.setVersion(KdbxHeader.MaxFileVersion);
         header.generateSalts();
         header.crsAlgorithm = undefined;
         expect(function() { header.writeInnerHeader(new BinaryStream(), new KdbxContext({})); }).to.throwException(function(e) {
@@ -343,6 +343,15 @@ describe('KdbxHeader', function() {
         }).to.throwException(function(e) {
             expect(e.code).to.be(Consts.ErrorCodes.FileCorrupt);
             expect(e.message).to.contain('not enough data');
+        });
+    });
+
+    it('throws error for bad version in setVersion', function() {
+        var header = KdbxHeader.create();
+        expect(function() {
+            header.setVersion(2);
+        }).to.throwException(function(e) {
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
         });
     });
 });

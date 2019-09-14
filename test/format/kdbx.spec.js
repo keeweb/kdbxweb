@@ -196,6 +196,22 @@ describe('Kdbx', function () {
         });
     });
 
+    it('downgrades file to V3', function() {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            db.setVersion(3);
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.header.versionMajor).to.be(3);
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('saves kdbx4 to xml and loads it back', function() {
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
         return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(db) {
