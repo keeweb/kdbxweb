@@ -684,6 +684,42 @@ describe('Kdbx', function () {
         expect(db.binaries).to.eql({ b1: b1, b2: b2 });
     });
 
+    it('imports an entry from another file', function() {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), TestResources.demoKey);
+        var db = kdbxweb.Kdbx.create(cred, 'example');
+        return kdbxweb.Kdbx.load(TestResources.demoKdbx, cred).then(function(sourceDb) {
+            var sourceEntryWithCustomIcon = sourceDb.groups[0].entries[0];
+            var sourceEntryWithBinaries = sourceDb.groups[0].groups[0].entries[0];
+
+            expect(sourceDb.groups[0].entries.length).to.be(2);
+            expect(sourceEntryWithCustomIcon.customIcon).to.be.ok();
+            expect(Object.keys(sourceEntryWithBinaries.binaries)).to.eql(['attachment']);
+
+            var importedEntryWithCustomIcon = db.importEntry(sourceEntryWithCustomIcon, db.groups[0], sourceDb);
+            var importedEntryWithBinaries = db.importEntry(sourceEntryWithBinaries, db.groups[0], sourceDb);
+
+            expect(importedEntryWithCustomIcon.uuid).not.to.eql(sourceEntryWithCustomIcon.uuid);
+            expect(importedEntryWithBinaries.uuid).not.to.eql(sourceEntryWithBinaries.uuid);
+
+            return db.save().then(function(ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function(db) {
+                    expect(db.groups[0].entries.length).to.be(2);
+
+                    var withCustomIcon = db.groups[0].entries[0];
+                    var withBinaries = db.groups[0].entries[1];
+
+                    expect(withCustomIcon.uuid).to.eql(importedEntryWithCustomIcon.uuid);
+                    expect(Object.keys(withCustomIcon.customIcon)).to.be.ok();
+                    expect(db.meta.customIcons[withCustomIcon.customIcon]).to.be.ok();
+
+                    expect(withBinaries.uuid).to.eql(importedEntryWithBinaries.uuid);
+                    expect(Object.keys(withBinaries.binaries)).to.eql(['attachment']);
+                });
+            });
+        });
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');

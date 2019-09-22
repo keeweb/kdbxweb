@@ -203,6 +203,11 @@ db.remove(entry);
 db.move(entry, toGroup);
 ```
 
+If you're moving an entry from another file, this is called _import_:
+```javascript
+db.importEntry(entry, toGroup, sourceFile);
+```
+
 ##### ProtectedValue
 Used for passwords and custom fields, stored the value in memory XOR'ed  
 ```javascript
