@@ -18,7 +18,7 @@ module.exports = {
     entry: './index.js',
     output: {
         path: path.join(__dirname, '../../dist'),
-        filename: 'kdbxweb.js',
+        filename: 'kdbxweb' + (debug ? '' : '.min') + '.js',
         library: 'kdbxweb',
         libraryTarget: 'umd'
     },
@@ -56,12 +56,7 @@ module.exports = {
                     compress: {},
                     output: { ascii_only: true }
                 },
-                extractComments: {
-                    condition: /^\**!|@preserve|@license|@cc_on/i,
-                    banner() {
-                        return banner;
-                    }
-                }
+                extractComments: false
             })
         ]
     },

@@ -6,13 +6,12 @@
     "type": "git",
     "url": "https://github.com/keeweb/kdbxweb.git"
   },
-  "main": "lib/index.js",
+  "main": "dist/kdbxweb.js",
   "scripts": {
     "test": "npm run tests:cover",
     "start": "npm run jshint && npm run build",
     "jshint": "jshint lib test",
-    "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-pro",
-    "build:debug": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug",
+    "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug && npm run pack:dist-pro",
     "cichecks": "npm run clean && npm run jshint && npm run pack:tests && npm run tests:cover",
     "clean": "rimraf dist",
     "pack:dist-pro": "webpack --progress --colors --display-modules --config build/config/webpack.config.js",
@@ -42,7 +41,7 @@
     "uglify-loader": "^3.0.0",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.8"
+    "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "pako": "github:keeweb/pako#653c0b00d8941c89d09ed4546d2179001ec44efc",

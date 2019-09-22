@@ -3,6 +3,8 @@ workspace.xml
 node_modules/
 dist/*
 !dist/kdbxweb.js
+!dist/kdbxweb.js.map
+!dist/kdbxweb.min.js
 coverage/
 *.log
 .idea/
