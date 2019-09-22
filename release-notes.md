@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.1 (2019-09-22)
+`-` fixed a bug in importing attachments  
+
 ##### v1.5.0 (2019-09-22)
 `+` importing entries from other files using `Kdbx.importEntry`  
 `*` debug and release versions are now provided: kdbxweb.js and kdbxweb.min.js  
