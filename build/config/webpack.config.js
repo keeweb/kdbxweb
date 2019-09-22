@@ -56,7 +56,12 @@ module.exports = {
                     compress: {},
                     output: { ascii_only: true }
                 },
-                extractComments: false
+                extractComments: {
+                    condition: /do-not-extract-anything/,
+                    banner() {
+                        return banner;
+                    }
+                }
             })
         ]
     },
