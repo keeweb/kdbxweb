@@ -7,7 +7,7 @@ var path = require('path'),
 var debug = process.argv.indexOf('--debug') > 0;
 
 var StatsPlugin = require('stats-webpack-plugin');
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+var TerserPlugin = require('terser-webpack-plugin');
 
 const banner = 'kdbxweb v' + pkg.version + ', (c) ' + new Date().getFullYear() +
     ' ' + pkg.author + ', opensource.org/licenses/' + pkg.license;
@@ -22,12 +22,7 @@ module.exports = {
         library: 'kdbxweb',
         libraryTarget: 'umd'
     },
-    module: {
-        rules: debug ? [] : [{
-            test: /\.js$/,
-            loader: 'uglify-loader'
-        }]
-    },
+    module: {},
     resolve: {
         modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
     },
@@ -47,21 +42,10 @@ module.exports = {
         zlib: false
     },
     optimization: {
+        minimize: !debug,
         minimizer: debug ? [] : [
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true,
-                uglifyOptions: {
-                    mangle: {},
-                    compress: {},
-                    output: { ascii_only: true }
-                },
-                extractComments: {
-                    condition: /do-not-extract-anything/,
-                    banner() {
-                        return banner;
-                    }
-                }
+            new TerserPlugin({
+                extractComments: false
             })
         ]
     },
