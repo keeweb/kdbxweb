@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.2 (2019-09-22)
+`-` removed a leaked dependency  
+
 ##### v1.5.1 (2019-09-22)
 `-` fixed a bug in importing attachments  
 

@@ -38,12 +38,12 @@
     "mocha": "^6.2.0",
     "rimraf": "^3.0.0",
     "stats-webpack-plugin": "^0.7.0",
+    "terser-webpack-plugin": "^2.1.0",
     "webpack": "^4.40.2",
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
     "pako": "github:keeweb/pako#653c0b00d8941c89d09ed4546d2179001ec44efc",
-    "terser-webpack-plugin": "^2.1.0",
     "text-encoding": "github:keeweb/text-encoding#4dfb7cb0954c222852092f8b06ae4f6b4f60bfbb",
     "xmldom": "github:keeweb/xmldom#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6"
   }
