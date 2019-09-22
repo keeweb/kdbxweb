@@ -2,6 +2,7 @@ Release notes
 -------------
 ##### v1.5.0 (2019-09-22)
 `+` importing entries from other files using `Kdbx.importEntry`  
+`*` debug and release versions are now provided: kdbxweb.js and kdbxweb.min.js  
 
 ##### v1.4.2 (2019-09-14)
 `+` default encryption rounds increased to 300000  
