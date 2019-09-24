@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.3 (2019-09-24)
+`-` fix #26: library usage issues in node.js  
+
 ##### v1.5.2 (2019-09-22)
 `-` removed a leaked dependency  
 

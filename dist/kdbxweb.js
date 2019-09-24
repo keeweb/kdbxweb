@@ -1,4 +1,4 @@
-/*! kdbxweb v1.5.2, (c) 2019 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.5.3, (c) 2019 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -8,7 +8,7 @@
 		exports["kdbxweb"] = factory(require("crypto"), require("xmldom"));
 	else
 		root["kdbxweb"] = factory(root["crypto"], root["xmldom"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE__42__, __WEBPACK_EXTERNAL_MODULE__44__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE__42__, __WEBPACK_EXTERNAL_MODULE__44__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};

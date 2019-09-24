@@ -20,7 +20,8 @@ module.exports = {
         path: path.join(__dirname, '../../dist'),
         filename: 'kdbxweb' + (debug ? '' : '.min') + '.js',
         library: 'kdbxweb',
-        libraryTarget: 'umd'
+        libraryTarget: 'umd',
+        globalObject: 'this'
     },
     module: {},
     resolve: {
