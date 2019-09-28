@@ -27,8 +27,12 @@ Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb file
 Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations, you have to implement it manually and export to kdbxweb, if you want to support such files. Here's how:
 
 ```javascript
-const argon2 = require('your-argon2-impl');
-kdbxweb.CryptoEngine.argon2 = argon2;
+kdbxweb.CryptoEngine.argon2 = (password, salt,
+    memory, iterations, length, parallelism, type, version
+) => {
+    // your implementation makes hash (Uint32Array, 'length' bytes)
+    return Promise.resolve(hash);
+};
 ```
 
 You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.js).  
