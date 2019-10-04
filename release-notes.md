@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.4 (2019-10-04)
+`-` fixed importing entries  
+
 ##### v1.5.3 (2019-09-24)
 `-` fix #26: library usage issues in node.js  
 
