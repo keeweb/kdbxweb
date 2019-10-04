@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.5 (2019-10-04)
+`-` fixed another bug in importing entries  
+
 ##### v1.5.4 (2019-10-04)
 `-` fixed importing entries  
 

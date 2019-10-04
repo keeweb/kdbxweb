@@ -1,6 +1,6 @@
 {
   "name": "kdbxweb",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Kdbx KeePass database reader for web",
   "repository": {
     "type": "git",
