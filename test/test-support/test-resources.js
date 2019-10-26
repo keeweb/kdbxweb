@@ -67,6 +67,9 @@ catch (e) { res.aesChaCha = readNodeFile('../../resources/AesChaCha.kdbx'); }
 try { res.aesKdfKdbx4 = require('base64-loader!../../resources/AesKdfKdbx4.kdbx'); }
 catch (e) { res.aesKdfKdbx4 = readNodeFile('../../resources/AesKdfKdbx4.kdbx'); }
 
+try { res.emptyUuidXml = require('base64-loader!../../resources/empty-uuid.xml'); }
+catch (e) { res.emptyUuidXml = readNodeFile('../../resources/empty-uuid.xml'); }
+
 for (var file in res) {
     if (res.hasOwnProperty(file)) {
         var content = res[file];

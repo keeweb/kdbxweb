@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.6 (2019-10-26)
+`+` generating missing ids while reading files  
+
 ##### v1.5.5 (2019-10-04)
 `-` fixed another bug in importing entries  
 

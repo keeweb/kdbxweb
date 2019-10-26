@@ -720,6 +720,26 @@ describe('Kdbx', function () {
         });
     });
 
+    it('creates missing uuids', function () {
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
+        var xml = kdbxweb.ByteUtils.bytesToString(TestResources.emptyUuidXml).toString('utf8');
+        return kdbxweb.Kdbx.loadXml(xml, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.groups.length).to.be(1);
+            expect(db.groups[0].uuid).to.be.ok();
+            expect(db.groups[0].uuid.id).to.be.ok();
+            var entry = db.groups[0].groups[0].entries[0];
+            expect(entry.uuid).to.be.ok();
+            expect(entry.uuid.id).to.be.ok();
+            expect(entry.history.length).to.be.greaterThan(0);
+            for (var i = 0; i < entry.history.length; i++) {
+                var he = entry.history[i];
+                expect(he.uuid).to.be.ok();
+                expect(he.uuid.id).to.be(entry.uuid.id);
+            }
+        });
+    });
+
     function checkDb(db) {
         expect(db.meta.name).to.be('demo');
         expect(db.meta.nameChanged.toISOString()).to.be('2015-08-16T14:45:23.000Z');

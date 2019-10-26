@@ -1,4 +1,4 @@
-/*! kdbxweb v1.5.5, (c) 2019 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.5.6, (c) 2019 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -4545,6 +4545,13 @@ KdbxEntry.read = function(xmlNode, ctx, parentGroup) {
         var childNode = cn[i];
         if (childNode.tagName) {
             entry._readNode(childNode, ctx);
+        }
+    }
+    if (!entry.uuid) {
+        // some clients don't write ids
+        entry.uuid = KdbxUuid.random();
+        for (var j = 0; j < entry.history.length; j++) {
+            entry.history[j].uuid = entry.uuid;
         }
     }
     entry.parentGroup = parentGroup;
@@ -14022,6 +14029,10 @@ KdbxGroup.read = function(xmlNode, ctx, parentGroup) {
         if (childNode.tagName) {
             grp._readNode(childNode, ctx);
         }
+    }
+    if (!grp.uuid) {
+        // some clients don't write ids
+        grp.uuid = KdbxUuid.random();
     }
     grp.parentGroup = parentGroup;
     return grp;
