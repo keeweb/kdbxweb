@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.7 (2019-12-01)
+`+` fixed minor version for v4 files  
+
 ##### v1.5.6 (2019-10-26)
 `+` generating missing ids while reading files  
 

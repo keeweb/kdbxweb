@@ -1,4 +1,4 @@
-/*! kdbxweb v1.5.6, (c) 2019 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.5.7, (c) 2019 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -2835,7 +2835,7 @@ var HeaderConst = {
 
 var LastMinorVersions = {
     3: 1,
-    4: 1
+    4: 0
 };
 
 /**
