@@ -1,4 +1,4 @@
-/*! kdbxweb v1.5.7, (c) 2019 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.5.8, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -4919,8 +4919,10 @@ Kdbx.prototype.importEntry = function(entry, group, file) {
  */
 Kdbx.prototype.cleanup = function(settings) {
     var now = new Date();
-    var historyMaxItems = settings && settings.historyRules && this.meta.historyMaxItems && this.meta.historyMaxItems > 0 ?
-        this.meta.historyMaxItems : Infinity;
+    var historyMaxItems = settings && settings.historyRules &&
+        typeof this.meta.historyMaxItems === 'number' &&
+        this.meta.historyMaxItems >= 0 ?
+            this.meta.historyMaxItems : Infinity;
     var usedCustomIcons = {};
     var usedBinaries = {};
     var processEntry = function(entry) {

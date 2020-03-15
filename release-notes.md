@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.5.8 (2020-14-15)
+`+` fixed historyMaxItems for 0 and -1  
+
 ##### v1.5.7 (2019-12-01)
 `+` fixed minor version for v4 files  
 
