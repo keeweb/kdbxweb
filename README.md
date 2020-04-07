@@ -275,6 +275,12 @@ kdbxweb includes these 3rd party libraries:
 
 This library is used in [KeeWeb](https://app.keeweb.info)
 
+## Extras
+
+We also provide a template for [HexFeind](https://github.com/ridiculousfish/HexFiend)
+to explore the contents of KDBX files, you can find it
+[here](format).
+
 ## License
 
 MIT
