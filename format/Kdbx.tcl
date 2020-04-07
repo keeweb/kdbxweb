@@ -1,9 +1,9 @@
-# KDBX file template for HexFeind
+# KDBX file template for HexFiend
 # https://github.com/keeweb/kdbxweb/blob/master/format/Kdbx.tcl
 # MIT license
 #
 # Format reference: https://keepass.info/help/kb/kdbx_4.html
-# HexFeind templates docs: https://github.com/ridiculousfish/HexFiend/tree/master/templates
+# HexFiend templates docs: https://github.com/ridiculousfish/HexFiend/tree/master/templates
 
 little_endian
 

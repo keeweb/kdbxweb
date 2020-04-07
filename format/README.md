@@ -1,4 +1,4 @@
-This is a template for [HexFeind](https://github.com/ridiculousfish/HexFiend).
+This is a template for [HexFiend](https://github.com/ridiculousfish/HexFiend).
 
 To install:
 
@@ -10,4 +10,4 @@ Alternatively, just copy Kdbx.tcl to `~/Library/Application\ Support/com.ridicul
 
 You should see something like this;
 
-![](KDBX-HexFeind.png)
+![](KDBX-HexFiend.png)
