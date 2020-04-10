@@ -1,4 +1,4 @@
-/*! kdbxweb v1.5.8, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.6.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -3804,11 +3804,12 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
  * @param {String|ArrayBuffer|Uint8Array} [keyFile]
  * @constructor
  */
-var KdbxCredentials = function(password, keyFile) {
+var KdbxCredentials = function(password, keyFile, challengeResponse) {
     var that = this;
     this.ready = Promise.all([
         this.setPassword(password),
-        this.setKeyFile(keyFile)
+        this.setKeyFile(keyFile),
+        this.setChallengeResponse(challengeResponse)
     ]).then(function() {
         return that;
     });
@@ -3870,34 +3871,64 @@ KdbxCredentials.prototype.setKeyFile = function(keyFile) {
 };
 
 /**
+ * Set a challenge-response module
+ * @param challengeResponse {Function}
+ */
+KdbxCredentials.prototype.setChallengeResponse = function(challengeResponse) {
+    this.challengeResponse = challengeResponse;
+    return Promise.resolve();
+};
+
+/**
  * Get credentials hash
  * @returns {Promise.<ArrayBuffer>}
  */
-KdbxCredentials.prototype.getHash = function() {
+KdbxCredentials.prototype.getHash = function(challenge) {
     var that = this;
     return this.ready.then(function() {
-        var buffers = [];
-        if (that.passwordHash) {
-            buffers.push(that.passwordHash.getBinary());
-        }
-        if (that.keyFileHash) {
-            buffers.push(that.keyFileHash.getBinary());
-        }
-        var totalLength = buffers.reduce(function (acc, buf) {
-            return acc + buf.byteLength;
-        }, 0);
-        var allBytes = new Uint8Array(totalLength);
-        var offset = 0;
-        buffers.forEach(function (buffer) {
-            allBytes.set(buffer, offset);
-            ByteUtils.zeroBuffer(buffer);
-            offset += buffer.length;
-        });
-        return CryptoEngine.sha256(ByteUtils.arrayToBuffer(allBytes)).then(function (hash) {
-            ByteUtils.zeroBuffer(allBytes);
-            return hash;
+        return that.getChallengeResponse(challenge).then(function(chalResp) {
+            var buffers = [];
+            if (that.passwordHash) {
+                buffers.push(that.passwordHash.getBinary());
+            }
+            if (that.keyFileHash) {
+                buffers.push(that.keyFileHash.getBinary());
+            }
+            if (chalResp) {
+                buffers.push(new Uint8Array(chalResp));
+            }
+            var totalLength = buffers.reduce(function(acc, buf) {
+                return acc + buf.byteLength;
+            }, 0);
+            var allBytes = new Uint8Array(totalLength);
+            var offset = 0;
+            buffers.forEach(function(buffer) {
+                allBytes.set(buffer, offset);
+                ByteUtils.zeroBuffer(buffer);
+                offset += buffer.length;
+            });
+            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(allBytes)).then(function(hash) {
+                ByteUtils.zeroBuffer(allBytes);
+                return hash;
+            });
         });
     });
+};
+
+KdbxCredentials.prototype.getChallengeResponse = function(challenge) {
+    var challengeResponse = this.challengeResponse;
+    return Promise.resolve()
+        .then(function() {
+            if (!challengeResponse || !challenge) {
+                return null;
+            }
+            return challengeResponse(challenge).then(function(response) {
+                return CryptoEngine.sha256(ByteUtils.arrayToBuffer(response)).then(function (hash) {
+                    ByteUtils.zeroBuffer(response);
+                    return hash;
+                });
+            });
+        });
 };
 
 /**
@@ -5423,18 +5454,30 @@ KdbxFormat.prototype._getMasterKeyV3 = function() {
         var transformRounds = kdbx.header.keyEncryptionRounds;
         var masterSeed = kdbx.header.masterSeed;
 
-        return KeyEncryptorAes.encrypt(new Uint8Array(credHash), transformSeed, transformRounds).then(function(encKey) {
-            ByteUtils.zeroBuffer(credHash);
-            return CryptoEngine.sha256(encKey).then(function(keyHash) {
-                ByteUtils.zeroBuffer(encKey);
-                var all = new Uint8Array(masterSeed.byteLength + keyHash.byteLength);
-                all.set(new Uint8Array(masterSeed), 0);
-                all.set(new Uint8Array(keyHash), masterSeed.byteLength);
-                ByteUtils.zeroBuffer(keyHash);
-                ByteUtils.zeroBuffer(masterSeed);
-                return CryptoEngine.sha256(all.buffer).then(function(masterKey) {
-                    ByteUtils.zeroBuffer(all.buffer);
-                    return masterKey;
+        return kdbx.credentials.getChallengeResponse(masterSeed).then(function(chalResp)  {
+            return KeyEncryptorAes.encrypt(new Uint8Array(credHash), transformSeed, transformRounds).then(function(encKey) {
+                ByteUtils.zeroBuffer(credHash);
+                return CryptoEngine.sha256(encKey).then(function(keyHash) {
+                    ByteUtils.zeroBuffer(encKey);
+
+                    var chalRespLength = chalResp ? chalResp.byteLength : 0;
+                    var all = new Uint8Array(masterSeed.byteLength + keyHash.byteLength + chalRespLength);
+                    all.set(new Uint8Array(masterSeed), 0);
+                    if (chalResp) {
+                        all.set(new Uint8Array(chalResp), masterSeed.byteLength);
+                    }
+                    all.set(new Uint8Array(keyHash), masterSeed.byteLength + chalRespLength);
+
+                    ByteUtils.zeroBuffer(keyHash);
+                    ByteUtils.zeroBuffer(masterSeed);
+                    if (chalResp) {
+                        ByteUtils.zeroBuffer(chalResp);
+                    }
+
+                    return CryptoEngine.sha256(all.buffer).then(function(masterKey) {
+                        ByteUtils.zeroBuffer(all.buffer);
+                        return masterKey;
+                    });
                 });
             });
         });
@@ -5495,7 +5538,8 @@ KdbxFormat.prototype._computeKeysV4 = function() {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad master seed'));
     }
     var kdfParams = that.kdbx.header.kdfParameters;
-    return that.kdbx.credentials.getHash().then(function(credHash) {
+    var kdfSalt = kdfParams.get('S');
+    return that.kdbx.credentials.getHash(kdfSalt).then(function(credHash) {
         return KeyEncryptorKdf.encrypt(credHash, kdfParams).then(function (encKey) {
             ByteUtils.zeroBuffer(credHash);
             if (!encKey || encKey.byteLength !== 32) {

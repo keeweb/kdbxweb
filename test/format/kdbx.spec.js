@@ -7,6 +7,15 @@ var expect = require('expect.js'),
 
 describe('Kdbx', function () {
     var cryptoEngineArgon2 = kdbxweb.CryptoEngine.argon2;
+    var challengeResponse = function(challenge) {
+        var responses = {
+            '011ed85afa703341893596fba2da60b6cacabaa5468a0e9ea74698b901bc89ab': 'ae7244b336f3360e4669ec9eaf4ddc23785aef03',
+            '0ba4bbdf2e44fe56b64136a5086ba3ab814130d8e3fe7ed0e869cc976af6c12a': '18350f73193e1c89211921d3016bfe3ddfc54d3e'
+        };
+        var hexChallenge = kdbxweb.ByteUtils.bytesToHex(challenge);
+        var response = responses[hexChallenge] || '0000000000000000000000000000000000000000';
+        return Promise.resolve(kdbxweb.ByteUtils.hexToBytes(response));
+    };
 
     before(function() {
         kdbxweb.CryptoEngine.argon2 = argon2;
@@ -177,6 +186,24 @@ describe('Kdbx', function () {
                     checkDb(db);
                 });
             });
+        });
+    });
+
+    it('loads kdbx3 file with challenge-response', function () {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), null, challengeResponse);
+        return kdbxweb.Kdbx.load(TestResources.yubikey3, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.meta.generator).to.be('Strongbox');
+        });
+    });
+
+    it('loads a kdbx4 file with challenge-response', function () {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), null, challengeResponse);
+        return kdbxweb.Kdbx.load(TestResources.yubikey4, cred).then(function(db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            expect(db.meta.generator).to.be('KeePassXC');
         });
     });
 

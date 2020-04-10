@@ -1,6 +1,9 @@
 Release notes
 -------------
-##### v1.5.8 (2020-14-15)
+##### v1.6.0 (2020-04-10)
+`+` challenge-response keys support  
+
+##### v1.5.8 (2020-03-15)
 `+` fixed historyMaxItems for 0 and -1  
 
 ##### v1.5.7 (2019-12-01)

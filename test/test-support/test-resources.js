@@ -67,6 +67,12 @@ catch (e) { res.aesChaCha = readNodeFile('../../resources/AesChaCha.kdbx'); }
 try { res.aesKdfKdbx4 = require('base64-loader!../../resources/AesKdfKdbx4.kdbx'); }
 catch (e) { res.aesKdfKdbx4 = readNodeFile('../../resources/AesKdfKdbx4.kdbx'); }
 
+try { res.yubikey3 = require('base64-loader!../../resources/YubiKey3.kdbx'); }
+catch (e) { res.yubikey3 = readNodeFile('../../resources/YubiKey3.kdbx'); }
+
+try { res.yubikey4 = require('base64-loader!../../resources/YubiKey4.kdbx'); }
+catch (e) { res.yubikey4 = readNodeFile('../../resources/YubiKey4.kdbx'); }
+
 try { res.emptyUuidXml = require('base64-loader!../../resources/empty-uuid.xml'); }
 catch (e) { res.emptyUuidXml = readNodeFile('../../resources/empty-uuid.xml'); }
 

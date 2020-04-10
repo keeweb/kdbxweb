@@ -44,7 +44,8 @@ It's not compiled into the library because there's no universal way to provide a
 ##### Loading
 
 ```javascript
-let credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFileArrayBuffer);
+let credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'),
+    keyFileArrayBuffer, challengeResponseFunction);
 kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials).then(db => ...);
 kdbxweb.Kdbx.loadXml(dataAsString, credentials).then(db => ...);
 ```
