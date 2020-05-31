@@ -1,4 +1,4 @@
-/*! kdbxweb v1.7.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.7.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -4153,7 +4153,7 @@ KdbxEntry.prototype._readNode = function(node, ctx) {
             this.uuid = XmlUtils.getUuid(node);
             break;
         case XmlNames.Elem.Icon:
-            this.icon = XmlUtils.getNumber(node);
+            this.icon = XmlUtils.getNumber(node) || Consts.Icons.Key;
             break;
         case XmlNames.Elem.CustomIconID:
             this.customIcon = XmlUtils.getUuid(node);
@@ -4359,7 +4359,7 @@ KdbxEntry.prototype._addHistoryTombstone = function(isAdded, dt) {
 KdbxEntry.prototype.write = function(parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Entry);
     XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon);
+    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon || Consts.Icons.Key);
     if (this.customIcon) {
         XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID), this.customIcon);
     }
