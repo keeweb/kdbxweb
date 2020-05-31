@@ -1,4 +1,4 @@
-/*! kdbxweb v1.6.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.7.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -4138,7 +4138,7 @@ var KdbxEntry = function() {
     this.fields = {};
     this.binaries = {};
     this.autoType = {
-        enabled: true, obfuscation: undefined, defaultSequence: undefined, items: []
+        enabled: true, obfuscation: Consts.AutoTypeObfuscationOptions.None, defaultSequence: undefined, items: []
     };
     this.history = [];
     this.parentGroup = undefined;
@@ -4270,7 +4270,7 @@ KdbxEntry.prototype._readAutoType = function(node) {
                 }
                 break;
             case XmlNames.Elem.AutoTypeObfuscation:
-                this.autoType.obfuscation = XmlUtils.getNumber(childNode);
+                this.autoType.obfuscation = XmlUtils.getNumber(childNode) || Consts.AutoTypeObfuscationOptions.None;
                 break;
             case XmlNames.Elem.AutoTypeDefaultSeq:
                 this.autoType.defaultSequence = XmlUtils.getText(childNode);
@@ -4301,7 +4301,8 @@ KdbxEntry.prototype._readAutoTypeItem = function(node) {
 KdbxEntry.prototype._writeAutoType = function(parentNode) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.AutoType);
     XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeEnabled), this.autoType.enabled);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeObfuscation), this.autoType.obfuscation);
+    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeObfuscation),
+        this.autoType.obfuscation || Consts.AutoTypeObfuscationOptions.None);
     if (this.autoType.defaultSequence) {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeDefaultSeq), this.autoType.defaultSequence);
     }

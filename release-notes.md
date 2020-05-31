@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.7.0 (2020-05-31)
+`+` fixed empty auto-type obfuscation setting not understood by other clients  
+
 ##### v1.6.0 (2020-04-10)
 `+` challenge-response keys support  
 
