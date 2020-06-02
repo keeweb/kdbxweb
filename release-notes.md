@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.8.0 (2020-06-02)
+`*` default format changed to KDBX4  
+
 ##### v1.7.1 (2020-05-31)
 `+` fixed empty icon not understood by other clients  
 

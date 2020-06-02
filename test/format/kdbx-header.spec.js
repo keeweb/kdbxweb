@@ -15,6 +15,8 @@ describe('KdbxHeader', function() {
     it('writes and reads header v3', function() {
         var ctx = new KdbxContext({ kdbx: { } });
         var header = KdbxHeader.create();
+        expect(header.versionMajor).to.be(4);
+        header.setVersion(3);
         expect(header.versionMajor).to.be(3);
         header.masterSeed = new Uint32Array([1,1,1,1]).buffer;
         header.transformSeed = new Uint32Array([2,2,2,2]).buffer;
@@ -50,8 +52,7 @@ describe('KdbxHeader', function() {
             }
         };
         var header = KdbxHeader.create();
-        expect(header.versionMajor).to.be(3);
-        header.setVersion(KdbxHeader.MaxFileVersion);
+        expect(header.versionMajor).to.be(4);
         header.masterSeed = new Uint32Array([1,1,1,1]).buffer;
         header.transformSeed = new Uint32Array([2,2,2,2]).buffer;
         header.streamStartBytes = new Uint32Array([3,3,3,3]).buffer;
@@ -154,6 +155,7 @@ describe('KdbxHeader', function() {
     it('skips binaries for v3', function() {
         var ctx = new KdbxContext({ kdbx: { binaries: { 0: undefined } } });
         var header = KdbxHeader.create();
+        header.setVersion(3);
         var stm = new BinaryStream();
         header._writeBinary(stm, ctx);
         expect(stm.pos).to.be(0);
@@ -231,6 +233,7 @@ describe('KdbxHeader', function() {
 
     it('validates header transform seed', function() {
         var header = KdbxHeader.create();
+        header.setVersion(3);
         header.generateSalts();
         header.transformSeed = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -241,6 +244,7 @@ describe('KdbxHeader', function() {
 
     it('validates header key encryption rounds', function() {
         var header = KdbxHeader.create();
+        header.setVersion(3);
         header.generateSalts();
         header.keyEncryptionRounds = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -251,6 +255,7 @@ describe('KdbxHeader', function() {
 
     it('validates header protected stream key', function() {
         var header = KdbxHeader.create();
+        header.setVersion(3);
         header.generateSalts();
         header.protectedStreamKey = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -261,6 +266,7 @@ describe('KdbxHeader', function() {
 
     it('validates header stream start bytes', function() {
         var header = KdbxHeader.create();
+        header.setVersion(3);
         header.generateSalts();
         header.streamStartBytes = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {
@@ -271,6 +277,7 @@ describe('KdbxHeader', function() {
 
     it('validates header crs algorithm', function() {
         var header = KdbxHeader.create();
+        header.setVersion(3);
         header.generateSalts();
         header.crsAlgorithm = undefined;
         expect(function() { header.write(new BinaryStream()); }).to.throwException(function(e) {

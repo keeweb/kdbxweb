@@ -1,4 +1,4 @@
-/*! kdbxweb v1.7.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.8.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -2817,8 +2817,8 @@ var InnerHeaderFields = [
 ];
 
 var HeaderConst = {
-    DefaultFileVersionMajor: 3,
-    DefaultFileVersionMinor: 1,
+    DefaultFileVersionMajor: 4,
+    DefaultFileVersionMinor: 0,
     MaxFileVersionMajor: 4,
     MaxFileVersionMinor: 1,
     MaxSupportedVersion: 4,
@@ -3292,8 +3292,8 @@ KdbxHeader.create = function() {
     header.versionMinor = HeaderConst.DefaultFileVersionMinor;
     header.dataCipherUuid = new KdbxUuid(Consts.CipherId.Aes);
     header.compression = Consts.CompressionAlgorithm.GZip;
-    header.keyEncryptionRounds = Consts.Defaults.KeyEncryptionRounds;
-    header.crsAlgorithm = Consts.CrsAlgorithm.Salsa20;
+    header.crsAlgorithm = Consts.CrsAlgorithm.ChaCha20;
+    header._createKdfParameters();
     return header;
 };
 

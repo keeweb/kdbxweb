@@ -409,6 +409,7 @@ describe('Kdbx', function () {
         var keyFile = kdbxweb.Credentials.createRandomKeyFile();
         var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
         var db = kdbxweb.Kdbx.create(cred, 'example');
+        db.header.setVersion(3);
         db.header.versionMajor = 1;
         return db.save()
             .then(function () {
