@@ -1,5 +1,10 @@
 Release notes
 -------------
+##### v1.9.0 (2020-06-04)
+`*` removed text-encoding polyfill  
+`+` development: eslint  
+`+` development: prettier  
+
 ##### v1.8.0 (2020-06-02)
 `*` default format changed to KDBX4  
 

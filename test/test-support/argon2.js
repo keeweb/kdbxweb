@@ -9,11 +9,22 @@ function argon2(password, salt, memory, iterations, length, parallelism, type, v
     var hash = Module.allocate(new Array(length), 'i8', Module.ALLOC_NORMAL);
     var encodedLen = 512;
     var encoded = Module.allocate(new Array(encodedLen), 'i8', Module.ALLOC_NORMAL);
-    // jshint camelcase:false
     try {
-        var res = Module._argon2_hash(iterations, memory, parallelism,
-            password, passwordLen, salt, saltLen,
-            hash, length, encoded, encodedLen, type, version);
+        var res = Module._argon2_hash(
+            iterations,
+            memory,
+            parallelism,
+            password,
+            passwordLen,
+            salt,
+            saltLen,
+            hash,
+            length,
+            encoded,
+            encodedLen,
+            type,
+            version
+        );
         if (res) {
             return Promise.reject('Argon2 error ' + res);
         }

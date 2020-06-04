@@ -3,8 +3,8 @@
 var expect = require('expect.js'),
     Random = require('../../lib/crypto/random');
 
-describe('Random', function() {
-    it('generates random sequences', function() {
+describe('Random', function () {
+    it('generates random sequences', function () {
         testRandom();
     });
 

@@ -3,14 +3,14 @@
 var expect = require('expect.js'),
     BinaryStream = require('../../lib/utils/binary-stream');
 
-describe('BinaryStream', function() {
+describe('BinaryStream', function () {
     var arr = new Uint8Array(100);
     for (var i = 0; i < arr.length; i++) {
         arr[i] = i;
     }
     var view = new DataView(arr.buffer);
 
-    it('provides basic int and float getters available in DataView', function() {
+    it('provides basic int and float getters available in DataView', function () {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.getUint8()).to.be(view.getUint8(0, false));
         expect(stm.getUint8(true)).to.be(view.getUint8(1, true));
@@ -30,7 +30,7 @@ describe('BinaryStream', function() {
         expect(stm.getFloat64(true)).to.be(view.getFloat64(44, true));
     });
 
-    it('gets uint64', function() {
+    it('gets uint64', function () {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.getUint64()).to.be(0x0001020304050607);
         expect(stm.getUint8()).to.be(8);
@@ -39,7 +39,7 @@ describe('BinaryStream', function() {
         expect(stm.getUint8()).to.be(8);
     });
 
-    it('provides basic int and float setters available in DataView', function() {
+    it('provides basic int and float setters available in DataView', function () {
         var tmpArr = new Uint8Array(100);
         var stm = new BinaryStream(tmpArr.buffer);
         stm.getUint8(view.getUint8(0, false));
@@ -61,7 +61,7 @@ describe('BinaryStream', function() {
         expectArrayBuffersEqual(tmpArr.buffer.slice(0, 52), arr.buffer.slice(0, 52));
     });
 
-    it('sets uint64', function() {
+    it('sets uint64', function () {
         var tmpArr = new Uint8Array(9);
         var stm = new BinaryStream(tmpArr.buffer);
         stm.setUint64(0x0001020304050607);
@@ -74,7 +74,7 @@ describe('BinaryStream', function() {
         expectArrayBuffersEqual(tmpArr.buffer, arr.buffer.slice(0, 9));
     });
 
-    it('reads bytes after pos', function() {
+    it('reads bytes after pos', function () {
         var stm = new BinaryStream(arr.buffer);
         var bytes = stm.readBytesToEnd();
         expectArrayBuffersEqual(bytes, arr.buffer);
@@ -97,7 +97,7 @@ describe('BinaryStream', function() {
         expect(bytes.byteLength).to.be(0);
     });
 
-    it('reads number of bytes after pos', function() {
+    it('reads number of bytes after pos', function () {
         var stm = new BinaryStream(arr.buffer);
         var bytes = stm.readBytes(100);
         expectArrayBuffersEqual(bytes, arr.buffer);
@@ -120,7 +120,7 @@ describe('BinaryStream', function() {
         expect(bytes.byteLength).to.be(0);
     });
 
-    it('returns position', function() {
+    it('returns position', function () {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.pos).to.be(0);
         stm.getInt8();
@@ -129,12 +129,12 @@ describe('BinaryStream', function() {
         expect(stm.pos).to.be(100);
     });
 
-    it('returns byteLength', function() {
+    it('returns byteLength', function () {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.byteLength).to.be(arr.buffer.byteLength);
     });
 
-    it('can read bytes without changing position', function() {
+    it('can read bytes without changing position', function () {
         var stm = new BinaryStream(arr.buffer);
         expect(stm.pos).to.be(0);
         var bytes = stm.readBytesNoAdvance(10, 12);
@@ -142,19 +142,19 @@ describe('BinaryStream', function() {
         expect(new Uint8Array(bytes)).to.be.eql(new Uint8Array([10, 11]));
     });
 
-    it('can expand length on write', function() {
+    it('can expand length on write', function () {
         var stm = new BinaryStream(new Uint8Array(2).buffer);
         stm._canExpand = true;
-        stm.writeBytes(new Uint8Array([0,1,2]));
+        stm.writeBytes(new Uint8Array([0, 1, 2]));
         stm.setUint8(3);
         stm.writeBytes(new Uint8Array([4]).buffer);
-        expect(new Uint8Array(stm.getWrittenBytes())).to.be.eql(new Uint8Array([0,1,2,3,4]));
+        expect(new Uint8Array(stm.getWrittenBytes())).to.be.eql(new Uint8Array([0, 1, 2, 3, 4]));
     });
 
-    it('creates buffer itself and expands it', function() {
+    it('creates buffer itself and expands it', function () {
         var stm = new BinaryStream();
         stm.writeBytes(new Uint8Array(1021));
-        stm.writeBytes(new Uint8Array([0,1,2]));
+        stm.writeBytes(new Uint8Array([0, 1, 2]));
         stm.setUint8(3);
         stm.writeBytes(new Uint8Array([4]).buffer);
         expect(stm.getWrittenBytes().byteLength).to.be.eql(1026);

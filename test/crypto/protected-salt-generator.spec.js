@@ -5,9 +5,12 @@ var expect = require('expect.js'),
     Consts = require('../../lib/defs/consts'),
     ProtectedSaltGenerator = require('../../lib/crypto/protect-salt-generator');
 
-describe('ProtectedSaltGenerator', function() {
-    it('generates random sequences with Salsa20', function() {
-        return ProtectedSaltGenerator.create(new Uint8Array([1,2,3]), Consts.CrsAlgorithm.Salsa20).then(function(gen) {
+describe('ProtectedSaltGenerator', function () {
+    it('generates random sequences with Salsa20', function () {
+        return ProtectedSaltGenerator.create(
+            new Uint8Array([1, 2, 3]),
+            Consts.CrsAlgorithm.Salsa20
+        ).then(function (gen) {
             var bytes = gen.getSalt(0);
             expect(bytes.byteLength).to.be(0);
             bytes = gen.getSalt(10);
@@ -19,8 +22,11 @@ describe('ProtectedSaltGenerator', function() {
         });
     });
 
-    it('generates random sequences with ChaCha20', function() {
-        return ProtectedSaltGenerator.create(new Uint8Array([1,2,3]), Consts.CrsAlgorithm.ChaCha20).then(function(gen) {
+    it('generates random sequences with ChaCha20', function () {
+        return ProtectedSaltGenerator.create(
+            new Uint8Array([1, 2, 3]),
+            Consts.CrsAlgorithm.ChaCha20
+        ).then(function (gen) {
             var bytes = gen.getSalt(0);
             expect(bytes.byteLength).to.be(0);
             bytes = gen.getSalt(10);
@@ -32,9 +38,12 @@ describe('ProtectedSaltGenerator', function() {
         });
     });
 
-    it('fails if the algorithm is not supported', function() {
-        return ProtectedSaltGenerator.create(0).then(function() { throw 'Not expected'; })
-            .catch(function(e) {
+    it('fails if the algorithm is not supported', function () {
+        return ProtectedSaltGenerator.create(0)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
                 expect(e.message).to.contain('Unsupported: crsAlgorithm');
             });
     });

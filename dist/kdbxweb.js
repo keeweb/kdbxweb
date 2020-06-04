@@ -1,4 +1,4 @@
-/*! kdbxweb v1.8.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.9.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -8,7 +8,7 @@
 		exports["kdbxweb"] = factory(require("crypto"), require("xmldom"));
 	else
 		root["kdbxweb"] = factory(root["crypto"], root["xmldom"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE__42__, __WEBPACK_EXTERNAL_MODULE__44__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE__40__, __WEBPACK_EXTERNAL_MODULE__42__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -106,16 +106,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
 
-var TextEncoder = global.TextEncoder;
-var TextDecoder = global.TextDecoder;
-
-if (!TextEncoder || !TextDecoder) {
-    var textEncoding = __webpack_require__(/*! text-encoding */ 40);
-    TextEncoder = textEncoding.TextEncoder;
-    TextDecoder = textEncoding.TextDecoder;
-}
 
 var textEncoder = new TextEncoder();
 var textDecoder = new TextDecoder();
@@ -271,7 +262,6 @@ module.exports.bytesToHex = bytesToHex;
 module.exports.arrayToBuffer = arrayToBuffer;
 module.exports.zeroBuffer = zeroBuffer;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
 /* 1 */
@@ -287,9 +277,9 @@ module.exports.zeroBuffer = zeroBuffer;
 
 
 module.exports.Signatures = {
-    FileMagic: 0x9AA2D903,
-    Sig2Kdbx: 0xB54BFB67,
-    Sig2Kdb: 0xB54BFB65
+    FileMagic: 0x9aa2d903,
+    Sig2Kdbx: 0xb54bfb67,
+    Sig2Kdb: 0xb54bfb65
 };
 
 module.exports.ErrorCodes = {
@@ -455,15 +445,18 @@ var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
 
 var webCrypto = global.crypto;
 var subtle = webCrypto ? webCrypto.subtle || webCrypto.webkitSubtle : null;
-var nodeCrypto = global.process && global.process.versions && global.process.versions.node ? __webpack_require__(/*! crypto */ 42) : null;
+var nodeCrypto =
+    global.process && global.process.versions && global.process.versions.node
+        ? __webpack_require__(/*! crypto */ 40)
+        : null;
 
 var EmptySha256 = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
-var EmptySha512 = 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
+var EmptySha512 =
+    'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce' +
     '47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e';
 // maxRandomQuota is the max number of random bytes you can asks for from the cryptoEngine
 // https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues
 var maxRandomQuota = 65536;
-
 
 /**
  * SHA-256 hash
@@ -477,13 +470,15 @@ function sha256(data) {
     if (subtle) {
         return subtle.digest({ name: 'SHA-256' }, data);
     } else if (nodeCrypto) {
-        return new Promise(function(resolve) {
+        return new Promise(function (resolve) {
             var sha = nodeCrypto.createHash('sha256');
             var hash = sha.update(Buffer.from(data)).digest();
             resolve(hash.buffer);
         });
     } else {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.NotImplemented, 'SHA256 not implemented'));
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.NotImplemented, 'SHA256 not implemented')
+        );
     }
 }
 
@@ -499,13 +494,15 @@ function sha512(data) {
     if (subtle) {
         return subtle.digest({ name: 'SHA-512' }, data);
     } else if (nodeCrypto) {
-        return new Promise(function(resolve) {
+        return new Promise(function (resolve) {
             var sha = nodeCrypto.createHash('sha512');
             var hash = sha.update(Buffer.from(data)).digest();
             resolve(hash.buffer);
         });
     } else {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.NotImplemented, 'SHA512 not implemented'));
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.NotImplemented, 'SHA512 not implemented')
+        );
     }
 }
 
@@ -518,18 +515,19 @@ function sha512(data) {
 function hmacSha256(key, data) {
     if (subtle) {
         var algo = { name: 'HMAC', hash: { name: 'SHA-256' } };
-        return subtle.importKey('raw', key, algo, false, ['sign'])
-            .then(function(subtleKey) {
-                return subtle.sign(algo, subtleKey, data);
-            });
+        return subtle.importKey('raw', key, algo, false, ['sign']).then(function (subtleKey) {
+            return subtle.sign(algo, subtleKey, data);
+        });
     } else if (nodeCrypto) {
-        return new Promise(function(resolve) {
+        return new Promise(function (resolve) {
             var hmac = nodeCrypto.createHmac('sha256', Buffer.from(key));
             var hash = hmac.update(Buffer.from(data)).digest();
             resolve(hash.buffer);
         });
     } else {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.NotImplemented, 'HMAC-SHA256 not implemented'));
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.NotImplemented, 'HMAC-SHA256 not implemented')
+        );
     }
 }
 
@@ -537,52 +535,66 @@ function hmacSha256(key, data) {
  * AES-CBC using WebCrypto
  * @constructor
  */
-function AesCbcSubtle() {
-}
+function AesCbcSubtle() {}
 
-AesCbcSubtle.prototype.importKey = function(key) {
+AesCbcSubtle.prototype.importKey = function (key) {
     var that = this;
-    return subtle.importKey('raw', key, {name: 'AES-CBC'}, false, ['encrypt', 'decrypt'])
-        .then(function(key) { that.key = key; });
+    return subtle
+        .importKey('raw', key, { name: 'AES-CBC' }, false, ['encrypt', 'decrypt'])
+        .then(function (key) {
+            that.key = key;
+        });
 };
 
-AesCbcSubtle.prototype.encrypt = function(data, iv) {
-    return subtle.encrypt({name: 'AES-CBC', iv: iv}, this.key, data);
+AesCbcSubtle.prototype.encrypt = function (data, iv) {
+    return subtle.encrypt({ name: 'AES-CBC', iv: iv }, this.key, data);
 };
 
-AesCbcSubtle.prototype.decrypt = function(data, iv) {
-    return subtle.decrypt({name: 'AES-CBC', iv: iv}, this.key, data)
-        .catch(function() { throw new KdbxError(Consts.ErrorCodes.InvalidKey, 'invalid key'); });
+AesCbcSubtle.prototype.decrypt = function (data, iv) {
+    return subtle.decrypt({ name: 'AES-CBC', iv: iv }, this.key, data).catch(function () {
+        throw new KdbxError(Consts.ErrorCodes.InvalidKey, 'invalid key');
+    });
 };
 
 /**
  * AES-CBC using node crypto
  * @constructor
  */
-function AesCbcNode() {
-}
+function AesCbcNode() {}
 
-AesCbcNode.prototype.importKey = function(key) {
+AesCbcNode.prototype.importKey = function (key) {
     this.key = key;
     return Promise.resolve();
 };
 
-AesCbcNode.prototype.encrypt = function(data, iv) {
+AesCbcNode.prototype.encrypt = function (data, iv) {
     var that = this;
-    return Promise.resolve().then(function() {
-        var cipher = nodeCrypto.createCipheriv('aes-256-cbc', Buffer.from(that.key), Buffer.from(iv));
+    return Promise.resolve().then(function () {
+        var cipher = nodeCrypto.createCipheriv(
+            'aes-256-cbc',
+            Buffer.from(that.key),
+            Buffer.from(iv)
+        );
         var block = cipher.update(Buffer.from(data));
         return ByteUtils.arrayToBuffer(Buffer.concat([block, cipher.final()]));
     });
 };
 
-AesCbcNode.prototype.decrypt = function(data, iv) {
+AesCbcNode.prototype.decrypt = function (data, iv) {
     var that = this;
-    return Promise.resolve().then(function() {
-        var cipher = nodeCrypto.createDecipheriv('aes-256-cbc', Buffer.from(that.key), Buffer.from(iv));
-        var block = cipher.update(Buffer.from(data));
-        return ByteUtils.arrayToBuffer(Buffer.concat([block, cipher.final()]));
-    }).catch(function() { throw new KdbxError(Consts.ErrorCodes.InvalidKey, 'invalid key'); });
+    return Promise.resolve()
+        .then(function () {
+            var cipher = nodeCrypto.createDecipheriv(
+                'aes-256-cbc',
+                Buffer.from(that.key),
+                Buffer.from(iv)
+            );
+            var block = cipher.update(Buffer.from(data));
+            return ByteUtils.arrayToBuffer(Buffer.concat([block, cipher.final()]));
+        })
+        .catch(function () {
+            throw new KdbxError(Consts.ErrorCodes.InvalidKey, 'invalid key');
+        });
 };
 
 /**
@@ -640,7 +652,7 @@ function random(len) {
  * @returns {Promise.<ArrayBuffer>}
  */
 function chacha20(data, key, iv) {
-    return Promise.resolve().then(function() {
+    return Promise.resolve().then(function () {
         var algo = new ChaCha20(new Uint8Array(key), new Uint8Array(iv));
         return ByteUtils.arrayToBuffer(algo.encrypt(new Uint8Array(data)));
     });
@@ -658,8 +670,10 @@ function chacha20(data, key, iv) {
  * @param {Number} version - 0x10 or 0x13
  * @returns {Promise.<ArrayBuffer>}
  */
-function argon2(password, salt, memory, iterations, length, parallelism, type, version) { // jshint ignore:line
-    return Promise.reject(new KdbxError(Consts.ErrorCodes.NotImplemented, 'Argon2 not implemented'));
+function argon2(password, salt, memory, iterations, length, parallelism, type, version) {
+    return Promise.reject(
+        new KdbxError(Consts.ErrorCodes.NotImplemented, 'Argon2 not implemented')
+    );
 }
 
 /**
@@ -685,7 +699,7 @@ module.exports.argon2 = argon2;
 
 module.exports.configure = configure;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 23)))
 
 /***/ }),
 /* 4 */
@@ -707,17 +721,23 @@ var KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
     ByteUtils = __webpack_require__(/*! ./byte-utils */ 0),
     Int64 = __webpack_require__(/*! ./int64 */ 8),
-    pako = __webpack_require__(/*! pako */ 16);
+    pako = __webpack_require__(/*! pako */ 15);
 
 var dateRegex = /\.\d\d\d/;
 
-var dom = global.DOMParser ? global : __webpack_require__(/*! xmldom */ 44);
-var domParserArg = global.DOMParser ? undefined : {
-    errorHandler: {
-        error: function(e) { throw e; },
-        fatalError: function(e) { throw e; }
-    }
-};
+var dom = global.DOMParser ? global : __webpack_require__(/*! xmldom */ 42);
+var domParserArg = global.DOMParser
+    ? undefined
+    : {
+          errorHandler: {
+              error: function (e) {
+                  throw e;
+              },
+              fatalError: function (e) {
+                  throw e;
+              }
+          }
+      };
 
 var EpochSeconds = 62135596800;
 
@@ -778,7 +798,10 @@ function prettyPrintXmlNode(node, indentationLevel) {
 
     for (var i = 0; i < numChildNodes; i++) {
         childNode = node.childNodes[i];
-        if (childNode.nodeType !== doc.TEXT_NODE && childNode.nodeType !== doc.PROCESSING_INSTRUCTION_NODE) {
+        if (
+            childNode.nodeType !== doc.TEXT_NODE &&
+            childNode.nodeType !== doc.PROCESSING_INSTRUCTION_NODE
+        ) {
             childNodes.push(childNode);
         }
     }
@@ -962,7 +985,10 @@ function getBoolean(node) {
  * @param {boolean|undefined} boolean
  */
 function setBoolean(node, boolean) {
-    setText(node, boolean === undefined ? '' : boolean === null ? 'null' : boolean ? 'True' : 'False');
+    setText(
+        node,
+        boolean === undefined ? '' : boolean === null ? 'null' : boolean ? 'True' : 'False'
+    );
 }
 
 /**
@@ -1087,7 +1113,7 @@ function traverse(node, callback) {
  * @param {ProtectSaltGenerator} protectSaltGenerator
  */
 function setProtectedValues(node, protectSaltGenerator) {
-    traverse(node, function(node) {
+    traverse(node, function (node) {
         if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected))) {
             try {
                 var value = ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(node.textContent));
@@ -1096,8 +1122,10 @@ function setProtectedValues(node, protectSaltGenerator) {
                     node.protectedValue = new ProtectedValue(value, salt);
                 }
             } catch (e) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad protected value at line ' +
-                node.lineNumber + ': ' + e);
+                throw new KdbxError(
+                    Consts.ErrorCodes.FileCorrupt,
+                    'bad protected value at line ' + node.lineNumber + ': ' + e
+                );
             }
         }
     });
@@ -1109,7 +1137,7 @@ function setProtectedValues(node, protectSaltGenerator) {
  * @param {ProtectSaltGenerator} protectSaltGenerator
  */
 function updateProtectedValuesSalt(node, protectSaltGenerator) {
-    traverse(node, function(node) {
+    traverse(node, function (node) {
         if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
             var newSalt = protectSaltGenerator.getSalt(node.protectedValue.byteLength);
             node.protectedValue.setSalt(newSalt);
@@ -1123,7 +1151,7 @@ function updateProtectedValuesSalt(node, protectSaltGenerator) {
  * @param {Node} node
  */
 function unprotectValues(node) {
-    traverse(node, function(node) {
+    traverse(node, function (node) {
         if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
             node.removeAttribute(XmlNames.Attr.Protected);
             node.setAttribute(XmlNames.Attr.ProtectedInMemPlainXml, 'True');
@@ -1137,8 +1165,11 @@ function unprotectValues(node) {
  * @param {Node} node
  */
 function protectUnprotectedValues(node) {
-    traverse(node, function(node) {
-        if (strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml)) && node.protectedValue) {
+    traverse(node, function (node) {
+        if (
+            strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml)) &&
+            node.protectedValue
+        ) {
             node.removeAttribute(XmlNames.Attr.ProtectedInMemPlainXml);
             node.setAttribute(XmlNames.Attr.Protected, 'True');
             node.textContent = node.protectedValue.toString();
@@ -1151,7 +1182,7 @@ function protectUnprotectedValues(node) {
  * @param {Node} node
  */
 function protectPlainValues(node) {
-    traverse(node, function(node) {
+    traverse(node, function (node) {
         if (strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml))) {
             node.protectedValue = ProtectedValue.fromString(node.textContent);
             node.textContent = node.protectedValue.toString();
@@ -1189,7 +1220,7 @@ module.exports.unprotectValues = unprotectValues;
 module.exports.protectUnprotectedValues = protectUnprotectedValues;
 module.exports.protectPlainValues = protectPlainValues;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 23)))
 
 /***/ }),
 /* 5 */
@@ -1477,13 +1508,13 @@ function KdbxUuid(ab) {
  * Checks whether two uuids are equal
  * @param {KdbxUuid|string} other
  */
-KdbxUuid.prototype.equals = function(other) {
-    return other && other.toString() === this.toString() || false;
+KdbxUuid.prototype.equals = function (other) {
+    return (other && other.toString() === this.toString()) || false;
 };
 
 Object.defineProperty(KdbxUuid.prototype, 'bytes', {
     enumerable: true,
-    get: function() {
+    get: function () {
         return ByteUtils.base64ToBytes(this.id);
     }
 });
@@ -1493,19 +1524,19 @@ Object.defineProperty(KdbxUuid.prototype, 'bytes', {
  * @return {KdbxUuid}
  * @static
  */
-KdbxUuid.random = function() {
+KdbxUuid.random = function () {
     return new KdbxUuid(Random.getBytes(UuidLength));
 };
 
-KdbxUuid.prototype.toString = function() {
+KdbxUuid.prototype.toString = function () {
     return this.id;
 };
 
-KdbxUuid.prototype.valueOf = function() {
+KdbxUuid.prototype.valueOf = function () {
     return this.id;
 };
 
-KdbxUuid.prototype.toBytes = function() {
+KdbxUuid.prototype.toBytes = function () {
     return this.id ? ByteUtils.base64ToBytes(this.id) : undefined;
 };
 
@@ -1542,7 +1573,7 @@ function Int64(lo, hi) {
  */
 Object.defineProperty(Int64.prototype, 'value', {
     enumerable: true,
-    get: function() {
+    get: function () {
         if (this.hi) {
             if (this.hi >= 0x200000) {
                 throw new Error('too large number');
@@ -1557,7 +1588,7 @@ Object.defineProperty(Int64.prototype, 'value', {
  * Gets number value
  * @returns {Number}
  */
-Int64.prototype.valueOf = function() {
+Int64.prototype.valueOf = function () {
     return this.value;
 };
 
@@ -1567,7 +1598,7 @@ Int64.prototype.valueOf = function() {
  * @returns {Int64}
  * @static
  */
-Int64.from = function(value) {
+Int64.from = function (value) {
     if (value > 0x1fffffffffffff) {
         throw new Error('too large number');
     }
@@ -1602,7 +1633,7 @@ var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
  * @param {ArrayBuffer} salt - salt bytes
  * @constructor
  */
-var ProtectedValue = function(value, salt) {
+var ProtectedValue = function (value, salt) {
     Object.defineProperty(this, '_value', { value: new Uint8Array(value) });
     Object.defineProperty(this, '_salt', { value: new Uint8Array(salt) });
 };
@@ -1611,7 +1642,7 @@ var ProtectedValue = function(value, salt) {
  * Returns protected value as base64 string
  * @returns {string}
  */
-ProtectedValue.prototype.toString = function() {
+ProtectedValue.prototype.toString = function () {
     return ByteUtils.bytesToBase64(this._value);
 };
 
@@ -1619,7 +1650,7 @@ ProtectedValue.prototype.toString = function() {
  * Creates protected value from string with new random salt
  * @param {string} str
  */
-ProtectedValue.fromString = function(str) {
+ProtectedValue.fromString = function (str) {
     var bytes = ByteUtils.stringToBytes(str),
         salt = Random.getBytes(bytes.length);
     for (var i = 0, len = bytes.length; i < len; i++) {
@@ -1632,7 +1663,7 @@ ProtectedValue.fromString = function(str) {
  * Creates protected value from binary with new random salt
  * @param {ArrayBuffer} binary
  */
-ProtectedValue.fromBinary = function(binary) {
+ProtectedValue.fromBinary = function (binary) {
     var bytes = new Uint8Array(binary),
         salt = Random.getBytes(bytes.length);
     for (var i = 0, len = bytes.length; i < len; i++) {
@@ -1646,15 +1677,18 @@ ProtectedValue.fromBinary = function(binary) {
  * @param {string} str
  * @return {boolean}
  */
-ProtectedValue.prototype.includes = function(str) {
+ProtectedValue.prototype.includes = function (str) {
     if (str.length === 0) {
         return false;
     }
     var source = this._value,
         salt = this._salt,
         search = ByteUtils.stringToBytes(str),
-        sourceLen = source.length, searchLen = search.length, maxPos = sourceLen - searchLen,
-        sourceIx, searchIx;
+        sourceLen = source.length,
+        searchLen = search.length,
+        maxPos = sourceLen - searchLen,
+        sourceIx,
+        searchIx;
     src: for (sourceIx = 0; sourceIx <= maxPos; sourceIx++) {
         for (searchIx = 0; searchIx < searchLen; searchIx++) {
             if ((source[sourceIx + searchIx] ^ salt[sourceIx + searchIx]) !== search[searchIx]) {
@@ -1670,9 +1704,9 @@ ProtectedValue.prototype.includes = function(str) {
  * Calculates SHA256 hash of saved value
  * @return {Promise.<ArrayBuffer>}
  */
-ProtectedValue.prototype.getHash = function() {
+ProtectedValue.prototype.getHash = function () {
     var binary = ByteUtils.arrayToBuffer(this.getBinary());
-    return CryptoEngine.sha256(binary).then(function(hash) {
+    return CryptoEngine.sha256(binary).then(function (hash) {
         ByteUtils.zeroBuffer(binary);
         return hash;
     });
@@ -1682,7 +1716,7 @@ ProtectedValue.prototype.getHash = function() {
  * Decrypted text
  * @returns {string}
  */
-ProtectedValue.prototype.getText = function() {
+ProtectedValue.prototype.getText = function () {
     return ByteUtils.bytesToString(this.getBinary());
 };
 
@@ -1690,8 +1724,9 @@ ProtectedValue.prototype.getText = function() {
  * Decrypted binary. Don't forget to zero it after usage
  * @returns {Uint8Array}
  */
-ProtectedValue.prototype.getBinary = function() {
-    var value = this._value, salt = this._salt;
+ProtectedValue.prototype.getBinary = function () {
+    var value = this._value,
+        salt = this._salt;
     var bytes = new Uint8Array(value.byteLength);
     for (var i = bytes.length - 1; i >= 0; i--) {
         bytes[i] = value[i] ^ salt[i];
@@ -1703,9 +1738,10 @@ ProtectedValue.prototype.getBinary = function() {
  * Sets new salt
  * @param {ArrayBuffer} newSalt
  */
-ProtectedValue.prototype.setSalt = function(newSalt) {
+ProtectedValue.prototype.setSalt = function (newSalt) {
     var newSaltArr = new Uint8Array(newSalt);
-    var value = this._value, salt = this._salt;
+    var value = this._value,
+        salt = this._salt;
     for (var i = 0, len = value.length; i < len; i++) {
         value[i] = value[i] ^ salt[i] ^ newSaltArr[i];
         salt[i] = newSaltArr[i];
@@ -1716,7 +1752,7 @@ ProtectedValue.prototype.setSalt = function(newSalt) {
  * Clones object
  * @return {ProtectedValue}
  */
-ProtectedValue.prototype.clone = function() {
+ProtectedValue.prototype.clone = function () {
     return new ProtectedValue(this._value, this._salt);
 };
 
@@ -1725,7 +1761,7 @@ ProtectedValue.prototype.clone = function() {
  */
 Object.defineProperty(ProtectedValue.prototype, 'byteLength', {
     enumerable: true,
-    get: function() {
+    get: function () {
         return this._value.byteLength;
     }
 });
@@ -1746,10 +1782,11 @@ module.exports = ProtectedValue;
 "use strict";
 
 
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ 22),
     CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
 
-var key = new Uint8Array(32), nonce = new Uint8Array(8);
+var key = new Uint8Array(32),
+    nonce = new Uint8Array(8);
 for (var i = 0; i < key.length; i++) {
     key[i] = Math.random() * 0xff;
 }
@@ -1804,16 +1841,16 @@ function BinaryStream(arrayBuffer) {
     this._canExpand = !arrayBuffer;
 }
 
-['Int', 'Uint', 'Float'].forEach(function(type) {
-    (type === 'Float' ? [4, 8] : [1, 2, 4]).forEach(function(bytes) {
+['Int', 'Uint', 'Float'].forEach(function (type) {
+    (type === 'Float' ? [4, 8] : [1, 2, 4]).forEach(function (bytes) {
         var getMethod = 'get' + type + bytes * 8;
-        BinaryStream.prototype[getMethod] = function(littleEndian) {
+        BinaryStream.prototype[getMethod] = function (littleEndian) {
             var res = this._dataView[getMethod].call(this._dataView, this._pos, littleEndian);
             this._pos += bytes;
             return res;
         };
         var setMethod = 'set' + type + bytes * 8;
-        BinaryStream.prototype[setMethod] = function(value, littleEndian) {
+        BinaryStream.prototype[setMethod] = function (value, littleEndian) {
             this._checkCapacity(bytes);
             this._dataView[setMethod].call(this._dataView, this._pos, value, littleEndian);
             this._pos += bytes;
@@ -1821,7 +1858,7 @@ function BinaryStream(arrayBuffer) {
     });
 });
 
-BinaryStream.prototype.getUint64 = function(littleEndian) {
+BinaryStream.prototype.getUint64 = function (littleEndian) {
     var part1 = this.getUint32(littleEndian),
         part2 = this.getUint32(littleEndian);
     if (littleEndian) {
@@ -1832,7 +1869,7 @@ BinaryStream.prototype.getUint64 = function(littleEndian) {
     return part1 + part2;
 };
 
-BinaryStream.prototype.setUint64 = function(value, littleEndian) {
+BinaryStream.prototype.setUint64 = function (value, littleEndian) {
     if (littleEndian) {
         this.setUint32(value & 0xffffffff, true);
         this.setUint32(Math.floor(value / 0x100000000), true);
@@ -1843,22 +1880,22 @@ BinaryStream.prototype.setUint64 = function(value, littleEndian) {
     }
 };
 
-BinaryStream.prototype.readBytes = function(size) {
+BinaryStream.prototype.readBytes = function (size) {
     var buffer = this._arrayBuffer.slice(this._pos, this._pos + size);
     this._pos += size;
     return buffer;
 };
 
-BinaryStream.prototype.readBytesToEnd = function() {
+BinaryStream.prototype.readBytesToEnd = function () {
     var size = this._arrayBuffer.byteLength - this._pos;
     return this.readBytes(size);
 };
 
-BinaryStream.prototype.readBytesNoAdvance = function(startPos, endPos) {
+BinaryStream.prototype.readBytesNoAdvance = function (startPos, endPos) {
     return this._arrayBuffer.slice(startPos, endPos);
 };
 
-BinaryStream.prototype.writeBytes = function(bytes) {
+BinaryStream.prototype.writeBytes = function (bytes) {
     if (bytes instanceof ArrayBuffer) {
         bytes = new Uint8Array(bytes);
     }
@@ -1867,11 +1904,11 @@ BinaryStream.prototype.writeBytes = function(bytes) {
     this._pos += bytes.length;
 };
 
-BinaryStream.prototype.getWrittenBytes = function() {
+BinaryStream.prototype.getWrittenBytes = function () {
     return this._arrayBuffer.slice(0, this._pos);
 };
 
-BinaryStream.prototype._checkCapacity = function(addBytes) {
+BinaryStream.prototype._checkCapacity = function (addBytes) {
     var available = this._arrayBuffer.byteLength - this._pos;
     if (this._canExpand && available < addBytes) {
         var newLen = this._arrayBuffer.byteLength,
@@ -1888,14 +1925,14 @@ BinaryStream.prototype._checkCapacity = function(addBytes) {
 
 Object.defineProperty(BinaryStream.prototype, 'pos', {
     enumerable: true,
-    get: function() {
+    get: function () {
         return this._pos;
     }
 });
 
 Object.defineProperty(BinaryStream.prototype, 'byteLength', {
     enumerable: true,
-    get: function() {
+    get: function () {
         return this._arrayBuffer.byteLength;
     }
 });
@@ -1931,38 +1968,6 @@ module.exports = {
 
 /***/ }),
 /* 13 */
-/*!*************************************************!*\
-  !*** ../node_modules/webpack/buildin/global.js ***!
-  \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 14 */
 /*!*********************************!*\
   !*** ./utils/var-dictionary.js ***!
   \*********************************/
@@ -1990,8 +1995,8 @@ var ValueType = {
     UInt32: 0x04,
     UInt64: 0x05,
     Bool: 0x08,
-    Int32: 0x0C,
-    Int64: 0x0D,
+    Int32: 0x0c,
+    Int64: 0x0d,
     String: 0x18,
     Bytes: 0x42
 };
@@ -2017,7 +2022,7 @@ VarDictionary.ValueType = ValueType;
  * @param {string} key
  * @returns {*}
  */
-VarDictionary.prototype.get = function(key) {
+VarDictionary.prototype.get = function (key) {
     var item = this._dict[key];
     return item ? item.value : undefined;
 };
@@ -2026,8 +2031,10 @@ VarDictionary.prototype.get = function(key) {
  * Get all keys
  * @return {string[]} keys array
  */
-VarDictionary.prototype.keys = function() {
-    return this._items.map(function(item) { return item.key; });
+VarDictionary.prototype.keys = function () {
+    return this._items.map(function (item) {
+        return item.key;
+    });
 };
 
 /**
@@ -2036,7 +2043,9 @@ VarDictionary.prototype.keys = function() {
  */
 Object.defineProperty(VarDictionary.prototype, 'length', {
     enumberable: true,
-    get: function() { return this._items.length; }
+    get: function () {
+        return this._items.length;
+    }
 });
 
 /**
@@ -2045,7 +2054,7 @@ Object.defineProperty(VarDictionary.prototype, 'length', {
  * @param {VarDictionary.ValueType|Number} type
  * @param {*} value
  */
-VarDictionary.prototype.set = function(key, type, value) {
+VarDictionary.prototype.set = function (key, type, value) {
     switch (type) {
         case ValueType.UInt32:
             if (typeof value !== 'number' || value < 0) {
@@ -2102,8 +2111,10 @@ VarDictionary.prototype.set = function(key, type, value) {
  * Removes key from dictionary
  * @param {string} key
  */
-VarDictionary.prototype.remove = function(key) {
-    this._items = this._items.filter(function(item) { return item.key !== key; });
+VarDictionary.prototype.remove = function (key) {
+    this._items = this._items.filter(function (item) {
+        return item.key !== key;
+    });
     delete this._dict[key];
 };
 
@@ -2113,7 +2124,7 @@ VarDictionary.prototype.remove = function(key) {
  * @returns {VarDictionary}
  * @static
  */
-VarDictionary.read = function(stm) {
+VarDictionary.read = function (stm) {
     var dict = new VarDictionary();
     dict._readVersion(stm);
     while (true) {
@@ -2127,7 +2138,7 @@ VarDictionary.read = function(stm) {
     return dict;
 };
 
-VarDictionary.prototype._readVersion = function(stm) {
+VarDictionary.prototype._readVersion = function (stm) {
     stm.getUint8();
     var versionMajor = stm.getUint8();
     if (versionMajor === 0 || versionMajor > MaxSupportedVersion) {
@@ -2135,7 +2146,7 @@ VarDictionary.prototype._readVersion = function(stm) {
     }
 };
 
-VarDictionary.prototype._readItem = function(stm) {
+VarDictionary.prototype._readItem = function (stm) {
     var type = stm.getUint8();
     if (!type) {
         return false;
@@ -2201,19 +2212,19 @@ VarDictionary.prototype._readItem = function(stm) {
  * Writes self to binary stream
  * @param {BinaryStream} stm
  */
-VarDictionary.prototype.write = function(stm) {
+VarDictionary.prototype.write = function (stm) {
     this._writeVersion(stm);
-    Object.keys(this._items).forEach(function(key) {
+    Object.keys(this._items).forEach(function (key) {
         this._writeItem(stm, this._items[key]);
     }, this);
     stm.setUint8(0);
 };
 
-VarDictionary.prototype._writeVersion = function(stm) {
+VarDictionary.prototype._writeVersion = function (stm) {
     stm.setUint16(DefaultVersion, true);
 };
 
-VarDictionary.prototype._writeItem = function(stm, item) {
+VarDictionary.prototype._writeItem = function (stm, item) {
     stm.setUint8(item.type);
     var keyBytes = ByteUtils.stringToBytes(item.key);
     stm.setInt32(keyBytes.length, true);
@@ -2260,7 +2271,7 @@ module.exports = VarDictionary;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /*!************************************!*\
   !*** ./format/kdbx-custom-data.js ***!
   \************************************/
@@ -2281,7 +2292,7 @@ var KdbxCustomData = {
      * @param {Node} node - xml node
      * @returns {object} - custom data dictionary
      */
-    read: function(node) {
+    read: function (node) {
         var customData = {};
         for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
             var childNode = cn[i];
@@ -2297,12 +2308,12 @@ var KdbxCustomData = {
      * @param {Node} parentNode - xml node
      * @param {object} customData - custom data dictionary
      */
-    write: function(parentNode, customData) {
+    write: function (parentNode, customData) {
         if (!customData) {
             return;
         }
         var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomData);
-        Object.keys(customData).forEach(function(key) {
+        Object.keys(customData).forEach(function (key) {
             var value = customData[key];
             if (value) {
                 var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.StringDictExItem);
@@ -2312,7 +2323,7 @@ var KdbxCustomData = {
         });
     },
 
-    _readItem: function(node, customData) {
+    _readItem: function (node, customData) {
         var key, value;
         for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
             var childNode = cn[i];
@@ -2335,7 +2346,7 @@ module.exports = KdbxCustomData;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /*!*************************************!*\
   !*** ../node_modules/pako/index.js ***!
   \*************************************/
@@ -2352,7 +2363,7 @@ var assign    = __webpack_require__(/*! ./lib/utils/common */ 5).assign;
 
 var deflate   = __webpack_require__(/*! ./lib/deflate */ 32);
 var inflate   = __webpack_require__(/*! ./lib/inflate */ 35);
-var constants = __webpack_require__(/*! ./lib/zlib/constants */ 21);
+var constants = __webpack_require__(/*! ./lib/zlib/constants */ 20);
 
 var pako = {};
 
@@ -2362,7 +2373,7 @@ module.exports = pako;
 
 
 /***/ }),
-/* 17 */
+/* 16 */
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/adler32.js ***!
   \************************************************/
@@ -2407,7 +2418,7 @@ module.exports = adler32;
 
 
 /***/ }),
-/* 18 */
+/* 17 */
 /*!**********************************************!*\
   !*** ../node_modules/pako/lib/zlib/crc32.js ***!
   \**********************************************/
@@ -2461,7 +2472,7 @@ module.exports = crc32;
 
 
 /***/ }),
-/* 19 */
+/* 18 */
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/utils/strings.js ***!
   \*************************************************/
@@ -2659,7 +2670,7 @@ exports.utf8border = function (buf, max) {
 
 
 /***/ }),
-/* 20 */
+/* 19 */
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/zstream.js ***!
   \************************************************/
@@ -2701,7 +2712,7 @@ module.exports = ZStream;
 
 
 /***/ }),
-/* 21 */
+/* 20 */
 /*!**************************************************!*\
   !*** ../node_modules/pako/lib/zlib/constants.js ***!
   \**************************************************/
@@ -2764,7 +2775,7 @@ module.exports = {
 
 
 /***/ }),
-/* 22 */
+/* 21 */
 /*!*******************************!*\
   !*** ./format/kdbx-header.js ***!
   \*******************************/
@@ -2786,7 +2797,7 @@ var KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
     ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ 14),
+    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ 13),
     Int64 = __webpack_require__(/*! ./../utils/int64 */ 8),
     Random = __webpack_require__(/*! ../crypto/random */ 10);
 
@@ -2842,7 +2853,7 @@ var LastMinorVersions = {
  * Binary file header reader/writer
  * @constructor
  */
-var KdbxHeader = function() {
+var KdbxHeader = function () {
     this.versionMajor = undefined;
     this.versionMinor = undefined;
     this.dataCipherUuid = undefined;
@@ -2860,22 +2871,23 @@ var KdbxHeader = function() {
     Object.preventExtensions(this);
 };
 
-KdbxHeader.prototype._readSignature = function(stm) {
+KdbxHeader.prototype._readSignature = function (stm) {
     if (stm.byteLength < 8) {
         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'not enough data');
     }
-    var sig1 = stm.getUint32(true), sig2 = stm.getUint32(true);
+    var sig1 = stm.getUint32(true),
+        sig2 = stm.getUint32(true);
     if (!(sig1 === Consts.Signatures.FileMagic && sig2 === Consts.Signatures.Sig2Kdbx)) {
         throw new KdbxError(Consts.ErrorCodes.BadSignature);
     }
 };
 
-KdbxHeader.prototype._writeSignature = function(stm) {
+KdbxHeader.prototype._writeSignature = function (stm) {
     stm.setUint32(Consts.Signatures.FileMagic, true);
     stm.setUint32(Consts.Signatures.Sig2Kdbx, true);
 };
 
-KdbxHeader.prototype._readVersion = function(stm) {
+KdbxHeader.prototype._readVersion = function (stm) {
     var versionMinor = stm.getUint16(true);
     var versionMajor = stm.getUint16(true);
     if (versionMajor > HeaderConst.MaxSupportedVersion) {
@@ -2885,24 +2897,24 @@ KdbxHeader.prototype._readVersion = function(stm) {
     this.versionMajor = versionMajor;
 };
 
-KdbxHeader.prototype._writeVersion = function(stm) {
+KdbxHeader.prototype._writeVersion = function (stm) {
     stm.setUint16(this.versionMinor, true);
     stm.setUint16(this.versionMajor, true);
 };
 
-KdbxHeader.prototype._readCipherID = function(bytes) {
+KdbxHeader.prototype._readCipherID = function (bytes) {
     if (bytes.byteLength !== 16) {
         throw new KdbxError(Consts.ErrorCodes.Unsupported, 'cipher');
     }
     this.dataCipherUuid = new KdbxUuid(bytes);
 };
 
-KdbxHeader.prototype._writeCipherID = function(stm) {
+KdbxHeader.prototype._writeCipherID = function (stm) {
     this._writeFieldSize(stm, 16);
     stm.writeBytes(this.dataCipherUuid.bytes);
 };
 
-KdbxHeader.prototype._readCompressionFlags = function(bytes) {
+KdbxHeader.prototype._readCompressionFlags = function (bytes) {
     var id = new DataView(bytes).getUint32(bytes, true);
     if (id < 0 || id >= Object.keys(Consts.CompressionAlgorithm).length) {
         throw new KdbxError(Consts.ErrorCodes.Unsupported, 'compression');
@@ -2910,96 +2922,96 @@ KdbxHeader.prototype._readCompressionFlags = function(bytes) {
     this.compression = id;
 };
 
-KdbxHeader.prototype._writeCompressionFlags = function(stm) {
+KdbxHeader.prototype._writeCompressionFlags = function (stm) {
     this._writeFieldSize(stm, 4);
     stm.setUint32(this.compression, true);
 };
 
-KdbxHeader.prototype._readMasterSeed = function(bytes) {
+KdbxHeader.prototype._readMasterSeed = function (bytes) {
     this.masterSeed = bytes;
 };
 
-KdbxHeader.prototype._writeMasterSeed = function(stm) {
+KdbxHeader.prototype._writeMasterSeed = function (stm) {
     this._writeFieldBytes(stm, this.masterSeed);
 };
 
-KdbxHeader.prototype._readTransformSeed = function(bytes) {
+KdbxHeader.prototype._readTransformSeed = function (bytes) {
     this.transformSeed = bytes;
 };
 
-KdbxHeader.prototype._writeTransformSeed = function(stm) {
+KdbxHeader.prototype._writeTransformSeed = function (stm) {
     this._writeFieldBytes(stm, this.transformSeed);
 };
 
-KdbxHeader.prototype._readTransformRounds = function(bytes) {
+KdbxHeader.prototype._readTransformRounds = function (bytes) {
     this.keyEncryptionRounds = new BinaryStream(bytes).getUint64(true);
 };
 
-KdbxHeader.prototype._writeTransformRounds = function(stm) {
+KdbxHeader.prototype._writeTransformRounds = function (stm) {
     this._writeFieldSize(stm, 8);
     stm.setUint64(this.keyEncryptionRounds, true);
 };
 
-KdbxHeader.prototype._readEncryptionIV = function(bytes) {
+KdbxHeader.prototype._readEncryptionIV = function (bytes) {
     this.encryptionIV = bytes;
 };
 
-KdbxHeader.prototype._writeEncryptionIV = function(stm) {
+KdbxHeader.prototype._writeEncryptionIV = function (stm) {
     this._writeFieldBytes(stm, this.encryptionIV);
 };
 
-KdbxHeader.prototype._readProtectedStreamKey = function(bytes) {
+KdbxHeader.prototype._readProtectedStreamKey = function (bytes) {
     this.protectedStreamKey = bytes;
 };
 
-KdbxHeader.prototype._writeProtectedStreamKey = function(stm) {
+KdbxHeader.prototype._writeProtectedStreamKey = function (stm) {
     this._writeFieldBytes(stm, this.protectedStreamKey);
 };
 
-KdbxHeader.prototype._readStreamStartBytes = function(bytes) {
+KdbxHeader.prototype._readStreamStartBytes = function (bytes) {
     this.streamStartBytes = bytes;
 };
 
-KdbxHeader.prototype._writeStreamStartBytes = function(stm) {
+KdbxHeader.prototype._writeStreamStartBytes = function (stm) {
     this._writeFieldBytes(stm, this.streamStartBytes);
 };
 
-KdbxHeader.prototype._readInnerRandomStreamID = function(bytes) {
+KdbxHeader.prototype._readInnerRandomStreamID = function (bytes) {
     this.crsAlgorithm = new DataView(bytes).getUint32(bytes, true);
 };
 
-KdbxHeader.prototype._writeInnerRandomStreamID = function(stm) {
+KdbxHeader.prototype._writeInnerRandomStreamID = function (stm) {
     this._writeFieldSize(stm, 4);
     stm.setUint32(this.crsAlgorithm, true);
 };
 
-KdbxHeader.prototype._readInnerRandomStreamKey = function(bytes) {
+KdbxHeader.prototype._readInnerRandomStreamKey = function (bytes) {
     this.protectedStreamKey = bytes;
 };
 
-KdbxHeader.prototype._writeInnerRandomStreamKey = function(stm) {
+KdbxHeader.prototype._writeInnerRandomStreamKey = function (stm) {
     this._writeFieldBytes(stm, this.protectedStreamKey);
 };
 
-KdbxHeader.prototype._readKdfParameters = function(bytes) {
+KdbxHeader.prototype._readKdfParameters = function (bytes) {
     this.kdfParameters = VarDictionary.read(new BinaryStream(bytes));
 };
 
-KdbxHeader.prototype._writeKdfParameters = function(stm) {
+KdbxHeader.prototype._writeKdfParameters = function (stm) {
     var innerStream = new BinaryStream();
     this.kdfParameters.write(innerStream);
     this._writeFieldBytes(stm, innerStream.getWrittenBytes());
 };
 
-KdbxHeader.prototype._readPublicCustomData = function(bytes) {
+KdbxHeader.prototype._readPublicCustomData = function (bytes) {
     this.publicCustomData = VarDictionary.read(new BinaryStream(bytes));
 };
 
-KdbxHeader.prototype._hasPublicCustomData = function() {
+KdbxHeader.prototype._hasPublicCustomData = function () {
     return this.publicCustomData;
 };
 
-KdbxHeader.prototype._writePublicCustomData = function(stm) {
+KdbxHeader.prototype._writePublicCustomData = function (stm) {
     if (this.publicCustomData) {
         var innerStream = new BinaryStream();
         this.publicCustomData.write(innerStream);
@@ -3007,7 +3019,7 @@ KdbxHeader.prototype._writePublicCustomData = function(stm) {
     }
 };
 
-KdbxHeader.prototype._readBinary = function(bytes, ctx) {
+KdbxHeader.prototype._readBinary = function (bytes, ctx) {
     var view = new DataView(bytes);
     var flags = view.getUint8(0);
     var isProtected = flags & HeaderConst.FlagBinaryProtected;
@@ -3019,7 +3031,7 @@ KdbxHeader.prototype._readBinary = function(bytes, ctx) {
     ctx.kdbx.binaries[binaryIndex] = binary;
 };
 
-KdbxHeader.prototype._writeBinary = function(stm, ctx) {
+KdbxHeader.prototype._writeBinary = function (stm, ctx) {
     if (this.versionMajor < 4) {
         return;
     }
@@ -3045,12 +3057,12 @@ KdbxHeader.prototype._writeBinary = function(stm, ctx) {
     }
 };
 
-KdbxHeader.prototype._writeEndOfHeader = function(stm) {
+KdbxHeader.prototype._writeEndOfHeader = function (stm) {
     this._writeFieldSize(stm, 4);
     stm.setUint32(0x0d0ad0a);
 };
 
-KdbxHeader.prototype._readField = function(stm, fields, ctx) {
+KdbxHeader.prototype._readField = function (stm, fields, ctx) {
     var headerId = stm.getUint8();
     var size = this._readFieldSize(stm);
     var bytes;
@@ -3068,7 +3080,7 @@ KdbxHeader.prototype._readField = function(stm, fields, ctx) {
     return headerId !== 0;
 };
 
-KdbxHeader.prototype._writeField = function(stm, headerId, fields, ctx) {
+KdbxHeader.prototype._writeField = function (stm, headerId, fields, ctx) {
     var headerField = fields[headerId];
     if (headerField) {
         if (headerField.ver && headerField.ver.indexOf(this.versionMajor) < 0) {
@@ -3088,11 +3100,11 @@ KdbxHeader.prototype._writeField = function(stm, headerId, fields, ctx) {
     }
 };
 
-KdbxHeader.prototype._readFieldSize = function(stm) {
+KdbxHeader.prototype._readFieldSize = function (stm) {
     return this.versionMajor >= 4 ? stm.getUint32(true) : stm.getUint16(true);
 };
 
-KdbxHeader.prototype._writeFieldSize = function(stm, size) {
+KdbxHeader.prototype._writeFieldSize = function (stm, size) {
     if (this.versionMajor >= 4) {
         stm.setUint32(size, true);
     } else {
@@ -3100,12 +3112,12 @@ KdbxHeader.prototype._writeFieldSize = function(stm, size) {
     }
 };
 
-KdbxHeader.prototype._writeFieldBytes = function(stm, bytes) {
+KdbxHeader.prototype._writeFieldBytes = function (stm, bytes) {
     this._writeFieldSize(stm, bytes.byteLength);
     stm.writeBytes(bytes);
 };
 
-KdbxHeader.prototype._validate = function() {
+KdbxHeader.prototype._validate = function () {
     if (this.dataCipherUuid === undefined) {
         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no cipher in header');
     }
@@ -3138,7 +3150,7 @@ KdbxHeader.prototype._validate = function() {
     }
 };
 
-KdbxHeader.prototype._validateInner = function() {
+KdbxHeader.prototype._validateInner = function () {
     if (!this.protectedStreamKey) {
         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no protected stream key in header');
     }
@@ -3147,25 +3159,61 @@ KdbxHeader.prototype._validateInner = function() {
     }
 };
 
-KdbxHeader.prototype._createKdfParameters = function(algo) {
+KdbxHeader.prototype._createKdfParameters = function (algo) {
     if (!algo) {
         algo = HeaderConst.DefaultKdfAlgo;
     }
     switch (algo) {
         case Consts.KdfId.Argon2:
             this.kdfParameters = new VarDictionary();
-            this.kdfParameters.set('$UUID', VarDictionary.ValueType.Bytes, ByteUtils.base64ToBytes(Consts.KdfId.Argon2));
-            this.kdfParameters.set('S', VarDictionary.ValueType.Bytes, Random.getBytes(HeaderConst.DefaultKdfSaltLength));
-            this.kdfParameters.set('P', VarDictionary.ValueType.UInt32, HeaderConst.DefaultKdfParallelism);
-            this.kdfParameters.set('I', VarDictionary.ValueType.UInt64, new Int64(HeaderConst.DefaultKdfIterations));
-            this.kdfParameters.set('M', VarDictionary.ValueType.UInt64, new Int64(HeaderConst.DefaultKdfMemory));
-            this.kdfParameters.set('V', VarDictionary.ValueType.UInt32, HeaderConst.DefaultKdfVersion);
+            this.kdfParameters.set(
+                '$UUID',
+                VarDictionary.ValueType.Bytes,
+                ByteUtils.base64ToBytes(Consts.KdfId.Argon2)
+            );
+            this.kdfParameters.set(
+                'S',
+                VarDictionary.ValueType.Bytes,
+                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
+            );
+            this.kdfParameters.set(
+                'P',
+                VarDictionary.ValueType.UInt32,
+                HeaderConst.DefaultKdfParallelism
+            );
+            this.kdfParameters.set(
+                'I',
+                VarDictionary.ValueType.UInt64,
+                new Int64(HeaderConst.DefaultKdfIterations)
+            );
+            this.kdfParameters.set(
+                'M',
+                VarDictionary.ValueType.UInt64,
+                new Int64(HeaderConst.DefaultKdfMemory)
+            );
+            this.kdfParameters.set(
+                'V',
+                VarDictionary.ValueType.UInt32,
+                HeaderConst.DefaultKdfVersion
+            );
             break;
         case Consts.KdfId.Aes:
             this.kdfParameters = new VarDictionary();
-            this.kdfParameters.set('$UUID', VarDictionary.ValueType.Bytes, ByteUtils.base64ToBytes(Consts.KdfId.Aes));
-            this.kdfParameters.set('S', VarDictionary.ValueType.Bytes, Random.getBytes(HeaderConst.DefaultKdfSaltLength));
-            this.kdfParameters.set('R', VarDictionary.ValueType.UInt32, Consts.Defaults.KeyEncryptionRounds);
+            this.kdfParameters.set(
+                '$UUID',
+                VarDictionary.ValueType.Bytes,
+                ByteUtils.base64ToBytes(Consts.KdfId.Aes)
+            );
+            this.kdfParameters.set(
+                'S',
+                VarDictionary.ValueType.Bytes,
+                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
+            );
+            this.kdfParameters.set(
+                'R',
+                VarDictionary.ValueType.UInt32,
+                Consts.Defaults.KeyEncryptionRounds
+            );
             break;
         default:
             throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad KDF algo');
@@ -3176,7 +3224,7 @@ KdbxHeader.prototype._createKdfParameters = function(algo) {
  * Saves header to stream
  * @param {BinaryStream} stm
  */
-KdbxHeader.prototype.write = function(stm) {
+KdbxHeader.prototype.write = function (stm) {
     this._validate();
     this._writeSignature(stm);
     this._writeVersion(stm);
@@ -3192,7 +3240,7 @@ KdbxHeader.prototype.write = function(stm) {
  * @param {BinaryStream} stm
  * @param {KdbxContext} ctx
  */
-KdbxHeader.prototype.writeInnerHeader = function(stm, ctx) {
+KdbxHeader.prototype.writeInnerHeader = function (stm, ctx) {
     this._validateInner();
     for (var id = 1; id < InnerHeaderFields.length; id++) {
         this._writeField(stm, id, InnerHeaderFields, ctx);
@@ -3203,7 +3251,7 @@ KdbxHeader.prototype.writeInnerHeader = function(stm, ctx) {
 /**
  * Updates header random salts
  */
-KdbxHeader.prototype.generateSalts = function() {
+KdbxHeader.prototype.generateSalts = function () {
     this.masterSeed = Random.getBytes(32);
     if (this.versionMajor < 4) {
         this.transformSeed = Random.getBytes(32);
@@ -3222,7 +3270,7 @@ KdbxHeader.prototype.generateSalts = function() {
  * Upgrade the header to the specified version
  * @param {Number} version - major file version
  */
-KdbxHeader.prototype.setVersion = function(version) {
+KdbxHeader.prototype.setVersion = function (version) {
     if (version !== 3 && version !== 4) {
         throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad file version');
     }
@@ -3245,7 +3293,7 @@ KdbxHeader.prototype.setVersion = function(version) {
  * Set file KDF
  * @param kdf - KDF ID, from Consts.KdfId
  */
-KdbxHeader.prototype.setKdf = function(kdf) {
+KdbxHeader.prototype.setKdf = function (kdf) {
     this._createKdfParameters(kdf);
 };
 
@@ -3256,7 +3304,7 @@ KdbxHeader.prototype.setKdf = function(kdf) {
  * @return {KdbxHeader}
  * @static
  */
-KdbxHeader.read = function(stm, ctx) {
+KdbxHeader.read = function (stm, ctx) {
     var header = new KdbxHeader();
     header._readSignature(stm);
     header._readVersion(stm);
@@ -3273,7 +3321,7 @@ KdbxHeader.read = function(stm, ctx) {
  * @param {BinaryStream} stm
  * @param {KdbxContext} ctx
  */
-KdbxHeader.prototype.readInnerHeader = function(stm, ctx) {
+KdbxHeader.prototype.readInnerHeader = function (stm, ctx) {
     while (this._readField(stm, InnerHeaderFields, ctx)) {
         continue;
     }
@@ -3286,7 +3334,7 @@ KdbxHeader.prototype.readInnerHeader = function(stm, ctx) {
  * @return {KdbxHeader}
  * @static
  */
-KdbxHeader.create = function() {
+KdbxHeader.create = function () {
     var header = new KdbxHeader();
     header.versionMajor = HeaderConst.DefaultFileVersionMajor;
     header.versionMinor = HeaderConst.DefaultFileVersionMinor;
@@ -3303,7 +3351,7 @@ module.exports = KdbxHeader;
 
 
 /***/ }),
-/* 23 */
+/* 22 */
 /*!***************************!*\
   !*** ./crypto/salsa20.js ***!
   \***************************/
@@ -3323,44 +3371,47 @@ function Salsa20(key, nonce) {
     this.sigmaWords = [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574];
 
     // State.
-    this.keyWords = [];           // key words
-    this.nonceWords = [0, 0];     // nonce words
-    this.counterWords = [0, 0];   // block counter words
+    this.keyWords = []; // key words
+    this.nonceWords = [0, 0]; // nonce words
+    this.counterWords = [0, 0]; // block counter words
 
     // Output buffer.
-    this.block = [];        // output block of 64 bytes
-    this.blockUsed = 64;     // number of block bytes used
+    this.block = []; // output block of 64 bytes
+    this.blockUsed = 64; // number of block bytes used
 
     this.setKey(key);
     this.setNonce(nonce);
 }
 
 // setKey sets the key to the given 32-byte array.
-Salsa20.prototype.setKey = function(key) {
+Salsa20.prototype.setKey = function (key) {
     for (var i = 0, j = 0; i < 8; i++, j += 4) {
-        this.keyWords[i] = (key[j] & 0xff)        |
-        ((key[j+1] & 0xff)<<8)  |
-        ((key[j+2] & 0xff)<<16) |
-        ((key[j+3] & 0xff)<<24);
+        this.keyWords[i] =
+            (key[j] & 0xff) |
+            ((key[j + 1] & 0xff) << 8) |
+            ((key[j + 2] & 0xff) << 16) |
+            ((key[j + 3] & 0xff) << 24);
     }
     this._reset();
 };
 
 // setNonce sets the nonce to the given 8-byte array.
-Salsa20.prototype.setNonce = function(nonce) {
-    this.nonceWords[0] = (nonce[0] & 0xff)      |
-    ((nonce[1] & 0xff)<<8)  |
-    ((nonce[2] & 0xff)<<16) |
-    ((nonce[3] & 0xff)<<24);
-    this.nonceWords[1] = (nonce[4] & 0xff)      |
-    ((nonce[5] & 0xff)<<8)  |
-    ((nonce[6] & 0xff)<<16) |
-    ((nonce[7] & 0xff)<<24);
+Salsa20.prototype.setNonce = function (nonce) {
+    this.nonceWords[0] =
+        (nonce[0] & 0xff) |
+        ((nonce[1] & 0xff) << 8) |
+        ((nonce[2] & 0xff) << 16) |
+        ((nonce[3] & 0xff) << 24);
+    this.nonceWords[1] =
+        (nonce[4] & 0xff) |
+        ((nonce[5] & 0xff) << 8) |
+        ((nonce[6] & 0xff) << 16) |
+        ((nonce[7] & 0xff) << 24);
     this._reset();
 };
 
 // getBytes returns the next numberOfBytes bytes of stream.
-Salsa20.prototype.getBytes = function(numberOfBytes) {
+Salsa20.prototype.getBytes = function (numberOfBytes) {
     var out = new Uint8Array(numberOfBytes);
     for (var i = 0; i < numberOfBytes; i++) {
         if (this.blockUsed === 64) {
@@ -3374,11 +3425,11 @@ Salsa20.prototype.getBytes = function(numberOfBytes) {
     return out;
 };
 
-Salsa20.prototype.getHexString = function(numberOfBytes) {
-    var hex=['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'];
+Salsa20.prototype.getHexString = function (numberOfBytes) {
+    var hex = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
     var out = [];
     var bytes = this.getBytes(numberOfBytes);
-    for(var i = 0; i < bytes.length; i++) {
+    for (var i = 0; i < bytes.length; i++) {
         out.push(hex[(bytes[i] >> 4) & 15]);
         out.push(hex[bytes[i] & 15]);
     }
@@ -3387,14 +3438,14 @@ Salsa20.prototype.getHexString = function(numberOfBytes) {
 
 // Private methods.
 
-Salsa20.prototype._reset = function() {
+Salsa20.prototype._reset = function () {
     this.counterWords[0] = 0;
     this.counterWords[1] = 0;
     this.blockUsed = 64;
 };
 
 // _incrementCounter increments block counter.
-Salsa20.prototype._incrementCounter = function() {
+Salsa20.prototype._incrementCounter = function () {
     // Note: maximum 2^64 blocks.
     this.counterWords[0] = (this.counterWords[0] + 1) & 0xffffffff;
     if (this.counterWords[0] === 0) {
@@ -3404,7 +3455,7 @@ Salsa20.prototype._incrementCounter = function() {
 
 // _generateBlock generates 64 bytes from key, nonce, and counter,
 // and puts the result into this.block.
-Salsa20.prototype._generateBlock = function() {
+Salsa20.prototype._generateBlock = function () {
     var j0 = this.sigmaWords[0],
         j1 = this.keyWords[0],
         j2 = this.keyWords[1],
@@ -3422,83 +3473,97 @@ Salsa20.prototype._generateBlock = function() {
         j14 = this.keyWords[7],
         j15 = this.sigmaWords[3];
 
-    var x0 = j0, x1 = j1, x2 = j2, x3 = j3, x4 = j4, x5 = j5, x6 = j6, x7 = j7,
-        x8 = j8, x9 = j9, x10 = j10, x11 = j11, x12 = j12, x13 = j13, x14 = j14, x15 = j15;
+    var x0 = j0,
+        x1 = j1,
+        x2 = j2,
+        x3 = j3,
+        x4 = j4,
+        x5 = j5,
+        x6 = j6,
+        x7 = j7,
+        x8 = j8,
+        x9 = j9,
+        x10 = j10,
+        x11 = j11,
+        x12 = j12,
+        x13 = j13,
+        x14 = j14,
+        x15 = j15;
 
     var u;
 
     for (var i = 0; i < this.rounds; i += 2) {
         u = x0 + x12;
-        x4 ^= (u<<7) | (u>>>(32-7));
+        x4 ^= (u << 7) | (u >>> (32 - 7));
         u = x4 + x0;
-        x8 ^= (u<<9) | (u>>>(32-9));
+        x8 ^= (u << 9) | (u >>> (32 - 9));
         u = x8 + x4;
-        x12 ^= (u<<13) | (u>>>(32-13));
+        x12 ^= (u << 13) | (u >>> (32 - 13));
         u = x12 + x8;
-        x0 ^= (u<<18) | (u>>>(32-18));
+        x0 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x5 + x1;
-        x9 ^= (u<<7) | (u>>>(32-7));
+        x9 ^= (u << 7) | (u >>> (32 - 7));
         u = x9 + x5;
-        x13 ^= (u<<9) | (u>>>(32-9));
+        x13 ^= (u << 9) | (u >>> (32 - 9));
         u = x13 + x9;
-        x1 ^= (u<<13) | (u>>>(32-13));
+        x1 ^= (u << 13) | (u >>> (32 - 13));
         u = x1 + x13;
-        x5 ^= (u<<18) | (u>>>(32-18));
+        x5 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x10 + x6;
-        x14 ^= (u<<7) | (u>>>(32-7));
+        x14 ^= (u << 7) | (u >>> (32 - 7));
         u = x14 + x10;
-        x2 ^= (u<<9) | (u>>>(32-9));
+        x2 ^= (u << 9) | (u >>> (32 - 9));
         u = x2 + x14;
-        x6 ^= (u<<13) | (u>>>(32-13));
+        x6 ^= (u << 13) | (u >>> (32 - 13));
         u = x6 + x2;
-        x10 ^= (u<<18) | (u>>>(32-18));
+        x10 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x15 + x11;
-        x3 ^= (u<<7) | (u>>>(32-7));
+        x3 ^= (u << 7) | (u >>> (32 - 7));
         u = x3 + x15;
-        x7 ^= (u<<9) | (u>>>(32-9));
+        x7 ^= (u << 9) | (u >>> (32 - 9));
         u = x7 + x3;
-        x11 ^= (u<<13) | (u>>>(32-13));
+        x11 ^= (u << 13) | (u >>> (32 - 13));
         u = x11 + x7;
-        x15 ^= (u<<18) | (u>>>(32-18));
+        x15 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x0 + x3;
-        x1 ^= (u<<7) | (u>>>(32-7));
+        x1 ^= (u << 7) | (u >>> (32 - 7));
         u = x1 + x0;
-        x2 ^= (u<<9) | (u>>>(32-9));
+        x2 ^= (u << 9) | (u >>> (32 - 9));
         u = x2 + x1;
-        x3 ^= (u<<13) | (u>>>(32-13));
+        x3 ^= (u << 13) | (u >>> (32 - 13));
         u = x3 + x2;
-        x0 ^= (u<<18) | (u>>>(32-18));
+        x0 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x5 + x4;
-        x6 ^= (u<<7) | (u>>>(32-7));
+        x6 ^= (u << 7) | (u >>> (32 - 7));
         u = x6 + x5;
-        x7 ^= (u<<9) | (u>>>(32-9));
+        x7 ^= (u << 9) | (u >>> (32 - 9));
         u = x7 + x6;
-        x4 ^= (u<<13) | (u>>>(32-13));
+        x4 ^= (u << 13) | (u >>> (32 - 13));
         u = x4 + x7;
-        x5 ^= (u<<18) | (u>>>(32-18));
+        x5 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x10 + x9;
-        x11 ^= (u<<7) | (u>>>(32-7));
+        x11 ^= (u << 7) | (u >>> (32 - 7));
         u = x11 + x10;
-        x8 ^= (u<<9) | (u>>>(32-9));
+        x8 ^= (u << 9) | (u >>> (32 - 9));
         u = x8 + x11;
-        x9 ^= (u<<13) | (u>>>(32-13));
+        x9 ^= (u << 13) | (u >>> (32 - 13));
         u = x9 + x8;
-        x10 ^= (u<<18) | (u>>>(32-18));
+        x10 ^= (u << 18) | (u >>> (32 - 18));
 
         u = x15 + x14;
-        x12 ^= (u<<7) | (u>>>(32-7));
+        x12 ^= (u << 7) | (u >>> (32 - 7));
         u = x12 + x15;
-        x13 ^= (u<<9) | (u>>>(32-9));
+        x13 ^= (u << 9) | (u >>> (32 - 9));
         u = x13 + x12;
-        x14 ^= (u<<13) | (u>>>(32-13));
+        x14 ^= (u << 13) | (u >>> (32 - 13));
         u = x14 + x13;
-        x15 ^= (u<<18) | (u>>>(32-18));
+        x15 ^= (u << 18) | (u >>> (32 - 18));
     }
 
     x0 += j0;
@@ -3518,41 +3583,105 @@ Salsa20.prototype._generateBlock = function() {
     x14 += j14;
     x15 += j15;
 
-    this.block[ 0] = ( x0 >>>  0) & 0xff; this.block[ 1] = ( x0 >>>  8) & 0xff;
-    this.block[ 2] = ( x0 >>> 16) & 0xff; this.block[ 3] = ( x0 >>> 24) & 0xff;
-    this.block[ 4] = ( x1 >>>  0) & 0xff; this.block[ 5] = ( x1 >>>  8) & 0xff;
-    this.block[ 6] = ( x1 >>> 16) & 0xff; this.block[ 7] = ( x1 >>> 24) & 0xff;
-    this.block[ 8] = ( x2 >>>  0) & 0xff; this.block[ 9] = ( x2 >>>  8) & 0xff;
-    this.block[10] = ( x2 >>> 16) & 0xff; this.block[11] = ( x2 >>> 24) & 0xff;
-    this.block[12] = ( x3 >>>  0) & 0xff; this.block[13] = ( x3 >>>  8) & 0xff;
-    this.block[14] = ( x3 >>> 16) & 0xff; this.block[15] = ( x3 >>> 24) & 0xff;
-    this.block[16] = ( x4 >>>  0) & 0xff; this.block[17] = ( x4 >>>  8) & 0xff;
-    this.block[18] = ( x4 >>> 16) & 0xff; this.block[19] = ( x4 >>> 24) & 0xff;
-    this.block[20] = ( x5 >>>  0) & 0xff; this.block[21] = ( x5 >>>  8) & 0xff;
-    this.block[22] = ( x5 >>> 16) & 0xff; this.block[23] = ( x5 >>> 24) & 0xff;
-    this.block[24] = ( x6 >>>  0) & 0xff; this.block[25] = ( x6 >>>  8) & 0xff;
-    this.block[26] = ( x6 >>> 16) & 0xff; this.block[27] = ( x6 >>> 24) & 0xff;
-    this.block[28] = ( x7 >>>  0) & 0xff; this.block[29] = ( x7 >>>  8) & 0xff;
-    this.block[30] = ( x7 >>> 16) & 0xff; this.block[31] = ( x7 >>> 24) & 0xff;
-    this.block[32] = ( x8 >>>  0) & 0xff; this.block[33] = ( x8 >>>  8) & 0xff;
-    this.block[34] = ( x8 >>> 16) & 0xff; this.block[35] = ( x8 >>> 24) & 0xff;
-    this.block[36] = ( x9 >>>  0) & 0xff; this.block[37] = ( x9 >>>  8) & 0xff;
-    this.block[38] = ( x9 >>> 16) & 0xff; this.block[39] = ( x9 >>> 24) & 0xff;
-    this.block[40] = (x10 >>>  0) & 0xff; this.block[41] = (x10 >>>  8) & 0xff;
-    this.block[42] = (x10 >>> 16) & 0xff; this.block[43] = (x10 >>> 24) & 0xff;
-    this.block[44] = (x11 >>>  0) & 0xff; this.block[45] = (x11 >>>  8) & 0xff;
-    this.block[46] = (x11 >>> 16) & 0xff; this.block[47] = (x11 >>> 24) & 0xff;
-    this.block[48] = (x12 >>>  0) & 0xff; this.block[49] = (x12 >>>  8) & 0xff;
-    this.block[50] = (x12 >>> 16) & 0xff; this.block[51] = (x12 >>> 24) & 0xff;
-    this.block[52] = (x13 >>>  0) & 0xff; this.block[53] = (x13 >>>  8) & 0xff;
-    this.block[54] = (x13 >>> 16) & 0xff; this.block[55] = (x13 >>> 24) & 0xff;
-    this.block[56] = (x14 >>>  0) & 0xff; this.block[57] = (x14 >>>  8) & 0xff;
-    this.block[58] = (x14 >>> 16) & 0xff; this.block[59] = (x14 >>> 24) & 0xff;
-    this.block[60] = (x15 >>>  0) & 0xff; this.block[61] = (x15 >>>  8) & 0xff;
-    this.block[62] = (x15 >>> 16) & 0xff; this.block[63] = (x15 >>> 24) & 0xff;
+    this.block[0] = (x0 >>> 0) & 0xff;
+    this.block[1] = (x0 >>> 8) & 0xff;
+    this.block[2] = (x0 >>> 16) & 0xff;
+    this.block[3] = (x0 >>> 24) & 0xff;
+    this.block[4] = (x1 >>> 0) & 0xff;
+    this.block[5] = (x1 >>> 8) & 0xff;
+    this.block[6] = (x1 >>> 16) & 0xff;
+    this.block[7] = (x1 >>> 24) & 0xff;
+    this.block[8] = (x2 >>> 0) & 0xff;
+    this.block[9] = (x2 >>> 8) & 0xff;
+    this.block[10] = (x2 >>> 16) & 0xff;
+    this.block[11] = (x2 >>> 24) & 0xff;
+    this.block[12] = (x3 >>> 0) & 0xff;
+    this.block[13] = (x3 >>> 8) & 0xff;
+    this.block[14] = (x3 >>> 16) & 0xff;
+    this.block[15] = (x3 >>> 24) & 0xff;
+    this.block[16] = (x4 >>> 0) & 0xff;
+    this.block[17] = (x4 >>> 8) & 0xff;
+    this.block[18] = (x4 >>> 16) & 0xff;
+    this.block[19] = (x4 >>> 24) & 0xff;
+    this.block[20] = (x5 >>> 0) & 0xff;
+    this.block[21] = (x5 >>> 8) & 0xff;
+    this.block[22] = (x5 >>> 16) & 0xff;
+    this.block[23] = (x5 >>> 24) & 0xff;
+    this.block[24] = (x6 >>> 0) & 0xff;
+    this.block[25] = (x6 >>> 8) & 0xff;
+    this.block[26] = (x6 >>> 16) & 0xff;
+    this.block[27] = (x6 >>> 24) & 0xff;
+    this.block[28] = (x7 >>> 0) & 0xff;
+    this.block[29] = (x7 >>> 8) & 0xff;
+    this.block[30] = (x7 >>> 16) & 0xff;
+    this.block[31] = (x7 >>> 24) & 0xff;
+    this.block[32] = (x8 >>> 0) & 0xff;
+    this.block[33] = (x8 >>> 8) & 0xff;
+    this.block[34] = (x8 >>> 16) & 0xff;
+    this.block[35] = (x8 >>> 24) & 0xff;
+    this.block[36] = (x9 >>> 0) & 0xff;
+    this.block[37] = (x9 >>> 8) & 0xff;
+    this.block[38] = (x9 >>> 16) & 0xff;
+    this.block[39] = (x9 >>> 24) & 0xff;
+    this.block[40] = (x10 >>> 0) & 0xff;
+    this.block[41] = (x10 >>> 8) & 0xff;
+    this.block[42] = (x10 >>> 16) & 0xff;
+    this.block[43] = (x10 >>> 24) & 0xff;
+    this.block[44] = (x11 >>> 0) & 0xff;
+    this.block[45] = (x11 >>> 8) & 0xff;
+    this.block[46] = (x11 >>> 16) & 0xff;
+    this.block[47] = (x11 >>> 24) & 0xff;
+    this.block[48] = (x12 >>> 0) & 0xff;
+    this.block[49] = (x12 >>> 8) & 0xff;
+    this.block[50] = (x12 >>> 16) & 0xff;
+    this.block[51] = (x12 >>> 24) & 0xff;
+    this.block[52] = (x13 >>> 0) & 0xff;
+    this.block[53] = (x13 >>> 8) & 0xff;
+    this.block[54] = (x13 >>> 16) & 0xff;
+    this.block[55] = (x13 >>> 24) & 0xff;
+    this.block[56] = (x14 >>> 0) & 0xff;
+    this.block[57] = (x14 >>> 8) & 0xff;
+    this.block[58] = (x14 >>> 16) & 0xff;
+    this.block[59] = (x14 >>> 24) & 0xff;
+    this.block[60] = (x15 >>> 0) & 0xff;
+    this.block[61] = (x15 >>> 8) & 0xff;
+    this.block[62] = (x15 >>> 16) & 0xff;
+    this.block[63] = (x15 >>> 24) & 0xff;
 };
 
 module.exports = Salsa20;
+
+
+/***/ }),
+/* 23 */
+/*!*************************************************!*\
+  !*** ../node_modules/webpack/buildin/global.js ***!
+  \*************************************************/
+/*! no static exports found */
+/*! all exports used */
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -3603,7 +3732,7 @@ function ChaCha20(key, nonce) {
     this.input = input;
 }
 
-ChaCha20.prototype.getBytes = function(numberOfBytes) {
+ChaCha20.prototype.getBytes = function (numberOfBytes) {
     var out = new Uint8Array(numberOfBytes);
     for (var i = 0; i < numberOfBytes; i++) {
         if (this.blockUsed === 64) {
@@ -3616,7 +3745,7 @@ ChaCha20.prototype.getBytes = function(numberOfBytes) {
     return out;
 };
 
-ChaCha20.prototype._generateBlock = function() {
+ChaCha20.prototype._generateBlock = function () {
     var input = this.input;
     var x = this.x;
     var block = this.block;
@@ -3633,10 +3762,10 @@ ChaCha20.prototype._generateBlock = function() {
         quarterRound(x, 2, 7, 8, 13);
         quarterRound(x, 3, 4, 9, 14);
     }
-    for (i = 16; i--;) {
+    for (i = 16; i--; ) {
         x[i] += input[i];
     }
-    for (i = 16; i--;) {
+    for (i = 16; i--; ) {
         u32to8le(block, 4 * i, x[i]);
     }
 
@@ -3646,7 +3775,7 @@ ChaCha20.prototype._generateBlock = function() {
     }
 };
 
-ChaCha20.prototype.encrypt = function(data) {
+ChaCha20.prototype.encrypt = function (data) {
     var length = data.length;
     var res = new Uint8Array(length);
     var pos = 0;
@@ -3724,16 +3853,18 @@ size of the zero buffer to prevent enormous memory usage.
 
 function encrypt(credentials, key, rounds) {
     var algo = CryptoEngine.createAesCbc();
-    return algo.importKey(ByteUtils.arrayToBuffer(key))
-        .then(function() {
+    return algo
+        .importKey(ByteUtils.arrayToBuffer(key))
+        .then(function () {
             var resolvers = [];
             for (var idx = 0; idx < credentialSize; idx += aesBlockSize) {
-                resolvers.push(encryptBlock(algo,
-                    credentials.subarray(idx, idx + aesBlockSize), rounds));
+                resolvers.push(
+                    encryptBlock(algo, credentials.subarray(idx, idx + aesBlockSize), rounds)
+                );
             }
             return Promise.all(resolvers);
         })
-        .then(function(results) {
+        .then(function (results) {
             var res = new Uint8Array(credentialSize);
             results.forEach(function (result, idx) {
                 var base = idx * aesBlockSize;
@@ -3755,20 +3886,27 @@ function encryptBlock(algo, iv, rounds) {
         rounds -= currentRounds;
 
         var dataLen = aesBlockSize * currentRounds;
-        var zeroData = buffer.length === dataLen ? buffer.buffer : ByteUtils.arrayToBuffer(buffer.subarray(0, dataLen));
+        var zeroData =
+            buffer.length === dataLen
+                ? buffer.buffer
+                : ByteUtils.arrayToBuffer(buffer.subarray(0, dataLen));
         result = encryptBlockBuffer(algo, result, zeroData);
     }
 
-    return result.then(function(res) { return new Uint8Array(res); });
+    return result.then(function (res) {
+        return new Uint8Array(res);
+    });
 }
 
 function encryptBlockBuffer(algo, promisedIv, buffer) {
     return promisedIv
-        .then(function(iv) {
+        .then(function (iv) {
             return algo.encrypt(buffer, iv);
         })
-        .then(function(buf) {
-            var res = ByteUtils.arrayToBuffer(new Uint8Array(buf).subarray(-2 * aesBlockSize, -aesBlockSize));
+        .then(function (buf) {
+            var res = ByteUtils.arrayToBuffer(
+                new Uint8Array(buf).subarray(-2 * aesBlockSize, -aesBlockSize)
+            );
             ByteUtils.zeroBuffer(buf);
             return res;
         });
@@ -3804,13 +3942,13 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
  * @param {String|ArrayBuffer|Uint8Array} [keyFile]
  * @constructor
  */
-var KdbxCredentials = function(password, keyFile, challengeResponse) {
+var KdbxCredentials = function (password, keyFile, challengeResponse) {
     var that = this;
     this.ready = Promise.all([
         this.setPassword(password),
         this.setKeyFile(keyFile),
         this.setChallengeResponse(challengeResponse)
-    ]).then(function() {
+    ]).then(function () {
         return that;
     });
 };
@@ -3819,14 +3957,14 @@ var KdbxCredentials = function(password, keyFile, challengeResponse) {
  * Set password
  * @param {ProtectedValue|null} password
  */
-KdbxCredentials.prototype.setPassword = function(password) {
+KdbxCredentials.prototype.setPassword = function (password) {
     if (password === null) {
         this.passwordHash = null;
     } else if (!(password instanceof ProtectedValue)) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.InvalidArg, 'password'));
     } else {
         var that = this;
-        return password.getHash().then(function(hash) {
+        return password.getHash().then(function (hash) {
             that.passwordHash = ProtectedValue.fromBinary(hash);
         });
     }
@@ -3837,7 +3975,7 @@ KdbxCredentials.prototype.setPassword = function(password) {
  * Set keyfile
  * @param {ArrayBuffer|Uint8Array} [keyFile]
  */
-KdbxCredentials.prototype.setKeyFile = function(keyFile) {
+KdbxCredentials.prototype.setKeyFile = function (keyFile) {
     if (keyFile && !(keyFile instanceof ArrayBuffer) && !(keyFile instanceof Uint8Array)) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.InvalidArg, 'keyFile'));
     }
@@ -3857,10 +3995,12 @@ KdbxCredentials.prototype.setKeyFile = function(keyFile) {
             var xml = XmlUtils.parse(keyFileStr.trim());
             var keyEl = XmlUtils.getChildNode(xml.documentElement, 'Key');
             var dataEl = XmlUtils.getChildNode(keyEl, 'Data');
-            this.keyFileHash = ProtectedValue.fromBinary(ByteUtils.base64ToBytes(dataEl.textContent));
+            this.keyFileHash = ProtectedValue.fromBinary(
+                ByteUtils.base64ToBytes(dataEl.textContent)
+            );
         } catch (e) {
             var that = this;
-            return CryptoEngine.sha256(keyFile).then(function(hash) {
+            return CryptoEngine.sha256(keyFile).then(function (hash) {
                 that.keyFileHash = ProtectedValue.fromBinary(hash);
             });
         }
@@ -3874,7 +4014,7 @@ KdbxCredentials.prototype.setKeyFile = function(keyFile) {
  * Set a challenge-response module
  * @param challengeResponse {Function}
  */
-KdbxCredentials.prototype.setChallengeResponse = function(challengeResponse) {
+KdbxCredentials.prototype.setChallengeResponse = function (challengeResponse) {
     this.challengeResponse = challengeResponse;
     return Promise.resolve();
 };
@@ -3883,10 +4023,10 @@ KdbxCredentials.prototype.setChallengeResponse = function(challengeResponse) {
  * Get credentials hash
  * @returns {Promise.<ArrayBuffer>}
  */
-KdbxCredentials.prototype.getHash = function(challenge) {
+KdbxCredentials.prototype.getHash = function (challenge) {
     var that = this;
-    return this.ready.then(function() {
-        return that.getChallengeResponse(challenge).then(function(chalResp) {
+    return this.ready.then(function () {
+        return that.getChallengeResponse(challenge).then(function (chalResp) {
             var buffers = [];
             if (that.passwordHash) {
                 buffers.push(that.passwordHash.getBinary());
@@ -3897,17 +4037,17 @@ KdbxCredentials.prototype.getHash = function(challenge) {
             if (chalResp) {
                 buffers.push(new Uint8Array(chalResp));
             }
-            var totalLength = buffers.reduce(function(acc, buf) {
+            var totalLength = buffers.reduce(function (acc, buf) {
                 return acc + buf.byteLength;
             }, 0);
             var allBytes = new Uint8Array(totalLength);
             var offset = 0;
-            buffers.forEach(function(buffer) {
+            buffers.forEach(function (buffer) {
                 allBytes.set(buffer, offset);
                 ByteUtils.zeroBuffer(buffer);
                 offset += buffer.length;
             });
-            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(allBytes)).then(function(hash) {
+            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(allBytes)).then(function (hash) {
                 ByteUtils.zeroBuffer(allBytes);
                 return hash;
             });
@@ -3915,33 +4055,32 @@ KdbxCredentials.prototype.getHash = function(challenge) {
     });
 };
 
-KdbxCredentials.prototype.getChallengeResponse = function(challenge) {
+KdbxCredentials.prototype.getChallengeResponse = function (challenge) {
     var challengeResponse = this.challengeResponse;
-    return Promise.resolve()
-        .then(function() {
-            if (!challengeResponse || !challenge) {
-                return null;
-            }
-            return challengeResponse(challenge).then(function(response) {
-                return CryptoEngine.sha256(ByteUtils.arrayToBuffer(response)).then(function (hash) {
-                    ByteUtils.zeroBuffer(response);
-                    return hash;
-                });
+    return Promise.resolve().then(function () {
+        if (!challengeResponse || !challenge) {
+            return null;
+        }
+        return challengeResponse(challenge).then(function (response) {
+            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(response)).then(function (hash) {
+                ByteUtils.zeroBuffer(response);
+                return hash;
             });
         });
+    });
 };
 
 /**
  * Creates random keyfile
  * @returns {Uint8Array}
  */
-KdbxCredentials.createRandomKeyFile = function() {
+KdbxCredentials.createRandomKeyFile = function () {
     var keyLength = 32;
     var keyBytes = Random.getBytes(keyLength),
         salt = Random.getBytes(keyLength);
     for (var i = 0; i < keyLength; i++) {
         keyBytes[i] ^= salt[i];
-        keyBytes[i] ^= (Math.random() * 1000 % 255);
+        keyBytes[i] ^= (Math.random() * 1000) % 255;
     }
     var key = ByteUtils.bytesToBase64(keyBytes);
     return KdbxCredentials.createKeyFileWithHash(key);
@@ -3952,14 +4091,17 @@ KdbxCredentials.createRandomKeyFile = function() {
  * @param {string} hash base64-encoded hash
  * @returns {Uint8Array}
  */
-KdbxCredentials.createKeyFileWithHash = function(hash) {
-    var xml = '<?xml version="1.0" encoding="utf-8"?>\n' +
+KdbxCredentials.createKeyFileWithHash = function (hash) {
+    var xml =
+        '<?xml version="1.0" encoding="utf-8"?>\n' +
         '<KeyFile>\n' +
         '    <Meta>\n' +
         '        <Version>1.00</Version>\n' +
         '    </Meta>\n' +
         '    <Key>\n' +
-        '       <Data>' + hash + '</Data>\n' +
+        '       <Data>' +
+        hash +
+        '</Data>\n' +
         '   </Key>\n' +
         '</KeyFile>';
     return ByteUtils.stringToBytes(xml);
@@ -3988,7 +4130,7 @@ var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
  * Kdbx times
  * @constructor
  */
-var KdbxTimes = function() {
+var KdbxTimes = function () {
     this.creationTime = undefined;
     this.lastModTime = undefined;
     this.lastAccessTime = undefined;
@@ -3999,7 +4141,7 @@ var KdbxTimes = function() {
     Object.preventExtensions(this);
 };
 
-KdbxTimes.prototype._readNode = function(node) {
+KdbxTimes.prototype._readNode = function (node) {
     switch (node.tagName) {
         case XmlNames.Elem.CreationTime:
             this.creationTime = XmlUtils.getDate(node);
@@ -4029,7 +4171,7 @@ KdbxTimes.prototype._readNode = function(node) {
  * Clones object
  * @returns {KdbxTimes}
  */
-KdbxTimes.prototype.clone = function() {
+KdbxTimes.prototype.clone = function () {
     var clone = new KdbxTimes();
     clone.creationTime = this.creationTime;
     clone.lastModTime = this.lastModTime;
@@ -4041,7 +4183,7 @@ KdbxTimes.prototype.clone = function() {
     return clone;
 };
 
-KdbxTimes.prototype.update = function() {
+KdbxTimes.prototype.update = function () {
     var now = new Date();
     this.lastModTime = now;
     this.lastAccessTime = now;
@@ -4052,7 +4194,7 @@ KdbxTimes.prototype.update = function() {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxTimes.prototype.write = function(parentNode, ctx) {
+KdbxTimes.prototype.write = function (parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Times);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.CreationTime), this.creationTime);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LastModTime), this.lastModTime);
@@ -4060,14 +4202,17 @@ KdbxTimes.prototype.write = function(parentNode, ctx) {
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.ExpiryTime), this.expiryTime);
     XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.Expires), this.expires);
     XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.UsageCount), this.usageCount);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LocationChanged), this.locationChanged);
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LocationChanged),
+        this.locationChanged
+    );
 };
 
 /**
  * Creates new times
  * @return {KdbxTimes}
  */
-KdbxTimes.create = function() {
+KdbxTimes.create = function () {
     var times = new KdbxTimes();
     var now = new Date();
     times.creationTime = now;
@@ -4085,7 +4230,7 @@ KdbxTimes.create = function() {
  * @param {Node} xmlNode
  * @return {KdbxTimes}
  */
-KdbxTimes.read = function(xmlNode) {
+KdbxTimes.read = function (xmlNode) {
     var obj = new KdbxTimes();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -4116,7 +4261,7 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
     XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27);
 
@@ -4126,7 +4271,7 @@ var tagsSplitRegex = /\s*[;,:]\s*/;
  * Entry
  * @constructor
  */
-var KdbxEntry = function() {
+var KdbxEntry = function () {
     this.uuid = undefined;
     this.icon = undefined;
     this.customIcon = undefined;
@@ -4138,7 +4283,10 @@ var KdbxEntry = function() {
     this.fields = {};
     this.binaries = {};
     this.autoType = {
-        enabled: true, obfuscation: Consts.AutoTypeObfuscationOptions.None, defaultSequence: undefined, items: []
+        enabled: true,
+        obfuscation: Consts.AutoTypeObfuscationOptions.None,
+        defaultSequence: undefined,
+        items: []
     };
     this.history = [];
     this.parentGroup = undefined;
@@ -4147,7 +4295,7 @@ var KdbxEntry = function() {
     Object.preventExtensions(this);
 };
 
-KdbxEntry.prototype._readNode = function(node, ctx) {
+KdbxEntry.prototype._readNode = function (node, ctx) {
     switch (node.tagName) {
         case XmlNames.Elem.Uuid:
             this.uuid = XmlUtils.getUuid(node);
@@ -4191,7 +4339,7 @@ KdbxEntry.prototype._readNode = function(node, ctx) {
     }
 };
 
-KdbxEntry.prototype._readField = function(node) {
+KdbxEntry.prototype._readField = function (node) {
     var keyNode = XmlUtils.getChildNode(node, XmlNames.Elem.Key),
         valueNode = XmlUtils.getChildNode(node, XmlNames.Elem.Value),
         key = XmlUtils.getText(keyNode),
@@ -4201,9 +4349,9 @@ KdbxEntry.prototype._readField = function(node) {
     }
 };
 
-KdbxEntry.prototype._writeFields = function(parentNode) {
+KdbxEntry.prototype._writeFields = function (parentNode) {
     var fields = this.fields;
-    Object.keys(fields).forEach(function(field) {
+    Object.keys(fields).forEach(function (field) {
         var value = fields[field];
         if (value !== undefined && value !== null) {
             var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.String);
@@ -4213,7 +4361,7 @@ KdbxEntry.prototype._writeFields = function(parentNode) {
     });
 };
 
-KdbxEntry.prototype._readBinary = function(node, ctx) {
+KdbxEntry.prototype._readBinary = function (node, ctx) {
     var keyNode = XmlUtils.getChildNode(node, XmlNames.Elem.Key),
         valueNode = XmlUtils.getChildNode(node, XmlNames.Elem.Value),
         key = XmlUtils.getText(keyNode),
@@ -4233,9 +4381,9 @@ KdbxEntry.prototype._readBinary = function(node, ctx) {
     }
 };
 
-KdbxEntry.prototype._writeBinaries = function(parentNode, ctx) {
+KdbxEntry.prototype._writeBinaries = function (parentNode, ctx) {
     var binaries = this.binaries;
-    Object.keys(binaries).forEach(function(id) {
+    Object.keys(binaries).forEach(function (id) {
         var data = binaries[id];
         if (data) {
             if (data.ref) {
@@ -4252,14 +4400,16 @@ KdbxEntry.prototype._writeBinaries = function(parentNode, ctx) {
     });
 };
 
-KdbxEntry.prototype._stringToTags = function(str) {
+KdbxEntry.prototype._stringToTags = function (str) {
     if (!str) {
         return [];
     }
-    return str.split(tagsSplitRegex).filter(function(s) { return s; });
+    return str.split(tagsSplitRegex).filter(function (s) {
+        return s;
+    });
 };
 
-KdbxEntry.prototype._readAutoType = function(node) {
+KdbxEntry.prototype._readAutoType = function (node) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         switch (childNode.tagName) {
@@ -4270,7 +4420,8 @@ KdbxEntry.prototype._readAutoType = function(node) {
                 }
                 break;
             case XmlNames.Elem.AutoTypeObfuscation:
-                this.autoType.obfuscation = XmlUtils.getNumber(childNode) || Consts.AutoTypeObfuscationOptions.None;
+                this.autoType.obfuscation =
+                    XmlUtils.getNumber(childNode) || Consts.AutoTypeObfuscationOptions.None;
                 break;
             case XmlNames.Elem.AutoTypeDefaultSeq:
                 this.autoType.defaultSequence = XmlUtils.getText(childNode);
@@ -4282,7 +4433,7 @@ KdbxEntry.prototype._readAutoType = function(node) {
     }
 };
 
-KdbxEntry.prototype._readAutoTypeItem = function(node) {
+KdbxEntry.prototype._readAutoTypeItem = function (node) {
     var item = {};
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -4298,23 +4449,34 @@ KdbxEntry.prototype._readAutoTypeItem = function(node) {
     this.autoType.items.push(item);
 };
 
-KdbxEntry.prototype._writeAutoType = function(parentNode) {
+KdbxEntry.prototype._writeAutoType = function (parentNode) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.AutoType);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeEnabled), this.autoType.enabled);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeObfuscation),
-        this.autoType.obfuscation || Consts.AutoTypeObfuscationOptions.None);
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeEnabled),
+        this.autoType.enabled
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeObfuscation),
+        this.autoType.obfuscation || Consts.AutoTypeObfuscationOptions.None
+    );
     if (this.autoType.defaultSequence) {
-        XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeDefaultSeq), this.autoType.defaultSequence);
+        XmlUtils.setText(
+            XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeDefaultSeq),
+            this.autoType.defaultSequence
+        );
     }
     for (var i = 0; i < this.autoType.items.length; i++) {
         var item = this.autoType.items[i];
         var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.AutoTypeItem);
         XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Window), item.window);
-        XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.KeystrokeSequence), item.keystrokeSequence);
+        XmlUtils.setText(
+            XmlUtils.addChildNode(itemNode, XmlNames.Elem.KeystrokeSequence),
+            item.keystrokeSequence
+        );
     }
 };
 
-KdbxEntry.prototype._readHistory = function(node, ctx) {
+KdbxEntry.prototype._readHistory = function (node, ctx) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         switch (childNode.tagName) {
@@ -4325,26 +4487,26 @@ KdbxEntry.prototype._readHistory = function(node, ctx) {
     }
 };
 
-KdbxEntry.prototype._writeHistory = function(parentNode, ctx) {
+KdbxEntry.prototype._writeHistory = function (parentNode, ctx) {
     var historyNode = XmlUtils.addChildNode(parentNode, XmlNames.Elem.History);
     for (var i = 0; i < this.history.length; i++) {
         this.history[i].write(historyNode, ctx);
     }
 };
 
-KdbxEntry.prototype._readCustomData = function(node) {
+KdbxEntry.prototype._readCustomData = function (node) {
     this.customData = KdbxCustomData.read(node);
 };
 
-KdbxEntry.prototype._writeCustomData = function(parentNode) {
+KdbxEntry.prototype._writeCustomData = function (parentNode) {
     KdbxCustomData.write(parentNode, this.customData);
 };
 
-KdbxEntry.prototype._setField = function(name, str, secure) {
+KdbxEntry.prototype._setField = function (name, str, secure) {
     this.fields[name] = secure ? ProtectedValue.fromString(str) : str;
 };
 
-KdbxEntry.prototype._addHistoryTombstone = function(isAdded, dt) {
+KdbxEntry.prototype._addHistoryTombstone = function (isAdded, dt) {
     if (!this._editState) {
         this._editState = { added: [], deleted: [] };
     }
@@ -4356,10 +4518,13 @@ KdbxEntry.prototype._addHistoryTombstone = function(isAdded, dt) {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxEntry.prototype.write = function(parentNode, ctx) {
+KdbxEntry.prototype.write = function (parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Entry);
     XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon || Consts.Icons.Key);
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.Icon),
+        this.icon || Consts.Icons.Key
+    );
     if (this.customIcon) {
         XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID), this.customIcon);
     }
@@ -4380,7 +4545,7 @@ KdbxEntry.prototype.write = function(parentNode, ctx) {
 /**
  * Push current entry state to the top of history
  */
-KdbxEntry.prototype.pushHistory = function() {
+KdbxEntry.prototype.pushHistory = function () {
     var historyEntry = new KdbxEntry();
     historyEntry.copyFrom(this);
     this.history.push(historyEntry);
@@ -4392,7 +4557,7 @@ KdbxEntry.prototype.pushHistory = function() {
  * @param {number} index - history state start index
  * @param {number} [count=1] - deleted states count
  */
-KdbxEntry.prototype.removeHistory = function(index, count) {
+KdbxEntry.prototype.removeHistory = function (index, count) {
     if (count === undefined) {
         count = 1;
     }
@@ -4407,7 +4572,7 @@ KdbxEntry.prototype.removeHistory = function(index, count) {
 /**
  * Clone entry state from another entry, or history entry
  */
-KdbxEntry.prototype.copyFrom = function(entry) {
+KdbxEntry.prototype.copyFrom = function (entry) {
     this.uuid = entry.uuid;
     this.icon = entry.icon;
     this.customIcon = entry.customIcon;
@@ -4417,7 +4582,7 @@ KdbxEntry.prototype.copyFrom = function(entry) {
     this.tags = entry.tags.slice();
     this.times = entry.times.clone();
     this.fields = {};
-    Object.keys(entry.fields).forEach(function(name) {
+    Object.keys(entry.fields).forEach(function (name) {
         if (entry.fields[name] instanceof ProtectedValue) {
             this.fields[name] = entry.fields[name].clone();
         } else {
@@ -4425,7 +4590,7 @@ KdbxEntry.prototype.copyFrom = function(entry) {
         }
     }, this);
     this.binaries = {};
-    Object.keys(entry.binaries).forEach(function(name) {
+    Object.keys(entry.binaries).forEach(function (name) {
         if (entry.binaries[name] instanceof ProtectedValue) {
             this.binaries[name] = entry.binaries[name].clone();
         } else if (entry.binaries[name] && entry.binaries[name].ref) {
@@ -4444,7 +4609,7 @@ KdbxEntry.prototype.copyFrom = function(entry) {
  * Merge entry with remote entry
  * @param {{objects, remote, deleted}} objectMap
  */
-KdbxEntry.prototype.merge = function(objectMap) {
+KdbxEntry.prototype.merge = function (objectMap) {
     var remoteEntry = objectMap.remote[this.uuid];
     if (!remoteEntry) {
         return;
@@ -4456,7 +4621,7 @@ KdbxEntry.prototype.merge = function(objectMap) {
         this.copyFrom(remoteEntry);
     } else if (this.times.lastModTime > remoteEntry.times.lastModTime) {
         // local is more new; if remote state is not in history, push it
-        var existsInHistory = this.history.some(function(historyEntry) {
+        var existsInHistory = this.history.some(function (historyEntry) {
             return +historyEntry.times.lastModTime === +remoteEntry.times.lastModTime;
         });
         if (!existsInHistory) {
@@ -4496,14 +4661,24 @@ KdbxEntry.prototype.merge = function(objectMap) {
  * @returns {KdbxEntry[]} - new history
  * @private
  */
-KdbxEntry.prototype._mergeHistory = function(remoteHistory, remoteLastModTime) {
+KdbxEntry.prototype._mergeHistory = function (remoteHistory, remoteLastModTime) {
     // we can skip sorting but the history may not have been sorted
-    this.history.sort(function(x, y) { return x.times.lastModTime - y.times.lastModTime; });
-    remoteHistory.sort(function(x, y) { return x.times.lastModTime - y.times.lastModTime; });
-    var historyMap = {}, remoteHistoryMap = {};
-    this.history.forEach(function(record) { historyMap[record.times.lastModTime.getTime()] = record; });
-    remoteHistory.forEach(function(record) { remoteHistoryMap[record.times.lastModTime.getTime()] = record; });
-    var historyIx = 0, remoteHistoryIx = 0;
+    this.history.sort(function (x, y) {
+        return x.times.lastModTime - y.times.lastModTime;
+    });
+    remoteHistory.sort(function (x, y) {
+        return x.times.lastModTime - y.times.lastModTime;
+    });
+    var historyMap = {},
+        remoteHistoryMap = {};
+    this.history.forEach(function (record) {
+        historyMap[record.times.lastModTime.getTime()] = record;
+    });
+    remoteHistory.forEach(function (record) {
+        remoteHistoryMap[record.times.lastModTime.getTime()] = record;
+    });
+    var historyIx = 0,
+        remoteHistoryIx = 0;
     var newHistory = [];
     while (historyIx < this.history.length || remoteHistoryIx < remoteHistory.length) {
         var historyEntry = this.history[historyIx],
@@ -4548,7 +4723,7 @@ KdbxEntry.prototype._mergeHistory = function(remoteHistory, remoteLastModTime) {
  * @param {KdbxGroup} parentGroup - parent group
  * @returns {KdbxEntry}
  */
-KdbxEntry.create = function(meta, parentGroup) {
+KdbxEntry.create = function (meta, parentGroup) {
     var entry = new KdbxEntry(parentGroup);
     entry.uuid = KdbxUuid.random();
     entry.icon = Consts.Icons.Key;
@@ -4559,7 +4734,8 @@ KdbxEntry.create = function(meta, parentGroup) {
     entry._setField('Password', '', meta.memoryProtection.password);
     entry._setField('URL', '', meta.memoryProtection.url);
     entry._setField('Notes', '', meta.memoryProtection.notes);
-    entry.autoType.enabled = typeof parentGroup.enableAutoType === 'boolean' ? parentGroup.enableAutoType : true;
+    entry.autoType.enabled =
+        typeof parentGroup.enableAutoType === 'boolean' ? parentGroup.enableAutoType : true;
     entry.autoType.obfuscation = Consts.AutoTypeObfuscationOptions.None;
     return entry;
 };
@@ -4571,7 +4747,7 @@ KdbxEntry.create = function(meta, parentGroup) {
  * @param {KdbxGroup} [parentGroup]
  * @return {KdbxEntry}
  */
-KdbxEntry.read = function(xmlNode, ctx, parentGroup) {
+KdbxEntry.read = function (xmlNode, ctx, parentGroup) {
     var entry = new KdbxEntry();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -4610,7 +4786,7 @@ module.exports.Credentials = __webpack_require__(/*! ./format/kdbx-credentials *
 module.exports.Consts = __webpack_require__(/*! ./defs/consts */ 1);
 module.exports.ProtectedValue = __webpack_require__(/*! ./crypto/protected-value */ 9);
 module.exports.ByteUtils = __webpack_require__(/*! ./utils/byte-utils */ 0);
-module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ 14);
+module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ 13);
 module.exports.Int64 = __webpack_require__(/*! ./utils/int64 */ 8);
 module.exports.Random = __webpack_require__(/*! ./crypto/random */ 10);
 module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 3);
@@ -4629,16 +4805,15 @@ module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 
 "use strict";
 
 
-var
-    KdbxFormat = __webpack_require__(/*! ./kdbx-format */ 31),
+var KdbxFormat = __webpack_require__(/*! ./kdbx-format */ 31),
     KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     KdbxCredentials = __webpack_require__(/*! ./kdbx-credentials */ 26),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
-    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ 49),
-    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ 50),
-    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ 51),
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 21),
+    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ 47),
+    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ 48),
+    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ 49),
     KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28),
-    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ 52),
+    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ 50),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     Consts = __webpack_require__(/*! ./../defs/consts */ 1),
     XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
@@ -4648,7 +4823,7 @@ var
  * Kdbx file (KeePass database v2)
  * @constructor
  */
-var Kdbx = function() {
+var Kdbx = function () {
     this.header = undefined;
     this.credentials = undefined;
     this.meta = undefined;
@@ -4663,7 +4838,7 @@ var Kdbx = function() {
  * Creates new database
  * @return {Kdbx}
  */
-Kdbx.create = function(credentials, name) {
+Kdbx.create = function (credentials, name) {
     if (!(credentials instanceof KdbxCredentials)) {
         throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'credentials');
     }
@@ -4686,7 +4861,7 @@ Kdbx.create = function(credentials, name) {
  * @param {KdbxCredentials} credentials
  * @return {Promise.<Kdbx>}
  */
-Kdbx.load = function(data, credentials) {
+Kdbx.load = function (data, credentials) {
     if (!(data instanceof ArrayBuffer)) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.InvalidArg, 'data'));
     }
@@ -4706,8 +4881,8 @@ Kdbx.load = function(data, credentials) {
  * @param {KdbxCredentials} credentials
  * @return {Promise.<Kdbx>}
  */
-Kdbx.loadXml = function(data, credentials) {
-    if ((typeof data !== 'string')) {
+Kdbx.loadXml = function (data, credentials) {
+    if (typeof data !== 'string') {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.InvalidArg, 'data'));
     }
     if (!(credentials instanceof KdbxCredentials)) {
@@ -4723,7 +4898,7 @@ Kdbx.loadXml = function(data, credentials) {
  * Save db to ArrayBuffer
  * @return {Promise.<ArrayBuffer>}
  */
-Kdbx.prototype.save = function() {
+Kdbx.prototype.save = function () {
     var format = new KdbxFormat(this);
     return format.save();
 };
@@ -4733,7 +4908,7 @@ Kdbx.prototype.save = function() {
  * @param {boolean} [prettyPrint=false] - pretty print XML
  * @return {Promise.<String>}
  */
-Kdbx.prototype.saveXml = function(prettyPrint) {
+Kdbx.prototype.saveXml = function (prettyPrint) {
     var format = new KdbxFormat(this);
     return format.saveXml(prettyPrint);
 };
@@ -4741,7 +4916,7 @@ Kdbx.prototype.saveXml = function(prettyPrint) {
 /**
  * Creates default group, if it's not yet created
  */
-Kdbx.prototype.createDefaultGroup = function() {
+Kdbx.prototype.createDefaultGroup = function () {
     if (this.groups.length) {
         return;
     }
@@ -4754,7 +4929,7 @@ Kdbx.prototype.createDefaultGroup = function() {
 /**
  * Creates recycle bin, if it's not yet created
  */
-Kdbx.prototype.createRecycleBin = function() {
+Kdbx.prototype.createRecycleBin = function () {
     this.meta.recycleBinEnabled = true;
     if (this.meta.recycleBinUuid && this.getGroup(this.meta.recycleBinUuid)) {
         return;
@@ -4774,7 +4949,7 @@ Kdbx.prototype.createRecycleBin = function() {
  * @param {KdbxGroup} group - parent group
  * @return {KdbxGroup}
  */
-Kdbx.prototype.createGroup = function(group, name) {
+Kdbx.prototype.createGroup = function (group, name) {
     var subGroup = KdbxGroup.create(name, group);
     group.groups.push(subGroup);
     return subGroup;
@@ -4785,7 +4960,7 @@ Kdbx.prototype.createGroup = function(group, name) {
  * @param {KdbxGroup} group - parent group
  * @return {KdbxEntry}
  */
-Kdbx.prototype.createEntry = function(group) {
+Kdbx.prototype.createEntry = function (group) {
     var entry = KdbxEntry.create(this.meta, group);
     group.entries.push(entry);
     return entry;
@@ -4795,7 +4970,7 @@ Kdbx.prototype.createEntry = function(group) {
  * Gets default group
  * @return {KdbxGroup}
  */
-Kdbx.prototype.getDefaultGroup = function() {
+Kdbx.prototype.getDefaultGroup = function () {
     return this.groups[0];
 };
 
@@ -4805,7 +4980,7 @@ Kdbx.prototype.getDefaultGroup = function() {
  * @param {KdbxGroup} [parentGroup]
  * @return {KdbxGroup|undefined}
  */
-Kdbx.prototype.getGroup = function(uuid, parentGroup) {
+Kdbx.prototype.getGroup = function (uuid, parentGroup) {
     var groups = parentGroup ? parentGroup.groups : this.groups;
     for (var i = 0; i < groups.length; i++) {
         if (groups[i].uuid.id === uuid.id) {
@@ -4824,7 +4999,7 @@ Kdbx.prototype.getGroup = function(uuid, parentGroup) {
  * @param {KdbxGroup} toGroup - target parent group
  * @param {Number} [atIndex] - index in target group (by default, insert to the end of the group)
  */
-Kdbx.prototype.move = function(object, toGroup, atIndex) {
+Kdbx.prototype.move = function (object, toGroup, atIndex) {
     var containerProp = object instanceof KdbxGroup ? 'groups' : 'entries';
     var fromContainer = object.parentGroup[containerProp];
     var ix = fromContainer.indexOf(object);
@@ -4857,7 +5032,7 @@ Kdbx.prototype.move = function(object, toGroup, atIndex) {
  * @param {KdbxUuid} uuid - object uuid
  * @param {Date} dt - deletion date
  */
-Kdbx.prototype.addDeletedObject = function(uuid, dt) {
+Kdbx.prototype.addDeletedObject = function (uuid, dt) {
     var deletedObject = new KdbxDeletedObject();
     deletedObject.uuid = uuid;
     deletedObject.deletionTime = dt;
@@ -4869,7 +5044,7 @@ Kdbx.prototype.addDeletedObject = function(uuid, dt) {
  * Depending on settings, removes either to trash, or completely
  * @param {KdbxEntry|KdbxGroup} object - object to be deleted
  */
-Kdbx.prototype.remove = function(object) {
+Kdbx.prototype.remove = function (object) {
     var toGroup = null;
     if (this.meta.recycleBinEnabled) {
         this.createRecycleBin();
@@ -4883,7 +5058,7 @@ Kdbx.prototype.remove = function(object) {
  * @param {ProtectedValue|ArrayBuffer} value
  * @return {Promise}
  */
-Kdbx.prototype.createBinary = function(value) {
+Kdbx.prototype.createBinary = function (value) {
     return this.binaries.add(value);
 };
 
@@ -4894,13 +5069,13 @@ Kdbx.prototype.createBinary = function(value) {
  * @param {KdbxGroup} group - target parent group
  * @param {Kdbx} file - the source file containing the group
  */
-Kdbx.prototype.importEntry = function(entry, group, file) {
+Kdbx.prototype.importEntry = function (entry, group, file) {
     var newEntry = new KdbxEntry();
     var uuid = KdbxUuid.random();
 
     newEntry.copyFrom(entry);
     newEntry.uuid = uuid;
-    entry.history.forEach(function(historyEntry) {
+    entry.history.forEach(function (historyEntry) {
         var newHistoryEntry = new KdbxEntry();
         newHistoryEntry.copyFrom(historyEntry);
         newHistoryEntry.uuid = uuid;
@@ -4909,25 +5084,25 @@ Kdbx.prototype.importEntry = function(entry, group, file) {
 
     var binaries = {};
     var customIcons = {};
-    newEntry.history.concat(newEntry).forEach(function(e) {
+    newEntry.history.concat(newEntry).forEach(function (e) {
         if (e.customIcon) {
             customIcons[e.customIcon] = e.customIcon;
         }
-        Object.values(e.binaries).forEach(function(binary) {
+        Object.values(e.binaries).forEach(function (binary) {
             if (binary.ref) {
                 binaries[binary.ref] = binary;
             }
         });
     });
 
-    Object.values(binaries).forEach(function(binary) {
+    Object.values(binaries).forEach(function (binary) {
         var fileBinary = file.binaries[binary.ref];
         if (fileBinary && !this.binaries[binary.ref]) {
             this.binaries[binary.ref] = fileBinary;
         }
     }, this);
 
-    Object.values(customIcons).forEach(function(customIconId) {
+    Object.values(customIcons).forEach(function (customIconId) {
         var customIcon = file.meta.customIcons[customIconId];
         if (customIcon) {
             this.meta.customIcons[customIconId] = customIcon;
@@ -4949,20 +5124,23 @@ Kdbx.prototype.importEntry = function(entry, group, file) {
  * @param {boolean} [settings.customIcons=false] - remove unused custom icons
  * @param {boolean} [settings.binaries=false] - remove unused binaries
  */
-Kdbx.prototype.cleanup = function(settings) {
+Kdbx.prototype.cleanup = function (settings) {
     var now = new Date();
-    var historyMaxItems = settings && settings.historyRules &&
+    var historyMaxItems =
+        settings &&
+        settings.historyRules &&
         typeof this.meta.historyMaxItems === 'number' &&
-        this.meta.historyMaxItems >= 0 ?
-            this.meta.historyMaxItems : Infinity;
+        this.meta.historyMaxItems >= 0
+            ? this.meta.historyMaxItems
+            : Infinity;
     var usedCustomIcons = {};
     var usedBinaries = {};
-    var processEntry = function(entry) {
+    var processEntry = function (entry) {
         if (entry && entry.customIcon) {
             usedCustomIcons[entry.customIcon] = true;
         }
         if (entry && entry.binaries) {
-            Object.keys(entry.binaries).forEach(function(key) {
+            Object.keys(entry.binaries).forEach(function (key) {
                 if (entry.binaries[key] && entry.binaries[key].ref) {
                     usedBinaries[entry.binaries[key].ref] = true;
                 }
@@ -4977,7 +5155,7 @@ Kdbx.prototype.cleanup = function(settings) {
             processEntry(entry);
         }
         if (entry && entry.history) {
-            entry.history.forEach(function(historyEntry) {
+            entry.history.forEach(function (historyEntry) {
                 processEntry(historyEntry);
             });
         }
@@ -4986,7 +5164,7 @@ Kdbx.prototype.cleanup = function(settings) {
         }
     });
     if (settings && settings.customIcons) {
-        Object.keys(this.meta.customIcons).forEach(function(customIcon) {
+        Object.keys(this.meta.customIcons).forEach(function (customIcon) {
             if (!usedCustomIcons[customIcon]) {
                 var uuid = new KdbxUuid(customIcon);
                 this.addDeletedObject(uuid, now);
@@ -4995,7 +5173,7 @@ Kdbx.prototype.cleanup = function(settings) {
         }, this);
     }
     if (settings && settings.binaries) {
-        Object.keys(this.binaries).forEach(function(bin) {
+        Object.keys(this.binaries).forEach(function (bin) {
             if (!usedBinaries[bin]) {
                 delete this.binaries[bin];
             }
@@ -5013,7 +5191,7 @@ Kdbx.prototype.cleanup = function(settings) {
  * - close remote db
  * @param {Kdbx} remote - database to merge in
  */
-Kdbx.prototype.merge = function(remote) {
+Kdbx.prototype.merge = function (remote) {
     var root = this.getDefaultGroup();
     var remoteRoot = remote.getDefaultGroup();
     if (!root || !remoteRoot) {
@@ -5023,13 +5201,13 @@ Kdbx.prototype.merge = function(remote) {
         throw new KdbxError(Consts.ErrorCodes.MergeError, 'default group is different');
     }
     var objectMap = this._getObjectMap();
-    remote.deletedObjects.forEach(function(rem) {
+    remote.deletedObjects.forEach(function (rem) {
         if (!objectMap.deleted[rem.uuid]) {
             this.deletedObjects.push(rem);
             objectMap.deleted[rem.uuid] = rem.deletionTime;
         }
     }, this);
-    Object.keys(remote.binaries).forEach(function(key) {
+    Object.keys(remote.binaries).forEach(function (key) {
         if (!this.binaries[key] && !objectMap.deleted[key]) {
             this.binaries[key] = remote.binaries[key];
         }
@@ -5045,9 +5223,9 @@ Kdbx.prototype.merge = function(remote) {
  * Replica must save this state with the db, assign in on db open and call removeLocalEditState on successful upstream push
  * This state is JSON serializable
  */
-Kdbx.prototype.getLocalEditState = function() {
+Kdbx.prototype.getLocalEditState = function () {
     var editingState = {};
-    this.getDefaultGroup().forEach(function(entry) {
+    this.getDefaultGroup().forEach(function (entry) {
         if (entry && entry._editState) {
             editingState[entry.uuid] = entry._editState;
         }
@@ -5063,8 +5241,8 @@ Kdbx.prototype.getLocalEditState = function() {
  * Replica must call this method on db open with state returned previously on getLocalEditState
  * @param editingState - result of getLocalEditState invoked before db save
  */
-Kdbx.prototype.setLocalEditState = function(editingState) {
-    this.getDefaultGroup().forEach(function(entry) {
+Kdbx.prototype.setLocalEditState = function (editingState) {
+    this.getDefaultGroup().forEach(function (entry) {
         if (entry && editingState[entry.uuid]) {
             entry._editState = editingState[entry.uuid];
         }
@@ -5080,8 +5258,8 @@ Kdbx.prototype.setLocalEditState = function(editingState) {
  * - call this method
  * - discard previous state obtained by getLocalEditState call
  */
-Kdbx.prototype.removeLocalEditState = function() {
-    this.getDefaultGroup().forEach(function(entry) {
+Kdbx.prototype.removeLocalEditState = function () {
+    this.getDefaultGroup().forEach(function (entry) {
         if (entry) {
             entry._editState = undefined;
         }
@@ -5092,7 +5270,7 @@ Kdbx.prototype.removeLocalEditState = function() {
 /**
  * Upgrade the file to latest version
  */
-Kdbx.prototype.upgrade = function() {
+Kdbx.prototype.upgrade = function () {
     this.setVersion(KdbxHeader.MaxFileVersion);
 };
 
@@ -5100,7 +5278,7 @@ Kdbx.prototype.upgrade = function() {
  * Set file version to a specified number
  * @param {Number} version - 3 or 4
  */
-Kdbx.prototype.setVersion = function(version) {
+Kdbx.prototype.setVersion = function (version) {
     this.meta.headerHash = null;
     this.meta.settingsChanged = new Date();
     this.header.setVersion(version);
@@ -5110,46 +5288,47 @@ Kdbx.prototype.setVersion = function(version) {
  * Set file key derivation function
  * @param {String} kdf - KDF id, from Consts.KdfId
  */
-Kdbx.prototype.setKdf = function(kdf) {
+Kdbx.prototype.setKdf = function (kdf) {
     this.meta.headerHash = null;
     this.meta.settingsChanged = new Date();
     this.header.setKdf(kdf);
 };
 
-Kdbx.prototype._getObjectMap = function() {
-    var objects = {}, deleted = {};
-    this.getDefaultGroup().forEach(function(entry, group) {
+Kdbx.prototype._getObjectMap = function () {
+    var objects = {},
+        deleted = {};
+    this.getDefaultGroup().forEach(function (entry, group) {
         var object = entry || group;
         if (objects[object.uuid]) {
             throw new KdbxError(Consts.ErrorCodes.MergeError, 'Duplicate: ' + object.uuid);
         }
         objects[object.uuid] = object;
     });
-    this.deletedObjects.forEach(function(deletedObject) {
+    this.deletedObjects.forEach(function (deletedObject) {
         deleted[deletedObject.uuid] = deletedObject.deletionTime;
     });
     return { objects: objects, deleted: deleted };
 };
 
-Kdbx.prototype._loadFromXml = function(ctx) {
+Kdbx.prototype._loadFromXml = function (ctx) {
     var doc = this.xml.documentElement;
     if (doc.tagName !== XmlNames.Elem.DocNode) {
         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml root');
     }
     this._parseMeta(ctx);
     var that = this;
-    return this.binaries.hash().then(function() {
+    return this.binaries.hash().then(function () {
         that._parseRoot(ctx);
         return that;
     });
 };
 
-Kdbx.prototype._parseMeta = function(ctx) {
+Kdbx.prototype._parseMeta = function (ctx) {
     var node = XmlUtils.getChildNode(this.xml.documentElement, XmlNames.Elem.Meta, 'no meta node');
     this.meta = KdbxMeta.read(node, ctx);
 };
 
-Kdbx.prototype._parseRoot = function(ctx) {
+Kdbx.prototype._parseRoot = function (ctx) {
     this.groups = [];
     this.deletedObjects = [];
     var node = XmlUtils.getChildNode(this.xml.documentElement, XmlNames.Elem.Root, 'no root node');
@@ -5166,7 +5345,7 @@ Kdbx.prototype._parseRoot = function(ctx) {
     }
 };
 
-Kdbx.prototype._readDeletedObjects = function(node) {
+Kdbx.prototype._readDeletedObjects = function (node) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         switch (childNode.tagName) {
@@ -5177,17 +5356,21 @@ Kdbx.prototype._readDeletedObjects = function(node) {
     }
 };
 
-Kdbx.prototype._readGroup = function(node, ctx) {
+Kdbx.prototype._readGroup = function (node, ctx) {
     this.groups.push(KdbxGroup.read(node, ctx));
 };
 
-Kdbx.prototype._buildXml = function(ctx) {
+Kdbx.prototype._buildXml = function (ctx) {
     var xml = XmlUtils.create(XmlNames.Elem.DocNode);
     this.meta.write(xml.documentElement, ctx);
     var rootNode = XmlUtils.addChildNode(xml.documentElement, XmlNames.Elem.Root);
-    this.groups.forEach(function(g) { g.write(rootNode, ctx); }, this);
+    this.groups.forEach(function (g) {
+        g.write(rootNode, ctx);
+    }, this);
     var delObjNode = XmlUtils.addChildNode(rootNode, XmlNames.Elem.DeletedObjects);
-    this.deletedObjects.forEach(function (d) { d.write(delObjNode, ctx); }, this);
+    this.deletedObjects.forEach(function (d) {
+        d.write(delObjNode, ctx);
+    }, this);
     this.xml = xml;
 };
 
@@ -5207,25 +5390,23 @@ module.exports = Kdbx;
 "use strict";
 
 
-var pako = __webpack_require__(/*! pako */ 16),
-
+var pako = __webpack_require__(/*! pako */ 15),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
-    KdbxContext = __webpack_require__(/*! ./kdbx-context */ 43),
-
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 21),
+    KdbxContext = __webpack_require__(/*! ./kdbx-context */ 41),
     CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
     BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ 11),
     ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
     XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4),
     Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ 45),
-    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ 46),
-    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ 47),
+    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ 43),
+    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ 44),
+    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ 45),
     KeyEncryptorAes = __webpack_require__(/*! ../crypto/key-encryptor-aes */ 25),
-    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ 48);
+    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ 46);
 
-var KdbxFormat = function(kdbx) {
+var KdbxFormat = function (kdbx) {
     this.kdbx = kdbx;
 };
 
@@ -5235,30 +5416,33 @@ var KdbxFormat = function(kdbx) {
  * @param {ArrayBuffer} data - database file contents
  * @returns {Promise.<Kdbx>}
  */
-KdbxFormat.prototype.load = function(data) {
+KdbxFormat.prototype.load = function (data) {
     var stm = new BinaryStream(data);
     var kdbx = this.kdbx;
     var that = this;
     that.ctx = new KdbxContext({ kdbx: kdbx });
-    return kdbx.credentials.ready.then(function() {
+    return kdbx.credentials.ready.then(function () {
         kdbx.header = KdbxHeader.read(stm, that.ctx);
         if (kdbx.header.versionMajor === 3) {
             return that._loadV3(stm);
         } else if (kdbx.header.versionMajor === 4) {
             return that._loadV4(stm);
         } else {
-            throw new KdbxError(Consts.ErrorCodes.InvalidVersion, 'bad version: ' + kdbx.header.versionMajor);
+            throw new KdbxError(
+                Consts.ErrorCodes.InvalidVersion,
+                'bad version: ' + kdbx.header.versionMajor
+            );
         }
     });
 };
 
-KdbxFormat.prototype._loadV3 = function(stm) {
+KdbxFormat.prototype._loadV3 = function (stm) {
     var kdbx = this.kdbx;
     var that = this;
-    return that._decryptXmlV3(kdbx, stm).then(function(xmlStr) {
+    return that._decryptXmlV3(kdbx, stm).then(function (xmlStr) {
         kdbx.xml = XmlUtils.parse(xmlStr);
-        return that._setProtectedValues().then(function() {
-            return kdbx._loadFromXml(that.ctx).then(function() {
+        return that._setProtectedValues().then(function () {
+            return kdbx._loadFromXml(that.ctx).then(function () {
                 return that._checkHeaderHashV3(stm).then(function () {
                     return kdbx;
                 });
@@ -5267,36 +5451,38 @@ KdbxFormat.prototype._loadV3 = function(stm) {
     });
 };
 
-KdbxFormat.prototype._loadV4 = function(stm) {
+KdbxFormat.prototype._loadV4 = function (stm) {
     var that = this;
-    return that._getHeaderHash(stm).then(function(headerSha) {
+    return that._getHeaderHash(stm).then(function (headerSha) {
         var expectedHeaderSha = stm.readBytes(headerSha.byteLength);
         if (!ByteUtils.arrayBufferEquals(expectedHeaderSha, headerSha)) {
             throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
         }
-        return that._computeKeysV4().then(function(keys) {
-            return that._getHeaderHmac(stm, keys.hmacKey).then(function(headerHmac) {
+        return that._computeKeysV4().then(function (keys) {
+            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
                 var expectedHeaderHmac = stm.readBytes(headerHmac.byteLength);
                 if (!ByteUtils.arrayBufferEquals(expectedHeaderHmac, headerHmac)) {
                     throw new KdbxError(Consts.ErrorCodes.InvalidKey);
                 }
-                return HmacBlockTransform.decrypt(stm.readBytesToEnd(), keys.hmacKey).then(function(data) {
-                    ByteUtils.zeroBuffer(keys.hmacKey);
-                    return that._decryptData(data, keys.cipherKey).then(function(data) {
-                        ByteUtils.zeroBuffer(keys.cipherKey);
-                        if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
-                            data = pako.ungzip(data);
-                        }
-                        stm = new BinaryStream(ByteUtils.arrayToBuffer(data));
-                        that.kdbx.header.readInnerHeader(stm, that.ctx);
-                        data = stm.readBytesToEnd();
-                        var xmlStr = ByteUtils.bytesToString(data);
-                        that.kdbx.xml = XmlUtils.parse(xmlStr);
-                        return that._setProtectedValues().then(function() {
-                            return that.kdbx._loadFromXml(that.ctx);
+                return HmacBlockTransform.decrypt(stm.readBytesToEnd(), keys.hmacKey).then(
+                    function (data) {
+                        ByteUtils.zeroBuffer(keys.hmacKey);
+                        return that._decryptData(data, keys.cipherKey).then(function (data) {
+                            ByteUtils.zeroBuffer(keys.cipherKey);
+                            if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
+                                data = pako.ungzip(data);
+                            }
+                            stm = new BinaryStream(ByteUtils.arrayToBuffer(data));
+                            that.kdbx.header.readInnerHeader(stm, that.ctx);
+                            data = stm.readBytesToEnd();
+                            var xmlStr = ByteUtils.bytesToString(data);
+                            that.kdbx.xml = XmlUtils.parse(xmlStr);
+                            return that._setProtectedValues().then(function () {
+                                return that.kdbx._loadFromXml(that.ctx);
+                            });
                         });
-                    });
-                });
+                    }
+                );
             });
         });
     });
@@ -5307,10 +5493,10 @@ KdbxFormat.prototype._loadV4 = function(stm) {
  * @param {string} xmlStr
  * @returns {Promise.<Kdbx>}
  */
-KdbxFormat.prototype.loadXml = function(xmlStr) {
+KdbxFormat.prototype.loadXml = function (xmlStr) {
     var kdbx = this.kdbx;
     var ctx = new KdbxContext({ kdbx: kdbx });
-    return kdbx.credentials.ready.then(function() {
+    return kdbx.credentials.ready.then(function () {
         kdbx.header = KdbxHeader.create();
         kdbx.xml = XmlUtils.parse(xmlStr);
         XmlUtils.protectPlainValues(kdbx.xml.documentElement);
@@ -5322,12 +5508,12 @@ KdbxFormat.prototype.loadXml = function(xmlStr) {
  * Save kdbx file
  * @returns {Promise.<ArrayBuffer>}
  */
-KdbxFormat.prototype.save = function() {
+KdbxFormat.prototype.save = function () {
     var kdbx = this.kdbx;
     var that = this;
     that.ctx = new KdbxContext({ kdbx: kdbx });
     kdbx.binaries.assignIds();
-    return kdbx.credentials.ready.then(function() {
+    return kdbx.credentials.ready.then(function () {
         var stm = new BinaryStream();
         kdbx.header.generateSalts();
         kdbx.header.write(stm);
@@ -5336,19 +5522,22 @@ KdbxFormat.prototype.save = function() {
         } else if (kdbx.header.versionMajor === 4) {
             return that._saveV4(stm);
         } else {
-            throw new KdbxError(Consts.ErrorCodes.InvalidVersion, 'bad version: ' + kdbx.header.versionMajor);
+            throw new KdbxError(
+                Consts.ErrorCodes.InvalidVersion,
+                'bad version: ' + kdbx.header.versionMajor
+            );
         }
     });
 };
 
-KdbxFormat.prototype._saveV3 = function(stm) {
+KdbxFormat.prototype._saveV3 = function (stm) {
     var that = this;
-    return that._getHeaderHash(stm).then(function(headerHash) {
+    return that._getHeaderHash(stm).then(function (headerHash) {
         that.kdbx.meta.headerHash = headerHash;
         that.kdbx._buildXml(that.ctx);
-        return that._getProtectSaltGenerator().then(function(gen) {
+        return that._getProtectSaltGenerator().then(function (gen) {
             XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
-            return that._encryptXmlV3().then(function(data) {
+            return that._encryptXmlV3().then(function (data) {
                 stm.writeBytes(data);
                 return stm.getWrittenBytes();
             });
@@ -5356,15 +5545,15 @@ KdbxFormat.prototype._saveV3 = function(stm) {
     });
 };
 
-KdbxFormat.prototype._saveV4 = function(stm) {
+KdbxFormat.prototype._saveV4 = function (stm) {
     var that = this;
     that.kdbx._buildXml(that.ctx);
-    return that._getHeaderHash(stm).then(function(headerSha) {
+    return that._getHeaderHash(stm).then(function (headerSha) {
         stm.writeBytes(headerSha);
-        return that._computeKeysV4().then(function(keys) {
-            return that._getHeaderHmac(stm, keys.hmacKey).then(function(headerHmac) {
+        return that._computeKeysV4().then(function (keys) {
+            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
                 stm.writeBytes(headerHmac);
-                return that._getProtectSaltGenerator().then(function(gen) {
+                return that._getProtectSaltGenerator().then(function (gen) {
                     XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
                     var xml = XmlUtils.serialize(that.kdbx.xml);
                     var innerHeaderStm = new BinaryStream();
@@ -5380,23 +5569,27 @@ KdbxFormat.prototype._saveV4 = function(stm) {
                     if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
                         data = pako.gzip(data);
                     }
-                    return that._encryptData(ByteUtils.arrayToBuffer(data), keys.cipherKey).then(function(data) {
-                        ByteUtils.zeroBuffer(keys.cipherKey);
-                        return HmacBlockTransform.encrypt(data, keys.hmacKey).then(function(data) {
-                            ByteUtils.zeroBuffer(keys.hmacKey);
-                            stm.writeBytes(data);
-                            return stm.getWrittenBytes();
+                    return that
+                        ._encryptData(ByteUtils.arrayToBuffer(data), keys.cipherKey)
+                        .then(function (data) {
+                            ByteUtils.zeroBuffer(keys.cipherKey);
+                            return HmacBlockTransform.encrypt(data, keys.hmacKey).then(function (
+                                data
+                            ) {
+                                ByteUtils.zeroBuffer(keys.hmacKey);
+                                stm.writeBytes(data);
+                                return stm.getWrittenBytes();
+                            });
                         });
-                    });
                 });
             });
         });
     });
 };
 
-KdbxFormat.prototype.saveXml = function(prettyPrint) {
+KdbxFormat.prototype.saveXml = function (prettyPrint) {
     var kdbx = this.kdbx;
-    return kdbx.credentials.ready.then(function() {
+    return kdbx.credentials.ready.then(function () {
         kdbx.header.generateSalts();
         var ctx = new KdbxContext({ kdbx: kdbx, exportXml: true });
         kdbx.binaries.assignIds();
@@ -5408,14 +5601,14 @@ KdbxFormat.prototype.saveXml = function(prettyPrint) {
     });
 };
 
-KdbxFormat.prototype._decryptXmlV3 = function(kdbx, stm) {
+KdbxFormat.prototype._decryptXmlV3 = function (kdbx, stm) {
     var data = stm.readBytesToEnd();
     var that = this;
-    return that._getMasterKeyV3().then(function(masterKey) {
-        return that._decryptData(data, masterKey).then(function(data) {
+    return that._getMasterKeyV3().then(function (masterKey) {
+        return that._decryptData(data, masterKey).then(function (data) {
             ByteUtils.zeroBuffer(masterKey);
             data = that._trimStartBytesV3(data);
-            return HashedBlockTransform.decrypt(data).then(function(data) {
+            return HashedBlockTransform.decrypt(data).then(function (data) {
                 if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
                     data = pako.ungzip(data);
                 }
@@ -5425,7 +5618,7 @@ KdbxFormat.prototype._decryptXmlV3 = function(kdbx, stm) {
     });
 };
 
-KdbxFormat.prototype._encryptXmlV3 = function() {
+KdbxFormat.prototype._encryptXmlV3 = function () {
     var kdbx = this.kdbx;
     var that = this;
     var xml = XmlUtils.serialize(kdbx.xml);
@@ -5433,36 +5626,44 @@ KdbxFormat.prototype._encryptXmlV3 = function() {
     if (kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
         data = pako.gzip(data);
     }
-    return HashedBlockTransform.encrypt(ByteUtils.arrayToBuffer(data)).then(function(data) {
+    return HashedBlockTransform.encrypt(ByteUtils.arrayToBuffer(data)).then(function (data) {
         var ssb = new Uint8Array(kdbx.header.streamStartBytes);
         var newData = new Uint8Array(data.byteLength + ssb.length);
         newData.set(ssb);
         newData.set(new Uint8Array(data), ssb.length);
         data = newData;
-        return that._getMasterKeyV3().then(function(masterKey) {
-            return that._encryptData(ByteUtils.arrayToBuffer(data), masterKey).then(function(data) {
-                ByteUtils.zeroBuffer(masterKey);
-                return data;
-            });
+        return that._getMasterKeyV3().then(function (masterKey) {
+            return that
+                ._encryptData(ByteUtils.arrayToBuffer(data), masterKey)
+                .then(function (data) {
+                    ByteUtils.zeroBuffer(masterKey);
+                    return data;
+                });
         });
     });
 };
 
-KdbxFormat.prototype._getMasterKeyV3 = function() {
+KdbxFormat.prototype._getMasterKeyV3 = function () {
     var kdbx = this.kdbx;
-    return kdbx.credentials.getHash().then(function(credHash) {
+    return kdbx.credentials.getHash().then(function (credHash) {
         var transformSeed = kdbx.header.transformSeed;
         var transformRounds = kdbx.header.keyEncryptionRounds;
         var masterSeed = kdbx.header.masterSeed;
 
-        return kdbx.credentials.getChallengeResponse(masterSeed).then(function(chalResp)  {
-            return KeyEncryptorAes.encrypt(new Uint8Array(credHash), transformSeed, transformRounds).then(function(encKey) {
+        return kdbx.credentials.getChallengeResponse(masterSeed).then(function (chalResp) {
+            return KeyEncryptorAes.encrypt(
+                new Uint8Array(credHash),
+                transformSeed,
+                transformRounds
+            ).then(function (encKey) {
                 ByteUtils.zeroBuffer(credHash);
-                return CryptoEngine.sha256(encKey).then(function(keyHash) {
+                return CryptoEngine.sha256(encKey).then(function (keyHash) {
                     ByteUtils.zeroBuffer(encKey);
 
                     var chalRespLength = chalResp ? chalResp.byteLength : 0;
-                    var all = new Uint8Array(masterSeed.byteLength + keyHash.byteLength + chalRespLength);
+                    var all = new Uint8Array(
+                        masterSeed.byteLength + keyHash.byteLength + chalRespLength
+                    );
                     all.set(new Uint8Array(masterSeed), 0);
                     if (chalResp) {
                         all.set(new Uint8Array(chalResp), masterSeed.byteLength);
@@ -5475,7 +5676,7 @@ KdbxFormat.prototype._getMasterKeyV3 = function() {
                         ByteUtils.zeroBuffer(chalResp);
                     }
 
-                    return CryptoEngine.sha256(all.buffer).then(function(masterKey) {
+                    return CryptoEngine.sha256(all.buffer).then(function (masterKey) {
                         ByteUtils.zeroBuffer(all.buffer);
                         return masterKey;
                     });
@@ -5485,44 +5686,54 @@ KdbxFormat.prototype._getMasterKeyV3 = function() {
     });
 };
 
-KdbxFormat.prototype._trimStartBytesV3 = function(data) {
+KdbxFormat.prototype._trimStartBytesV3 = function (data) {
     var ssb = this.kdbx.header.streamStartBytes;
     if (data.byteLength < ssb.byteLength) {
         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'short start bytes');
     }
-    if (!ByteUtils.arrayBufferEquals(data.slice(0, this.kdbx.header.streamStartBytes.byteLength), ssb)) {
+    if (
+        !ByteUtils.arrayBufferEquals(
+            data.slice(0, this.kdbx.header.streamStartBytes.byteLength),
+            ssb
+        )
+    ) {
         throw new KdbxError(Consts.ErrorCodes.InvalidKey);
     }
     return data.slice(ssb.byteLength);
 };
 
-KdbxFormat.prototype._setProtectedValues = function() {
+KdbxFormat.prototype._setProtectedValues = function () {
     var kdbx = this.kdbx;
-    return this._getProtectSaltGenerator().then(function(gen) {
+    return this._getProtectSaltGenerator().then(function (gen) {
         XmlUtils.setProtectedValues(kdbx.xml.documentElement, gen);
     });
 };
 
-KdbxFormat.prototype._getProtectSaltGenerator = function() {
-    return ProtectSaltGenerator.create(this.kdbx.header.protectedStreamKey, this.kdbx.header.crsAlgorithm);
+KdbxFormat.prototype._getProtectSaltGenerator = function () {
+    return ProtectSaltGenerator.create(
+        this.kdbx.header.protectedStreamKey,
+        this.kdbx.header.crsAlgorithm
+    );
 };
 
-KdbxFormat.prototype._getHeaderHash = function(stm) {
+KdbxFormat.prototype._getHeaderHash = function (stm) {
     var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
     return CryptoEngine.sha256(src);
 };
 
-KdbxFormat.prototype._getHeaderHmac = function(stm, key) {
+KdbxFormat.prototype._getHeaderHmac = function (stm, key) {
     var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
-    return HmacBlockTransform.getHmacKey(key, new Int64(0xffffffff, 0xffffffff)).then(function(keySha) {
+    return HmacBlockTransform.getHmacKey(key, new Int64(0xffffffff, 0xffffffff)).then(function (
+        keySha
+    ) {
         return CryptoEngine.hmacSha256(keySha, src);
     });
 };
 
-KdbxFormat.prototype._checkHeaderHashV3 = function(stm) {
+KdbxFormat.prototype._checkHeaderHashV3 = function (stm) {
     if (this.kdbx.meta.headerHash) {
         var metaHash = this.kdbx.meta.headerHash;
-        return this._getHeaderHash(stm).then(function(actualHash) {
+        return this._getHeaderHash(stm).then(function (actualHash) {
             if (!ByteUtils.arrayBufferEquals(metaHash, actualHash)) {
                 throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
             }
@@ -5532,7 +5743,7 @@ KdbxFormat.prototype._checkHeaderHashV3 = function(stm) {
     }
 };
 
-KdbxFormat.prototype._computeKeysV4 = function() {
+KdbxFormat.prototype._computeKeysV4 = function () {
     var that = this;
     var masterSeed = that.kdbx.header.masterSeed;
     if (!masterSeed || masterSeed.byteLength !== 32) {
@@ -5540,11 +5751,13 @@ KdbxFormat.prototype._computeKeysV4 = function() {
     }
     var kdfParams = that.kdbx.header.kdfParameters;
     var kdfSalt = kdfParams.get('S');
-    return that.kdbx.credentials.getHash(kdfSalt).then(function(credHash) {
+    return that.kdbx.credentials.getHash(kdfSalt).then(function (credHash) {
         return KeyEncryptorKdf.encrypt(credHash, kdfParams).then(function (encKey) {
             ByteUtils.zeroBuffer(credHash);
             if (!encKey || encKey.byteLength !== 32) {
-                return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'bad derived key'));
+                return Promise.reject(
+                    new KdbxError(Consts.ErrorCodes.Unsupported, 'bad derived key')
+                );
             }
             var keyWithSeed = new Uint8Array(65);
             keyWithSeed.set(new Uint8Array(masterSeed), 0);
@@ -5563,7 +5776,7 @@ KdbxFormat.prototype._computeKeysV4 = function() {
     });
 };
 
-KdbxFormat.prototype._decryptData = function(data, cipherKey) {
+KdbxFormat.prototype._decryptData = function (data, cipherKey) {
     var cipherId = this.kdbx.header.dataCipherUuid;
     switch (cipherId.toString()) {
         case Consts.CipherId.Aes:
@@ -5571,11 +5784,13 @@ KdbxFormat.prototype._decryptData = function(data, cipherKey) {
         case Consts.CipherId.ChaCha20:
             return this._transformDataV4ChaCha20(data, cipherKey);
         default:
-            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher'));
+            return Promise.reject(
+                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
+            );
     }
 };
 
-KdbxFormat.prototype._encryptData = function(data, cipherKey) {
+KdbxFormat.prototype._encryptData = function (data, cipherKey) {
     var cipherId = this.kdbx.header.dataCipherUuid;
     switch (cipherId.toString()) {
         case Consts.CipherId.Aes:
@@ -5583,21 +5798,23 @@ KdbxFormat.prototype._encryptData = function(data, cipherKey) {
         case Consts.CipherId.ChaCha20:
             return this._transformDataV4ChaCha20(data, cipherKey);
         default:
-            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher'));
+            return Promise.reject(
+                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
+            );
     }
 };
 
-KdbxFormat.prototype._transformDataV4Aes = function(data, cipherKey, encrypt) {
+KdbxFormat.prototype._transformDataV4Aes = function (data, cipherKey, encrypt) {
     var that = this;
     var aesCbc = CryptoEngine.createAesCbc();
-    return aesCbc.importKey(cipherKey).then(function() {
-        return encrypt ?
-            aesCbc.encrypt(data, that.kdbx.header.encryptionIV) :
-            aesCbc.decrypt(data, that.kdbx.header.encryptionIV);
+    return aesCbc.importKey(cipherKey).then(function () {
+        return encrypt
+            ? aesCbc.encrypt(data, that.kdbx.header.encryptionIV)
+            : aesCbc.decrypt(data, that.kdbx.header.encryptionIV);
     });
 };
 
-KdbxFormat.prototype._transformDataV4ChaCha20 = function(data, cipherKey) {
+KdbxFormat.prototype._transformDataV4ChaCha20 = function (data, cipherKey) {
     return CryptoEngine.chacha20(data, cipherKey, this.kdbx.header.encryptionIV);
 };
 
@@ -5620,9 +5837,9 @@ module.exports = KdbxFormat;
 
 var zlib_deflate = __webpack_require__(/*! ./zlib/deflate */ 33);
 var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 19);
+var strings      = __webpack_require__(/*! ./utils/strings */ 18);
 var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 19);
 
 var toString = Object.prototype.toString;
 
@@ -6032,8 +6249,8 @@ exports.gzip = gzip;
 
 var utils   = __webpack_require__(/*! ../utils/common */ 5);
 var trees   = __webpack_require__(/*! ./trees */ 34);
-var adler32 = __webpack_require__(/*! ./adler32 */ 17);
-var crc32   = __webpack_require__(/*! ./crc32 */ 18);
+var adler32 = __webpack_require__(/*! ./adler32 */ 16);
+var crc32   = __webpack_require__(/*! ./crc32 */ 17);
 var msg     = __webpack_require__(/*! ./messages */ 12);
 
 /* Public constants ==========================================================*/
@@ -9116,10 +9333,10 @@ exports._tr_align = _tr_align;
 
 var zlib_inflate = __webpack_require__(/*! ./zlib/inflate */ 36);
 var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 19);
-var c            = __webpack_require__(/*! ./zlib/constants */ 21);
+var strings      = __webpack_require__(/*! ./utils/strings */ 18);
+var c            = __webpack_require__(/*! ./zlib/constants */ 20);
 var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 19);
 var GZheader     = __webpack_require__(/*! ./zlib/gzheader */ 39);
 
 var toString = Object.prototype.toString;
@@ -9546,8 +9763,8 @@ exports.ungzip  = inflate;
 
 
 var utils         = __webpack_require__(/*! ../utils/common */ 5);
-var adler32       = __webpack_require__(/*! ./adler32 */ 17);
-var crc32         = __webpack_require__(/*! ./crc32 */ 18);
+var adler32       = __webpack_require__(/*! ./adler32 */ 16);
+var crc32         = __webpack_require__(/*! ./crc32 */ 17);
 var inflate_fast  = __webpack_require__(/*! ./inffast */ 37);
 var inflate_table = __webpack_require__(/*! ./inftrees */ 38);
 
@@ -11816,972 +12033,6 @@ module.exports = GZheader;
 
 /***/ }),
 /* 40 */
-/*!**********************************************!*\
-  !*** ../node_modules/text-encoding/index.js ***!
-  \**********************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-// This is free and unencumbered software released into the public domain.
-// See LICENSE.md for more information.
-
-var encoding = __webpack_require__(/*! ./lib/encoding.js */ 41);
-
-module.exports = {
-  TextEncoder: encoding.TextEncoder,
-  TextDecoder: encoding.TextDecoder,
-};
-
-
-/***/ }),
-/* 41 */
-/*!*****************************************************!*\
-  !*** ../node_modules/text-encoding/lib/encoding.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-// This is free and unencumbered software released into the public domain.
-// See LICENSE.md for more information.
-
-// If we're in node require encoding-indexes and attach it to the global.
-/**
- * @fileoverview Global |this| required for resolving indexes in node.
- * @suppress {globalThis}
- */
-(function(global) {
-  'use strict';
-
-  //
-  // Utilities
-  //
-
-  /**
-   * @param {number} a The number to test.
-   * @param {number} min The minimum value in the range, inclusive.
-   * @param {number} max The maximum value in the range, inclusive.
-   * @return {boolean} True if a >= min and a <= max.
-   */
-  function inRange(a, min, max) {
-    return min <= a && a <= max;
-  }
-
-  /**
-   * @param {!Array.<*>} array The array to check.
-   * @param {*} item The item to look for in the array.
-   * @return {boolean} True if the item appears in the array.
-   */
-  function includes(array, item) {
-    return array.indexOf(item) !== -1;
-  }
-
-  /**
-   * @param {*} o
-   * @return {Object}
-   */
-  function ToDictionary(o) {
-    if (o === undefined) return {};
-    if (o === Object(o)) return o;
-    throw TypeError('Could not convert argument to dictionary');
-  }
-
-  /**
-   * @param {string} string Input string of UTF-16 code units.
-   * @return {!Array.<number>} Code points.
-   */
-  function stringToCodePoints(string) {
-    // https://heycam.github.io/webidl/#dfn-obtain-unicode
-
-    // 1. Let S be the DOMString value.
-    var s = String(string);
-
-    // 2. Let n be the length of S.
-    var n = s.length;
-
-    // 3. Initialize i to 0.
-    var i = 0;
-
-    // 4. Initialize U to be an empty sequence of Unicode characters.
-    var u = [];
-
-    // 5. While i < n:
-    while (i < n) {
-
-      // 1. Let c be the code unit in S at index i.
-      var c = s.charCodeAt(i);
-
-      // 2. Depending on the value of c:
-
-      // c < 0xD800 or c > 0xDFFF
-      if (c < 0xD800 || c > 0xDFFF) {
-        // Append to U the Unicode character with code point c.
-        u.push(c);
-      }
-
-      // 0xDC00 ≤ c ≤ 0xDFFF
-      else if (0xDC00 <= c && c <= 0xDFFF) {
-        // Append to U a U+FFFD REPLACEMENT CHARACTER.
-        u.push(0xFFFD);
-      }
-
-      // 0xD800 ≤ c ≤ 0xDBFF
-      else if (0xD800 <= c && c <= 0xDBFF) {
-        // 1. If i = n−1, then append to U a U+FFFD REPLACEMENT
-        // CHARACTER.
-        if (i === n - 1) {
-          u.push(0xFFFD);
-        }
-        // 2. Otherwise, i < n−1:
-        else {
-          // 1. Let d be the code unit in S at index i+1.
-          var d = s.charCodeAt(i + 1);
-
-          // 2. If 0xDC00 ≤ d ≤ 0xDFFF, then:
-          if (0xDC00 <= d && d <= 0xDFFF) {
-            // 1. Let a be c & 0x3FF.
-            var a = c & 0x3FF;
-
-            // 2. Let b be d & 0x3FF.
-            var b = d & 0x3FF;
-
-            // 3. Append to U the Unicode character with code point
-            // 2^16+2^10*a+b.
-            u.push(0x10000 + (a << 10) + b);
-
-            // 4. Set i to i+1.
-            i += 1;
-          }
-
-          // 3. Otherwise, d < 0xDC00 or d > 0xDFFF. Append to U a
-          // U+FFFD REPLACEMENT CHARACTER.
-          else  {
-            u.push(0xFFFD);
-          }
-        }
-      }
-
-      // 3. Set i to i+1.
-      i += 1;
-    }
-
-    // 6. Return U.
-    return u;
-  }
-
-  /**
-   * @param {!Array.<number>} code_points Array of code points.
-   * @return {string} string String of UTF-16 code units.
-   */
-  function codePointsToString(code_points) {
-    var s = '';
-    for (var i = 0; i < code_points.length; ++i) {
-      var cp = code_points[i];
-      if (cp <= 0xFFFF) {
-        s += String.fromCharCode(cp);
-      } else {
-        cp -= 0x10000;
-        s += String.fromCharCode((cp >> 10) + 0xD800,
-                                 (cp & 0x3FF) + 0xDC00);
-      }
-    }
-    return s;
-  }
-
-
-  //
-  // Implementation of Encoding specification
-  // https://encoding.spec.whatwg.org/
-  //
-
-  //
-  // 4. Terminology
-  //
-
-  /**
-   * An ASCII byte is a byte in the range 0x00 to 0x7F, inclusive.
-   * @param {number} a The number to test.
-   * @return {boolean} True if a is in the range 0x00 to 0x7F, inclusive.
-   */
-  function isASCIIByte(a) {
-    return 0x00 <= a && a <= 0x7F;
-  }
-
-  /**
-   * An ASCII code point is a code point in the range U+0000 to
-   * U+007F, inclusive.
-   */
-  var isASCIICodePoint = isASCIIByte;
-
-
-  /**
-   * End-of-stream is a special token that signifies no more tokens
-   * are in the stream.
-   * @const
-   */ var end_of_stream = -1;
-
-  /**
-   * A stream represents an ordered sequence of tokens.
-   *
-   * @constructor
-   * @param {!(Array.<number>|Uint8Array)} tokens Array of tokens that provide
-   * the stream.
-   */
-  function Stream(tokens) {
-    /** @type {!Array.<number>} */
-    this.tokens = [].slice.call(tokens);
-    // Reversed as push/pop is more efficient than shift/unshift.
-    this.tokens.reverse();
-  }
-
-  Stream.prototype = {
-    /**
-     * @return {boolean} True if end-of-stream has been hit.
-     */
-    endOfStream: function() {
-      return !this.tokens.length;
-    },
-
-    /**
-     * When a token is read from a stream, the first token in the
-     * stream must be returned and subsequently removed, and
-     * end-of-stream must be returned otherwise.
-     *
-     * @return {number} Get the next token from the stream, or
-     * end_of_stream.
-     */
-     read: function() {
-      if (!this.tokens.length)
-        return end_of_stream;
-       return this.tokens.pop();
-     },
-
-    /**
-     * When one or more tokens are prepended to a stream, those tokens
-     * must be inserted, in given order, before the first token in the
-     * stream.
-     *
-     * @param {(number|!Array.<number>)} token The token(s) to prepend to the
-     * stream.
-     */
-    prepend: function(token) {
-      if (Array.isArray(token)) {
-        var tokens = /**@type {!Array.<number>}*/(token);
-        while (tokens.length)
-          this.tokens.push(tokens.pop());
-      } else {
-        this.tokens.push(token);
-      }
-    },
-
-    /**
-     * When one or more tokens are pushed to a stream, those tokens
-     * must be inserted, in given order, after the last token in the
-     * stream.
-     *
-     * @param {(number|!Array.<number>)} token The tokens(s) to push to the
-     * stream.
-     */
-    push: function(token) {
-      if (Array.isArray(token)) {
-        var tokens = /**@type {!Array.<number>}*/(token);
-        while (tokens.length)
-          this.tokens.unshift(tokens.shift());
-      } else {
-        this.tokens.unshift(token);
-      }
-    }
-  };
-
-  //
-  // 5. Encodings
-  //
-
-  // 5.1 Encoders and decoders
-
-  /** @const */
-  var finished = -1;
-
-  /**
-   * @param {boolean} fatal If true, decoding errors raise an exception.
-   * @param {number=} opt_code_point Override the standard fallback code point.
-   * @return {number} The code point to insert on a decoding error.
-   */
-  function decoderError(fatal, opt_code_point) {
-    if (fatal)
-      throw TypeError('Decoder error');
-    return opt_code_point || 0xFFFD;
-  }
-
-  /**
-   * @param {number} code_point The code point that could not be encoded.
-   * @return {number} Always throws, no value is actually returned.
-   */
-  function encoderError(code_point) {
-    throw TypeError('The code point ' + code_point + ' could not be encoded.');
-  }
-
-  /** @interface */
-  function Decoder() {}
-  Decoder.prototype = {
-    /**
-     * @param {Stream} stream The stream of bytes being decoded.
-     * @param {number} bite The next byte read from the stream.
-     * @return {?(number|!Array.<number>)} The next code point(s)
-     *     decoded, or null if not enough data exists in the input
-     *     stream to decode a complete code point, or |finished|.
-     */
-    handler: function(stream, bite) {}
-  };
-
-  /** @interface */
-  function Encoder() {}
-  Encoder.prototype = {
-    /**
-     * @param {Stream} stream The stream of code points being encoded.
-     * @param {number} code_point Next code point read from the stream.
-     * @return {(number|!Array.<number>)} Byte(s) to emit, or |finished|.
-     */
-    handler: function(stream, code_point) {}
-  };
-
-  // 5.2 Names and labels
-
-  // TODO: Define @typedef for Encoding: {name:string,labels:Array.<string>}
-  // https://github.com/google/closure-compiler/issues/247
-
-  /**
-   * @param {string} label The encoding label.
-   * @return {?{name:string,labels:Array.<string>}}
-   */
-  function getEncoding(label) {
-    // 1. Remove any leading and trailing ASCII whitespace from label.
-    label = String(label).trim().toLowerCase();
-
-    // 2. If label is an ASCII case-insensitive match for any of the
-    // labels listed in the table below, return the corresponding
-    // encoding, and failure otherwise.
-    if (Object.prototype.hasOwnProperty.call(label_to_encoding, label)) {
-      return label_to_encoding[label];
-    }
-    return null;
-  }
-
-  /**
-   * Encodings table: https://encoding.spec.whatwg.org/encodings.json
-   * @const
-   * @type {!Array.<{
-   *          heading: string,
-   *          encodings: Array.<{name:string,labels:Array.<string>}>
-   *        }>}
-   */
-  var encodings = [
-    {
-      "encodings": [
-        {
-          "labels": [
-            "unicode-1-1-utf-8",
-            "utf-8",
-            "utf8"
-          ],
-          "name": "UTF-8"
-        }
-      ],
-      "heading": "The Encoding"
-    }
-  ];
-
-  // Label to encoding registry.
-  /** @type {Object.<string,{name:string,labels:Array.<string>}>} */
-  var label_to_encoding = {};
-  encodings.forEach(function(category) {
-    category.encodings.forEach(function(encoding) {
-      encoding.labels.forEach(function(label) {
-        label_to_encoding[label] = encoding;
-      });
-    });
-  });
-
-  // Registry of of encoder/decoder factories, by encoding name.
-  /** @type {Object.<string, function({fatal:boolean}): Encoder>} */
-  var encoders = {};
-  /** @type {Object.<string, function({fatal:boolean}): Decoder>} */
-  var decoders = {};
-
-  //
-  // 8. API
-  //
-
-  /** @const */ var DEFAULT_ENCODING = 'utf-8';
-
-  // 8.1 Interface TextDecoder
-
-  /**
-   * @constructor
-   * @param {string=} label The label of the encoding;
-   *     defaults to 'utf-8'.
-   * @param {Object=} options
-   */
-  function TextDecoder(label, options) {
-    // Web IDL conventions
-    if (!(this instanceof TextDecoder))
-      throw TypeError('Called as a function. Did you forget \'new\'?');
-    label = label !== undefined ? String(label) : DEFAULT_ENCODING;
-    options = ToDictionary(options);
-
-    // A TextDecoder object has an associated encoding, decoder,
-    // stream, ignore BOM flag (initially unset), BOM seen flag
-    // (initially unset), error mode (initially replacement), and do
-    // not flush flag (initially unset).
-
-    /** @private */
-    this._encoding = null;
-    /** @private @type {?Decoder} */
-    this._decoder = null;
-    /** @private @type {boolean} */
-    this._ignoreBOM = false;
-    /** @private @type {boolean} */
-    this._BOMseen = false;
-    /** @private @type {string} */
-    this._error_mode = 'replacement';
-    /** @private @type {boolean} */
-    this._do_not_flush = false;
-
-
-    // 1. Let encoding be the result of getting an encoding from
-    // label.
-    var encoding = getEncoding(label);
-
-    // 2. If encoding is failure or replacement, throw a RangeError.
-    if (encoding === null || encoding.name === 'replacement')
-      throw RangeError('Unknown encoding: ' + label);
-    if (!decoders[encoding.name]) {
-      throw Error('Decoder not present.' +
-                  ' Did you forget to include encoding-indexes.js?');
-    }
-
-    // 3. Let dec be a new TextDecoder object.
-    var dec = this;
-
-    // 4. Set dec's encoding to encoding.
-    dec._encoding = encoding;
-
-    // 5. If options's fatal member is true, set dec's error mode to
-    // fatal.
-    if (Boolean(options['fatal']))
-      dec._error_mode = 'fatal';
-
-    // 6. If options's ignoreBOM member is true, set dec's ignore BOM
-    // flag.
-    if (Boolean(options['ignoreBOM']))
-      dec._ignoreBOM = true;
-
-    // 7. Return dec.
-    return dec;
-  }
-
-  if (Object.defineProperty) {
-    // The encoding attribute's getter must return encoding's name.
-    Object.defineProperty(TextDecoder.prototype, 'encoding', {
-      /** @this {TextDecoder} */
-      get: function() { return this._encoding.name.toLowerCase(); }
-    });
-
-    // The fatal attribute's getter must return true if error mode
-    // is fatal, and false otherwise.
-    Object.defineProperty(TextDecoder.prototype, 'fatal', {
-      /** @this {TextDecoder} */
-      get: function() { return this._error_mode === 'fatal'; }
-    });
-
-    // The ignoreBOM attribute's getter must return true if ignore
-    // BOM flag is set, and false otherwise.
-    Object.defineProperty(TextDecoder.prototype, 'ignoreBOM', {
-      /** @this {TextDecoder} */
-      get: function() { return this._ignoreBOM; }
-    });
-  }
-
-  /**
-   * @param {BufferSource=} input The buffer of bytes to decode.
-   * @param {Object=} options
-   * @return {string} The decoded string.
-   */
-  TextDecoder.prototype.decode = function decode(input, options) {
-    var bytes;
-    if (typeof input === 'object' && input instanceof ArrayBuffer) {
-      bytes = new Uint8Array(input);
-    } else if (typeof input === 'object' && 'buffer' in input &&
-               input.buffer instanceof ArrayBuffer) {
-      bytes = new Uint8Array(input.buffer,
-                             input.byteOffset,
-                             input.byteLength);
-    } else {
-      bytes = new Uint8Array(0);
-    }
-
-    options = ToDictionary(options);
-
-    // 1. If the do not flush flag is unset, set decoder to a new
-    // encoding's decoder, set stream to a new stream, and unset the
-    // BOM seen flag.
-    if (!this._do_not_flush) {
-      this._decoder = decoders[this._encoding.name]({
-        fatal: this._error_mode === 'fatal'});
-      this._BOMseen = false;
-    }
-
-    // 2. If options's stream is true, set the do not flush flag, and
-    // unset the do not flush flag otherwise.
-    this._do_not_flush = Boolean(options['stream']);
-
-    // 3. If input is given, push a copy of input to stream.
-    // TODO: Align with spec algorithm - maintain stream on instance.
-    var input_stream = new Stream(bytes);
-
-    // 4. Let output be a new stream.
-    var output = [];
-
-    /** @type {?(number|!Array.<number>)} */
-    var result;
-
-    // 5. While true:
-    while (true) {
-      // 1. Let token be the result of reading from stream.
-      var token = input_stream.read();
-
-      // 2. If token is end-of-stream and the do not flush flag is
-      // set, return output, serialized.
-      // TODO: Align with spec algorithm.
-      if (token === end_of_stream)
-        break;
-
-      // 3. Otherwise, run these subsubsteps:
-
-      // 1. Let result be the result of processing token for decoder,
-      // stream, output, and error mode.
-      result = this._decoder.handler(input_stream, token);
-
-      // 2. If result is finished, return output, serialized.
-      if (result === finished)
-        break;
-
-      if (result !== null) {
-        if (Array.isArray(result))
-          output.push.apply(output, /**@type {!Array.<number>}*/(result));
-        else
-          output.push(result);
-      }
-
-      // 3. Otherwise, if result is error, throw a TypeError.
-      // (Thrown in handler)
-
-      // 4. Otherwise, do nothing.
-    }
-    // TODO: Align with spec algorithm.
-    if (!this._do_not_flush) {
-      do {
-        result = this._decoder.handler(input_stream, input_stream.read());
-        if (result === finished)
-          break;
-        if (result === null)
-          continue;
-        if (Array.isArray(result))
-          output.push.apply(output, /**@type {!Array.<number>}*/(result));
-        else
-          output.push(result);
-      } while (!input_stream.endOfStream());
-      this._decoder = null;
-    }
-
-    // A TextDecoder object also has an associated serialize stream
-    // algorithm...
-    /**
-     * @param {!Array.<number>} stream
-     * @return {string}
-     * @this {TextDecoder}
-     */
-    function serializeStream(stream) {
-      // 1. Let token be the result of reading from stream.
-      // (Done in-place on array, rather than as a stream)
-
-      // 2. If encoding is UTF-8, UTF-16BE, or UTF-16LE, and ignore
-      // BOM flag and BOM seen flag are unset, run these subsubsteps:
-      if (includes(['UTF-8', 'UTF-16LE', 'UTF-16BE'], this._encoding.name) &&
-          !this._ignoreBOM && !this._BOMseen) {
-        if (stream.length > 0 && stream[0] === 0xFEFF) {
-          // 1. If token is U+FEFF, set BOM seen flag.
-          this._BOMseen = true;
-          stream.shift();
-        } else if (stream.length > 0) {
-          // 2. Otherwise, if token is not end-of-stream, set BOM seen
-          // flag and append token to stream.
-          this._BOMseen = true;
-        } else {
-          // 3. Otherwise, if token is not end-of-stream, append token
-          // to output.
-          // (no-op)
-        }
-      }
-      // 4. Otherwise, return output.
-      return codePointsToString(stream);
-    }
-
-    return serializeStream.call(this, output);
-  };
-
-  // 8.2 Interface TextEncoder
-
-  /**
-   * @constructor
-   * @param {string=} label The label of the encoding. NONSTANDARD.
-   * @param {Object=} options NONSTANDARD.
-   */
-  function TextEncoder(label, options) {
-    // Web IDL conventions
-    if (!(this instanceof TextEncoder))
-      throw TypeError('Called as a function. Did you forget \'new\'?');
-    options = ToDictionary(options);
-
-    // A TextEncoder object has an associated encoding and encoder.
-
-    /** @private */
-    this._encoding = null;
-    /** @private @type {?Encoder} */
-    this._encoder = null;
-
-    // Non-standard
-    /** @private @type {boolean} */
-    this._do_not_flush = false;
-    /** @private @type {string} */
-    this._fatal = Boolean(options['fatal']) ? 'fatal' : 'replacement';
-
-    // 1. Let enc be a new TextEncoder object.
-    var enc = this;
-
-    // 2. Set enc's encoding to UTF-8's encoder.
-    // Standard behavior.
-    enc._encoding = getEncoding('utf-8');
-
-    if (label !== undefined && 'console' in global) {
-      console.warn('TextEncoder constructor called with encoding label, '
-                   + 'which is ignored.');
-    }
-
-    // 3. Return enc.
-    return enc;
-  }
-
-  if (Object.defineProperty) {
-    // The encoding attribute's getter must return encoding's name.
-    Object.defineProperty(TextEncoder.prototype, 'encoding', {
-      /** @this {TextEncoder} */
-      get: function() { return this._encoding.name.toLowerCase(); }
-    });
-  }
-
-  /**
-   * @param {string=} opt_string The string to encode.
-   * @param {Object=} options
-   * @return {!Uint8Array} Encoded bytes, as a Uint8Array.
-   */
-  TextEncoder.prototype.encode = function encode(opt_string, options) {
-    opt_string = opt_string ? String(opt_string) : '';
-    options = ToDictionary(options);
-
-    // NOTE: This option is nonstandard. None of the encodings
-    // permitted for encoding (i.e. UTF-8, UTF-16) are stateful when
-    // the input is a USVString so streaming is not necessary.
-    if (!this._do_not_flush)
-      this._encoder = encoders[this._encoding.name]({
-        fatal: this._fatal === 'fatal'});
-    this._do_not_flush = Boolean(options['stream']);
-
-    // 1. Convert input to a stream.
-    var input = new Stream(stringToCodePoints(opt_string));
-
-    // 2. Let output be a new stream
-    var output = [];
-
-    /** @type {?(number|!Array.<number>)} */
-    var result;
-    // 3. While true, run these substeps:
-    while (true) {
-      // 1. Let token be the result of reading from input.
-      var token = input.read();
-      if (token === end_of_stream)
-        break;
-      // 2. Let result be the result of processing token for encoder,
-      // input, output.
-      result = this._encoder.handler(input, token);
-      if (result === finished)
-        break;
-      if (Array.isArray(result))
-        output.push.apply(output, /**@type {!Array.<number>}*/(result));
-      else
-        output.push(result);
-    }
-    // TODO: Align with spec algorithm.
-    if (!this._do_not_flush) {
-      while (true) {
-        result = this._encoder.handler(input, input.read());
-        if (result === finished)
-          break;
-        if (Array.isArray(result))
-          output.push.apply(output, /**@type {!Array.<number>}*/(result));
-        else
-          output.push(result);
-      }
-      this._encoder = null;
-    }
-    // 3. If result is finished, convert output into a byte sequence,
-    // and then return a Uint8Array object wrapping an ArrayBuffer
-    // containing output.
-    return new Uint8Array(output);
-  };
-
-
-  //
-  // 9. The encoding
-  //
-
-  // 9.1 utf-8
-
-  // 9.1.1 utf-8 decoder
-  /**
-   * @constructor
-   * @implements {Decoder}
-   * @param {{fatal: boolean}} options
-   */
-  function UTF8Decoder(options) {
-    var fatal = options.fatal;
-
-    // utf-8's decoder's has an associated utf-8 code point, utf-8
-    // bytes seen, and utf-8 bytes needed (all initially 0), a utf-8
-    // lower boundary (initially 0x80), and a utf-8 upper boundary
-    // (initially 0xBF).
-    var /** @type {number} */ utf8_code_point = 0,
-        /** @type {number} */ utf8_bytes_seen = 0,
-        /** @type {number} */ utf8_bytes_needed = 0,
-        /** @type {number} */ utf8_lower_boundary = 0x80,
-        /** @type {number} */ utf8_upper_boundary = 0xBF;
-
-    /**
-     * @param {Stream} stream The stream of bytes being decoded.
-     * @param {number} bite The next byte read from the stream.
-     * @return {?(number|!Array.<number>)} The next code point(s)
-     *     decoded, or null if not enough data exists in the input
-     *     stream to decode a complete code point.
-     */
-    this.handler = function(stream, bite) {
-      // 1. If byte is end-of-stream and utf-8 bytes needed is not 0,
-      // set utf-8 bytes needed to 0 and return error.
-      if (bite === end_of_stream && utf8_bytes_needed !== 0) {
-        utf8_bytes_needed = 0;
-        return decoderError(fatal);
-      }
-
-      // 2. If byte is end-of-stream, return finished.
-      if (bite === end_of_stream)
-        return finished;
-
-      // 3. If utf-8 bytes needed is 0, based on byte:
-      if (utf8_bytes_needed === 0) {
-
-        // 0x00 to 0x7F
-        if (inRange(bite, 0x00, 0x7F)) {
-          // Return a code point whose value is byte.
-          return bite;
-        }
-
-        // 0xC2 to 0xDF
-        else if (inRange(bite, 0xC2, 0xDF)) {
-          // 1. Set utf-8 bytes needed to 1.
-          utf8_bytes_needed = 1;
-
-          // 2. Set UTF-8 code point to byte & 0x1F.
-          utf8_code_point = bite & 0x1F;
-        }
-
-        // 0xE0 to 0xEF
-        else if (inRange(bite, 0xE0, 0xEF)) {
-          // 1. If byte is 0xE0, set utf-8 lower boundary to 0xA0.
-          if (bite === 0xE0)
-            utf8_lower_boundary = 0xA0;
-          // 2. If byte is 0xED, set utf-8 upper boundary to 0x9F.
-          if (bite === 0xED)
-            utf8_upper_boundary = 0x9F;
-          // 3. Set utf-8 bytes needed to 2.
-          utf8_bytes_needed = 2;
-          // 4. Set UTF-8 code point to byte & 0xF.
-          utf8_code_point = bite & 0xF;
-        }
-
-        // 0xF0 to 0xF4
-        else if (inRange(bite, 0xF0, 0xF4)) {
-          // 1. If byte is 0xF0, set utf-8 lower boundary to 0x90.
-          if (bite === 0xF0)
-            utf8_lower_boundary = 0x90;
-          // 2. If byte is 0xF4, set utf-8 upper boundary to 0x8F.
-          if (bite === 0xF4)
-            utf8_upper_boundary = 0x8F;
-          // 3. Set utf-8 bytes needed to 3.
-          utf8_bytes_needed = 3;
-          // 4. Set UTF-8 code point to byte & 0x7.
-          utf8_code_point = bite & 0x7;
-        }
-
-        // Otherwise
-        else {
-          // Return error.
-          return decoderError(fatal);
-        }
-
-        // Return continue.
-        return null;
-      }
-
-      // 4. If byte is not in the range utf-8 lower boundary to utf-8
-      // upper boundary, inclusive, run these substeps:
-      if (!inRange(bite, utf8_lower_boundary, utf8_upper_boundary)) {
-
-        // 1. Set utf-8 code point, utf-8 bytes needed, and utf-8
-        // bytes seen to 0, set utf-8 lower boundary to 0x80, and set
-        // utf-8 upper boundary to 0xBF.
-        utf8_code_point = utf8_bytes_needed = utf8_bytes_seen = 0;
-        utf8_lower_boundary = 0x80;
-        utf8_upper_boundary = 0xBF;
-
-        // 2. Prepend byte to stream.
-        stream.prepend(bite);
-
-        // 3. Return error.
-        return decoderError(fatal);
-      }
-
-      // 5. Set utf-8 lower boundary to 0x80 and utf-8 upper boundary
-      // to 0xBF.
-      utf8_lower_boundary = 0x80;
-      utf8_upper_boundary = 0xBF;
-
-      // 6. Set UTF-8 code point to (UTF-8 code point << 6) | (byte &
-      // 0x3F)
-      utf8_code_point = (utf8_code_point << 6) | (bite & 0x3F);
-
-      // 7. Increase utf-8 bytes seen by one.
-      utf8_bytes_seen += 1;
-
-      // 8. If utf-8 bytes seen is not equal to utf-8 bytes needed,
-      // continue.
-      if (utf8_bytes_seen !== utf8_bytes_needed)
-        return null;
-
-      // 9. Let code point be utf-8 code point.
-      var code_point = utf8_code_point;
-
-      // 10. Set utf-8 code point, utf-8 bytes needed, and utf-8 bytes
-      // seen to 0.
-      utf8_code_point = utf8_bytes_needed = utf8_bytes_seen = 0;
-
-      // 11. Return a code point whose value is code point.
-      return code_point;
-    };
-  }
-
-  // 9.1.2 utf-8 encoder
-  /**
-   * @constructor
-   * @implements {Encoder}
-   * @param {{fatal: boolean}} options
-   */
-  function UTF8Encoder(options) {
-    var fatal = options.fatal;
-    /**
-     * @param {Stream} stream Input stream.
-     * @param {number} code_point Next code point read from the stream.
-     * @return {(number|!Array.<number>)} Byte(s) to emit.
-     */
-    this.handler = function(stream, code_point) {
-      // 1. If code point is end-of-stream, return finished.
-      if (code_point === end_of_stream)
-        return finished;
-
-      // 2. If code point is in the range U+0000 to U+007F, return a
-      // byte whose value is code point.
-      if (inRange(code_point, 0x0000, 0x007f))
-        return code_point;
-
-      // 3. Set count and offset based on the range code point is in:
-      var count, offset;
-      // U+0080 to U+07FF, inclusive:
-      if (inRange(code_point, 0x0080, 0x07FF)) {
-        // 1 and 0xC0
-        count = 1;
-        offset = 0xC0;
-      }
-      // U+0800 to U+FFFF, inclusive:
-      else if (inRange(code_point, 0x0800, 0xFFFF)) {
-        // 2 and 0xE0
-        count = 2;
-        offset = 0xE0;
-      }
-      // U+10000 to U+10FFFF, inclusive:
-      else if (inRange(code_point, 0x10000, 0x10FFFF)) {
-        // 3 and 0xF0
-        count = 3;
-        offset = 0xF0;
-      }
-
-      // 4.Let bytes be a byte sequence whose first byte is (code
-      // point >> (6 × count)) + offset.
-      var bytes = [(code_point >> (6 * count)) + offset];
-
-      // 5. Run these substeps while count is greater than 0:
-      while (count > 0) {
-
-        // 1. Set temp to code point >> (6 × (count − 1)).
-        var temp = code_point >> (6 * (count - 1));
-
-        // 2. Append to bytes 0x80 | (temp & 0x3F).
-        bytes.push(0x80 | (temp & 0x3F));
-
-        // 3. Decrease count by one.
-        count -= 1;
-      }
-
-      // 6. Return bytes bytes, in order.
-      return bytes;
-    };
-  }
-
-  /** @param {{fatal: boolean}} options */
-  encoders['UTF-8'] = function(options) {
-    return new UTF8Encoder(options);
-  };
-  /** @param {{fatal: boolean}} options */
-  decoders['UTF-8'] = function(options) {
-    return new UTF8Decoder(options);
-  };
-
-  if (!global['TextEncoder'])
-    global['TextEncoder'] = TextEncoder;
-  if (!global['TextDecoder'])
-    global['TextDecoder'] = TextDecoder;
-
-  if ( true && module.exports) {
-    module.exports = {
-      TextEncoder: global['TextEncoder'],
-      TextDecoder: global['TextDecoder']
-    };
-  }
-}(this));
-
-
-/***/ }),
-/* 42 */
 /*!*************************!*\
   !*** external "crypto" ***!
   \*************************/
@@ -12790,10 +12041,10 @@ module.exports = {
 /*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__42__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__40__;
 
 /***/ }),
-/* 43 */
+/* 41 */
 /*!********************************!*\
   !*** ./format/kdbx-context.js ***!
   \********************************/
@@ -12813,7 +12064,7 @@ var XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4);
  * @param {boolean} [opts.exportXml=false] - whether we are exporting as xml
  * @constructor
  */
-var KdbxContext = function(opts) {
+var KdbxContext = function (opts) {
     this.kdbx = opts.kdbx;
     this.exportXml = opts.exportXml || false;
 };
@@ -12823,7 +12074,7 @@ var KdbxContext = function(opts) {
  * @param {Node} node
  * @param {Date} dt
  */
-KdbxContext.prototype.setXmlDate = function(node, dt) {
+KdbxContext.prototype.setXmlDate = function (node, dt) {
     var isBinary = this.kdbx.header.versionMajor >= 4 && !this.exportXml;
     XmlUtils.setDate(node, dt, isBinary);
 };
@@ -12832,7 +12083,7 @@ module.exports = KdbxContext;
 
 
 /***/ }),
-/* 44 */
+/* 42 */
 /*!*************************!*\
   !*** external "xmldom" ***!
   \*************************/
@@ -12841,10 +12092,10 @@ module.exports = KdbxContext;
 /*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__44__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__42__;
 
 /***/ }),
-/* 45 */
+/* 43 */
 /*!******************************************!*\
   !*** ./crypto/hashed-block-transform.js ***!
   \******************************************/
@@ -12856,14 +12107,13 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__44__;
 "use strict";
 
 
-var
-    BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
+var BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
     KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     Consts = __webpack_require__(/*! ./../defs/consts */ 1),
     ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
     CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
 
-var BlockSize = 1024*1024;
+var BlockSize = 1024 * 1024;
 
 /**
  * Decrypt buffer
@@ -12871,19 +12121,22 @@ var BlockSize = 1024*1024;
  * @returns {Promise.<ArrayBuffer>}
  */
 function decrypt(data) {
-    return Promise.resolve().then(function() {
+    return Promise.resolve().then(function () {
         var stm = new BinaryStream(data);
         var buffers = [];
-        var blockIndex = 0, blockLength = 0, blockHash, totalLength = 0;
+        var // blockIndex = 0,
+            blockLength = 0,
+            blockHash,
+            totalLength = 0;
 
-        var next = function() {
-            blockIndex = stm.getUint32(true);
+        var next = function () {
+            /* blockIndex = */ stm.getUint32(true);
             blockHash = stm.readBytes(32);
             blockLength = stm.getUint32(true);
             if (blockLength > 0) {
                 totalLength += blockLength;
                 var blockData = stm.readBytes(blockLength);
-                return CryptoEngine.sha256(blockData).then(function(calculatedHash) {
+                return CryptoEngine.sha256(blockData).then(function (calculatedHash) {
                     if (!ByteUtils.arrayBufferEquals(calculatedHash, blockHash)) {
                         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
                     } else {
@@ -12911,18 +12164,20 @@ function decrypt(data) {
  * @returns {Promise.<ArrayBuffer>}
  */
 function encrypt(data) {
-    return Promise.resolve().then(function() {
+    return Promise.resolve().then(function () {
         var bytesLeft = data.byteLength;
-        var currentOffset = 0, blockIndex = 0, totalLength = 0;
+        var currentOffset = 0,
+            blockIndex = 0,
+            totalLength = 0;
         var buffers = [];
 
-        var next = function() {
+        var next = function () {
             if (bytesLeft > 0) {
                 var blockLength = Math.min(BlockSize, bytesLeft);
                 bytesLeft -= blockLength;
 
                 var blockData = data.slice(currentOffset, currentOffset + blockLength);
-                return CryptoEngine.sha256(blockData).then(function(blockHash) {
+                return CryptoEngine.sha256(blockData).then(function (blockHash) {
                     var blockBuffer = new ArrayBuffer(4 + 32 + 4);
                     var stm = new BinaryStream(blockBuffer);
                     stm.setUint32(blockIndex, true);
@@ -12964,7 +12219,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 46 */
+/* 44 */
 /*!****************************************!*\
   !*** ./crypto/hmac-block-transform.js ***!
   \****************************************/
@@ -12976,15 +12231,14 @@ module.exports.encrypt = encrypt;
 "use strict";
 
 
-var
-    Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
+var Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
     ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
     BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ 11),
     CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
 
-var BlockSize = 1024*1024;
+var BlockSize = 1024 * 1024;
 
 /**
  * Computes HMAC-SHA key
@@ -12998,7 +12252,7 @@ function getHmacKey(key, blockIndex) {
     var view = new DataView(shaSrc.buffer);
     view.setUint32(0, blockIndex.lo, true);
     view.setUint32(4, blockIndex.hi, true);
-    return CryptoEngine.sha512(ByteUtils.arrayToBuffer(shaSrc)).then(function(sha) {
+    return CryptoEngine.sha512(ByteUtils.arrayToBuffer(shaSrc)).then(function (sha) {
         ByteUtils.zeroBuffer(shaSrc);
         return sha;
     });
@@ -13013,7 +12267,7 @@ function getHmacKey(key, blockIndex) {
  * @returns {Promise.<ArrayBuffer>}
  */
 function getBlockHmac(key, blockIndex, blockLength, blockData) {
-    return getHmacKey(key, new Int64(blockIndex)).then(function(blockKey) {
+    return getHmacKey(key, new Int64(blockIndex)).then(function (blockKey) {
         var blockDataForHash = new Uint8Array(blockData.byteLength + 4 + 8);
         var blockDataForHashView = new DataView(blockDataForHash.buffer);
         blockDataForHash.set(new Uint8Array(blockData), 4 + 8);
@@ -13031,17 +12285,22 @@ function getBlockHmac(key, blockIndex, blockLength, blockData) {
  */
 function decrypt(data, key) {
     var stm = new BinaryStream(data);
-    return Promise.resolve().then(function() {
+    return Promise.resolve().then(function () {
         var buffers = [];
-        var blockIndex = 0, blockLength = 0, blockHash, totalLength = 0;
+        var blockIndex = 0,
+            blockLength = 0,
+            blockHash,
+            totalLength = 0;
 
-        var next = function() {
+        var next = function () {
             blockHash = stm.readBytes(32);
             blockLength = stm.getUint32(true);
             if (blockLength > 0) {
                 totalLength += blockLength;
                 var blockData = stm.readBytes(blockLength);
-                return getBlockHmac(key, blockIndex, blockLength, blockData).then(function(calculatedBlockHash) {
+                return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (
+                    calculatedBlockHash
+                ) {
                     if (!ByteUtils.arrayBufferEquals(calculatedBlockHash, blockHash)) {
                         throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
                     } else {
@@ -13071,17 +12330,19 @@ function decrypt(data, key) {
  * @returns {Promise.<ArrayBuffer>}
  */
 function encrypt(data, key) {
-    return Promise.resolve().then(function() {
+    return Promise.resolve().then(function () {
         var bytesLeft = data.byteLength;
-        var currentOffset = 0, blockIndex = 0, totalLength = 0;
+        var currentOffset = 0,
+            blockIndex = 0,
+            totalLength = 0;
         var buffers = [];
 
-        var next = function() {
+        var next = function () {
             var blockLength = Math.min(BlockSize, bytesLeft);
             bytesLeft -= blockLength;
 
             var blockData = data.slice(currentOffset, currentOffset + blockLength);
-            return getBlockHmac(key, blockIndex, blockLength, blockData).then(function(blockHash) {
+            return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (blockHash) {
                 var blockBuffer = new ArrayBuffer(32 + 4);
                 var stm = new BinaryStream(blockBuffer);
                 stm.writeBytes(blockHash);
@@ -13117,7 +12378,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 47 */
+/* 45 */
 /*!******************************************!*\
   !*** ./crypto/protect-salt-generator.js ***!
   \******************************************/
@@ -13129,20 +12390,20 @@ module.exports.encrypt = encrypt;
 "use strict";
 
 
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ 22),
     ChaCha20 = __webpack_require__(/*! ./chacha20 */ 24),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
     CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3),
     ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0);
 
-var SalsaNonce = [0xE8, 0x30, 0x09, 0x4B, 0x97, 0x20, 0x5D, 0x2A];
+var SalsaNonce = [0xe8, 0x30, 0x09, 0x4b, 0x97, 0x20, 0x5d, 0x2a];
 
 /**
  * Protect information used for decrypt and encrypt protected data fields
  * @constructor
  */
-var ProtectSaltGenerator = function(algo) {
+var ProtectSaltGenerator = function (algo) {
     this.algo = algo;
 };
 
@@ -13151,7 +12412,7 @@ var ProtectSaltGenerator = function(algo) {
  * @param {number} len - bytes count
  * @return {ArrayBuffer} - salt bytes
  */
-ProtectSaltGenerator.prototype.getSalt = function(len) {
+ProtectSaltGenerator.prototype.getSalt = function (len) {
     return ByteUtils.arrayToBuffer(this.algo.getBytes(len));
 };
 
@@ -13161,16 +12422,16 @@ ProtectSaltGenerator.prototype.getSalt = function(len) {
  * @param {Number} crsAlgorithm
  * @return {Promise.<ProtectedSaltGenerator>}
  */
-ProtectSaltGenerator.create = function(key, crsAlgorithm) {
+ProtectSaltGenerator.create = function (key, crsAlgorithm) {
     switch (crsAlgorithm) {
         case Consts.CrsAlgorithm.Salsa20:
-            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(key)).then(function(hash) {
+            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(key)).then(function (hash) {
                 var key = new Uint8Array(hash);
                 var algo = new Salsa20(key, SalsaNonce);
                 return new ProtectSaltGenerator(algo);
             });
         case Consts.CrsAlgorithm.ChaCha20:
-            return CryptoEngine.sha512(ByteUtils.arrayToBuffer(key)).then(function(hash) {
+            return CryptoEngine.sha512(ByteUtils.arrayToBuffer(key)).then(function (hash) {
                 var key = new Uint8Array(hash, 0, 32);
                 var nonce = new Uint8Array(hash, 32, 12);
                 var algo = new ChaCha20(key, nonce);
@@ -13185,7 +12446,7 @@ module.exports = ProtectSaltGenerator;
 
 
 /***/ }),
-/* 48 */
+/* 46 */
 /*!*************************************!*\
   !*** ./crypto/key-encryptor-kdf.js ***!
   \*************************************/
@@ -13199,7 +12460,7 @@ module.exports = ProtectSaltGenerator;
 
 var Consts = __webpack_require__(/*! ../defs/consts */ 1),
     ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ 14),
+    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ 13),
     Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
     CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
@@ -13239,7 +12500,7 @@ function encrypt(key, kdfParams) {
 
 function decodeParams(kdfParams) {
     var params = {};
-    KdfFields.forEach(function(fieldDef) {
+    KdfFields.forEach(function (fieldDef) {
         var value = kdfParams.get(fieldDef.field);
         if (value) {
             if (value instanceof Int64) {
@@ -13257,10 +12518,14 @@ function encryptArgon2(key, kdfParams) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 salt'));
     }
     if (typeof params.parallelism !== 'number' || params.parallelism < 1) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 parallelism'));
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 parallelism')
+        );
     }
     if (typeof params.iterations !== 'number' || params.iterations < 1) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 iterations'));
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 iterations')
+        );
     }
     if (typeof params.memory !== 'number' || params.memory < 1 || params.memory % 1024 !== 0) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 memory'));
@@ -13274,9 +12539,16 @@ function encryptArgon2(key, kdfParams) {
     if (params.assocData) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'argon2 assoc data'));
     }
-    return CryptoEngine.argon2(key, params.salt,
-        params.memory / 1024, params.iterations,
-        32, params.parallelism, 0, params.version);
+    return CryptoEngine.argon2(
+        key,
+        params.salt,
+        params.memory / 1024,
+        params.iterations,
+        32,
+        params.parallelism,
+        0,
+        params.version
+    );
 }
 
 function encryptAes(key, kdfParams) {
@@ -13287,8 +12559,12 @@ function encryptAes(key, kdfParams) {
     if (typeof params.rounds !== 'number' || params.rounds < 1) {
         return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad aes rounds'));
     }
-    return KeyEncryptorAes.encrypt(new Uint8Array(key), new Uint8Array(params.salt), params.rounds).then(function(key) {
-        return CryptoEngine.sha256(key).then(function(hash) {
+    return KeyEncryptorAes.encrypt(
+        new Uint8Array(key),
+        new Uint8Array(params.salt),
+        params.rounds
+    ).then(function (key) {
+        return CryptoEngine.sha256(key).then(function (hash) {
             ByteUtils.zeroBuffer(key);
             return hash;
         });
@@ -13299,7 +12575,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 49 */
+/* 47 */
 /*!*****************************!*\
   !*** ./format/kdbx-meta.js ***!
   \*****************************/
@@ -13313,7 +12589,7 @@ module.exports.encrypt = encrypt;
 
 var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ./../defs/consts */ 1);
 
@@ -13325,7 +12601,7 @@ var Constants = {
  * Db metadata
  * @constructor
  */
-var KdbxMeta = function() {
+var KdbxMeta = function () {
     this.generator = undefined;
     this.headerHash = undefined;
     this.settingsChanged = undefined;
@@ -13350,7 +12626,11 @@ var KdbxMeta = function() {
     this._lastSelectedGroup = undefined;
     this._lastTopVisibleGroup = undefined;
     this._memoryProtection = {
-        title: undefined, userName: undefined, password: undefined, url: undefined, notes: undefined
+        title: undefined,
+        userName: undefined,
+        password: undefined,
+        url: undefined,
+        notes: undefined
     };
     this.customData = {};
     this.customIcons = {};
@@ -13376,7 +12656,7 @@ var props = {
     memoryProtection: null
 };
 
-Object.keys(props).forEach(function(prop) {
+Object.keys(props).forEach(function (prop) {
     createProperty(prop, props[prop]);
 });
 
@@ -13384,8 +12664,10 @@ function createProperty(prop, propChanged) {
     var field = '_' + prop;
     Object.defineProperty(KdbxMeta.prototype, prop, {
         enumerable: true,
-        get: function() { return this[field]; },
-        set: function(value) {
+        get: function () {
+            return this[field];
+        },
+        set: function (value) {
             if (value !== this[field]) {
                 this[field] = value;
                 if (propChanged) {
@@ -13398,14 +12680,14 @@ function createProperty(prop, propChanged) {
     });
 }
 
-KdbxMeta.prototype._setPropModDate = function(prop) {
+KdbxMeta.prototype._setPropModDate = function (prop) {
     if (!this._editState) {
-        this._editState = { };
+        this._editState = {};
     }
     this._editState[prop] = new Date().getTime();
 };
 
-KdbxMeta.prototype._readNode = function(node, ctx) {
+KdbxMeta.prototype._readNode = function (node, ctx) {
     switch (node.tagName) {
         case XmlNames.Elem.Generator:
             this.generator = XmlUtils.getText(node);
@@ -13491,7 +12773,7 @@ KdbxMeta.prototype._readNode = function(node, ctx) {
     }
 };
 
-KdbxMeta.prototype._readMemoryProtection = function(node) {
+KdbxMeta.prototype._readMemoryProtection = function (node) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         switch (childNode.tagName) {
@@ -13514,16 +12796,31 @@ KdbxMeta.prototype._readMemoryProtection = function(node) {
     }
 };
 
-KdbxMeta.prototype._writeMemoryProtection = function(parentNode) {
+KdbxMeta.prototype._writeMemoryProtection = function (parentNode) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.MemoryProt);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.ProtTitle), this.memoryProtection.title);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.ProtUserName), this.memoryProtection.userName);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.ProtPassword), this.memoryProtection.password);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.ProtUrl), this.memoryProtection.url);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.ProtNotes), this.memoryProtection.notes);
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtTitle),
+        this.memoryProtection.title
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUserName),
+        this.memoryProtection.userName
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtPassword),
+        this.memoryProtection.password
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUrl),
+        this.memoryProtection.url
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtNotes),
+        this.memoryProtection.notes
+    );
 };
 
-KdbxMeta.prototype._readCustomIcons = function(node) {
+KdbxMeta.prototype._readCustomIcons = function (node) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         if (childNode.tagName === XmlNames.Elem.CustomIconItem) {
@@ -13532,7 +12829,7 @@ KdbxMeta.prototype._readCustomIcons = function(node) {
     }
 };
 
-KdbxMeta.prototype._readCustomIcon = function(node) {
+KdbxMeta.prototype._readCustomIcon = function (node) {
     var uuid, data;
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -13550,20 +12847,23 @@ KdbxMeta.prototype._readCustomIcon = function(node) {
     }
 };
 
-KdbxMeta.prototype._writeCustomIcons = function(parentNode) {
+KdbxMeta.prototype._writeCustomIcons = function (parentNode) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomIcons);
     var customIcons = this.customIcons;
-    Object.keys(customIcons).forEach(function(uuid) {
+    Object.keys(customIcons).forEach(function (uuid) {
         var data = customIcons[uuid];
         if (data) {
             var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconItem);
             XmlUtils.setUuid(XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemID), uuid);
-            XmlUtils.setBytes(XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemData), data);
+            XmlUtils.setBytes(
+                XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemData),
+                data
+            );
         }
     });
 };
 
-KdbxMeta.prototype._readBinaries = function(node, ctx) {
+KdbxMeta.prototype._readBinaries = function (node, ctx) {
     for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         if (childNode.tagName === XmlNames.Elem.Binary) {
@@ -13572,7 +12872,7 @@ KdbxMeta.prototype._readBinaries = function(node, ctx) {
     }
 };
 
-KdbxMeta.prototype._readBinary = function(node, ctx) {
+KdbxMeta.prototype._readBinary = function (node, ctx) {
     var id = node.getAttribute(XmlNames.Attr.Id);
     var binary = XmlUtils.getProtectedBinary(node);
     if (id && binary) {
@@ -13580,10 +12880,10 @@ KdbxMeta.prototype._readBinary = function(node, ctx) {
     }
 };
 
-KdbxMeta.prototype._writeBinaries = function(parentNode, ctx) {
+KdbxMeta.prototype._writeBinaries = function (parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Binaries);
     var binaries = ctx.kdbx.binaries;
-    binaries.hashOrder.forEach(function(hash, index) {
+    binaries.hashOrder.forEach(function (hash, index) {
         var data = binaries[hash];
         if (data) {
             var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.Binary);
@@ -13593,11 +12893,11 @@ KdbxMeta.prototype._writeBinaries = function(parentNode, ctx) {
     });
 };
 
-KdbxMeta.prototype._readCustomData = function(node) {
+KdbxMeta.prototype._readCustomData = function (node) {
     this.customData = KdbxCustomData.read(node);
 };
 
-KdbxMeta.prototype._writeCustomData = function(parentNode) {
+KdbxMeta.prototype._writeCustomData = function (parentNode) {
     KdbxCustomData.write(parentNode, this.customData);
 };
 
@@ -13606,35 +12906,77 @@ KdbxMeta.prototype._writeCustomData = function(parentNode) {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxMeta.prototype.write = function(parentNode, ctx) {
+KdbxMeta.prototype.write = function (parentNode, ctx) {
     this.generator = Constants.generator;
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Meta);
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Generator), Constants.Generator);
     if (ctx.kdbx.header.versionMajor < 4) {
         XmlUtils.setBytes(XmlUtils.addChildNode(node, XmlNames.Elem.HeaderHash), this.headerHash);
     } else if (this.settingsChanged) {
-        ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.SettingsChanged), this.settingsChanged);
+        ctx.setXmlDate(
+            XmlUtils.addChildNode(node, XmlNames.Elem.SettingsChanged),
+            this.settingsChanged
+        );
     }
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbName), this.name);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbNameChanged), this.nameChanged);
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDesc), this.desc);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbDescChanged), this.descChanged);
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUser), this.defaultUser);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUserChanged), this.defaultUserChanged);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbMntncHistoryDays), this.mntncHistoryDays);
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUserChanged),
+        this.defaultUserChanged
+    );
+    XmlUtils.setText(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbMntncHistoryDays),
+        this.mntncHistoryDays
+    );
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbColor), this.color);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChanged), this.keyChanged);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeRec), this.keyChangeRec);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeForce), this.keyChangeForce);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinEnabled), this.recycleBinEnabled);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinUuid), this.recycleBinUuid);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinChanged), this.recycleBinChanged);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroup), this.entryTemplatesGroup);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroupChanged), this.entryTemplatesGroupChanged);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxItems), this.historyMaxItems);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxSize), this.historyMaxSize);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.LastSelectedGroup), this.lastSelectedGroup);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleGroup), this.lastTopVisibleGroup);
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeRec),
+        this.keyChangeRec
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeForce),
+        this.keyChangeForce
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinEnabled),
+        this.recycleBinEnabled
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinUuid),
+        this.recycleBinUuid
+    );
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinChanged),
+        this.recycleBinChanged
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroup),
+        this.entryTemplatesGroup
+    );
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroupChanged),
+        this.entryTemplatesGroupChanged
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxItems),
+        this.historyMaxItems
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxSize),
+        this.historyMaxSize
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastSelectedGroup),
+        this.lastSelectedGroup
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleGroup),
+        this.lastTopVisibleGroup
+    );
     this._writeMemoryProtection(node);
     this._writeCustomIcons(node);
     if (ctx.exportXml || ctx.kdbx.header.versionMajor < 4) {
@@ -13648,7 +12990,7 @@ KdbxMeta.prototype.write = function(parentNode, ctx) {
  * @param {KdbxMeta} remote
  * @param {{objects, remote, deleted}} objectMap
  */
-KdbxMeta.prototype.merge = function(remote, objectMap) {
+KdbxMeta.prototype.merge = function (remote, objectMap) {
     if (remote.nameChanged > this.nameChanged) {
         this._name = remote.name;
         this.nameChanged = remote.nameChanged;
@@ -13676,29 +13018,41 @@ KdbxMeta.prototype.merge = function(remote, objectMap) {
         this._entryTemplatesGroup = remote.entryTemplatesGroup;
         this.entryTemplatesGroupChanged = remote.entryTemplatesGroupChanged;
     }
-    Object.keys(remote.customData).forEach(function(key) {
+    Object.keys(remote.customData).forEach(function (key) {
         if (!this.customData[key] && !objectMap.deleted[key]) {
             this.customData[key] = remote.customData[key];
         }
     }, this);
-    Object.keys(remote.customIcons).forEach(function(key) {
+    Object.keys(remote.customIcons).forEach(function (key) {
         if (!this.customIcons[key] && !objectMap.deleted[key]) {
             this.customIcons[key] = remote.customIcons[key];
         }
     }, this);
-    if (!this._editState || !this._editState.historyMaxItems) { this.historyMaxItems = remote.historyMaxItems; }
-    if (!this._editState || !this._editState.historyMaxSize) { this.historyMaxSize = remote.historyMaxSize; }
-    if (!this._editState || !this._editState.keyChangeRec) { this.keyChangeRec = remote.keyChangeRec; }
-    if (!this._editState || !this._editState.keyChangeForce) { this.keyChangeForce = remote.keyChangeForce; }
-    if (!this._editState || !this._editState.mntncHistoryDays) { this.mntncHistoryDays = remote.mntncHistoryDays; }
-    if (!this._editState || !this._editState.color) { this.color = remote.color; }
+    if (!this._editState || !this._editState.historyMaxItems) {
+        this.historyMaxItems = remote.historyMaxItems;
+    }
+    if (!this._editState || !this._editState.historyMaxSize) {
+        this.historyMaxSize = remote.historyMaxSize;
+    }
+    if (!this._editState || !this._editState.keyChangeRec) {
+        this.keyChangeRec = remote.keyChangeRec;
+    }
+    if (!this._editState || !this._editState.keyChangeForce) {
+        this.keyChangeForce = remote.keyChangeForce;
+    }
+    if (!this._editState || !this._editState.mntncHistoryDays) {
+        this.mntncHistoryDays = remote.mntncHistoryDays;
+    }
+    if (!this._editState || !this._editState.color) {
+        this.color = remote.color;
+    }
 };
 
 /**
  * Creates new meta
  * @returns {KdbxMeta}
  */
-KdbxMeta.create = function() {
+KdbxMeta.create = function () {
     var now = new Date();
     var meta = new KdbxMeta();
     meta.generator = Constants.Generator;
@@ -13715,7 +13069,13 @@ KdbxMeta.create = function() {
     meta.keyChangeForce = -1;
     meta.entryTemplatesGroup = new KdbxUuid();
     meta.entryTemplatesGroupChanged = now;
-    meta.memoryProtection = { title: false, userName: false, password: true, url: false, notes: false };
+    meta.memoryProtection = {
+        title: false,
+        userName: false,
+        password: true,
+        url: false,
+        notes: false
+    };
     return meta;
 };
 
@@ -13725,7 +13085,7 @@ KdbxMeta.create = function() {
  * @param {KdbxContext} ctx
  * @return {KdbxMeta}
  */
-KdbxMeta.read = function(xmlNode, ctx) {
+KdbxMeta.read = function (xmlNode, ctx) {
     var meta = new KdbxMeta();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -13740,7 +13100,7 @@ module.exports = KdbxMeta;
 
 
 /***/ }),
-/* 50 */
+/* 48 */
 /*!*********************************!*\
   !*** ./format/kdbx-binaries.js ***!
   \*********************************/
@@ -13756,28 +13116,30 @@ var ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
     CryptoEngine = __webpack_require__(/*! ./../crypto/crypto-engine */ 3),
     ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0);
 
-var KdbxBinaries = function() {
+var KdbxBinaries = function () {
     Object.defineProperties(this, {
         idToHash: { value: {} },
         hashOrder: { value: null, configurable: true }
     });
 };
 
-KdbxBinaries.prototype.hash = function() {
+KdbxBinaries.prototype.hash = function () {
     var promises = [];
     var that = this;
-    Object.keys(that).forEach(function(id) {
+    Object.keys(that).forEach(function (id) {
         var binary = that[id];
-        promises.push(that.getBinaryHash(binary).then(function(hash) {
-            that.idToHash[id] = hash;
-            that[hash] = that[id];
-            delete that[id];
-        }));
+        promises.push(
+            that.getBinaryHash(binary).then(function (hash) {
+                that.idToHash[id] = hash;
+                that[hash] = that[id];
+                delete that[id];
+            })
+        );
     });
     return Promise.all(promises);
 };
 
-KdbxBinaries.prototype.getBinaryHash = function(binary) {
+KdbxBinaries.prototype.getBinaryHash = function (binary) {
     var promise;
     if (binary instanceof ProtectedValue) {
         promise = binary.getHash();
@@ -13785,18 +13147,18 @@ KdbxBinaries.prototype.getBinaryHash = function(binary) {
         binary = ByteUtils.arrayToBuffer(binary);
         promise = CryptoEngine.sha256(binary);
     }
-    return promise.then(function(hash) {
+    return promise.then(function (hash) {
         return ByteUtils.bytesToHex(hash);
     });
 };
 
-KdbxBinaries.prototype.assignIds = function() {
+KdbxBinaries.prototype.assignIds = function () {
     Object.defineProperty(this, 'hashOrder', { value: Object.keys(this), configurable: true });
 };
 
-KdbxBinaries.prototype.add = function(value) {
+KdbxBinaries.prototype.add = function (value) {
     var that = this;
-    return this.getBinaryHash(value).then(function(hash) {
+    return this.getBinaryHash(value).then(function (hash) {
         that[hash] = value;
         return { ref: hash, value: value };
     });
@@ -13806,7 +13168,7 @@ module.exports = KdbxBinaries;
 
 
 /***/ }),
-/* 51 */
+/* 49 */
 /*!******************************!*\
   !*** ./format/kdbx-group.js ***!
   \******************************/
@@ -13821,7 +13183,7 @@ module.exports = KdbxBinaries;
 var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
     KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28);
@@ -13830,7 +13192,7 @@ var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
  * Entries group
  * @constructor
  */
-var KdbxGroup = function() {
+var KdbxGroup = function () {
     this.uuid = undefined;
     this.name = undefined;
     this.notes = undefined;
@@ -13849,7 +13211,7 @@ var KdbxGroup = function() {
     Object.preventExtensions(this);
 };
 
-KdbxGroup.prototype._readNode = function(node, ctx) {
+KdbxGroup.prototype._readNode = function (node, ctx) {
     switch (node.tagName) {
         case XmlNames.Elem.Uuid:
             this.uuid = XmlUtils.getUuid(node);
@@ -13901,7 +13263,7 @@ KdbxGroup.prototype._readNode = function(node, ctx) {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxGroup.prototype.write = function(parentNode, ctx) {
+KdbxGroup.prototype.write = function (parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Group);
     XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
     XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Name), this.name);
@@ -13913,12 +13275,28 @@ KdbxGroup.prototype.write = function(parentNode, ctx) {
     KdbxCustomData.write(node, this.customData);
     this.times.write(node, ctx);
     XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.IsExpanded), this.expanded);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.GroupDefaultAutoTypeSeq), this.defaultAutoTypeSeq);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.EnableAutoType), this.enableAutoType);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.EnableSearching), this.enableSearching);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleEntry), this.lastTopVisibleEntry);
-    this.groups.forEach(function(g) { g.write(node, ctx); });
-    this.entries.forEach(function(e) { e.write(node, ctx); });
+    XmlUtils.setText(
+        XmlUtils.addChildNode(node, XmlNames.Elem.GroupDefaultAutoTypeSeq),
+        this.defaultAutoTypeSeq
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EnableAutoType),
+        this.enableAutoType
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EnableSearching),
+        this.enableSearching
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleEntry),
+        this.lastTopVisibleEntry
+    );
+    this.groups.forEach(function (g) {
+        g.write(node, ctx);
+    });
+    this.entries.forEach(function (e) {
+        e.write(node, ctx);
+    });
 };
 
 /**
@@ -13926,17 +13304,21 @@ KdbxGroup.prototype.write = function(parentNode, ctx) {
  * @param {function} callback - will be invoked with entry or group argument
  * @param {function} [thisArg] - callback context
  */
-KdbxGroup.prototype.forEach = function(callback, thisArg) {
+KdbxGroup.prototype.forEach = function (callback, thisArg) {
     callback.call(thisArg, undefined, this);
-    this.entries.forEach(function(entry) { callback.call(thisArg, entry); });
-    this.groups.forEach(function(group) { group.forEach(callback, thisArg); });
+    this.entries.forEach(function (entry) {
+        callback.call(thisArg, entry);
+    });
+    this.groups.forEach(function (group) {
+        group.forEach(callback, thisArg);
+    });
 };
 
 /**
  * Merge group with remote group
  * @param {{objects, remote, deleted}} objectMap
  */
-KdbxGroup.prototype.merge = function(objectMap) {
+KdbxGroup.prototype.merge = function (objectMap) {
     var remoteGroup = objectMap.remote[this.uuid];
     if (!remoteGroup) {
         return;
@@ -13946,8 +13328,12 @@ KdbxGroup.prototype.merge = function(objectMap) {
     }
     this.groups = this._mergeCollection(this.groups, remoteGroup.groups, objectMap);
     this.entries = this._mergeCollection(this.entries, remoteGroup.entries, objectMap);
-    this.groups.forEach(function(group) { group.merge(objectMap); });
-    this.entries.forEach(function(entry) { entry.merge(objectMap); });
+    this.groups.forEach(function (group) {
+        group.merge(objectMap);
+    });
+    this.entries.forEach(function (entry) {
+        entry.merge(objectMap);
+    });
 };
 
 /**
@@ -13960,9 +13346,9 @@ KdbxGroup.prototype.merge = function(objectMap) {
  * @returns {object[]}
  * @private
  */
-KdbxGroup.prototype._mergeCollection = function(collection, remoteCollection, objectMap) {
+KdbxGroup.prototype._mergeCollection = function (collection, remoteCollection, objectMap) {
     var newItems = [];
-    collection.forEach(function(item) {
+    collection.forEach(function (item) {
         if (objectMap.deleted[item.uuid]) {
             return; // item deleted
         }
@@ -13973,7 +13359,7 @@ KdbxGroup.prototype._mergeCollection = function(collection, remoteCollection, ob
             newItems.push(item); // item not changed or moved to this group locally later than remote
         }
     }, this);
-    remoteCollection.forEach(function(remoteItem, ix) {
+    remoteCollection.forEach(function (remoteItem, ix) {
         if (objectMap.deleted[remoteItem.uuid]) {
             return; // item already processed as local item or deleted
         }
@@ -13999,8 +13385,9 @@ KdbxGroup.prototype._mergeCollection = function(collection, remoteCollection, ob
  * @returns {int} - index in collection
  * @private
  */
-KdbxGroup.prototype._findInsertIx = function(dst, src, srcIx) {
-    var selectedIx = dst.length, selectedScore = -1;
+KdbxGroup.prototype._findInsertIx = function (dst, src, srcIx) {
+    var selectedIx = dst.length,
+        selectedScore = -1;
     for (var dstIx = 0; dstIx <= dst.length; dstIx++) {
         var score = 0;
         var srcPrev = srcIx > 0 ? src[srcIx - 1].uuid.id : undefined,
@@ -14028,7 +13415,7 @@ KdbxGroup.prototype._findInsertIx = function(dst, src, srcIx) {
 /**
  * Clone group state from another group
  */
-KdbxGroup.prototype.copyFrom = function(group) {
+KdbxGroup.prototype.copyFrom = function (group) {
     this.uuid = group.uuid;
     this.name = group.name;
     this.notes = group.notes;
@@ -14048,7 +13435,7 @@ KdbxGroup.prototype.copyFrom = function(group) {
  * @param {KdbxGroup} [parentGroup]
  * @returns {KdbxGroup}
  */
-KdbxGroup.create = function(name, parentGroup) {
+KdbxGroup.create = function (name, parentGroup) {
     var group = new KdbxGroup();
     group.uuid = KdbxUuid.random();
     group.icon = Consts.Icons.Folder;
@@ -14069,7 +13456,7 @@ KdbxGroup.create = function(name, parentGroup) {
  * @param {KdbxGroup} [parentGroup]
  * @return {KdbxGroup}
  */
-KdbxGroup.read = function(xmlNode, ctx, parentGroup) {
+KdbxGroup.read = function (xmlNode, ctx, parentGroup) {
     var grp = new KdbxGroup();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
@@ -14089,7 +13476,7 @@ module.exports = KdbxGroup;
 
 
 /***/ }),
-/* 52 */
+/* 50 */
 /*!***************************************!*\
   !*** ./format/kdbx-deleted-object.js ***!
   \***************************************/
@@ -14108,13 +13495,13 @@ var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
  * Deleted object
  * @constructor
  */
-var KdbxDeletedObject = function() {
+var KdbxDeletedObject = function () {
     this.uuid = undefined;
     this.deletionTime = undefined;
     Object.preventExtensions(this);
 };
 
-KdbxDeletedObject.prototype._readNode = function(node) {
+KdbxDeletedObject.prototype._readNode = function (node) {
     switch (node.tagName) {
         case XmlNames.Elem.Uuid:
             this.uuid = XmlUtils.getUuid(node);
@@ -14130,7 +13517,7 @@ KdbxDeletedObject.prototype._readNode = function(node) {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxDeletedObject.prototype.write = function(parentNode, ctx) {
+KdbxDeletedObject.prototype.write = function (parentNode, ctx) {
     var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.DeletedObject);
     XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
     ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DeletionTime), this.deletionTime);
@@ -14141,7 +13528,7 @@ KdbxDeletedObject.prototype.write = function(parentNode, ctx) {
  * @param {Node} xmlNode
  * @return {KdbxTimes}
  */
-KdbxDeletedObject.read = function(xmlNode) {
+KdbxDeletedObject.read = function (xmlNode) {
     var obj = new KdbxDeletedObject();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
