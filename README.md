@@ -30,7 +30,7 @@ Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations
 kdbxweb.CryptoEngine.argon2 = (password, salt,
     memory, iterations, length, parallelism, type, version
 ) => {
-    // your implementation makes hash (Uint32Array, 'length' bytes)
+    // your implementation makes hash (Uint8Array, 'length' bytes)
     return Promise.resolve(hash);
 };
 ```
