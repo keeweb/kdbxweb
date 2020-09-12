@@ -269,6 +269,7 @@ To run tests:
 
 kdbxweb includes these 3rd party libraries:
 - [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
+- [text-encoding](https://github.com/inexorabletash/text-encoding) ([fork](https://github.com/keeweb/text-encoding))
 - [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
 
 ## See it in action
