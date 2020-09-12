@@ -1,4 +1,4 @@
-/*! kdbxweb v1.9.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.10.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -8,7 +8,7 @@
 		exports["kdbxweb"] = factory(require("crypto"), require("xmldom"));
 	else
 		root["kdbxweb"] = factory(root["crypto"], root["xmldom"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE__40__, __WEBPACK_EXTERNAL_MODULE__42__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE__42__, __WEBPACK_EXTERNAL_MODULE__44__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -106,7 +106,16 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
 
+var TextEncoder = global.TextEncoder;
+var TextDecoder = global.TextDecoder;
+
+if (!TextEncoder || !TextDecoder) {
+    var textEncoding = __webpack_require__(/*! text-encoding */ 40);
+    TextEncoder = textEncoding.TextEncoder;
+    TextDecoder = textEncoding.TextDecoder;
+}
 
 var textEncoder = new TextEncoder();
 var textDecoder = new TextDecoder();
@@ -262,6 +271,7 @@ module.exports.bytesToHex = bytesToHex;
 module.exports.arrayToBuffer = arrayToBuffer;
 module.exports.zeroBuffer = zeroBuffer;
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
 /* 1 */
@@ -447,7 +457,7 @@ var webCrypto = global.crypto;
 var subtle = webCrypto ? webCrypto.subtle || webCrypto.webkitSubtle : null;
 var nodeCrypto =
     global.process && global.process.versions && global.process.versions.node
-        ? __webpack_require__(/*! crypto */ 40)
+        ? __webpack_require__(/*! crypto */ 42)
         : null;
 
 var EmptySha256 = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
@@ -699,7 +709,7 @@ module.exports.argon2 = argon2;
 
 module.exports.configure = configure;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 23)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
 /* 4 */
@@ -721,11 +731,11 @@ var KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
     ByteUtils = __webpack_require__(/*! ./byte-utils */ 0),
     Int64 = __webpack_require__(/*! ./int64 */ 8),
-    pako = __webpack_require__(/*! pako */ 15);
+    pako = __webpack_require__(/*! pako */ 16);
 
 var dateRegex = /\.\d\d\d/;
 
-var dom = global.DOMParser ? global : __webpack_require__(/*! xmldom */ 42);
+var dom = global.DOMParser ? global : __webpack_require__(/*! xmldom */ 44);
 var domParserArg = global.DOMParser
     ? undefined
     : {
@@ -1220,7 +1230,7 @@ module.exports.unprotectValues = unprotectValues;
 module.exports.protectUnprotectedValues = protectUnprotectedValues;
 module.exports.protectPlainValues = protectPlainValues;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 23)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
 /* 5 */
@@ -1782,7 +1792,7 @@ module.exports = ProtectedValue;
 "use strict";
 
 
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 22),
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
     CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
 
 var key = new Uint8Array(32),
@@ -1968,6 +1978,38 @@ module.exports = {
 
 /***/ }),
 /* 13 */
+/*!*************************************************!*\
+  !*** ../node_modules/webpack/buildin/global.js ***!
+  \*************************************************/
+/*! no static exports found */
+/*! all exports used */
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || new Function("return this")();
+} catch (e) {
+	// This works if the window reference is available
+	if (typeof window === "object") g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 14 */
 /*!*********************************!*\
   !*** ./utils/var-dictionary.js ***!
   \*********************************/
@@ -2271,7 +2313,7 @@ module.exports = VarDictionary;
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /*!************************************!*\
   !*** ./format/kdbx-custom-data.js ***!
   \************************************/
@@ -2346,7 +2388,7 @@ module.exports = KdbxCustomData;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /*!*************************************!*\
   !*** ../node_modules/pako/index.js ***!
   \*************************************/
@@ -2363,7 +2405,7 @@ var assign    = __webpack_require__(/*! ./lib/utils/common */ 5).assign;
 
 var deflate   = __webpack_require__(/*! ./lib/deflate */ 32);
 var inflate   = __webpack_require__(/*! ./lib/inflate */ 35);
-var constants = __webpack_require__(/*! ./lib/zlib/constants */ 20);
+var constants = __webpack_require__(/*! ./lib/zlib/constants */ 21);
 
 var pako = {};
 
@@ -2373,7 +2415,7 @@ module.exports = pako;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/adler32.js ***!
   \************************************************/
@@ -2418,7 +2460,7 @@ module.exports = adler32;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /*!**********************************************!*\
   !*** ../node_modules/pako/lib/zlib/crc32.js ***!
   \**********************************************/
@@ -2472,7 +2514,7 @@ module.exports = crc32;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/utils/strings.js ***!
   \*************************************************/
@@ -2670,7 +2712,7 @@ exports.utf8border = function (buf, max) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/zstream.js ***!
   \************************************************/
@@ -2712,7 +2754,7 @@ module.exports = ZStream;
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /*!**************************************************!*\
   !*** ../node_modules/pako/lib/zlib/constants.js ***!
   \**************************************************/
@@ -2775,7 +2817,7 @@ module.exports = {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /*!*******************************!*\
   !*** ./format/kdbx-header.js ***!
   \*******************************/
@@ -2797,7 +2839,7 @@ var KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
     ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ 13),
+    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ 14),
     Int64 = __webpack_require__(/*! ./../utils/int64 */ 8),
     Random = __webpack_require__(/*! ../crypto/random */ 10);
 
@@ -3211,8 +3253,8 @@ KdbxHeader.prototype._createKdfParameters = function (algo) {
             );
             this.kdfParameters.set(
                 'R',
-                VarDictionary.ValueType.UInt32,
-                Consts.Defaults.KeyEncryptionRounds
+                VarDictionary.ValueType.UInt64,
+                new Int64(Consts.Defaults.KeyEncryptionRounds)
             );
             break;
         default:
@@ -3351,7 +3393,7 @@ module.exports = KdbxHeader;
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /*!***************************!*\
   !*** ./crypto/salsa20.js ***!
   \***************************/
@@ -3653,38 +3695,6 @@ module.exports = Salsa20;
 
 
 /***/ }),
-/* 23 */
-/*!*************************************************!*\
-  !*** ../node_modules/webpack/buildin/global.js ***!
-  \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
 /* 24 */
 /*!****************************!*\
   !*** ./crypto/chacha20.js ***!
@@ -3938,8 +3948,8 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
 
 /**
  * Credentials
- * @param {ProtectedValue} password
- * @param {String|ArrayBuffer|Uint8Array} [keyFile]
+ * @param {ProtectedValue|null} password
+ * @param {String|ArrayBuffer|Uint8Array|null} [keyFile]
  * @constructor
  */
 var KdbxCredentials = function (password, keyFile, challengeResponse) {
@@ -3973,7 +3983,7 @@ KdbxCredentials.prototype.setPassword = function (password) {
 
 /**
  * Set keyfile
- * @param {ArrayBuffer|Uint8Array} [keyFile]
+ * @param {ArrayBuffer|Uint8Array|null} [keyFile]
  */
 KdbxCredentials.prototype.setKeyFile = function (keyFile) {
     if (keyFile && !(keyFile instanceof ArrayBuffer) && !(keyFile instanceof Uint8Array)) {
@@ -4261,7 +4271,7 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
     XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27);
 
@@ -4786,7 +4796,7 @@ module.exports.Credentials = __webpack_require__(/*! ./format/kdbx-credentials *
 module.exports.Consts = __webpack_require__(/*! ./defs/consts */ 1);
 module.exports.ProtectedValue = __webpack_require__(/*! ./crypto/protected-value */ 9);
 module.exports.ByteUtils = __webpack_require__(/*! ./utils/byte-utils */ 0);
-module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ 13);
+module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ 14);
 module.exports.Int64 = __webpack_require__(/*! ./utils/int64 */ 8);
 module.exports.Random = __webpack_require__(/*! ./crypto/random */ 10);
 module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 3);
@@ -4808,12 +4818,12 @@ module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 
 var KdbxFormat = __webpack_require__(/*! ./kdbx-format */ 31),
     KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
     KdbxCredentials = __webpack_require__(/*! ./kdbx-credentials */ 26),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 21),
-    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ 47),
-    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ 48),
-    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ 49),
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
+    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ 49),
+    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ 50),
+    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ 51),
     KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28),
-    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ 50),
+    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ 52),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     Consts = __webpack_require__(/*! ./../defs/consts */ 1),
     XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
@@ -5390,21 +5400,21 @@ module.exports = Kdbx;
 "use strict";
 
 
-var pako = __webpack_require__(/*! pako */ 15),
+var pako = __webpack_require__(/*! pako */ 16),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 21),
-    KdbxContext = __webpack_require__(/*! ./kdbx-context */ 41),
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
+    KdbxContext = __webpack_require__(/*! ./kdbx-context */ 43),
     CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
     BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ 11),
     ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
     XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4),
     Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ 43),
-    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ 44),
-    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ 45),
+    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ 45),
+    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ 46),
+    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ 47),
     KeyEncryptorAes = __webpack_require__(/*! ../crypto/key-encryptor-aes */ 25),
-    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ 46);
+    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ 48);
 
 var KdbxFormat = function (kdbx) {
     this.kdbx = kdbx;
@@ -5837,9 +5847,9 @@ module.exports = KdbxFormat;
 
 var zlib_deflate = __webpack_require__(/*! ./zlib/deflate */ 33);
 var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 18);
+var strings      = __webpack_require__(/*! ./utils/strings */ 19);
 var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 19);
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
 
 var toString = Object.prototype.toString;
 
@@ -6249,8 +6259,8 @@ exports.gzip = gzip;
 
 var utils   = __webpack_require__(/*! ../utils/common */ 5);
 var trees   = __webpack_require__(/*! ./trees */ 34);
-var adler32 = __webpack_require__(/*! ./adler32 */ 16);
-var crc32   = __webpack_require__(/*! ./crc32 */ 17);
+var adler32 = __webpack_require__(/*! ./adler32 */ 17);
+var crc32   = __webpack_require__(/*! ./crc32 */ 18);
 var msg     = __webpack_require__(/*! ./messages */ 12);
 
 /* Public constants ==========================================================*/
@@ -9333,10 +9343,10 @@ exports._tr_align = _tr_align;
 
 var zlib_inflate = __webpack_require__(/*! ./zlib/inflate */ 36);
 var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 18);
-var c            = __webpack_require__(/*! ./zlib/constants */ 20);
+var strings      = __webpack_require__(/*! ./utils/strings */ 19);
+var c            = __webpack_require__(/*! ./zlib/constants */ 21);
 var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 19);
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
 var GZheader     = __webpack_require__(/*! ./zlib/gzheader */ 39);
 
 var toString = Object.prototype.toString;
@@ -9763,8 +9773,8 @@ exports.ungzip  = inflate;
 
 
 var utils         = __webpack_require__(/*! ../utils/common */ 5);
-var adler32       = __webpack_require__(/*! ./adler32 */ 16);
-var crc32         = __webpack_require__(/*! ./crc32 */ 17);
+var adler32       = __webpack_require__(/*! ./adler32 */ 17);
+var crc32         = __webpack_require__(/*! ./crc32 */ 18);
 var inflate_fast  = __webpack_require__(/*! ./inffast */ 37);
 var inflate_table = __webpack_require__(/*! ./inftrees */ 38);
 
@@ -12033,6 +12043,972 @@ module.exports = GZheader;
 
 /***/ }),
 /* 40 */
+/*!**********************************************!*\
+  !*** ../node_modules/text-encoding/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/*! all exports used */
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+/***/ (function(module, exports, __webpack_require__) {
+
+// This is free and unencumbered software released into the public domain.
+// See LICENSE.md for more information.
+
+var encoding = __webpack_require__(/*! ./lib/encoding.js */ 41);
+
+module.exports = {
+  TextEncoder: encoding.TextEncoder,
+  TextDecoder: encoding.TextDecoder,
+};
+
+
+/***/ }),
+/* 41 */
+/*!*****************************************************!*\
+  !*** ../node_modules/text-encoding/lib/encoding.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/*! all exports used */
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+/***/ (function(module, exports, __webpack_require__) {
+
+// This is free and unencumbered software released into the public domain.
+// See LICENSE.md for more information.
+
+// If we're in node require encoding-indexes and attach it to the global.
+/**
+ * @fileoverview Global |this| required for resolving indexes in node.
+ * @suppress {globalThis}
+ */
+(function(global) {
+  'use strict';
+
+  //
+  // Utilities
+  //
+
+  /**
+   * @param {number} a The number to test.
+   * @param {number} min The minimum value in the range, inclusive.
+   * @param {number} max The maximum value in the range, inclusive.
+   * @return {boolean} True if a >= min and a <= max.
+   */
+  function inRange(a, min, max) {
+    return min <= a && a <= max;
+  }
+
+  /**
+   * @param {!Array.<*>} array The array to check.
+   * @param {*} item The item to look for in the array.
+   * @return {boolean} True if the item appears in the array.
+   */
+  function includes(array, item) {
+    return array.indexOf(item) !== -1;
+  }
+
+  /**
+   * @param {*} o
+   * @return {Object}
+   */
+  function ToDictionary(o) {
+    if (o === undefined) return {};
+    if (o === Object(o)) return o;
+    throw TypeError('Could not convert argument to dictionary');
+  }
+
+  /**
+   * @param {string} string Input string of UTF-16 code units.
+   * @return {!Array.<number>} Code points.
+   */
+  function stringToCodePoints(string) {
+    // https://heycam.github.io/webidl/#dfn-obtain-unicode
+
+    // 1. Let S be the DOMString value.
+    var s = String(string);
+
+    // 2. Let n be the length of S.
+    var n = s.length;
+
+    // 3. Initialize i to 0.
+    var i = 0;
+
+    // 4. Initialize U to be an empty sequence of Unicode characters.
+    var u = [];
+
+    // 5. While i < n:
+    while (i < n) {
+
+      // 1. Let c be the code unit in S at index i.
+      var c = s.charCodeAt(i);
+
+      // 2. Depending on the value of c:
+
+      // c < 0xD800 or c > 0xDFFF
+      if (c < 0xD800 || c > 0xDFFF) {
+        // Append to U the Unicode character with code point c.
+        u.push(c);
+      }
+
+      // 0xDC00 ≤ c ≤ 0xDFFF
+      else if (0xDC00 <= c && c <= 0xDFFF) {
+        // Append to U a U+FFFD REPLACEMENT CHARACTER.
+        u.push(0xFFFD);
+      }
+
+      // 0xD800 ≤ c ≤ 0xDBFF
+      else if (0xD800 <= c && c <= 0xDBFF) {
+        // 1. If i = n−1, then append to U a U+FFFD REPLACEMENT
+        // CHARACTER.
+        if (i === n - 1) {
+          u.push(0xFFFD);
+        }
+        // 2. Otherwise, i < n−1:
+        else {
+          // 1. Let d be the code unit in S at index i+1.
+          var d = s.charCodeAt(i + 1);
+
+          // 2. If 0xDC00 ≤ d ≤ 0xDFFF, then:
+          if (0xDC00 <= d && d <= 0xDFFF) {
+            // 1. Let a be c & 0x3FF.
+            var a = c & 0x3FF;
+
+            // 2. Let b be d & 0x3FF.
+            var b = d & 0x3FF;
+
+            // 3. Append to U the Unicode character with code point
+            // 2^16+2^10*a+b.
+            u.push(0x10000 + (a << 10) + b);
+
+            // 4. Set i to i+1.
+            i += 1;
+          }
+
+          // 3. Otherwise, d < 0xDC00 or d > 0xDFFF. Append to U a
+          // U+FFFD REPLACEMENT CHARACTER.
+          else  {
+            u.push(0xFFFD);
+          }
+        }
+      }
+
+      // 3. Set i to i+1.
+      i += 1;
+    }
+
+    // 6. Return U.
+    return u;
+  }
+
+  /**
+   * @param {!Array.<number>} code_points Array of code points.
+   * @return {string} string String of UTF-16 code units.
+   */
+  function codePointsToString(code_points) {
+    var s = '';
+    for (var i = 0; i < code_points.length; ++i) {
+      var cp = code_points[i];
+      if (cp <= 0xFFFF) {
+        s += String.fromCharCode(cp);
+      } else {
+        cp -= 0x10000;
+        s += String.fromCharCode((cp >> 10) + 0xD800,
+                                 (cp & 0x3FF) + 0xDC00);
+      }
+    }
+    return s;
+  }
+
+
+  //
+  // Implementation of Encoding specification
+  // https://encoding.spec.whatwg.org/
+  //
+
+  //
+  // 4. Terminology
+  //
+
+  /**
+   * An ASCII byte is a byte in the range 0x00 to 0x7F, inclusive.
+   * @param {number} a The number to test.
+   * @return {boolean} True if a is in the range 0x00 to 0x7F, inclusive.
+   */
+  function isASCIIByte(a) {
+    return 0x00 <= a && a <= 0x7F;
+  }
+
+  /**
+   * An ASCII code point is a code point in the range U+0000 to
+   * U+007F, inclusive.
+   */
+  var isASCIICodePoint = isASCIIByte;
+
+
+  /**
+   * End-of-stream is a special token that signifies no more tokens
+   * are in the stream.
+   * @const
+   */ var end_of_stream = -1;
+
+  /**
+   * A stream represents an ordered sequence of tokens.
+   *
+   * @constructor
+   * @param {!(Array.<number>|Uint8Array)} tokens Array of tokens that provide
+   * the stream.
+   */
+  function Stream(tokens) {
+    /** @type {!Array.<number>} */
+    this.tokens = [].slice.call(tokens);
+    // Reversed as push/pop is more efficient than shift/unshift.
+    this.tokens.reverse();
+  }
+
+  Stream.prototype = {
+    /**
+     * @return {boolean} True if end-of-stream has been hit.
+     */
+    endOfStream: function() {
+      return !this.tokens.length;
+    },
+
+    /**
+     * When a token is read from a stream, the first token in the
+     * stream must be returned and subsequently removed, and
+     * end-of-stream must be returned otherwise.
+     *
+     * @return {number} Get the next token from the stream, or
+     * end_of_stream.
+     */
+     read: function() {
+      if (!this.tokens.length)
+        return end_of_stream;
+       return this.tokens.pop();
+     },
+
+    /**
+     * When one or more tokens are prepended to a stream, those tokens
+     * must be inserted, in given order, before the first token in the
+     * stream.
+     *
+     * @param {(number|!Array.<number>)} token The token(s) to prepend to the
+     * stream.
+     */
+    prepend: function(token) {
+      if (Array.isArray(token)) {
+        var tokens = /**@type {!Array.<number>}*/(token);
+        while (tokens.length)
+          this.tokens.push(tokens.pop());
+      } else {
+        this.tokens.push(token);
+      }
+    },
+
+    /**
+     * When one or more tokens are pushed to a stream, those tokens
+     * must be inserted, in given order, after the last token in the
+     * stream.
+     *
+     * @param {(number|!Array.<number>)} token The tokens(s) to push to the
+     * stream.
+     */
+    push: function(token) {
+      if (Array.isArray(token)) {
+        var tokens = /**@type {!Array.<number>}*/(token);
+        while (tokens.length)
+          this.tokens.unshift(tokens.shift());
+      } else {
+        this.tokens.unshift(token);
+      }
+    }
+  };
+
+  //
+  // 5. Encodings
+  //
+
+  // 5.1 Encoders and decoders
+
+  /** @const */
+  var finished = -1;
+
+  /**
+   * @param {boolean} fatal If true, decoding errors raise an exception.
+   * @param {number=} opt_code_point Override the standard fallback code point.
+   * @return {number} The code point to insert on a decoding error.
+   */
+  function decoderError(fatal, opt_code_point) {
+    if (fatal)
+      throw TypeError('Decoder error');
+    return opt_code_point || 0xFFFD;
+  }
+
+  /**
+   * @param {number} code_point The code point that could not be encoded.
+   * @return {number} Always throws, no value is actually returned.
+   */
+  function encoderError(code_point) {
+    throw TypeError('The code point ' + code_point + ' could not be encoded.');
+  }
+
+  /** @interface */
+  function Decoder() {}
+  Decoder.prototype = {
+    /**
+     * @param {Stream} stream The stream of bytes being decoded.
+     * @param {number} bite The next byte read from the stream.
+     * @return {?(number|!Array.<number>)} The next code point(s)
+     *     decoded, or null if not enough data exists in the input
+     *     stream to decode a complete code point, or |finished|.
+     */
+    handler: function(stream, bite) {}
+  };
+
+  /** @interface */
+  function Encoder() {}
+  Encoder.prototype = {
+    /**
+     * @param {Stream} stream The stream of code points being encoded.
+     * @param {number} code_point Next code point read from the stream.
+     * @return {(number|!Array.<number>)} Byte(s) to emit, or |finished|.
+     */
+    handler: function(stream, code_point) {}
+  };
+
+  // 5.2 Names and labels
+
+  // TODO: Define @typedef for Encoding: {name:string,labels:Array.<string>}
+  // https://github.com/google/closure-compiler/issues/247
+
+  /**
+   * @param {string} label The encoding label.
+   * @return {?{name:string,labels:Array.<string>}}
+   */
+  function getEncoding(label) {
+    // 1. Remove any leading and trailing ASCII whitespace from label.
+    label = String(label).trim().toLowerCase();
+
+    // 2. If label is an ASCII case-insensitive match for any of the
+    // labels listed in the table below, return the corresponding
+    // encoding, and failure otherwise.
+    if (Object.prototype.hasOwnProperty.call(label_to_encoding, label)) {
+      return label_to_encoding[label];
+    }
+    return null;
+  }
+
+  /**
+   * Encodings table: https://encoding.spec.whatwg.org/encodings.json
+   * @const
+   * @type {!Array.<{
+   *          heading: string,
+   *          encodings: Array.<{name:string,labels:Array.<string>}>
+   *        }>}
+   */
+  var encodings = [
+    {
+      "encodings": [
+        {
+          "labels": [
+            "unicode-1-1-utf-8",
+            "utf-8",
+            "utf8"
+          ],
+          "name": "UTF-8"
+        }
+      ],
+      "heading": "The Encoding"
+    }
+  ];
+
+  // Label to encoding registry.
+  /** @type {Object.<string,{name:string,labels:Array.<string>}>} */
+  var label_to_encoding = {};
+  encodings.forEach(function(category) {
+    category.encodings.forEach(function(encoding) {
+      encoding.labels.forEach(function(label) {
+        label_to_encoding[label] = encoding;
+      });
+    });
+  });
+
+  // Registry of of encoder/decoder factories, by encoding name.
+  /** @type {Object.<string, function({fatal:boolean}): Encoder>} */
+  var encoders = {};
+  /** @type {Object.<string, function({fatal:boolean}): Decoder>} */
+  var decoders = {};
+
+  //
+  // 8. API
+  //
+
+  /** @const */ var DEFAULT_ENCODING = 'utf-8';
+
+  // 8.1 Interface TextDecoder
+
+  /**
+   * @constructor
+   * @param {string=} label The label of the encoding;
+   *     defaults to 'utf-8'.
+   * @param {Object=} options
+   */
+  function TextDecoder(label, options) {
+    // Web IDL conventions
+    if (!(this instanceof TextDecoder))
+      throw TypeError('Called as a function. Did you forget \'new\'?');
+    label = label !== undefined ? String(label) : DEFAULT_ENCODING;
+    options = ToDictionary(options);
+
+    // A TextDecoder object has an associated encoding, decoder,
+    // stream, ignore BOM flag (initially unset), BOM seen flag
+    // (initially unset), error mode (initially replacement), and do
+    // not flush flag (initially unset).
+
+    /** @private */
+    this._encoding = null;
+    /** @private @type {?Decoder} */
+    this._decoder = null;
+    /** @private @type {boolean} */
+    this._ignoreBOM = false;
+    /** @private @type {boolean} */
+    this._BOMseen = false;
+    /** @private @type {string} */
+    this._error_mode = 'replacement';
+    /** @private @type {boolean} */
+    this._do_not_flush = false;
+
+
+    // 1. Let encoding be the result of getting an encoding from
+    // label.
+    var encoding = getEncoding(label);
+
+    // 2. If encoding is failure or replacement, throw a RangeError.
+    if (encoding === null || encoding.name === 'replacement')
+      throw RangeError('Unknown encoding: ' + label);
+    if (!decoders[encoding.name]) {
+      throw Error('Decoder not present.' +
+                  ' Did you forget to include encoding-indexes.js?');
+    }
+
+    // 3. Let dec be a new TextDecoder object.
+    var dec = this;
+
+    // 4. Set dec's encoding to encoding.
+    dec._encoding = encoding;
+
+    // 5. If options's fatal member is true, set dec's error mode to
+    // fatal.
+    if (Boolean(options['fatal']))
+      dec._error_mode = 'fatal';
+
+    // 6. If options's ignoreBOM member is true, set dec's ignore BOM
+    // flag.
+    if (Boolean(options['ignoreBOM']))
+      dec._ignoreBOM = true;
+
+    // 7. Return dec.
+    return dec;
+  }
+
+  if (Object.defineProperty) {
+    // The encoding attribute's getter must return encoding's name.
+    Object.defineProperty(TextDecoder.prototype, 'encoding', {
+      /** @this {TextDecoder} */
+      get: function() { return this._encoding.name.toLowerCase(); }
+    });
+
+    // The fatal attribute's getter must return true if error mode
+    // is fatal, and false otherwise.
+    Object.defineProperty(TextDecoder.prototype, 'fatal', {
+      /** @this {TextDecoder} */
+      get: function() { return this._error_mode === 'fatal'; }
+    });
+
+    // The ignoreBOM attribute's getter must return true if ignore
+    // BOM flag is set, and false otherwise.
+    Object.defineProperty(TextDecoder.prototype, 'ignoreBOM', {
+      /** @this {TextDecoder} */
+      get: function() { return this._ignoreBOM; }
+    });
+  }
+
+  /**
+   * @param {BufferSource=} input The buffer of bytes to decode.
+   * @param {Object=} options
+   * @return {string} The decoded string.
+   */
+  TextDecoder.prototype.decode = function decode(input, options) {
+    var bytes;
+    if (typeof input === 'object' && input instanceof ArrayBuffer) {
+      bytes = new Uint8Array(input);
+    } else if (typeof input === 'object' && 'buffer' in input &&
+               input.buffer instanceof ArrayBuffer) {
+      bytes = new Uint8Array(input.buffer,
+                             input.byteOffset,
+                             input.byteLength);
+    } else {
+      bytes = new Uint8Array(0);
+    }
+
+    options = ToDictionary(options);
+
+    // 1. If the do not flush flag is unset, set decoder to a new
+    // encoding's decoder, set stream to a new stream, and unset the
+    // BOM seen flag.
+    if (!this._do_not_flush) {
+      this._decoder = decoders[this._encoding.name]({
+        fatal: this._error_mode === 'fatal'});
+      this._BOMseen = false;
+    }
+
+    // 2. If options's stream is true, set the do not flush flag, and
+    // unset the do not flush flag otherwise.
+    this._do_not_flush = Boolean(options['stream']);
+
+    // 3. If input is given, push a copy of input to stream.
+    // TODO: Align with spec algorithm - maintain stream on instance.
+    var input_stream = new Stream(bytes);
+
+    // 4. Let output be a new stream.
+    var output = [];
+
+    /** @type {?(number|!Array.<number>)} */
+    var result;
+
+    // 5. While true:
+    while (true) {
+      // 1. Let token be the result of reading from stream.
+      var token = input_stream.read();
+
+      // 2. If token is end-of-stream and the do not flush flag is
+      // set, return output, serialized.
+      // TODO: Align with spec algorithm.
+      if (token === end_of_stream)
+        break;
+
+      // 3. Otherwise, run these subsubsteps:
+
+      // 1. Let result be the result of processing token for decoder,
+      // stream, output, and error mode.
+      result = this._decoder.handler(input_stream, token);
+
+      // 2. If result is finished, return output, serialized.
+      if (result === finished)
+        break;
+
+      if (result !== null) {
+        if (Array.isArray(result))
+          output.push.apply(output, /**@type {!Array.<number>}*/(result));
+        else
+          output.push(result);
+      }
+
+      // 3. Otherwise, if result is error, throw a TypeError.
+      // (Thrown in handler)
+
+      // 4. Otherwise, do nothing.
+    }
+    // TODO: Align with spec algorithm.
+    if (!this._do_not_flush) {
+      do {
+        result = this._decoder.handler(input_stream, input_stream.read());
+        if (result === finished)
+          break;
+        if (result === null)
+          continue;
+        if (Array.isArray(result))
+          output.push.apply(output, /**@type {!Array.<number>}*/(result));
+        else
+          output.push(result);
+      } while (!input_stream.endOfStream());
+      this._decoder = null;
+    }
+
+    // A TextDecoder object also has an associated serialize stream
+    // algorithm...
+    /**
+     * @param {!Array.<number>} stream
+     * @return {string}
+     * @this {TextDecoder}
+     */
+    function serializeStream(stream) {
+      // 1. Let token be the result of reading from stream.
+      // (Done in-place on array, rather than as a stream)
+
+      // 2. If encoding is UTF-8, UTF-16BE, or UTF-16LE, and ignore
+      // BOM flag and BOM seen flag are unset, run these subsubsteps:
+      if (includes(['UTF-8', 'UTF-16LE', 'UTF-16BE'], this._encoding.name) &&
+          !this._ignoreBOM && !this._BOMseen) {
+        if (stream.length > 0 && stream[0] === 0xFEFF) {
+          // 1. If token is U+FEFF, set BOM seen flag.
+          this._BOMseen = true;
+          stream.shift();
+        } else if (stream.length > 0) {
+          // 2. Otherwise, if token is not end-of-stream, set BOM seen
+          // flag and append token to stream.
+          this._BOMseen = true;
+        } else {
+          // 3. Otherwise, if token is not end-of-stream, append token
+          // to output.
+          // (no-op)
+        }
+      }
+      // 4. Otherwise, return output.
+      return codePointsToString(stream);
+    }
+
+    return serializeStream.call(this, output);
+  };
+
+  // 8.2 Interface TextEncoder
+
+  /**
+   * @constructor
+   * @param {string=} label The label of the encoding. NONSTANDARD.
+   * @param {Object=} options NONSTANDARD.
+   */
+  function TextEncoder(label, options) {
+    // Web IDL conventions
+    if (!(this instanceof TextEncoder))
+      throw TypeError('Called as a function. Did you forget \'new\'?');
+    options = ToDictionary(options);
+
+    // A TextEncoder object has an associated encoding and encoder.
+
+    /** @private */
+    this._encoding = null;
+    /** @private @type {?Encoder} */
+    this._encoder = null;
+
+    // Non-standard
+    /** @private @type {boolean} */
+    this._do_not_flush = false;
+    /** @private @type {string} */
+    this._fatal = Boolean(options['fatal']) ? 'fatal' : 'replacement';
+
+    // 1. Let enc be a new TextEncoder object.
+    var enc = this;
+
+    // 2. Set enc's encoding to UTF-8's encoder.
+    // Standard behavior.
+    enc._encoding = getEncoding('utf-8');
+
+    if (label !== undefined && 'console' in global) {
+      console.warn('TextEncoder constructor called with encoding label, '
+                   + 'which is ignored.');
+    }
+
+    // 3. Return enc.
+    return enc;
+  }
+
+  if (Object.defineProperty) {
+    // The encoding attribute's getter must return encoding's name.
+    Object.defineProperty(TextEncoder.prototype, 'encoding', {
+      /** @this {TextEncoder} */
+      get: function() { return this._encoding.name.toLowerCase(); }
+    });
+  }
+
+  /**
+   * @param {string=} opt_string The string to encode.
+   * @param {Object=} options
+   * @return {!Uint8Array} Encoded bytes, as a Uint8Array.
+   */
+  TextEncoder.prototype.encode = function encode(opt_string, options) {
+    opt_string = opt_string ? String(opt_string) : '';
+    options = ToDictionary(options);
+
+    // NOTE: This option is nonstandard. None of the encodings
+    // permitted for encoding (i.e. UTF-8, UTF-16) are stateful when
+    // the input is a USVString so streaming is not necessary.
+    if (!this._do_not_flush)
+      this._encoder = encoders[this._encoding.name]({
+        fatal: this._fatal === 'fatal'});
+    this._do_not_flush = Boolean(options['stream']);
+
+    // 1. Convert input to a stream.
+    var input = new Stream(stringToCodePoints(opt_string));
+
+    // 2. Let output be a new stream
+    var output = [];
+
+    /** @type {?(number|!Array.<number>)} */
+    var result;
+    // 3. While true, run these substeps:
+    while (true) {
+      // 1. Let token be the result of reading from input.
+      var token = input.read();
+      if (token === end_of_stream)
+        break;
+      // 2. Let result be the result of processing token for encoder,
+      // input, output.
+      result = this._encoder.handler(input, token);
+      if (result === finished)
+        break;
+      if (Array.isArray(result))
+        output.push.apply(output, /**@type {!Array.<number>}*/(result));
+      else
+        output.push(result);
+    }
+    // TODO: Align with spec algorithm.
+    if (!this._do_not_flush) {
+      while (true) {
+        result = this._encoder.handler(input, input.read());
+        if (result === finished)
+          break;
+        if (Array.isArray(result))
+          output.push.apply(output, /**@type {!Array.<number>}*/(result));
+        else
+          output.push(result);
+      }
+      this._encoder = null;
+    }
+    // 3. If result is finished, convert output into a byte sequence,
+    // and then return a Uint8Array object wrapping an ArrayBuffer
+    // containing output.
+    return new Uint8Array(output);
+  };
+
+
+  //
+  // 9. The encoding
+  //
+
+  // 9.1 utf-8
+
+  // 9.1.1 utf-8 decoder
+  /**
+   * @constructor
+   * @implements {Decoder}
+   * @param {{fatal: boolean}} options
+   */
+  function UTF8Decoder(options) {
+    var fatal = options.fatal;
+
+    // utf-8's decoder's has an associated utf-8 code point, utf-8
+    // bytes seen, and utf-8 bytes needed (all initially 0), a utf-8
+    // lower boundary (initially 0x80), and a utf-8 upper boundary
+    // (initially 0xBF).
+    var /** @type {number} */ utf8_code_point = 0,
+        /** @type {number} */ utf8_bytes_seen = 0,
+        /** @type {number} */ utf8_bytes_needed = 0,
+        /** @type {number} */ utf8_lower_boundary = 0x80,
+        /** @type {number} */ utf8_upper_boundary = 0xBF;
+
+    /**
+     * @param {Stream} stream The stream of bytes being decoded.
+     * @param {number} bite The next byte read from the stream.
+     * @return {?(number|!Array.<number>)} The next code point(s)
+     *     decoded, or null if not enough data exists in the input
+     *     stream to decode a complete code point.
+     */
+    this.handler = function(stream, bite) {
+      // 1. If byte is end-of-stream and utf-8 bytes needed is not 0,
+      // set utf-8 bytes needed to 0 and return error.
+      if (bite === end_of_stream && utf8_bytes_needed !== 0) {
+        utf8_bytes_needed = 0;
+        return decoderError(fatal);
+      }
+
+      // 2. If byte is end-of-stream, return finished.
+      if (bite === end_of_stream)
+        return finished;
+
+      // 3. If utf-8 bytes needed is 0, based on byte:
+      if (utf8_bytes_needed === 0) {
+
+        // 0x00 to 0x7F
+        if (inRange(bite, 0x00, 0x7F)) {
+          // Return a code point whose value is byte.
+          return bite;
+        }
+
+        // 0xC2 to 0xDF
+        else if (inRange(bite, 0xC2, 0xDF)) {
+          // 1. Set utf-8 bytes needed to 1.
+          utf8_bytes_needed = 1;
+
+          // 2. Set UTF-8 code point to byte & 0x1F.
+          utf8_code_point = bite & 0x1F;
+        }
+
+        // 0xE0 to 0xEF
+        else if (inRange(bite, 0xE0, 0xEF)) {
+          // 1. If byte is 0xE0, set utf-8 lower boundary to 0xA0.
+          if (bite === 0xE0)
+            utf8_lower_boundary = 0xA0;
+          // 2. If byte is 0xED, set utf-8 upper boundary to 0x9F.
+          if (bite === 0xED)
+            utf8_upper_boundary = 0x9F;
+          // 3. Set utf-8 bytes needed to 2.
+          utf8_bytes_needed = 2;
+          // 4. Set UTF-8 code point to byte & 0xF.
+          utf8_code_point = bite & 0xF;
+        }
+
+        // 0xF0 to 0xF4
+        else if (inRange(bite, 0xF0, 0xF4)) {
+          // 1. If byte is 0xF0, set utf-8 lower boundary to 0x90.
+          if (bite === 0xF0)
+            utf8_lower_boundary = 0x90;
+          // 2. If byte is 0xF4, set utf-8 upper boundary to 0x8F.
+          if (bite === 0xF4)
+            utf8_upper_boundary = 0x8F;
+          // 3. Set utf-8 bytes needed to 3.
+          utf8_bytes_needed = 3;
+          // 4. Set UTF-8 code point to byte & 0x7.
+          utf8_code_point = bite & 0x7;
+        }
+
+        // Otherwise
+        else {
+          // Return error.
+          return decoderError(fatal);
+        }
+
+        // Return continue.
+        return null;
+      }
+
+      // 4. If byte is not in the range utf-8 lower boundary to utf-8
+      // upper boundary, inclusive, run these substeps:
+      if (!inRange(bite, utf8_lower_boundary, utf8_upper_boundary)) {
+
+        // 1. Set utf-8 code point, utf-8 bytes needed, and utf-8
+        // bytes seen to 0, set utf-8 lower boundary to 0x80, and set
+        // utf-8 upper boundary to 0xBF.
+        utf8_code_point = utf8_bytes_needed = utf8_bytes_seen = 0;
+        utf8_lower_boundary = 0x80;
+        utf8_upper_boundary = 0xBF;
+
+        // 2. Prepend byte to stream.
+        stream.prepend(bite);
+
+        // 3. Return error.
+        return decoderError(fatal);
+      }
+
+      // 5. Set utf-8 lower boundary to 0x80 and utf-8 upper boundary
+      // to 0xBF.
+      utf8_lower_boundary = 0x80;
+      utf8_upper_boundary = 0xBF;
+
+      // 6. Set UTF-8 code point to (UTF-8 code point << 6) | (byte &
+      // 0x3F)
+      utf8_code_point = (utf8_code_point << 6) | (bite & 0x3F);
+
+      // 7. Increase utf-8 bytes seen by one.
+      utf8_bytes_seen += 1;
+
+      // 8. If utf-8 bytes seen is not equal to utf-8 bytes needed,
+      // continue.
+      if (utf8_bytes_seen !== utf8_bytes_needed)
+        return null;
+
+      // 9. Let code point be utf-8 code point.
+      var code_point = utf8_code_point;
+
+      // 10. Set utf-8 code point, utf-8 bytes needed, and utf-8 bytes
+      // seen to 0.
+      utf8_code_point = utf8_bytes_needed = utf8_bytes_seen = 0;
+
+      // 11. Return a code point whose value is code point.
+      return code_point;
+    };
+  }
+
+  // 9.1.2 utf-8 encoder
+  /**
+   * @constructor
+   * @implements {Encoder}
+   * @param {{fatal: boolean}} options
+   */
+  function UTF8Encoder(options) {
+    var fatal = options.fatal;
+    /**
+     * @param {Stream} stream Input stream.
+     * @param {number} code_point Next code point read from the stream.
+     * @return {(number|!Array.<number>)} Byte(s) to emit.
+     */
+    this.handler = function(stream, code_point) {
+      // 1. If code point is end-of-stream, return finished.
+      if (code_point === end_of_stream)
+        return finished;
+
+      // 2. If code point is in the range U+0000 to U+007F, return a
+      // byte whose value is code point.
+      if (inRange(code_point, 0x0000, 0x007f))
+        return code_point;
+
+      // 3. Set count and offset based on the range code point is in:
+      var count, offset;
+      // U+0080 to U+07FF, inclusive:
+      if (inRange(code_point, 0x0080, 0x07FF)) {
+        // 1 and 0xC0
+        count = 1;
+        offset = 0xC0;
+      }
+      // U+0800 to U+FFFF, inclusive:
+      else if (inRange(code_point, 0x0800, 0xFFFF)) {
+        // 2 and 0xE0
+        count = 2;
+        offset = 0xE0;
+      }
+      // U+10000 to U+10FFFF, inclusive:
+      else if (inRange(code_point, 0x10000, 0x10FFFF)) {
+        // 3 and 0xF0
+        count = 3;
+        offset = 0xF0;
+      }
+
+      // 4.Let bytes be a byte sequence whose first byte is (code
+      // point >> (6 × count)) + offset.
+      var bytes = [(code_point >> (6 * count)) + offset];
+
+      // 5. Run these substeps while count is greater than 0:
+      while (count > 0) {
+
+        // 1. Set temp to code point >> (6 × (count − 1)).
+        var temp = code_point >> (6 * (count - 1));
+
+        // 2. Append to bytes 0x80 | (temp & 0x3F).
+        bytes.push(0x80 | (temp & 0x3F));
+
+        // 3. Decrease count by one.
+        count -= 1;
+      }
+
+      // 6. Return bytes bytes, in order.
+      return bytes;
+    };
+  }
+
+  /** @param {{fatal: boolean}} options */
+  encoders['UTF-8'] = function(options) {
+    return new UTF8Encoder(options);
+  };
+  /** @param {{fatal: boolean}} options */
+  decoders['UTF-8'] = function(options) {
+    return new UTF8Decoder(options);
+  };
+
+  if (!global['TextEncoder'])
+    global['TextEncoder'] = TextEncoder;
+  if (!global['TextDecoder'])
+    global['TextDecoder'] = TextDecoder;
+
+  if ( true && module.exports) {
+    module.exports = {
+      TextEncoder: global['TextEncoder'],
+      TextDecoder: global['TextDecoder']
+    };
+  }
+}(this));
+
+
+/***/ }),
+/* 42 */
 /*!*************************!*\
   !*** external "crypto" ***!
   \*************************/
@@ -12041,10 +13017,10 @@ module.exports = GZheader;
 /*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__40__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__42__;
 
 /***/ }),
-/* 41 */
+/* 43 */
 /*!********************************!*\
   !*** ./format/kdbx-context.js ***!
   \********************************/
@@ -12083,7 +13059,7 @@ module.exports = KdbxContext;
 
 
 /***/ }),
-/* 42 */
+/* 44 */
 /*!*************************!*\
   !*** external "xmldom" ***!
   \*************************/
@@ -12092,10 +13068,10 @@ module.exports = KdbxContext;
 /*! ModuleConcatenation bailout: Module is not an ECMAScript module */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__42__;
+module.exports = __WEBPACK_EXTERNAL_MODULE__44__;
 
 /***/ }),
-/* 43 */
+/* 45 */
 /*!******************************************!*\
   !*** ./crypto/hashed-block-transform.js ***!
   \******************************************/
@@ -12219,7 +13195,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 44 */
+/* 46 */
 /*!****************************************!*\
   !*** ./crypto/hmac-block-transform.js ***!
   \****************************************/
@@ -12378,7 +13354,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 45 */
+/* 47 */
 /*!******************************************!*\
   !*** ./crypto/protect-salt-generator.js ***!
   \******************************************/
@@ -12390,7 +13366,7 @@ module.exports.encrypt = encrypt;
 "use strict";
 
 
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 22),
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
     ChaCha20 = __webpack_require__(/*! ./chacha20 */ 24),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
@@ -12446,7 +13422,7 @@ module.exports = ProtectSaltGenerator;
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /*!*************************************!*\
   !*** ./crypto/key-encryptor-kdf.js ***!
   \*************************************/
@@ -12460,7 +13436,7 @@ module.exports = ProtectSaltGenerator;
 
 var Consts = __webpack_require__(/*! ../defs/consts */ 1),
     ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ 13),
+    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ 14),
     Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
     CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
     KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
@@ -12474,7 +13450,7 @@ var KdfFields = [
     { name: 'version', field: 'V', type: VarDictionary.ValueType.UInt32 },
     { name: 'secretKey', field: 'K', type: VarDictionary.ValueType.Bytes },
     { name: 'assocData', field: 'A', type: VarDictionary.ValueType.Bytes },
-    { name: 'rounds', field: 'R', type: VarDictionary.ValueType.Int64 }
+    { name: 'rounds', field: 'R', type: VarDictionary.ValueType.UInt64 }
 ];
 
 /**
@@ -12575,7 +13551,7 @@ module.exports.encrypt = encrypt;
 
 
 /***/ }),
-/* 47 */
+/* 49 */
 /*!*****************************!*\
   !*** ./format/kdbx-meta.js ***!
   \*****************************/
@@ -12589,7 +13565,7 @@ module.exports.encrypt = encrypt;
 
 var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ./../defs/consts */ 1);
 
@@ -13100,7 +14076,7 @@ module.exports = KdbxMeta;
 
 
 /***/ }),
-/* 48 */
+/* 50 */
 /*!*********************************!*\
   !*** ./format/kdbx-binaries.js ***!
   \*********************************/
@@ -13168,7 +14144,7 @@ module.exports = KdbxBinaries;
 
 
 /***/ }),
-/* 49 */
+/* 51 */
 /*!******************************!*\
   !*** ./format/kdbx-group.js ***!
   \******************************/
@@ -13183,7 +14159,7 @@ module.exports = KdbxBinaries;
 var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
     XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
     Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 14),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
     KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27),
     KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
     KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28);
@@ -13476,7 +14452,7 @@ module.exports = KdbxGroup;
 
 
 /***/ }),
-/* 50 */
+/* 52 */
 /*!***************************************!*\
   !*** ./format/kdbx-deleted-object.js ***!
   \***************************************/
