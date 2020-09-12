@@ -5,7 +5,7 @@ var path = require('path'),
 
 var entry = [];
 
-walk.walkSync('test', function(basedir, filename, stat) {
+walk.walkSync('test', function (basedir, filename, stat) {
     if (stat.isFile() && path.extname(filename) === '.js') {
         entry.push(path.join(basedir, filename).replace('test', '.'));
     }
@@ -22,10 +22,13 @@ module.exports = {
         globalObject: 'this'
     },
     module: {
-        rules: [{
-            test: /argon2-asm/,
-            loader: 'exports-loader?Module'
-        }]
+        rules: [
+            {
+                test: /argon2-asm/,
+                loader: 'exports-loader',
+                options: { type: 'module', exports: 'default Module' }
+            }
+        ]
     },
     resolve: {
         modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
