@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.10.0 (2020-09-12)
+`-` fixed KeyEncryptionRounds header field data type  
+
 ##### v1.9.0 (2020-06-04)
 `*` removed text-encoding polyfill  
 `+` development: eslint  
