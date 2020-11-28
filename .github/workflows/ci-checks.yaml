@@ -2,7 +2,8 @@ name: CI Checks
 on:
   push:
     branches:
-      [ master ]
+      - master
+  pull_request:
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -14,5 +15,7 @@ jobs:
         run: npm ci
       - name: Run CI checks
         run: npm run cichecks
-      - name: Upload coverage data
-        run: cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
