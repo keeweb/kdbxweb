@@ -1,4 +1,4 @@
-# KdbxWeb ![CI Checks](https://github.com/keeweb/kdbxweb/workflows/CI%20Checks/badge.svg)
+# KdbxWeb ![CI Checks](https://github.com/keeweb/kdbxweb/workflows/CI%20Checks/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/keeweb/kdbxweb/badge.svg?branch=master)](https://coveralls.io/github/keeweb/kdbxweb?branch=master)
 
 KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 databases (kdbx) in node.js or browser.
 
