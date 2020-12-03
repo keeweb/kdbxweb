@@ -4,6 +4,7 @@
   "rules": {
     "semi": ["error", "always"],
     "one-var": "off",
+    "no-var": "off",
     "space-before-function-paren": "off",
     "no-throw-literal": "off",
     "camelcase": ["error", { "properties": "always" }],

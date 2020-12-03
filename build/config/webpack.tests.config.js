@@ -31,16 +31,18 @@ module.exports = {
         ]
     },
     resolve: {
-        modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')]
+        modules: [path.join(__dirname, '../../lib'), path.join(__dirname, '../../node_modules')],
+        fallback: {
+            console: false,
+            process: false,
+            Buffer: false,
+            crypto: false,
+            zlib: false
+        }
     },
     node: {
-        console: false,
-        process: false,
-        Buffer: false,
         __filename: false,
-        __dirname: false,
-        crypto: false,
-        zlib: false
+        __dirname: false
     },
     externals: {
         fs: true,

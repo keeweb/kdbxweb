@@ -47,6 +47,7 @@ describe('Int64', function () {
 
     it('throws error for too high number creation', function () {
         expect(function () {
+            // eslint-disable-next-line no-loss-of-precision
             Int64.from(0xffffffffffffff);
         }).to.throwException(function (e) {
             expect(e.message).to.be('too large number');
