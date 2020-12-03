@@ -1,4 +1,4 @@
-/*! kdbxweb v1.10.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.11.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -8,456 +8,185 @@
 		exports["kdbxweb"] = factory(require("crypto"), require("xmldom"));
 	else
 		root["kdbxweb"] = factory(root["crypto"], root["xmldom"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE__42__, __WEBPACK_EXTERNAL_MODULE__44__) {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/*!*****************************!*\
-  !*** ./utils/byte-utils.js ***!
-  \*****************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_crypto__, __WEBPACK_EXTERNAL_MODULE_xmldom__) {
+return /******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./crypto/chacha20.js":
+/*!****************************!*\
+  !*** ./crypto/chacha20.js ***!
+  \****************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 126:0-14 */
+/***/ ((module) => {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
 
-var TextEncoder = global.TextEncoder;
-var TextDecoder = global.TextDecoder;
 
-if (!TextEncoder || !TextDecoder) {
-    var textEncoding = __webpack_require__(/*! text-encoding */ 40);
-    TextEncoder = textEncoding.TextEncoder;
-    TextDecoder = textEncoding.TextDecoder;
+function ChaCha20(key, nonce) {
+    this.sigmaWords = [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574];
+    this.block = new Uint8Array(64);
+    this.blockUsed = 64;
+    this.x = new Uint32Array(16);
+
+    var input = new Uint32Array(16);
+
+    input[0] = this.sigmaWords[0];
+    input[1] = this.sigmaWords[1];
+    input[2] = this.sigmaWords[2];
+    input[3] = this.sigmaWords[3];
+    input[4] = u8to32le(key, 0);
+    input[5] = u8to32le(key, 4);
+    input[6] = u8to32le(key, 8);
+    input[7] = u8to32le(key, 12);
+    input[8] = u8to32le(key, 16);
+    input[9] = u8to32le(key, 20);
+    input[10] = u8to32le(key, 24);
+    input[11] = u8to32le(key, 28);
+    input[12] = 0; // counter
+
+    if (nonce.length === 12) {
+        input[13] = u8to32le(nonce, 0);
+        input[14] = u8to32le(nonce, 4);
+        input[15] = u8to32le(nonce, 8);
+    } else {
+        input[13] = 0;
+        input[14] = u8to32le(nonce, 0);
+        input[15] = u8to32le(nonce, 4);
+    }
+
+    this.input = input;
 }
 
-var textEncoder = new TextEncoder();
-var textDecoder = new TextDecoder();
-
-/**
- * Checks if two ArrayBuffers are equal
- * @param {ArrayBuffer} ab1
- * @param {ArrayBuffer} ab2
- * @returns {boolean}
- */
-function arrayBufferEquals(ab1, ab2) {
-    if (ab1.byteLength !== ab2.byteLength) {
-        return false;
+ChaCha20.prototype.getBytes = function (numberOfBytes) {
+    var out = new Uint8Array(numberOfBytes);
+    for (var i = 0; i < numberOfBytes; i++) {
+        if (this.blockUsed === 64) {
+            this._generateBlock();
+            this.blockUsed = 0;
+        }
+        out[i] = this.block[this.blockUsed];
+        this.blockUsed++;
     }
-    var arr1 = new Uint8Array(ab1);
-    var arr2 = new Uint8Array(ab2);
-    for (var i = 0, len = arr1.length; i < len; i++) {
-        if (arr1[i] !== arr2[i]) {
-            return false;
+    return out;
+};
+
+ChaCha20.prototype._generateBlock = function () {
+    var input = this.input;
+    var x = this.x;
+    var block = this.block;
+    var i;
+
+    x.set(input);
+    for (i = 20; i > 0; i -= 2) {
+        quarterRound(x, 0, 4, 8, 12);
+        quarterRound(x, 1, 5, 9, 13);
+        quarterRound(x, 2, 6, 10, 14);
+        quarterRound(x, 3, 7, 11, 15);
+        quarterRound(x, 0, 5, 10, 15);
+        quarterRound(x, 1, 6, 11, 12);
+        quarterRound(x, 2, 7, 8, 13);
+        quarterRound(x, 3, 4, 9, 14);
+    }
+    for (i = 16; i--; ) {
+        x[i] += input[i];
+    }
+    for (i = 16; i--; ) {
+        u32to8le(block, 4 * i, x[i]);
+    }
+
+    input[12] += 1;
+    if (!input[12]) {
+        input[13] += 1;
+    }
+};
+
+ChaCha20.prototype.encrypt = function (data) {
+    var length = data.length;
+    var res = new Uint8Array(length);
+    var pos = 0;
+    var block = this.block;
+    while (pos < length) {
+        this._generateBlock();
+        var blockLength = Math.min(length - pos, 64);
+        for (var i = 0; i < blockLength; i++) {
+            res[pos] = data[pos] ^ block[i];
+            pos++;
         }
     }
-    return true;
-}
-
-/**
- * Converts Array or ArrayBuffer to string
- * @param {Array|Uint8Array|ArrayBuffer} arr
- * @return {string}
- */
-function bytesToString(arr) {
-    if (arr instanceof ArrayBuffer) {
-        arr = new Uint8Array(arr);
-    }
-    return textDecoder.decode(arr);
-}
-
-/**
- * Converts string to byte array
- * @param {string} str
- * @return {Uint8Array}
- */
-function stringToBytes(str) {
-    return textEncoder.encode(str);
-}
-
-/**
- * Converts base64 string to array
- * @param {string} str
- * @return {Uint8Array}
- */
-function base64ToBytes(str) {
-    if (typeof atob === 'undefined' && typeof Buffer === 'function') {
-        // node.js doesn't have atob
-        var buffer = Buffer.from(str, 'base64');
-        return new Uint8Array(buffer);
-    }
-    var byteStr = atob(str);
-    var arr = new Uint8Array(byteStr.length);
-    for (var i = 0; i < byteStr.length; i++) {
-        arr[i] = byteStr.charCodeAt(i);
-    }
-    return arr;
-}
-
-/**
- * Converts Array or ArrayBuffer to base64-string
- * @param {Array|Uint8Array|ArrayBuffer} arr
- * @return {string}
- */
-function bytesToBase64(arr) {
-    if (arr instanceof ArrayBuffer) {
-        arr = new Uint8Array(arr);
-    }
-    if (typeof btoa === 'undefined' && typeof Buffer === 'function') {
-        // node.js doesn't have btoa
-        var buffer = Buffer.from(arr);
-        return buffer.toString('base64');
-    }
-    var str = '';
-    for (var i = 0; i < arr.length; i++) {
-        str += String.fromCharCode(arr[i]);
-    }
-    return btoa(str);
-}
-
-/**
- * Convert hex-string to byte array
- * @param {string} hex
- * @return Uint8Array
- */
-function hexToBytes(hex) {
-    var arr = new Uint8Array(Math.ceil(hex.length / 2));
-    for (var i = 0; i < arr.length; i++) {
-        arr[i] = parseInt(hex.substr(i * 2, 2), 16);
-    }
-    return arr;
-}
-
-/**
- * Convert hex-string to byte array
- * @param {Array|Uint8Array|ArrayBuffer} arr
- * @return {string}
- */
-function bytesToHex(arr) {
-    if (arr instanceof ArrayBuffer) {
-        arr = new Uint8Array(arr);
-    }
-    var str = '';
-    for (var i = 0; i < arr.length; i++) {
-        var byte = arr[i].toString(16);
-        if (byte.length === 1) {
-            str += '0';
-        }
-        str += byte;
-    }
-    return str;
-}
-
-/**
- * Converts byte array to array buffer
- * @param {Uint8Array|ArrayBuffer} arr
- * @returns {ArrayBuffer}
- */
-function arrayToBuffer(arr) {
-    if (arr instanceof ArrayBuffer) {
-        return arr;
-    }
-    var ab = arr.buffer;
-    if (arr.byteOffset === 0 && arr.byteLength === ab.byteLength) {
-        return ab;
-    }
-    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
-}
-
-/**
- * Fills array or arraybuffer with zeroes
- * @param {Uint8Array|ArrayBuffer} buffer
- */
-function zeroBuffer(buffer) {
-    if (buffer instanceof ArrayBuffer) {
-        buffer = new Uint8Array(buffer);
-    }
-    buffer.fill(0);
-}
-
-module.exports.arrayBufferEquals = arrayBufferEquals;
-module.exports.bytesToString = bytesToString;
-module.exports.stringToBytes = stringToBytes;
-module.exports.base64ToBytes = base64ToBytes;
-module.exports.bytesToBase64 = bytesToBase64;
-module.exports.hexToBytes = hexToBytes;
-module.exports.bytesToHex = bytesToHex;
-module.exports.arrayToBuffer = arrayToBuffer;
-module.exports.zeroBuffer = zeroBuffer;
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
-
-/***/ }),
-/* 1 */
-/*!************************!*\
-  !*** ./defs/consts.js ***!
-  \************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports.Signatures = {
-    FileMagic: 0x9aa2d903,
-    Sig2Kdbx: 0xb54bfb67,
-    Sig2Kdb: 0xb54bfb65
+    return res;
 };
 
-module.exports.ErrorCodes = {
-    NotImplemented: 'NotImplemented',
-    InvalidArg: 'InvalidArg',
-    BadSignature: 'BadSignature',
-    InvalidVersion: 'InvalidVersion',
-    Unsupported: 'Unsupported',
-    FileCorrupt: 'FileCorrupt',
-    InvalidKey: 'InvalidKey',
-    MergeError: 'MergeError'
-};
+function quarterRound(x, a, b, c, d) {
+    x[a] += x[b];
+    x[d] = rotate(x[d] ^ x[a], 16);
+    x[c] += x[d];
+    x[b] = rotate(x[b] ^ x[c], 12);
+    x[a] += x[b];
+    x[d] = rotate(x[d] ^ x[a], 8);
+    x[c] += x[d];
+    x[b] = rotate(x[b] ^ x[c], 7);
+}
 
-module.exports.CompressionAlgorithm = {
-    None: 0,
-    GZip: 1
-};
+function u8to32le(x, i) {
+    return x[i] | (x[i + 1] << 8) | (x[i + 2] << 16) | (x[i + 3] << 24);
+}
 
-module.exports.CrsAlgorithm = {
-    Null: 0,
-    ArcFourVariant: 1,
-    Salsa20: 2,
-    ChaCha20: 3
-};
+function u32to8le(x, i, u) {
+    x[i] = u;
+    u >>>= 8;
+    x[i + 1] = u;
+    u >>>= 8;
+    x[i + 2] = u;
+    u >>>= 8;
+    x[i + 3] = u;
+}
 
-module.exports.KdfId = {
-    Argon2: '72Nt34wpREuR96mkA+MKDA==',
-    Aes: 'ydnzmmKKRGC/dA0IwYpP6g=='
-};
+function rotate(v, c) {
+    return (v << c) | (v >>> (32 - c));
+}
 
-module.exports.CipherId = {
-    Aes: 'McHy5r9xQ1C+WAUhavxa/w==',
-    ChaCha20: '1gOKK4tvTLWlJDOaMdu1mg=='
-};
-
-module.exports.AutoTypeObfuscationOptions = {
-    None: 0,
-    UseClipboard: 1
-};
-
-module.exports.Defaults = {
-    KeyEncryptionRounds: 300000,
-    MntncHistoryDays: 365,
-    HistoryMaxItems: 10,
-    HistoryMaxSize: 6 * 1024 * 1024,
-    RecycleBinName: 'Recycle Bin'
-};
-
-module.exports.Icons = {
-    Key: 0,
-    World: 1,
-    Warning: 2,
-    NetworkServer: 3,
-    MarkedDirectory: 4,
-    UserCommunication: 5,
-    Parts: 6,
-    Notepad: 7,
-    WorldSocket: 8,
-    Identity: 9,
-    PaperReady: 10,
-    Digicam: 11,
-    IRCommunication: 12,
-    MultiKeys: 13,
-    Energy: 14,
-    Scanner: 15,
-    WorldStar: 16,
-    CDRom: 17,
-    Monitor: 18,
-    EMail: 19,
-    Configuration: 20,
-    ClipboardReady: 21,
-    PaperNew: 22,
-    Screen: 23,
-    EnergyCareful: 24,
-    EMailBox: 25,
-    Disk: 26,
-    Drive: 27,
-    PaperQ: 28,
-    TerminalEncrypted: 29,
-    Console: 30,
-    Printer: 31,
-    ProgramIcons: 32,
-    Run: 33,
-    Settings: 34,
-    WorldComputer: 35,
-    Archive: 36,
-    Homebanking: 37,
-    DriveWindows: 39,
-    Clock: 39,
-    EMailSearch: 40,
-    PaperFlag: 41,
-    Memory: 42,
-    TrashBin: 43,
-    Note: 44,
-    Expired: 45,
-    Info: 46,
-    Package: 47,
-    Folder: 48,
-    FolderOpen: 49,
-    FolderPackage: 50,
-    LockOpen: 51,
-    PaperLocked: 52,
-    Checked: 53,
-    Pen: 54,
-    Thumbnail: 55,
-    Book: 56,
-    List: 57,
-    UserKey: 58,
-    Tool: 59,
-    Home: 60,
-    Star: 61,
-    Tux: 62,
-    Feather: 63,
-    Apple: 64,
-    Wiki: 65,
-    Money: 66,
-    Certificate: 67,
-    BlackBerry: 68
-};
+module.exports = ChaCha20;
 
 
 /***/ }),
-/* 2 */
-/*!******************************!*\
-  !*** ./errors/kdbx-error.js ***!
-  \******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-function KdbxError(code, message) {
-    this.name = 'KdbxError';
-    this.code = code;
-    this.message = 'Error ' + code + (message ? ': ' + message : '');
-}
-
-KdbxError.prototype = Error.prototype;
-
-module.exports = KdbxError;
-
-
-/***/ }),
-/* 3 */
+/***/ "./crypto/crypto-engine.js":
 /*!*********************************!*\
   !*** ./crypto/crypto-engine.js ***!
   \*********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! default exports */
+/*! export Argon2TypeArgon2d [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export Argon2TypeArgon2id [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export argon2 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export chacha20 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export configure [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export createAesCbc [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export hmacSha256 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export nodeCrypto [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export random [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export sha256 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export sha512 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export subtle [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export webCrypto [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__, __webpack_require__.g, __webpack_require__.* */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
 
-var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    ChaCha20 = __webpack_require__(/*! ./chacha20 */ 24);
 
-var webCrypto = global.crypto;
+var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    ChaCha20 = __webpack_require__(/*! ./chacha20 */ "./crypto/chacha20.js");
+
+var webCrypto = __webpack_require__.g.crypto;
 var subtle = webCrypto ? webCrypto.subtle || webCrypto.webkitSubtle : null;
 var nodeCrypto =
-    global.process && global.process.versions && global.process.versions.node
-        ? __webpack_require__(/*! crypto */ 42)
+    __webpack_require__.g.process && __webpack_require__.g.process.versions && __webpack_require__.g.process.versions.node
+        ? __webpack_require__(/*! crypto */ "crypto")
         : null;
 
 var EmptySha256 = 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
@@ -676,7 +405,7 @@ function chacha20(data, key, iv) {
  * @param {Number} iterations - number of iterations
  * @param {Number} length - hash length
  * @param {Number} parallelism - threads count (threads will be emulated if they are not supported)
- * @param {Number} type - 0 = argon2d, 1 = argon2i
+ * @param {Number} type - Argon2TypeArgon2d or Argon2TypeArgon2id
  * @param {Number} version - 0x10 or 0x13
  * @returns {Promise.<ArrayBuffer>}
  */
@@ -706,936 +435,615 @@ module.exports.random = random;
 module.exports.createAesCbc = createAesCbc;
 module.exports.chacha20 = chacha20;
 module.exports.argon2 = argon2;
+module.exports.Argon2TypeArgon2d = 0;
+module.exports.Argon2TypeArgon2id = 2;
 
 module.exports.configure = configure;
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
-/* 4 */
-/*!****************************!*\
-  !*** ./utils/xml-utils.js ***!
-  \****************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "./crypto/hashed-block-transform.js":
+/*!******************************************!*\
+  !*** ./crypto/hashed-block-transform.js ***!
+  \******************************************/
+/*! default exports */
+/*! export decrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
 
-var KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
-    Consts = __webpack_require__(/*! ./../defs/consts */ 1),
-    XmlNames = __webpack_require__(/*! ../defs/xml-names */ 6),
-    KdbxUuid = __webpack_require__(/*! ./../format/kdbx-uuid */ 7),
-    ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
-    ByteUtils = __webpack_require__(/*! ./byte-utils */ 0),
-    Int64 = __webpack_require__(/*! ./int64 */ 8),
-    pako = __webpack_require__(/*! pako */ 16);
 
-var dateRegex = /\.\d\d\d/;
+var BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ "./utils/binary-stream.js"),
+    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    Consts = __webpack_require__(/*! ./../defs/consts */ "./defs/consts.js"),
+    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ "./utils/byte-utils.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js");
 
-var dom = global.DOMParser ? global : __webpack_require__(/*! xmldom */ 44);
-var domParserArg = global.DOMParser
-    ? undefined
-    : {
-          errorHandler: {
-              error: function (e) {
-                  throw e;
-              },
-              fatalError: function (e) {
-                  throw e;
-              }
-          }
-      };
-
-var EpochSeconds = 62135596800;
+var BlockSize = 1024 * 1024;
 
 /**
- * Parses XML document
- * Throws an error in case of invalid XML
- * @param {string} xml - xml document
- * @returns {Document}
+ * Decrypt buffer
+ * @param {ArrayBuffer} data
+ * @returns {Promise.<ArrayBuffer>}
  */
-function parse(xml) {
-    var parser = domParserArg ? new dom.DOMParser(domParserArg) : new dom.DOMParser();
-    var doc;
-    try {
-        doc = parser.parseFromString(xml, 'application/xml');
-    } catch (e) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml: ' + e.message);
-    }
-    if (!doc.documentElement) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml');
-    }
-    var parserError = doc.getElementsByTagName('parsererror')[0];
-    if (parserError) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml: ' + parserError.textContent);
-    }
-    return doc;
-}
+function decrypt(data) {
+    return Promise.resolve().then(function () {
+        var stm = new BinaryStream(data);
+        var buffers = [];
+        var // blockIndex = 0,
+            blockLength = 0,
+            blockHash,
+            totalLength = 0;
 
-/**
- * Serializes document to XML string
- * @param {Document} doc - source document
- * @param {boolean} [prettyPrint=false] - whether to add whitespace around tags
- * @returns {string} - xml content
- */
-function serialize(doc, prettyPrint) {
-    if (prettyPrint) {
-        prettyPrintXmlNode(doc, 0);
-    }
-    var xml = new dom.XMLSerializer().serializeToString(doc);
-    if (prettyPrint && xml.startsWith('<?')) {
-        xml = xml.replace(/^(<\?.*?\?>)</, '$1\n<');
-    }
-    return xml;
-}
-
-function prettyPrintXmlNode(node, indentationLevel) {
-    var numChildNodes = node.childNodes.length;
-
-    if (numChildNodes === 0) {
-        return;
-    }
-
-    var formatStr = '\n' + '    '.repeat(indentationLevel);
-    var prevFormatStr = indentationLevel > 0 ? '\n' + '    '.repeat(indentationLevel - 1) : '';
-    var doc = node.ownerDocument || node;
-
-    var childNodes = [];
-    var childNode;
-
-    for (var i = 0; i < numChildNodes; i++) {
-        childNode = node.childNodes[i];
-        if (
-            childNode.nodeType !== doc.TEXT_NODE &&
-            childNode.nodeType !== doc.PROCESSING_INSTRUCTION_NODE
-        ) {
-            childNodes.push(childNode);
-        }
-    }
-
-    for (var j = 0; j < childNodes.length; j++) {
-        childNode = childNodes[j];
-
-        var isFirstDocumentNode = indentationLevel === 0 && j === 0;
-        if (!isFirstDocumentNode) {
-            var textNodeBefore = doc.createTextNode(formatStr);
-            node.insertBefore(textNodeBefore, childNode);
-        }
-
-        if (!childNode.nextSibling && indentationLevel > 0) {
-            var textNodeAfter = doc.createTextNode(prevFormatStr);
-            node.appendChild(textNodeAfter);
-        }
-
-        prettyPrintXmlNode(childNode, indentationLevel + 1);
-    }
-}
-
-/**
- * Creates a document with specified root node name
- * @param {string} rootNode - root node name
- * @returns {Document} - created XML document
- */
-function create(rootNode) {
-    return parse('<?xml version="1.0" encoding="utf-8" standalone="yes"?><' + rootNode + '/>');
-}
-
-/**
- * Gets first child node from xml
- * @param {Node} node - parent node for search
- * @param {string} tagName - child node tag name
- * @param {string} [errorMsgIfAbsent] - if set, error will be thrown if node is absent
- * @returns {Node} - first found node, or null, if there's no such node
- */
-function getChildNode(node, tagName, errorMsgIfAbsent) {
-    if (node && node.childNodes) {
-        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-            if (cn[i].tagName === tagName) {
-                return cn[i];
+        var next = function () {
+            /* blockIndex = */ stm.getUint32(true);
+            blockHash = stm.readBytes(32);
+            blockLength = stm.getUint32(true);
+            if (blockLength > 0) {
+                totalLength += blockLength;
+                var blockData = stm.readBytes(blockLength);
+                return CryptoEngine.sha256(blockData).then(function (calculatedHash) {
+                    if (!ByteUtils.arrayBufferEquals(calculatedHash, blockHash)) {
+                        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
+                    } else {
+                        buffers.push(blockData);
+                        return next();
+                    }
+                });
+            } else {
+                var ret = new Uint8Array(totalLength);
+                var offset = 0;
+                for (var i = 0; i < buffers.length; i++) {
+                    ret.set(new Uint8Array(buffers[i]), offset);
+                    offset += buffers[i].byteLength;
+                }
+                return ret.buffer;
             }
+        };
+        return next();
+    });
+}
+
+/**
+ * Encrypt buffer
+ * @param {ArrayBuffer} data
+ * @returns {Promise.<ArrayBuffer>}
+ */
+function encrypt(data) {
+    return Promise.resolve().then(function () {
+        var bytesLeft = data.byteLength;
+        var currentOffset = 0,
+            blockIndex = 0,
+            totalLength = 0;
+        var buffers = [];
+
+        var next = function () {
+            if (bytesLeft > 0) {
+                var blockLength = Math.min(BlockSize, bytesLeft);
+                bytesLeft -= blockLength;
+
+                var blockData = data.slice(currentOffset, currentOffset + blockLength);
+                return CryptoEngine.sha256(blockData).then(function (blockHash) {
+                    var blockBuffer = new ArrayBuffer(4 + 32 + 4);
+                    var stm = new BinaryStream(blockBuffer);
+                    stm.setUint32(blockIndex, true);
+                    stm.writeBytes(blockHash);
+                    stm.setUint32(blockLength, true);
+
+                    buffers.push(blockBuffer);
+                    totalLength += blockBuffer.byteLength;
+                    buffers.push(blockData);
+                    totalLength += blockData.byteLength;
+
+                    blockIndex++;
+                    currentOffset += blockLength;
+
+                    return next();
+                });
+            } else {
+                var endBlockData = new ArrayBuffer(4 + 32 + 4);
+                var view = new DataView(endBlockData);
+                view.setUint32(0, blockIndex, true);
+                buffers.push(endBlockData);
+                totalLength += endBlockData.byteLength;
+
+                var ret = new Uint8Array(totalLength);
+                var offset = 0;
+                for (var i = 0; i < buffers.length; i++) {
+                    ret.set(new Uint8Array(buffers[i]), offset);
+                    offset += buffers[i].byteLength;
+                }
+                return ret.buffer;
+            }
+        };
+        return next();
+    });
+}
+
+module.exports.decrypt = decrypt;
+module.exports.encrypt = encrypt;
+
+
+/***/ }),
+
+/***/ "./crypto/hmac-block-transform.js":
+/*!****************************************!*\
+  !*** ./crypto/hmac-block-transform.js ***!
+  \****************************************/
+/*! default exports */
+/*! export decrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getHmacKey [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var Int64 = __webpack_require__(/*! ../utils/int64 */ "./utils/int64.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ "./utils/binary-stream.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js");
+
+var BlockSize = 1024 * 1024;
+
+/**
+ * Computes HMAC-SHA key
+ * @param {ArrayBuffer} key
+ * @param {Int64} blockIndex
+ * @returns {Promise.<ArrayBuffer>}
+ */
+function getHmacKey(key, blockIndex) {
+    var shaSrc = new Uint8Array(8 + key.byteLength);
+    shaSrc.set(new Uint8Array(key), 8);
+    var view = new DataView(shaSrc.buffer);
+    view.setUint32(0, blockIndex.lo, true);
+    view.setUint32(4, blockIndex.hi, true);
+    return CryptoEngine.sha512(ByteUtils.arrayToBuffer(shaSrc)).then(function (sha) {
+        ByteUtils.zeroBuffer(shaSrc);
+        return sha;
+    });
+}
+
+/**
+ * Gets block HMAC
+ * @param {ArrayBuffer} key
+ * @param {number} blockIndex
+ * @param {number} blockLength
+ * @param {ArrayBuffer} blockData
+ * @returns {Promise.<ArrayBuffer>}
+ */
+function getBlockHmac(key, blockIndex, blockLength, blockData) {
+    return getHmacKey(key, new Int64(blockIndex)).then(function (blockKey) {
+        var blockDataForHash = new Uint8Array(blockData.byteLength + 4 + 8);
+        var blockDataForHashView = new DataView(blockDataForHash.buffer);
+        blockDataForHash.set(new Uint8Array(blockData), 4 + 8);
+        blockDataForHashView.setInt32(0, blockIndex, true);
+        blockDataForHashView.setInt32(8, blockLength, true);
+        return CryptoEngine.hmacSha256(blockKey, blockDataForHash.buffer);
+    });
+}
+
+/**
+ * Decrypt buffer
+ * @param {ArrayBuffer} data
+ * @param {ArrayBuffer} key
+ * @returns {Promise.<ArrayBuffer>}
+ */
+function decrypt(data, key) {
+    var stm = new BinaryStream(data);
+    return Promise.resolve().then(function () {
+        var buffers = [];
+        var blockIndex = 0,
+            blockLength = 0,
+            blockHash,
+            totalLength = 0;
+
+        var next = function () {
+            blockHash = stm.readBytes(32);
+            blockLength = stm.getUint32(true);
+            if (blockLength > 0) {
+                totalLength += blockLength;
+                var blockData = stm.readBytes(blockLength);
+                return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (
+                    calculatedBlockHash
+                ) {
+                    if (!ByteUtils.arrayBufferEquals(calculatedBlockHash, blockHash)) {
+                        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
+                    } else {
+                        buffers.push(blockData);
+                        blockIndex++;
+                        return next();
+                    }
+                });
+            } else {
+                var ret = new Uint8Array(totalLength);
+                var offset = 0;
+                for (var i = 0; i < buffers.length; i++) {
+                    ret.set(new Uint8Array(buffers[i]), offset);
+                    offset += buffers[i].byteLength;
+                }
+                return ret.buffer;
+            }
+        };
+        return next();
+    });
+}
+
+/**
+ * Encrypt buffer
+ * @param {ArrayBuffer} data
+ * @param {ArrayBuffer} key
+ * @returns {Promise.<ArrayBuffer>}
+ */
+function encrypt(data, key) {
+    return Promise.resolve().then(function () {
+        var bytesLeft = data.byteLength;
+        var currentOffset = 0,
+            blockIndex = 0,
+            totalLength = 0;
+        var buffers = [];
+
+        var next = function () {
+            var blockLength = Math.min(BlockSize, bytesLeft);
+            bytesLeft -= blockLength;
+
+            var blockData = data.slice(currentOffset, currentOffset + blockLength);
+            return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (blockHash) {
+                var blockBuffer = new ArrayBuffer(32 + 4);
+                var stm = new BinaryStream(blockBuffer);
+                stm.writeBytes(blockHash);
+                stm.setUint32(blockLength, true);
+
+                buffers.push(blockBuffer);
+                totalLength += blockBuffer.byteLength;
+
+                if (blockData.byteLength > 0) {
+                    buffers.push(blockData);
+                    totalLength += blockData.byteLength;
+                    blockIndex++;
+                    currentOffset += blockLength;
+                    return next();
+                } else {
+                    var ret = new Uint8Array(totalLength);
+                    var offset = 0;
+                    for (var i = 0; i < buffers.length; i++) {
+                        ret.set(new Uint8Array(buffers[i]), offset);
+                        offset += buffers[i].byteLength;
+                    }
+                    return ret.buffer;
+                }
+            });
+        };
+        return next();
+    });
+}
+
+module.exports.getHmacKey = getHmacKey;
+module.exports.decrypt = decrypt;
+module.exports.encrypt = encrypt;
+
+
+/***/ }),
+
+/***/ "./crypto/key-encryptor-aes.js":
+/*!*************************************!*\
+  !*** ./crypto/key-encryptor-aes.js ***!
+  \*************************************/
+/*! default exports */
+/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ "./utils/byte-utils.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js");
+
+var maxRoundsPreIteration = 10000;
+var aesBlockSize = 16;
+var credentialSize = 32;
+
+/*
+In order to simulate multiple rounds of ECB encryption, we do CBC encryption
+across a zero buffer of large length with the IV being the desired plaintext.
+The zero buffer does not contribute to the xor, so xoring the previous block
+with the next one simulates running ECB multiple times. We limit the maximum
+size of the zero buffer to prevent enormous memory usage.
+*/
+
+function encrypt(credentials, key, rounds) {
+    var algo = CryptoEngine.createAesCbc();
+    return algo
+        .importKey(ByteUtils.arrayToBuffer(key))
+        .then(function () {
+            var resolvers = [];
+            for (var idx = 0; idx < credentialSize; idx += aesBlockSize) {
+                resolvers.push(
+                    encryptBlock(algo, credentials.subarray(idx, idx + aesBlockSize), rounds)
+                );
+            }
+            return Promise.all(resolvers);
+        })
+        .then(function (results) {
+            var res = new Uint8Array(credentialSize);
+            results.forEach(function (result, idx) {
+                var base = idx * aesBlockSize;
+                for (var i = 0; i < aesBlockSize; ++i) {
+                    res[i + base] = result[i];
+                }
+                ByteUtils.zeroBuffer(result);
+            });
+            return res;
+        });
+}
+
+function encryptBlock(algo, iv, rounds) {
+    var result = Promise.resolve(ByteUtils.arrayToBuffer(iv));
+    var buffer = new Uint8Array(aesBlockSize * Math.min(rounds, maxRoundsPreIteration));
+
+    while (rounds > 0) {
+        var currentRounds = Math.min(rounds, maxRoundsPreIteration);
+        rounds -= currentRounds;
+
+        var dataLen = aesBlockSize * currentRounds;
+        var zeroData =
+            buffer.length === dataLen
+                ? buffer.buffer
+                : ByteUtils.arrayToBuffer(buffer.subarray(0, dataLen));
+        result = encryptBlockBuffer(algo, result, zeroData);
+    }
+
+    return result.then(function (res) {
+        return new Uint8Array(res);
+    });
+}
+
+function encryptBlockBuffer(algo, promisedIv, buffer) {
+    return promisedIv
+        .then(function (iv) {
+            return algo.encrypt(buffer, iv);
+        })
+        .then(function (buf) {
+            var res = ByteUtils.arrayToBuffer(
+                new Uint8Array(buf).subarray(-2 * aesBlockSize, -aesBlockSize)
+            );
+            ByteUtils.zeroBuffer(buf);
+            return res;
+        });
+}
+
+module.exports.encrypt = encrypt;
+
+
+/***/ }),
+
+/***/ "./crypto/key-encryptor-kdf.js":
+/*!*************************************!*\
+  !*** ./crypto/key-encryptor-kdf.js ***!
+  \*************************************/
+/*! default exports */
+/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ "./utils/var-dictionary.js"),
+    Int64 = __webpack_require__(/*! ../utils/int64 */ "./utils/int64.js"),
+    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ "./crypto/crypto-engine.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    KeyEncryptorAes = __webpack_require__(/*! ./key-encryptor-aes */ "./crypto/key-encryptor-aes.js");
+
+var KdfFields = [
+    { name: 'salt', field: 'S', type: VarDictionary.ValueType.Bytes },
+    { name: 'parallelism', field: 'P', type: VarDictionary.ValueType.UInt32 },
+    { name: 'memory', field: 'M', type: VarDictionary.ValueType.UInt64 },
+    { name: 'iterations', field: 'I', type: VarDictionary.ValueType.UInt64 },
+    { name: 'version', field: 'V', type: VarDictionary.ValueType.UInt32 },
+    { name: 'secretKey', field: 'K', type: VarDictionary.ValueType.Bytes },
+    { name: 'assocData', field: 'A', type: VarDictionary.ValueType.Bytes },
+    { name: 'rounds', field: 'R', type: VarDictionary.ValueType.UInt64 }
+];
+
+/**
+ * Derives key from seed using KDF parameters
+ * @param {ArrayBuffer} key
+ * @param {VarDictionary} kdfParams
+ */
+function encrypt(key, kdfParams) {
+    var uuid = kdfParams.get('$UUID');
+    if (!uuid || !(uuid instanceof ArrayBuffer)) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no kdf uuid'));
+    }
+    var kdfUuid = ByteUtils.bytesToBase64(uuid);
+    switch (kdfUuid) {
+        case Consts.KdfId.Argon2d:
+            return encryptArgon2(key, kdfParams, CryptoEngine.Argon2TypeArgon2d);
+        case Consts.KdfId.Argon2id:
+            return encryptArgon2(key, kdfParams, CryptoEngine.Argon2TypeArgon2id);
+        case Consts.KdfId.Aes:
+            return encryptAes(key, kdfParams);
+        default:
+            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'bad kdf'));
+    }
+}
+
+function decodeParams(kdfParams) {
+    var params = {};
+    KdfFields.forEach(function (fieldDef) {
+        var value = kdfParams.get(fieldDef.field);
+        if (value) {
+            if (value instanceof Int64) {
+                value = value.value;
+            }
+            params[fieldDef.name] = value;
         }
+    });
+    return params;
+}
+
+function encryptArgon2(key, kdfParams, argon2type) {
+    var params = decodeParams(kdfParams);
+    if (!(params.salt instanceof ArrayBuffer) || params.salt.byteLength !== 32) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 salt'));
     }
-    if (errorMsgIfAbsent) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, errorMsgIfAbsent);
-    } else {
-        return null;
+    if (typeof params.parallelism !== 'number' || params.parallelism < 1) {
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 parallelism')
+        );
     }
-}
-
-/**
- * Adds child node to xml
- * @param {Node} node - parent node
- * @param {string} tagName - child node tag name
- * @returns {Node} - created node
- */
-function addChildNode(node, tagName) {
-    return node.appendChild((node.ownerDocument || node).createElement(tagName));
-}
-
-/**
- * Gets node inner text
- * @param {Node} node - xml node
- * @return {string|undefined} - node inner text or undefined, if the node is empty
- */
-function getText(node) {
-    if (!node || !node.childNodes) {
-        return undefined;
+    if (typeof params.iterations !== 'number' || params.iterations < 1) {
+        return Promise.reject(
+            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 iterations')
+        );
     }
-    return node.protectedValue ? node.protectedValue.text : node.textContent;
-}
-
-/**
- * Sets node inner text
- * @param {Node} node
- * @param {string} text
- */
-function setText(node, text) {
-    node.textContent = text || '';
-}
-
-/**
- * Parses bytes saved by KeePass from XML
- * @param {Node} node - xml node with bytes saved by KeePass (base64 format)
- * @return {ArrayBuffer} - ArrayBuffer or undefined, if the tag is empty
- */
-function getBytes(node) {
-    var text = getText(node);
-    return text ? ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(text)) : undefined;
-}
-
-/**
- * Sets bytes for node
- * @param {Node} node
- * @param {ArrayBuffer|Uint8Array|string|undefined} bytes
- */
-function setBytes(node, bytes) {
-    if (typeof bytes === 'string') {
-        bytes = ByteUtils.base64ToBytes(bytes);
+    if (typeof params.memory !== 'number' || params.memory < 1 || params.memory % 1024 !== 0) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 memory'));
     }
-    setText(node, bytes ? ByteUtils.bytesToBase64(ByteUtils.arrayToBuffer(bytes)) : undefined);
-}
-
-/**
- * Parses date saved by KeePass from XML
- * @param {Node} node - xml node with date saved by KeePass (ISO format or base64-uint64) format
- * @return {Date} - date or undefined, if the tag is empty
- */
-function getDate(node) {
-    var text = getText(node);
-    if (!text) {
-        return undefined;
+    if (params.version !== 0x13 && params.version !== 0x10) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 version'));
     }
-    if (text.indexOf(':') > 0) {
-        return new Date(text);
+    if (params.secretKey) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'argon2 secret key'));
     }
-    var bytes = new DataView(ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(text)));
-    var secondsFrom00 = new Int64(bytes.getUint32(0, true), bytes.getUint32(4, true)).value;
-    var diff = (secondsFrom00 - EpochSeconds) * 1000;
-    return new Date(diff);
-}
-
-/**
- * Sets node date as string or binary
- * @param {Node} node
- * @param {Date|undefined} date
- * @param {boolean} [binary=false]
- */
-function setDate(node, date, binary) {
-    if (date) {
-        if (binary) {
-            var secondsFrom00 = Math.floor(date.getTime() / 1000) + EpochSeconds;
-            var bytes = new DataView(new ArrayBuffer(8));
-            var val64 = Int64.from(secondsFrom00);
-            bytes.setUint32(0, val64.lo, true);
-            bytes.setUint32(4, val64.hi, true);
-            setText(node, ByteUtils.bytesToBase64(bytes.buffer));
-        } else {
-            setText(node, date.toISOString().replace(dateRegex, ''));
-        }
-    } else {
-        setText(node, '');
+    if (params.assocData) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'argon2 assoc data'));
     }
-}
-
-/**
- * Parses number saved by KeePass from XML
- * @param {Node} node - xml node with number saved by KeePass
- * @return {Number|undefined} - number or undefined, if the tag is empty
- */
-function getNumber(node) {
-    var text = getText(node);
-    return text ? +text : undefined;
-}
-
-/**
- * Sets node number
- * @param {Node} node
- * @return {Number|undefined} number
- */
-function setNumber(node, number) {
-    setText(node, typeof number === 'number' && !isNaN(number) ? number.toString() : undefined);
-}
-
-/**
- * Parses boolean saved by KeePass from XML
- * @param {Node} node - xml node with boolean saved by KeePass
- * @return {boolean|undefined} - boolean or undefined, if the tag is empty
- */
-function getBoolean(node) {
-    var text = getText(node);
-    return text ? strToBoolean(text) : undefined;
-}
-
-/**
- * Sets node boolean
- * @param {Node} node
- * @param {boolean|undefined} boolean
- */
-function setBoolean(node, boolean) {
-    setText(
-        node,
-        boolean === undefined ? '' : boolean === null ? 'null' : boolean ? 'True' : 'False'
+    return CryptoEngine.argon2(
+        key,
+        params.salt,
+        params.memory / 1024,
+        params.iterations,
+        32,
+        params.parallelism,
+        argon2type,
+        params.version
     );
 }
 
-/**
- * Converts saved string to boolean
- * @param {string} str
- * @returns {boolean}
- */
-function strToBoolean(str) {
-    switch (str && str.toLowerCase && str.toLowerCase()) {
-        case 'true':
-            return true;
-        case 'false':
-            return false;
-        case 'null':
-            return null;
+function encryptAes(key, kdfParams) {
+    var params = decodeParams(kdfParams);
+    if (!(params.salt instanceof ArrayBuffer) || params.salt.byteLength !== 32) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad aes salt'));
     }
-    return undefined;
-}
-
-/**
- * Parses Uuid saved by KeePass from XML
- * @param {Node} node - xml node with Uuid saved by KeePass
- * @return {KdbxUuid} - Uuid or undefined, if the tag is empty
- */
-function getUuid(node) {
-    var bytes = getBytes(node);
-    return bytes ? new KdbxUuid(bytes) : undefined;
-}
-
-/**
- * Sets node uuid
- * @param {Node} node
- * @param {KdbxUuid} uuid
- */
-function setUuid(node, uuid) {
-    var uuidBytes = uuid instanceof KdbxUuid ? uuid.toBytes() : uuid;
-    setBytes(node, uuidBytes);
-}
-
-/**
- * Gets node protected text from inner text
- * @param {Node} node
- * @return {ProtectedValue|string}
- */
-function getProtectedText(node) {
-    return node.protectedValue || node.textContent;
-}
-
-/**
- * Sets node protected text
- * @param {Node} node
- * @param {ProtectedValue|string} text
- */
-function setProtectedText(node, text) {
-    if (text instanceof ProtectedValue) {
-        node.protectedValue = text;
-        node.setAttribute(XmlNames.Attr.Protected, 'True');
-    } else {
-        setText(node, text);
+    if (typeof params.rounds !== 'number' || params.rounds < 1) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad aes rounds'));
     }
-}
-
-/**
- * Gets node protected text from inner text
- * @param {Node} node
- * @return {ProtectedValue|ArrayBuffer|{ref: string}} - protected value, or array buffer, or reference to binary
- */
-function getProtectedBinary(node) {
-    if (node.protectedValue) {
-        return node.protectedValue;
-    }
-    var text = node.textContent;
-    var ref = node.getAttribute(XmlNames.Attr.Ref);
-    if (ref) {
-        return { ref: ref };
-    }
-    if (!text) {
-        return undefined;
-    }
-    var compressed = strToBoolean(node.getAttribute(XmlNames.Attr.Compressed));
-    var bytes = ByteUtils.base64ToBytes(text);
-    if (compressed) {
-        bytes = pako.ungzip(bytes);
-    }
-    return ByteUtils.arrayToBuffer(bytes);
-}
-
-/**
- * Sets node protected binary
- * @param {Node} node
- * @param {ProtectedValue|ArrayBuffer|{ref: string}|string} binary
- */
-function setProtectedBinary(node, binary) {
-    if (binary instanceof ProtectedValue) {
-        node.protectedValue = binary;
-        node.setAttribute(XmlNames.Attr.Protected, 'True');
-    } else if (binary && binary.ref) {
-        node.setAttribute(XmlNames.Attr.Ref, binary.ref);
-    } else {
-        setBytes(node, binary);
-    }
-}
-
-/**
- * Traversed XML tree with depth-first preorder search
- * @param {Node} node
- * @param {function} callback
- */
-function traverse(node, callback) {
-    callback(node);
-    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName) {
-            traverse(childNode, callback);
-        }
-    }
-}
-
-/**
- * Reads protected values for all nodes in tree
- * @param {Node} node
- * @param {ProtectSaltGenerator} protectSaltGenerator
- */
-function setProtectedValues(node, protectSaltGenerator) {
-    traverse(node, function (node) {
-        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected))) {
-            try {
-                var value = ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(node.textContent));
-                if (value.byteLength) {
-                    var salt = protectSaltGenerator.getSalt(value.byteLength);
-                    node.protectedValue = new ProtectedValue(value, salt);
-                }
-            } catch (e) {
-                throw new KdbxError(
-                    Consts.ErrorCodes.FileCorrupt,
-                    'bad protected value at line ' + node.lineNumber + ': ' + e
-                );
-            }
-        }
+    return KeyEncryptorAes.encrypt(
+        new Uint8Array(key),
+        new Uint8Array(params.salt),
+        params.rounds
+    ).then(function (key) {
+        return CryptoEngine.sha256(key).then(function (hash) {
+            ByteUtils.zeroBuffer(key);
+            return hash;
+        });
     });
 }
 
-/**
- * Updates protected values salt for all nodes in tree which have protected values assigned
- * @param {Node} node
- * @param {ProtectSaltGenerator} protectSaltGenerator
- */
-function updateProtectedValuesSalt(node, protectSaltGenerator) {
-    traverse(node, function (node) {
-        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
-            var newSalt = protectSaltGenerator.getSalt(node.protectedValue.byteLength);
-            node.protectedValue.setSalt(newSalt);
-            node.textContent = node.protectedValue.toString();
-        }
-    });
-}
+module.exports.encrypt = encrypt;
 
-/**
- * Unprotect protected values for all nodes in tree which have protected values assigned
- * @param {Node} node
- */
-function unprotectValues(node) {
-    traverse(node, function (node) {
-        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
-            node.removeAttribute(XmlNames.Attr.Protected);
-            node.setAttribute(XmlNames.Attr.ProtectedInMemPlainXml, 'True');
-            node.textContent = node.protectedValue.getText();
-        }
-    });
-}
-
-/**
- * Protect protected values back for all nodes in tree which have been unprotected
- * @param {Node} node
- */
-function protectUnprotectedValues(node) {
-    traverse(node, function (node) {
-        if (
-            strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml)) &&
-            node.protectedValue
-        ) {
-            node.removeAttribute(XmlNames.Attr.ProtectedInMemPlainXml);
-            node.setAttribute(XmlNames.Attr.Protected, 'True');
-            node.textContent = node.protectedValue.toString();
-        }
-    });
-}
-
-/**
- * Protect plain values in xml for all nodes in tree which should be protected
- * @param {Node} node
- */
-function protectPlainValues(node) {
-    traverse(node, function (node) {
-        if (strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml))) {
-            node.protectedValue = ProtectedValue.fromString(node.textContent);
-            node.textContent = node.protectedValue.toString();
-            node.removeAttribute(XmlNames.Attr.ProtectedInMemPlainXml);
-            node.setAttribute(XmlNames.Attr.Protected, 'True');
-        }
-    });
-}
-
-module.exports.parse = parse;
-module.exports.serialize = serialize;
-module.exports.create = create;
-module.exports.getChildNode = getChildNode;
-module.exports.addChildNode = addChildNode;
-module.exports.getText = getText;
-module.exports.setText = setText;
-module.exports.getBytes = getBytes;
-module.exports.setBytes = setBytes;
-module.exports.getDate = getDate;
-module.exports.setDate = setDate;
-module.exports.getNumber = getNumber;
-module.exports.setNumber = setNumber;
-module.exports.getBoolean = getBoolean;
-module.exports.setBoolean = setBoolean;
-module.exports.strToBoolean = strToBoolean;
-module.exports.getUuid = getUuid;
-module.exports.setUuid = setUuid;
-module.exports.getProtectedText = getProtectedText;
-module.exports.setProtectedText = setProtectedText;
-module.exports.getProtectedBinary = getProtectedBinary;
-module.exports.setProtectedBinary = setProtectedBinary;
-module.exports.setProtectedValues = setProtectedValues;
-module.exports.updateProtectedValuesSalt = updateProtectedValuesSalt;
-module.exports.unprotectValues = unprotectValues;
-module.exports.protectUnprotectedValues = protectUnprotectedValues;
-module.exports.protectPlainValues = protectPlainValues;
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ 13)))
 
 /***/ }),
-/* 5 */
-/*!************************************************!*\
-  !*** ../node_modules/pako/lib/utils/common.js ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "./crypto/protect-salt-generator.js":
+/*!******************************************!*\
+  !*** ./crypto/protect-salt-generator.js ***!
+  \******************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 55:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ "./crypto/salsa20.js"),
+    ChaCha20 = __webpack_require__(/*! ./chacha20 */ "./crypto/chacha20.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js"),
+    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ "./utils/byte-utils.js");
 
-var TYPED_OK =  (typeof Uint8Array !== 'undefined') &&
-                (typeof Uint16Array !== 'undefined') &&
-                (typeof Int32Array !== 'undefined');
-
-
-exports.assign = function (obj /*from1, from2, from3, ...*/) {
-  var sources = Array.prototype.slice.call(arguments, 1);
-  while (sources.length) {
-    var source = sources.shift();
-    if (!source) { continue; }
-
-    if (typeof source !== 'object') {
-      throw new TypeError(source + 'must be non-object');
-    }
-
-    for (var p in source) {
-      if (source.hasOwnProperty(p)) {
-        obj[p] = source[p];
-      }
-    }
-  }
-
-  return obj;
-};
-
-
-// reduce buffer size, avoiding mem copy
-exports.shrinkBuf = function (buf, size) {
-  if (buf.length === size) { return buf; }
-  if (buf.subarray) { return buf.subarray(0, size); }
-  buf.length = size;
-  return buf;
-};
-
-
-var fnTyped = {
-  arraySet: function (dest, src, src_offs, len, dest_offs) {
-    if (src.subarray && dest.subarray) {
-      dest.set(src.subarray(src_offs, src_offs + len), dest_offs);
-      return;
-    }
-    // Fallback to ordinary array
-    for (var i = 0; i < len; i++) {
-      dest[dest_offs + i] = src[src_offs + i];
-    }
-  },
-  // Join array of chunks to single array.
-  flattenChunks: function (chunks) {
-    var i, l, len, pos, chunk, result;
-
-    // calculate data length
-    len = 0;
-    for (i = 0, l = chunks.length; i < l; i++) {
-      len += chunks[i].length;
-    }
-
-    // join chunks
-    result = new Uint8Array(len);
-    pos = 0;
-    for (i = 0, l = chunks.length; i < l; i++) {
-      chunk = chunks[i];
-      result.set(chunk, pos);
-      pos += chunk.length;
-    }
-
-    return result;
-  }
-};
-
-var fnUntyped = {
-  arraySet: function (dest, src, src_offs, len, dest_offs) {
-    for (var i = 0; i < len; i++) {
-      dest[dest_offs + i] = src[src_offs + i];
-    }
-  },
-  // Join array of chunks to single array.
-  flattenChunks: function (chunks) {
-    return [].concat.apply([], chunks);
-  }
-};
-
-
-// Enable/Disable typed arrays use, for testing
-//
-exports.setTyped = function (on) {
-  if (on) {
-    exports.Buf8  = Uint8Array;
-    exports.Buf16 = Uint16Array;
-    exports.Buf32 = Int32Array;
-    exports.assign(exports, fnTyped);
-  } else {
-    exports.Buf8  = Array;
-    exports.Buf16 = Array;
-    exports.Buf32 = Array;
-    exports.assign(exports, fnUntyped);
-  }
-};
-
-exports.setTyped(TYPED_OK);
-
-
-/***/ }),
-/* 6 */
-/*!***************************!*\
-  !*** ./defs/xml-names.js ***!
-  \***************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-    Elem: {
-        DocNode: 'KeePassFile',
-
-        Meta: 'Meta',
-        Root: 'Root',
-        Group: 'Group',
-        Entry: 'Entry',
-
-        Generator: 'Generator',
-        HeaderHash: 'HeaderHash',
-        SettingsChanged: 'SettingsChanged',
-        DbName: 'DatabaseName',
-        DbNameChanged: 'DatabaseNameChanged',
-        DbDesc: 'DatabaseDescription',
-        DbDescChanged: 'DatabaseDescriptionChanged',
-        DbDefaultUser: 'DefaultUserName',
-        DbDefaultUserChanged: 'DefaultUserNameChanged',
-        DbMntncHistoryDays: 'MaintenanceHistoryDays',
-        DbColor: 'Color',
-        DbKeyChanged: 'MasterKeyChanged',
-        DbKeyChangeRec: 'MasterKeyChangeRec',
-        DbKeyChangeForce: 'MasterKeyChangeForce',
-        RecycleBinEnabled: 'RecycleBinEnabled',
-        RecycleBinUuid: 'RecycleBinUUID',
-        RecycleBinChanged: 'RecycleBinChanged',
-        EntryTemplatesGroup: 'EntryTemplatesGroup',
-        EntryTemplatesGroupChanged: 'EntryTemplatesGroupChanged',
-        HistoryMaxItems: 'HistoryMaxItems',
-        HistoryMaxSize: 'HistoryMaxSize',
-        LastSelectedGroup: 'LastSelectedGroup',
-        LastTopVisibleGroup: 'LastTopVisibleGroup',
-
-        MemoryProt: 'MemoryProtection',
-        ProtTitle: 'ProtectTitle',
-        ProtUserName: 'ProtectUserName',
-        ProtPassword: 'ProtectPassword',
-        ProtUrl: 'ProtectURL',
-        ProtNotes: 'ProtectNotes',
-
-        CustomIcons: 'CustomIcons',
-        CustomIconItem: 'Icon',
-        CustomIconItemID: 'UUID',
-        CustomIconItemData: 'Data',
-
-        AutoType: 'AutoType',
-        History: 'History',
-
-        Name: 'Name',
-        Notes: 'Notes',
-        Uuid: 'UUID',
-        Icon: 'IconID',
-        CustomIconID: 'CustomIconUUID',
-        FgColor: 'ForegroundColor',
-        BgColor: 'BackgroundColor',
-        OverrideUrl: 'OverrideURL',
-        Times: 'Times',
-        Tags: 'Tags',
-
-        CreationTime: 'CreationTime',
-        LastModTime: 'LastModificationTime',
-        LastAccessTime: 'LastAccessTime',
-        ExpiryTime: 'ExpiryTime',
-        Expires: 'Expires',
-        UsageCount: 'UsageCount',
-        LocationChanged: 'LocationChanged',
-
-        GroupDefaultAutoTypeSeq: 'DefaultAutoTypeSequence',
-        EnableAutoType: 'EnableAutoType',
-        EnableSearching: 'EnableSearching',
-
-        String: 'String',
-        Binary: 'Binary',
-        Key: 'Key',
-        Value: 'Value',
-
-        AutoTypeEnabled: 'Enabled',
-        AutoTypeObfuscation: 'DataTransferObfuscation',
-        AutoTypeDefaultSeq: 'DefaultSequence',
-        AutoTypeItem: 'Association',
-        Window: 'Window',
-        KeystrokeSequence: 'KeystrokeSequence',
-
-        Binaries: 'Binaries',
-
-        IsExpanded: 'IsExpanded',
-        LastTopVisibleEntry: 'LastTopVisibleEntry',
-
-        DeletedObjects: 'DeletedObjects',
-        DeletedObject: 'DeletedObject',
-        DeletionTime: 'DeletionTime',
-
-        CustomData: 'CustomData',
-        StringDictExItem: 'Item'
-    },
-
-    Attr: {
-        Id: 'ID',
-        Ref: 'Ref',
-        Protected: 'Protected',
-        ProtectedInMemPlainXml: 'ProtectInMemory',
-        Compressed: 'Compressed'
-    },
-
-    Val: {
-        False: 'False',
-        True: 'True'
-    }
-};
-
-
-/***/ }),
-/* 7 */
-/*!*****************************!*\
-  !*** ./format/kdbx-uuid.js ***!
-  \*****************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    Random = __webpack_require__(/*! ../crypto/random */ 10);
-
-var UuidLength = 16;
+var SalsaNonce = [0xe8, 0x30, 0x09, 0x4b, 0x97, 0x20, 0x5d, 0x2a];
 
 /**
- * Uuid for passwords
- * @param {ArrayBuffer|string} ab - ArrayBuffer with data
+ * Protect information used for decrypt and encrypt protected data fields
  * @constructor
  */
-function KdbxUuid(ab) {
-    if (ab === undefined) {
-        ab = new ArrayBuffer(UuidLength);
-    }
-    if (typeof ab === 'string') {
-        ab = ByteUtils.base64ToBytes(ab);
-    }
-    this.id = ab.byteLength === 16 ? ByteUtils.bytesToBase64(ab) : undefined;
-    this.empty = true;
-    if (ab) {
-        var bytes = new Uint8Array(ab);
-        for (var i = 0, len = bytes.length; i < len; i++) {
-            if (bytes[i] !== 0) {
-                this.empty = false;
-                return;
-            }
-        }
-    }
-}
+var ProtectSaltGenerator = function (algo) {
+    this.algo = algo;
+};
 
 /**
- * Checks whether two uuids are equal
- * @param {KdbxUuid|string} other
+ * Get salt bytes
+ * @param {number} len - bytes count
+ * @return {ArrayBuffer} - salt bytes
  */
-KdbxUuid.prototype.equals = function (other) {
-    return (other && other.toString() === this.toString()) || false;
+ProtectSaltGenerator.prototype.getSalt = function (len) {
+    return ByteUtils.arrayToBuffer(this.algo.getBytes(len));
 };
-
-Object.defineProperty(KdbxUuid.prototype, 'bytes', {
-    enumerable: true,
-    get: function () {
-        return ByteUtils.base64ToBytes(this.id);
-    }
-});
 
 /**
- * Generated random uuid
- * @return {KdbxUuid}
- * @static
+ * Creates protected salt generator
+ * @param {ArrayBuffer|Uint8Array} key
+ * @param {Number} crsAlgorithm
+ * @return {Promise.<ProtectedSaltGenerator>}
  */
-KdbxUuid.random = function () {
-    return new KdbxUuid(Random.getBytes(UuidLength));
+ProtectSaltGenerator.create = function (key, crsAlgorithm) {
+    switch (crsAlgorithm) {
+        case Consts.CrsAlgorithm.Salsa20:
+            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(key)).then(function (hash) {
+                var key = new Uint8Array(hash);
+                var algo = new Salsa20(key, SalsaNonce);
+                return new ProtectSaltGenerator(algo);
+            });
+        case Consts.CrsAlgorithm.ChaCha20:
+            return CryptoEngine.sha512(ByteUtils.arrayToBuffer(key)).then(function (hash) {
+                var key = new Uint8Array(hash, 0, 32);
+                var nonce = new Uint8Array(hash, 32, 12);
+                var algo = new ChaCha20(key, nonce);
+                return new ProtectSaltGenerator(algo);
+            });
+        default:
+            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'crsAlgorithm'));
+    }
 };
 
-KdbxUuid.prototype.toString = function () {
-    return this.id;
-};
-
-KdbxUuid.prototype.valueOf = function () {
-    return this.id;
-};
-
-KdbxUuid.prototype.toBytes = function () {
-    return this.id ? ByteUtils.base64ToBytes(this.id) : undefined;
-};
-
-module.exports = KdbxUuid;
+module.exports = ProtectSaltGenerator;
 
 
 /***/ }),
-/* 8 */
-/*!************************!*\
-  !*** ./utils/int64.js ***!
-  \************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-/**
- * Represents 64-bit number
- * @param {number} [lo=0]
- * @param {number} [hi=0]
- * @constructor
- */
-function Int64(lo, hi) {
-    this.lo = lo || 0;
-    this.hi = hi || 0;
-}
-
-/**
- * Number value as float
- * @returns {Number}
- */
-Object.defineProperty(Int64.prototype, 'value', {
-    enumerable: true,
-    get: function () {
-        if (this.hi) {
-            if (this.hi >= 0x200000) {
-                throw new Error('too large number');
-            }
-            return this.hi * 0x100000000 + this.lo;
-        }
-        return this.lo;
-    }
-});
-
-/**
- * Gets number value
- * @returns {Number}
- */
-Int64.prototype.valueOf = function () {
-    return this.value;
-};
-
-/**
- * Creates int64 from number
- * @param {number} value
- * @returns {Int64}
- * @static
- */
-Int64.from = function (value) {
-    if (value > 0x1fffffffffffff) {
-        throw new Error('too large number');
-    }
-    var lo = value >>> 0;
-    var hi = ((value - lo) / 0x100000000) >>> 0;
-    return new Int64(lo, hi);
-};
-
-module.exports = Int64;
-
-
-/***/ }),
-/* 9 */
+/***/ "./crypto/protected-value.js":
 /*!***********************************!*\
   !*** ./crypto/protected-value.js ***!
   \***********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 146:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3),
-    Random = __webpack_require__(/*! ./random */ 10);
+var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js"),
+    Random = __webpack_require__(/*! ./random */ "./crypto/random.js");
 
 /**
  * Protected value, used for protected entry fields
@@ -1780,20 +1188,22 @@ module.exports = ProtectedValue;
 
 
 /***/ }),
-/* 10 */
+
+/***/ "./crypto/random.js":
 /*!**************************!*\
   !*** ./crypto/random.js ***!
   \**************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! default exports */
+/*! export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
+var Salsa20 = __webpack_require__(/*! ./salsa20 */ "./crypto/salsa20.js"),
+    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ "./crypto/crypto-engine.js");
 
 var key = new Uint8Array(32),
     nonce = new Uint8Array(8);
@@ -1827,1580 +1237,15 @@ module.exports.getBytes = getBytes;
 
 
 /***/ }),
-/* 11 */
-/*!********************************!*\
-  !*** ./utils/binary-stream.js ***!
-  \********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-/**
- * Stream for accessing array buffer with auto-advanced position
- * @param {ArrayBuffer} [arrayBuffer]
- * @constructor
- */
-function BinaryStream(arrayBuffer) {
-    this._arrayBuffer = arrayBuffer || new ArrayBuffer(1024);
-    this._dataView = new DataView(this._arrayBuffer);
-    this._pos = 0;
-    this._canExpand = !arrayBuffer;
-}
-
-['Int', 'Uint', 'Float'].forEach(function (type) {
-    (type === 'Float' ? [4, 8] : [1, 2, 4]).forEach(function (bytes) {
-        var getMethod = 'get' + type + bytes * 8;
-        BinaryStream.prototype[getMethod] = function (littleEndian) {
-            var res = this._dataView[getMethod].call(this._dataView, this._pos, littleEndian);
-            this._pos += bytes;
-            return res;
-        };
-        var setMethod = 'set' + type + bytes * 8;
-        BinaryStream.prototype[setMethod] = function (value, littleEndian) {
-            this._checkCapacity(bytes);
-            this._dataView[setMethod].call(this._dataView, this._pos, value, littleEndian);
-            this._pos += bytes;
-        };
-    });
-});
-
-BinaryStream.prototype.getUint64 = function (littleEndian) {
-    var part1 = this.getUint32(littleEndian),
-        part2 = this.getUint32(littleEndian);
-    if (littleEndian) {
-        part2 *= 0x100000000;
-    } else {
-        part1 *= 0x100000000;
-    }
-    return part1 + part2;
-};
-
-BinaryStream.prototype.setUint64 = function (value, littleEndian) {
-    if (littleEndian) {
-        this.setUint32(value & 0xffffffff, true);
-        this.setUint32(Math.floor(value / 0x100000000), true);
-    } else {
-        this._checkCapacity(8);
-        this.setUint32(Math.floor(value / 0x100000000), false);
-        this.setUint32(value & 0xffffffff, false);
-    }
-};
-
-BinaryStream.prototype.readBytes = function (size) {
-    var buffer = this._arrayBuffer.slice(this._pos, this._pos + size);
-    this._pos += size;
-    return buffer;
-};
-
-BinaryStream.prototype.readBytesToEnd = function () {
-    var size = this._arrayBuffer.byteLength - this._pos;
-    return this.readBytes(size);
-};
-
-BinaryStream.prototype.readBytesNoAdvance = function (startPos, endPos) {
-    return this._arrayBuffer.slice(startPos, endPos);
-};
-
-BinaryStream.prototype.writeBytes = function (bytes) {
-    if (bytes instanceof ArrayBuffer) {
-        bytes = new Uint8Array(bytes);
-    }
-    this._checkCapacity(bytes.length);
-    new Uint8Array(this._arrayBuffer).set(bytes, this._pos);
-    this._pos += bytes.length;
-};
-
-BinaryStream.prototype.getWrittenBytes = function () {
-    return this._arrayBuffer.slice(0, this._pos);
-};
-
-BinaryStream.prototype._checkCapacity = function (addBytes) {
-    var available = this._arrayBuffer.byteLength - this._pos;
-    if (this._canExpand && available < addBytes) {
-        var newLen = this._arrayBuffer.byteLength,
-            requestedLen = this._pos + addBytes;
-        while (newLen < requestedLen) {
-            newLen *= 2;
-        }
-        var newData = new Uint8Array(newLen);
-        newData.set(new Uint8Array(this._arrayBuffer));
-        this._arrayBuffer = newData.buffer;
-        this._dataView = new DataView(this._arrayBuffer);
-    }
-};
-
-Object.defineProperty(BinaryStream.prototype, 'pos', {
-    enumerable: true,
-    get: function () {
-        return this._pos;
-    }
-});
-
-Object.defineProperty(BinaryStream.prototype, 'byteLength', {
-    enumerable: true,
-    get: function () {
-        return this._arrayBuffer.byteLength;
-    }
-});
-
-module.exports = BinaryStream;
-
-
-/***/ }),
-/* 12 */
-/*!*************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/messages.js ***!
-  \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = {
-  2:      'need dictionary',     /* Z_NEED_DICT       2  */
-  1:      'stream end',          /* Z_STREAM_END      1  */
-  0:      '',                    /* Z_OK              0  */
-  '-1':   'file error',          /* Z_ERRNO         (-1) */
-  '-2':   'stream error',        /* Z_STREAM_ERROR  (-2) */
-  '-3':   'data error',          /* Z_DATA_ERROR    (-3) */
-  '-4':   'insufficient memory', /* Z_MEM_ERROR     (-4) */
-  '-5':   'buffer error',        /* Z_BUF_ERROR     (-5) */
-  '-6':   'incompatible version' /* Z_VERSION_ERROR (-6) */
-};
-
-
-/***/ }),
-/* 13 */
-/*!*************************************************!*\
-  !*** ../node_modules/webpack/buildin/global.js ***!
-  \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || new Function("return this")();
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 14 */
-/*!*********************************!*\
-  !*** ./utils/var-dictionary.js ***!
-  \*********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2);
-var Consts = __webpack_require__(/*! ../defs/consts */ 1);
-var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0);
-var Int64 = __webpack_require__(/*! ../utils/int64 */ 8);
-
-var MaxSupportedVersion = 1;
-var DefaultVersion = 0x0100;
-
-/**
- * Value type
- * @enum
- */
-var ValueType = {
-    UInt32: 0x04,
-    UInt64: 0x05,
-    Bool: 0x08,
-    Int32: 0x0c,
-    Int64: 0x0d,
-    String: 0x18,
-    Bytes: 0x42
-};
-
-/**
- * Variant dictionary, capable to store/load different values from byte array
- * @constructor
- */
-function VarDictionary() {
-    this._items = [];
-    this._dict = {};
-    Object.preventExtensions(this);
-}
-
-/**
- * Available value types enum
- * @enum
- */
-VarDictionary.ValueType = ValueType;
-
-/**
- * Gets value or undefined
- * @param {string} key
- * @returns {*}
- */
-VarDictionary.prototype.get = function (key) {
-    var item = this._dict[key];
-    return item ? item.value : undefined;
-};
-
-/**
- * Get all keys
- * @return {string[]} keys array
- */
-VarDictionary.prototype.keys = function () {
-    return this._items.map(function (item) {
-        return item.key;
-    });
-};
-
-/**
- * Keys count
- * @returns {Number}
- */
-Object.defineProperty(VarDictionary.prototype, 'length', {
-    enumberable: true,
-    get: function () {
-        return this._items.length;
-    }
-});
-
-/**
- * Sets or replaces existing item
- * @param {String} key
- * @param {VarDictionary.ValueType|Number} type
- * @param {*} value
- */
-VarDictionary.prototype.set = function (key, type, value) {
-    switch (type) {
-        case ValueType.UInt32:
-            if (typeof value !== 'number' || value < 0) {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.UInt64:
-            if (!(value instanceof Int64)) {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.Bool:
-            if (typeof value !== 'boolean') {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.Int32:
-            if (typeof value !== 'number') {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.Int64:
-            if (!(value instanceof Int64)) {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.String:
-            if (typeof value !== 'string') {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        case ValueType.Bytes:
-            if (value instanceof Uint8Array) {
-                value = ByteUtils.arrayToBuffer(value);
-            }
-            if (!(value instanceof ArrayBuffer)) {
-                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-            }
-            break;
-        default:
-            throw new KdbxError(Consts.ErrorCodes.InvalidArg);
-    }
-    var item = { key: key, type: type, value: value };
-    if (this._dict[key]) {
-        var ix = this._items.indexOf(this._dict[key]);
-        this._items.splice(ix, 1, item);
-    } else {
-        this._items.push(item);
-    }
-    this._dict[key] = item;
-};
-
-/**
- * Removes key from dictionary
- * @param {string} key
- */
-VarDictionary.prototype.remove = function (key) {
-    this._items = this._items.filter(function (item) {
-        return item.key !== key;
-    });
-    delete this._dict[key];
-};
-
-/**
- * Reads dictionary from stream
- * @param {BinaryStream} stm
- * @returns {VarDictionary}
- * @static
- */
-VarDictionary.read = function (stm) {
-    var dict = new VarDictionary();
-    dict._readVersion(stm);
-    while (true) {
-        var item = dict._readItem(stm);
-        if (!item) {
-            break;
-        }
-        dict._items.push(item);
-        dict._dict[item.key] = item;
-    }
-    return dict;
-};
-
-VarDictionary.prototype._readVersion = function (stm) {
-    stm.getUint8();
-    var versionMajor = stm.getUint8();
-    if (versionMajor === 0 || versionMajor > MaxSupportedVersion) {
-        throw new KdbxError(Consts.ErrorCodes.InvalidVersion);
-    }
-};
-
-VarDictionary.prototype._readItem = function (stm) {
-    var type = stm.getUint8();
-    if (!type) {
-        return false;
-    }
-    var keyLength = stm.getInt32(true);
-    if (keyLength <= 0) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad key length');
-    }
-    var key = ByteUtils.bytesToString(stm.readBytes(keyLength));
-    var valueLength = stm.getInt32(true);
-    if (valueLength < 0) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad value length');
-    }
-    var value;
-    switch (type) {
-        case ValueType.UInt32:
-            if (valueLength !== 4) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad uint32');
-            }
-            value = stm.getUint32(true);
-            break;
-        case ValueType.UInt64:
-            if (valueLength !== 8) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad uint64');
-            }
-            var loInt = stm.getUint32(true);
-            var hiInt = stm.getUint32(true);
-            value = new Int64(loInt, hiInt);
-            break;
-        case ValueType.Bool:
-            if (valueLength !== 1) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad bool');
-            }
-            value = stm.getUint8() !== 0;
-            break;
-        case ValueType.Int32:
-            if (valueLength !== 4) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad int32');
-            }
-            value = stm.getInt32(true);
-            break;
-        case ValueType.Int64:
-            if (valueLength !== 8) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad int64');
-            }
-            var loUint = stm.getUint32(true);
-            var hiUint = stm.getUint32(true);
-            value = new Int64(loUint, hiUint);
-            break;
-        case ValueType.String:
-            value = ByteUtils.bytesToString(stm.readBytes(valueLength));
-            break;
-        case ValueType.Bytes:
-            value = stm.readBytes(valueLength);
-            break;
-        default:
-            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad value type: ' + type);
-    }
-    return { key: key, type: type, value: value };
-};
-
-/**
- * Writes self to binary stream
- * @param {BinaryStream} stm
- */
-VarDictionary.prototype.write = function (stm) {
-    this._writeVersion(stm);
-    Object.keys(this._items).forEach(function (key) {
-        this._writeItem(stm, this._items[key]);
-    }, this);
-    stm.setUint8(0);
-};
-
-VarDictionary.prototype._writeVersion = function (stm) {
-    stm.setUint16(DefaultVersion, true);
-};
-
-VarDictionary.prototype._writeItem = function (stm, item) {
-    stm.setUint8(item.type);
-    var keyBytes = ByteUtils.stringToBytes(item.key);
-    stm.setInt32(keyBytes.length, true);
-    stm.writeBytes(keyBytes);
-    switch (item.type) {
-        case ValueType.UInt32:
-            stm.setInt32(4, true);
-            stm.setUint32(item.value, true);
-            break;
-        case ValueType.UInt64:
-            stm.setInt32(8, true);
-            stm.setUint32(item.value.lo, true);
-            stm.setUint32(item.value.hi, true);
-            break;
-        case ValueType.Bool:
-            stm.setInt32(1, true);
-            stm.setUint8(item.value ? 1 : 0);
-            break;
-        case ValueType.Int32:
-            stm.setInt32(4, true);
-            stm.setInt32(item.value, true);
-            break;
-        case ValueType.Int64:
-            stm.setInt32(8, true);
-            stm.setUint32(item.value.lo, true);
-            stm.setUint32(item.value.hi, true);
-            break;
-        case ValueType.String:
-            var strBytes = ByteUtils.stringToBytes(item.value);
-            stm.setInt32(strBytes.length, true);
-            stm.writeBytes(strBytes);
-            break;
-        case ValueType.Bytes:
-            var bytesBuffer = ByteUtils.arrayToBuffer(item.value);
-            stm.setInt32(bytesBuffer.byteLength, true);
-            stm.writeBytes(bytesBuffer);
-            break;
-        default:
-            throw new KdbxError(Consts.ErrorCodes.Unsupported);
-    }
-};
-
-module.exports = VarDictionary;
-
-
-/***/ }),
-/* 15 */
-/*!************************************!*\
-  !*** ./format/kdbx-custom-data.js ***!
-  \************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4);
-
-var KdbxCustomData = {
-    /**
-     * Reads custom data from xml
-     * @param {Node} node - xml node
-     * @returns {object} - custom data dictionary
-     */
-    read: function (node) {
-        var customData = {};
-        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-            var childNode = cn[i];
-            if (childNode.tagName === XmlNames.Elem.StringDictExItem) {
-                KdbxCustomData._readItem(childNode, customData);
-            }
-        }
-        return customData;
-    },
-
-    /**
-     * Writes custom data to xml
-     * @param {Node} parentNode - xml node
-     * @param {object} customData - custom data dictionary
-     */
-    write: function (parentNode, customData) {
-        if (!customData) {
-            return;
-        }
-        var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomData);
-        Object.keys(customData).forEach(function (key) {
-            var value = customData[key];
-            if (value) {
-                var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.StringDictExItem);
-                XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Key), key);
-                XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Value), value);
-            }
-        });
-    },
-
-    _readItem: function (node, customData) {
-        var key, value;
-        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-            var childNode = cn[i];
-            switch (childNode.tagName) {
-                case XmlNames.Elem.Key:
-                    key = XmlUtils.getText(childNode);
-                    break;
-                case XmlNames.Elem.Value:
-                    value = XmlUtils.getText(childNode);
-                    break;
-            }
-        }
-        if (key) {
-            customData[key] = value;
-        }
-    }
-};
-
-module.exports = KdbxCustomData;
-
-
-/***/ }),
-/* 16 */
-/*!*************************************!*\
-  !*** ../node_modules/pako/index.js ***!
-  \*************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// Top level file is just a mixin of submodules & constants
-
-
-var assign    = __webpack_require__(/*! ./lib/utils/common */ 5).assign;
-
-var deflate   = __webpack_require__(/*! ./lib/deflate */ 32);
-var inflate   = __webpack_require__(/*! ./lib/inflate */ 35);
-var constants = __webpack_require__(/*! ./lib/zlib/constants */ 21);
-
-var pako = {};
-
-assign(pako, deflate, inflate, constants);
-
-module.exports = pako;
-
-
-/***/ }),
-/* 17 */
-/*!************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/adler32.js ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// Note: adler32 takes 12% for level 0 and 2% for level 6.
-// It doesn't worth to make additional optimizationa as in original.
-// Small size is preferable.
-
-function adler32(adler, buf, len, pos) {
-  var s1 = (adler & 0xffff) |0,
-      s2 = ((adler >>> 16) & 0xffff) |0,
-      n = 0;
-
-  while (len !== 0) {
-    // Set limit ~ twice less than 5552, to keep
-    // s2 in 31-bits, because we force signed ints.
-    // in other case %= will fail.
-    n = len > 2000 ? 2000 : len;
-    len -= n;
-
-    do {
-      s1 = (s1 + buf[pos++]) |0;
-      s2 = (s2 + s1) |0;
-    } while (--n);
-
-    s1 %= 65521;
-    s2 %= 65521;
-  }
-
-  return (s1 | (s2 << 16)) |0;
-}
-
-
-module.exports = adler32;
-
-
-/***/ }),
-/* 18 */
-/*!**********************************************!*\
-  !*** ../node_modules/pako/lib/zlib/crc32.js ***!
-  \**********************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// Note: we can't get significant speed boost here.
-// So write code to minimize size - no pregenerated tables
-// and array tools dependencies.
-
-
-// Use ordinary array, since untyped makes no boost here
-function makeTable() {
-  var c, table = [];
-
-  for (var n = 0; n < 256; n++) {
-    c = n;
-    for (var k = 0; k < 8; k++) {
-      c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
-    }
-    table[n] = c;
-  }
-
-  return table;
-}
-
-// Create table on load. Just 255 signed longs. Not a problem.
-var crcTable = makeTable();
-
-
-function crc32(crc, buf, len, pos) {
-  var t = crcTable,
-      end = pos + len;
-
-  crc ^= -1;
-
-  for (var i = pos; i < end; i++) {
-    crc = (crc >>> 8) ^ t[(crc ^ buf[i]) & 0xFF];
-  }
-
-  return (crc ^ (-1)); // >>> 0;
-}
-
-
-module.exports = crc32;
-
-
-/***/ }),
-/* 19 */
-/*!*************************************************!*\
-  !*** ../node_modules/pako/lib/utils/strings.js ***!
-  \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// String encode/decode helpers
-
-
-
-var utils = __webpack_require__(/*! ./common */ 5);
-
-
-// Quick check if we can use fast array to bin string conversion
-//
-// - apply(Array) can fail on Android 2.2
-// - apply(Uint8Array) can fail on iOS 5.1 Safary
-//
-var STR_APPLY_OK = true;
-var STR_APPLY_UIA_OK = true;
-
-try { String.fromCharCode.apply(null, [ 0 ]); } catch (__) { STR_APPLY_OK = false; }
-try { String.fromCharCode.apply(null, new Uint8Array(1)); } catch (__) { STR_APPLY_UIA_OK = false; }
-
-
-// Table with utf8 lengths (calculated by first byte of sequence)
-// Note, that 5 & 6-byte values and some 4-byte values can not be represented in JS,
-// because max possible codepoint is 0x10ffff
-var _utf8len = new utils.Buf8(256);
-for (var q = 0; q < 256; q++) {
-  _utf8len[q] = (q >= 252 ? 6 : q >= 248 ? 5 : q >= 240 ? 4 : q >= 224 ? 3 : q >= 192 ? 2 : 1);
-}
-_utf8len[254] = _utf8len[254] = 1; // Invalid sequence start
-
-
-// convert string to array (typed, when possible)
-exports.string2buf = function (str) {
-  var buf, c, c2, m_pos, i, str_len = str.length, buf_len = 0;
-
-  // count binary size
-  for (m_pos = 0; m_pos < str_len; m_pos++) {
-    c = str.charCodeAt(m_pos);
-    if ((c & 0xfc00) === 0xd800 && (m_pos + 1 < str_len)) {
-      c2 = str.charCodeAt(m_pos + 1);
-      if ((c2 & 0xfc00) === 0xdc00) {
-        c = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
-        m_pos++;
-      }
-    }
-    buf_len += c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
-  }
-
-  // allocate buffer
-  buf = new utils.Buf8(buf_len);
-
-  // convert
-  for (i = 0, m_pos = 0; i < buf_len; m_pos++) {
-    c = str.charCodeAt(m_pos);
-    if ((c & 0xfc00) === 0xd800 && (m_pos + 1 < str_len)) {
-      c2 = str.charCodeAt(m_pos + 1);
-      if ((c2 & 0xfc00) === 0xdc00) {
-        c = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
-        m_pos++;
-      }
-    }
-    if (c < 0x80) {
-      /* one byte */
-      buf[i++] = c;
-    } else if (c < 0x800) {
-      /* two bytes */
-      buf[i++] = 0xC0 | (c >>> 6);
-      buf[i++] = 0x80 | (c & 0x3f);
-    } else if (c < 0x10000) {
-      /* three bytes */
-      buf[i++] = 0xE0 | (c >>> 12);
-      buf[i++] = 0x80 | (c >>> 6 & 0x3f);
-      buf[i++] = 0x80 | (c & 0x3f);
-    } else {
-      /* four bytes */
-      buf[i++] = 0xf0 | (c >>> 18);
-      buf[i++] = 0x80 | (c >>> 12 & 0x3f);
-      buf[i++] = 0x80 | (c >>> 6 & 0x3f);
-      buf[i++] = 0x80 | (c & 0x3f);
-    }
-  }
-
-  return buf;
-};
-
-// Helper (used in 2 places)
-function buf2binstring(buf, len) {
-  // use fallback for big arrays to avoid stack overflow
-  if (len < 65537) {
-    if ((buf.subarray && STR_APPLY_UIA_OK) || (!buf.subarray && STR_APPLY_OK)) {
-      return String.fromCharCode.apply(null, utils.shrinkBuf(buf, len));
-    }
-  }
-
-  var result = '';
-  for (var i = 0; i < len; i++) {
-    result += String.fromCharCode(buf[i]);
-  }
-  return result;
-}
-
-
-// Convert byte array to binary string
-exports.buf2binstring = function (buf) {
-  return buf2binstring(buf, buf.length);
-};
-
-
-// Convert binary string (typed, when possible)
-exports.binstring2buf = function (str) {
-  var buf = new utils.Buf8(str.length);
-  for (var i = 0, len = buf.length; i < len; i++) {
-    buf[i] = str.charCodeAt(i);
-  }
-  return buf;
-};
-
-
-// convert array to string
-exports.buf2string = function (buf, max) {
-  var i, out, c, c_len;
-  var len = max || buf.length;
-
-  // Reserve max possible length (2 words per char)
-  // NB: by unknown reasons, Array is significantly faster for
-  //     String.fromCharCode.apply than Uint16Array.
-  var utf16buf = new Array(len * 2);
-
-  for (out = 0, i = 0; i < len;) {
-    c = buf[i++];
-    // quick process ascii
-    if (c < 0x80) { utf16buf[out++] = c; continue; }
-
-    c_len = _utf8len[c];
-    // skip 5 & 6 byte codes
-    if (c_len > 4) { utf16buf[out++] = 0xfffd; i += c_len - 1; continue; }
-
-    // apply mask on first byte
-    c &= c_len === 2 ? 0x1f : c_len === 3 ? 0x0f : 0x07;
-    // join the rest
-    while (c_len > 1 && i < len) {
-      c = (c << 6) | (buf[i++] & 0x3f);
-      c_len--;
-    }
-
-    // terminated by end of string?
-    if (c_len > 1) { utf16buf[out++] = 0xfffd; continue; }
-
-    if (c < 0x10000) {
-      utf16buf[out++] = c;
-    } else {
-      c -= 0x10000;
-      utf16buf[out++] = 0xd800 | ((c >> 10) & 0x3ff);
-      utf16buf[out++] = 0xdc00 | (c & 0x3ff);
-    }
-  }
-
-  return buf2binstring(utf16buf, out);
-};
-
-
-// Calculate max possible position in utf8 buffer,
-// that will not break sequence. If that's not possible
-// - (very small limits) return max size as is.
-//
-// buf[] - utf8 bytes array
-// max   - length limit (mandatory);
-exports.utf8border = function (buf, max) {
-  var pos;
-
-  max = max || buf.length;
-  if (max > buf.length) { max = buf.length; }
-
-  // go back from last position, until start of sequence found
-  pos = max - 1;
-  while (pos >= 0 && (buf[pos] & 0xC0) === 0x80) { pos--; }
-
-  // Fuckup - very small and broken sequence,
-  // return max, because we should return something anyway.
-  if (pos < 0) { return max; }
-
-  // If we came to start of buffer - that means vuffer is too small,
-  // return max too.
-  if (pos === 0) { return max; }
-
-  return (pos + _utf8len[buf[pos]] > max) ? pos : max;
-};
-
-
-/***/ }),
-/* 20 */
-/*!************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/zstream.js ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-function ZStream() {
-  /* next input byte */
-  this.input = null; // JS specific, because we have no pointers
-  this.next_in = 0;
-  /* number of bytes available at input */
-  this.avail_in = 0;
-  /* total number of input bytes read so far */
-  this.total_in = 0;
-  /* next output byte should be put there */
-  this.output = null; // JS specific, because we have no pointers
-  this.next_out = 0;
-  /* remaining free space at output */
-  this.avail_out = 0;
-  /* total number of bytes output so far */
-  this.total_out = 0;
-  /* last error message, NULL if no error */
-  this.msg = ''/*Z_NULL*/;
-  /* not visible by applications */
-  this.state = null;
-  /* best guess about the data type: binary or text */
-  this.data_type = 2/*Z_UNKNOWN*/;
-  /* adler32 value of the uncompressed data */
-  this.adler = 0;
-}
-
-module.exports = ZStream;
-
-
-/***/ }),
-/* 21 */
-/*!**************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/constants.js ***!
-  \**************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-module.exports = {
-
-  /* Allowed flush values; see deflate() and inflate() below for details */
-  Z_NO_FLUSH:         0,
-  Z_PARTIAL_FLUSH:    1,
-  Z_SYNC_FLUSH:       2,
-  Z_FULL_FLUSH:       3,
-  Z_FINISH:           4,
-  Z_BLOCK:            5,
-  Z_TREES:            6,
-
-  /* Return codes for the compression/decompression functions. Negative values
-  * are errors, positive values are used for special but normal events.
-  */
-  Z_OK:               0,
-  Z_STREAM_END:       1,
-  Z_NEED_DICT:        2,
-  Z_ERRNO:           -1,
-  Z_STREAM_ERROR:    -2,
-  Z_DATA_ERROR:      -3,
-  //Z_MEM_ERROR:     -4,
-  Z_BUF_ERROR:       -5,
-  //Z_VERSION_ERROR: -6,
-
-  /* compression levels */
-  Z_NO_COMPRESSION:         0,
-  Z_BEST_SPEED:             1,
-  Z_BEST_COMPRESSION:       9,
-  Z_DEFAULT_COMPRESSION:   -1,
-
-
-  Z_FILTERED:               1,
-  Z_HUFFMAN_ONLY:           2,
-  Z_RLE:                    3,
-  Z_FIXED:                  4,
-  Z_DEFAULT_STRATEGY:       0,
-
-  /* Possible values of the data_type field (though see inflate()) */
-  Z_BINARY:                 0,
-  Z_TEXT:                   1,
-  //Z_ASCII:                1, // = Z_TEXT (deprecated)
-  Z_UNKNOWN:                2,
-
-  /* The deflate compression method */
-  Z_DEFLATED:               8
-  //Z_NULL:                 null // Use -1 or null inline, depending on var type
-};
-
-
-/***/ }),
-/* 22 */
-/*!*******************************!*\
-  !*** ./format/kdbx-header.js ***!
-  \*******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/* Docs for the KDBX header schema:
- * https://keepass.info/help/kb/kdbx_4.html#innerhdr
- */
-
-var KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    Consts = __webpack_require__(/*! ./../defs/consts */ 1),
-    ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
-    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
-    BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
-    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ 14),
-    Int64 = __webpack_require__(/*! ./../utils/int64 */ 8),
-    Random = __webpack_require__(/*! ../crypto/random */ 10);
-
-var HeaderFields = [
-    { name: 'EndOfHeader' },
-
-    { name: 'Comment' },
-    { name: 'CipherID' },
-    { name: 'CompressionFlags' },
-    { name: 'MasterSeed' },
-    { name: 'TransformSeed', ver: [3] },
-    { name: 'TransformRounds', ver: [3] },
-    { name: 'EncryptionIV' },
-    { name: 'ProtectedStreamKey', ver: [3] },
-    { name: 'StreamStartBytes', ver: [3] },
-    { name: 'InnerRandomStreamID', ver: [3] },
-
-    { name: 'KdfParameters', ver: [4] },
-    { name: 'PublicCustomData', ver: [4] }
-];
-
-var InnerHeaderFields = [
-    { name: 'EndOfHeader' },
-
-    { name: 'InnerRandomStreamID' },
-    { name: 'InnerRandomStreamKey' },
-    { name: 'Binary', skipHeader: true }
-];
-
-var HeaderConst = {
-    DefaultFileVersionMajor: 4,
-    DefaultFileVersionMinor: 0,
-    MaxFileVersionMajor: 4,
-    MaxFileVersionMinor: 1,
-    MaxSupportedVersion: 4,
-    FlagBinaryProtected: 0x01,
-    InnerHeaderBinaryFieldId: 0x03,
-
-    DefaultKdfAlgo: Consts.KdfId.Argon2,
-    DefaultKdfSaltLength: 32,
-    DefaultKdfParallelism: 1,
-    DefaultKdfIterations: 2,
-    DefaultKdfMemory: 1024 * 1024,
-    DefaultKdfVersion: 0x13
-};
-
-var LastMinorVersions = {
-    3: 1,
-    4: 0
-};
-
-/**
- * Binary file header reader/writer
- * @constructor
- */
-var KdbxHeader = function () {
-    this.versionMajor = undefined;
-    this.versionMinor = undefined;
-    this.dataCipherUuid = undefined;
-    this.compression = undefined;
-    this.masterSeed = undefined;
-    this.transformSeed = undefined;
-    this.keyEncryptionRounds = undefined;
-    this.encryptionIV = undefined;
-    this.protectedStreamKey = undefined;
-    this.streamStartBytes = undefined;
-    this.crsAlgorithm = undefined;
-    this.endPos = undefined;
-    this.kdfParameters = undefined;
-    this.publicCustomData = undefined;
-    Object.preventExtensions(this);
-};
-
-KdbxHeader.prototype._readSignature = function (stm) {
-    if (stm.byteLength < 8) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'not enough data');
-    }
-    var sig1 = stm.getUint32(true),
-        sig2 = stm.getUint32(true);
-    if (!(sig1 === Consts.Signatures.FileMagic && sig2 === Consts.Signatures.Sig2Kdbx)) {
-        throw new KdbxError(Consts.ErrorCodes.BadSignature);
-    }
-};
-
-KdbxHeader.prototype._writeSignature = function (stm) {
-    stm.setUint32(Consts.Signatures.FileMagic, true);
-    stm.setUint32(Consts.Signatures.Sig2Kdbx, true);
-};
-
-KdbxHeader.prototype._readVersion = function (stm) {
-    var versionMinor = stm.getUint16(true);
-    var versionMajor = stm.getUint16(true);
-    if (versionMajor > HeaderConst.MaxSupportedVersion) {
-        throw new KdbxError(Consts.ErrorCodes.InvalidVersion);
-    }
-    this.versionMinor = versionMinor;
-    this.versionMajor = versionMajor;
-};
-
-KdbxHeader.prototype._writeVersion = function (stm) {
-    stm.setUint16(this.versionMinor, true);
-    stm.setUint16(this.versionMajor, true);
-};
-
-KdbxHeader.prototype._readCipherID = function (bytes) {
-    if (bytes.byteLength !== 16) {
-        throw new KdbxError(Consts.ErrorCodes.Unsupported, 'cipher');
-    }
-    this.dataCipherUuid = new KdbxUuid(bytes);
-};
-
-KdbxHeader.prototype._writeCipherID = function (stm) {
-    this._writeFieldSize(stm, 16);
-    stm.writeBytes(this.dataCipherUuid.bytes);
-};
-
-KdbxHeader.prototype._readCompressionFlags = function (bytes) {
-    var id = new DataView(bytes).getUint32(bytes, true);
-    if (id < 0 || id >= Object.keys(Consts.CompressionAlgorithm).length) {
-        throw new KdbxError(Consts.ErrorCodes.Unsupported, 'compression');
-    }
-    this.compression = id;
-};
-
-KdbxHeader.prototype._writeCompressionFlags = function (stm) {
-    this._writeFieldSize(stm, 4);
-    stm.setUint32(this.compression, true);
-};
-
-KdbxHeader.prototype._readMasterSeed = function (bytes) {
-    this.masterSeed = bytes;
-};
-
-KdbxHeader.prototype._writeMasterSeed = function (stm) {
-    this._writeFieldBytes(stm, this.masterSeed);
-};
-
-KdbxHeader.prototype._readTransformSeed = function (bytes) {
-    this.transformSeed = bytes;
-};
-
-KdbxHeader.prototype._writeTransformSeed = function (stm) {
-    this._writeFieldBytes(stm, this.transformSeed);
-};
-
-KdbxHeader.prototype._readTransformRounds = function (bytes) {
-    this.keyEncryptionRounds = new BinaryStream(bytes).getUint64(true);
-};
-
-KdbxHeader.prototype._writeTransformRounds = function (stm) {
-    this._writeFieldSize(stm, 8);
-    stm.setUint64(this.keyEncryptionRounds, true);
-};
-
-KdbxHeader.prototype._readEncryptionIV = function (bytes) {
-    this.encryptionIV = bytes;
-};
-
-KdbxHeader.prototype._writeEncryptionIV = function (stm) {
-    this._writeFieldBytes(stm, this.encryptionIV);
-};
-
-KdbxHeader.prototype._readProtectedStreamKey = function (bytes) {
-    this.protectedStreamKey = bytes;
-};
-
-KdbxHeader.prototype._writeProtectedStreamKey = function (stm) {
-    this._writeFieldBytes(stm, this.protectedStreamKey);
-};
-
-KdbxHeader.prototype._readStreamStartBytes = function (bytes) {
-    this.streamStartBytes = bytes;
-};
-
-KdbxHeader.prototype._writeStreamStartBytes = function (stm) {
-    this._writeFieldBytes(stm, this.streamStartBytes);
-};
-
-KdbxHeader.prototype._readInnerRandomStreamID = function (bytes) {
-    this.crsAlgorithm = new DataView(bytes).getUint32(bytes, true);
-};
-
-KdbxHeader.prototype._writeInnerRandomStreamID = function (stm) {
-    this._writeFieldSize(stm, 4);
-    stm.setUint32(this.crsAlgorithm, true);
-};
-
-KdbxHeader.prototype._readInnerRandomStreamKey = function (bytes) {
-    this.protectedStreamKey = bytes;
-};
-
-KdbxHeader.prototype._writeInnerRandomStreamKey = function (stm) {
-    this._writeFieldBytes(stm, this.protectedStreamKey);
-};
-
-KdbxHeader.prototype._readKdfParameters = function (bytes) {
-    this.kdfParameters = VarDictionary.read(new BinaryStream(bytes));
-};
-
-KdbxHeader.prototype._writeKdfParameters = function (stm) {
-    var innerStream = new BinaryStream();
-    this.kdfParameters.write(innerStream);
-    this._writeFieldBytes(stm, innerStream.getWrittenBytes());
-};
-
-KdbxHeader.prototype._readPublicCustomData = function (bytes) {
-    this.publicCustomData = VarDictionary.read(new BinaryStream(bytes));
-};
-
-KdbxHeader.prototype._hasPublicCustomData = function () {
-    return this.publicCustomData;
-};
-
-KdbxHeader.prototype._writePublicCustomData = function (stm) {
-    if (this.publicCustomData) {
-        var innerStream = new BinaryStream();
-        this.publicCustomData.write(innerStream);
-        this._writeFieldBytes(stm, innerStream.getWrittenBytes());
-    }
-};
-
-KdbxHeader.prototype._readBinary = function (bytes, ctx) {
-    var view = new DataView(bytes);
-    var flags = view.getUint8(0);
-    var isProtected = flags & HeaderConst.FlagBinaryProtected;
-    var binaryData = bytes.slice(1); // Actual data comes after the flag byte
-
-    var binary = isProtected ? ProtectedValue.fromBinary(binaryData) : binaryData;
-
-    var binaryIndex = Object.keys(ctx.kdbx.binaries).length;
-    ctx.kdbx.binaries[binaryIndex] = binary;
-};
-
-KdbxHeader.prototype._writeBinary = function (stm, ctx) {
-    if (this.versionMajor < 4) {
-        return;
-    }
-    var binaryHashes = ctx.kdbx.binaries.hashOrder;
-    for (var index = 0; index < binaryHashes.length; index++) {
-        stm.setUint8(HeaderConst.InnerHeaderBinaryFieldId);
-        var binary = ctx.kdbx.binaries[binaryHashes[index]];
-        if (!binary) {
-            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no binary ' + index);
-        }
-        if (binary instanceof ProtectedValue) {
-            var binaryData = binary.getBinary();
-            this._writeFieldSize(stm, binaryData.byteLength + 1);
-            stm.setUint8(HeaderConst.FlagBinaryProtected);
-            stm.writeBytes(binaryData);
-            ByteUtils.zeroBuffer(binaryData);
-        } else {
-            binary = ByteUtils.arrayToBuffer(binary);
-            this._writeFieldSize(stm, binary.byteLength + 1);
-            stm.setUint8(0);
-            stm.writeBytes(binary);
-        }
-    }
-};
-
-KdbxHeader.prototype._writeEndOfHeader = function (stm) {
-    this._writeFieldSize(stm, 4);
-    stm.setUint32(0x0d0ad0a);
-};
-
-KdbxHeader.prototype._readField = function (stm, fields, ctx) {
-    var headerId = stm.getUint8();
-    var size = this._readFieldSize(stm);
-    var bytes;
-    if (size > 0) {
-        bytes = stm.readBytes(size);
-    }
-
-    var headerField = fields[headerId];
-    if (headerField) {
-        var method = this['_read' + headerField.name];
-        if (method) {
-            method.call(this, bytes, ctx);
-        }
-    }
-    return headerId !== 0;
-};
-
-KdbxHeader.prototype._writeField = function (stm, headerId, fields, ctx) {
-    var headerField = fields[headerId];
-    if (headerField) {
-        if (headerField.ver && headerField.ver.indexOf(this.versionMajor) < 0) {
-            return;
-        }
-        var method = this['_write' + headerField.name];
-        if (method) {
-            var hasMethod = this['_has' + headerField.name];
-            if (hasMethod && !hasMethod.call(this)) {
-                return;
-            }
-            if (!headerField.skipHeader) {
-                stm.setUint8(headerId);
-            }
-            method.call(this, stm, ctx);
-        }
-    }
-};
-
-KdbxHeader.prototype._readFieldSize = function (stm) {
-    return this.versionMajor >= 4 ? stm.getUint32(true) : stm.getUint16(true);
-};
-
-KdbxHeader.prototype._writeFieldSize = function (stm, size) {
-    if (this.versionMajor >= 4) {
-        stm.setUint32(size, true);
-    } else {
-        stm.setUint16(size, true);
-    }
-};
-
-KdbxHeader.prototype._writeFieldBytes = function (stm, bytes) {
-    this._writeFieldSize(stm, bytes.byteLength);
-    stm.writeBytes(bytes);
-};
-
-KdbxHeader.prototype._validate = function () {
-    if (this.dataCipherUuid === undefined) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no cipher in header');
-    }
-    if (this.compression === undefined) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no compression in header');
-    }
-    if (!this.masterSeed) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no master seed in header');
-    }
-    if (this.versionMajor < 4 && !this.transformSeed) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no transform seed in header');
-    }
-    if (this.versionMajor < 4 && !this.keyEncryptionRounds) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no key encryption rounds in header');
-    }
-    if (!this.encryptionIV) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no encryption iv in header');
-    }
-    if (this.versionMajor < 4 && !this.protectedStreamKey) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no protected stream key in header');
-    }
-    if (this.versionMajor < 4 && !this.streamStartBytes) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no stream start bytes in header');
-    }
-    if (this.versionMajor < 4 && !this.crsAlgorithm) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no crs algorithm in header');
-    }
-    if (this.versionMajor >= 4 && !this.kdfParameters) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no kdf parameters in header');
-    }
-};
-
-KdbxHeader.prototype._validateInner = function () {
-    if (!this.protectedStreamKey) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no protected stream key in header');
-    }
-    if (!this.crsAlgorithm) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no crs algorithm in header');
-    }
-};
-
-KdbxHeader.prototype._createKdfParameters = function (algo) {
-    if (!algo) {
-        algo = HeaderConst.DefaultKdfAlgo;
-    }
-    switch (algo) {
-        case Consts.KdfId.Argon2:
-            this.kdfParameters = new VarDictionary();
-            this.kdfParameters.set(
-                '$UUID',
-                VarDictionary.ValueType.Bytes,
-                ByteUtils.base64ToBytes(Consts.KdfId.Argon2)
-            );
-            this.kdfParameters.set(
-                'S',
-                VarDictionary.ValueType.Bytes,
-                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
-            );
-            this.kdfParameters.set(
-                'P',
-                VarDictionary.ValueType.UInt32,
-                HeaderConst.DefaultKdfParallelism
-            );
-            this.kdfParameters.set(
-                'I',
-                VarDictionary.ValueType.UInt64,
-                new Int64(HeaderConst.DefaultKdfIterations)
-            );
-            this.kdfParameters.set(
-                'M',
-                VarDictionary.ValueType.UInt64,
-                new Int64(HeaderConst.DefaultKdfMemory)
-            );
-            this.kdfParameters.set(
-                'V',
-                VarDictionary.ValueType.UInt32,
-                HeaderConst.DefaultKdfVersion
-            );
-            break;
-        case Consts.KdfId.Aes:
-            this.kdfParameters = new VarDictionary();
-            this.kdfParameters.set(
-                '$UUID',
-                VarDictionary.ValueType.Bytes,
-                ByteUtils.base64ToBytes(Consts.KdfId.Aes)
-            );
-            this.kdfParameters.set(
-                'S',
-                VarDictionary.ValueType.Bytes,
-                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
-            );
-            this.kdfParameters.set(
-                'R',
-                VarDictionary.ValueType.UInt64,
-                new Int64(Consts.Defaults.KeyEncryptionRounds)
-            );
-            break;
-        default:
-            throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad KDF algo');
-    }
-};
-
-/**
- * Saves header to stream
- * @param {BinaryStream} stm
- */
-KdbxHeader.prototype.write = function (stm) {
-    this._validate();
-    this._writeSignature(stm);
-    this._writeVersion(stm);
-    for (var id = 1; id < HeaderFields.length; id++) {
-        this._writeField(stm, id, HeaderFields);
-    }
-    this._writeField(stm, 0, HeaderFields);
-    this.endPos = stm.pos;
-};
-
-/**
- * Saves inner header to stream
- * @param {BinaryStream} stm
- * @param {KdbxContext} ctx
- */
-KdbxHeader.prototype.writeInnerHeader = function (stm, ctx) {
-    this._validateInner();
-    for (var id = 1; id < InnerHeaderFields.length; id++) {
-        this._writeField(stm, id, InnerHeaderFields, ctx);
-    }
-    this._writeField(stm, 0, InnerHeaderFields);
-};
-
-/**
- * Updates header random salts
- */
-KdbxHeader.prototype.generateSalts = function () {
-    this.masterSeed = Random.getBytes(32);
-    if (this.versionMajor < 4) {
-        this.transformSeed = Random.getBytes(32);
-        this.streamStartBytes = Random.getBytes(32);
-        this.protectedStreamKey = Random.getBytes(32);
-        this.encryptionIV = Random.getBytes(16);
-    } else {
-        this.protectedStreamKey = Random.getBytes(64);
-        this.kdfParameters.set('S', VarDictionary.ValueType.Bytes, Random.getBytes(32));
-        var ivLength = this.dataCipherUuid.toString() === Consts.CipherId.ChaCha20 ? 12 : 16;
-        this.encryptionIV = Random.getBytes(ivLength);
-    }
-};
-
-/**
- * Upgrade the header to the specified version
- * @param {Number} version - major file version
- */
-KdbxHeader.prototype.setVersion = function (version) {
-    if (version !== 3 && version !== 4) {
-        throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad file version');
-    }
-    this.versionMajor = version;
-    this.versionMinor = LastMinorVersions[version];
-    if (this.versionMajor === 4) {
-        if (!this.kdfParameters) {
-            this._createKdfParameters();
-        }
-        this.crsAlgorithm = Consts.CrsAlgorithm.ChaCha20;
-        this.keyEncryptionRounds = undefined;
-    } else {
-        this.kdfParameters = undefined;
-        this.crsAlgorithm = Consts.CrsAlgorithm.Salsa20;
-        this.keyEncryptionRounds = Consts.Defaults.KeyEncryptionRounds;
-    }
-};
-
-/**
- * Set file KDF
- * @param kdf - KDF ID, from Consts.KdfId
- */
-KdbxHeader.prototype.setKdf = function (kdf) {
-    this._createKdfParameters(kdf);
-};
-
-/**
- * Read header from stream
- * @param {BinaryStream} stm
- * @param {KdbxContext} ctx
- * @return {KdbxHeader}
- * @static
- */
-KdbxHeader.read = function (stm, ctx) {
-    var header = new KdbxHeader();
-    header._readSignature(stm);
-    header._readVersion(stm);
-    while (header._readField(stm, HeaderFields, ctx)) {
-        continue;
-    }
-    header.endPos = stm.pos;
-    header._validate();
-    return header;
-};
-
-/**
- * Reads inner header from stream
- * @param {BinaryStream} stm
- * @param {KdbxContext} ctx
- */
-KdbxHeader.prototype.readInnerHeader = function (stm, ctx) {
-    while (this._readField(stm, InnerHeaderFields, ctx)) {
-        continue;
-    }
-    this._validateInner();
-};
-
-/**
- * Creates new header
- * @param {Kdbx} kdbx
- * @return {KdbxHeader}
- * @static
- */
-KdbxHeader.create = function () {
-    var header = new KdbxHeader();
-    header.versionMajor = HeaderConst.DefaultFileVersionMajor;
-    header.versionMinor = HeaderConst.DefaultFileVersionMinor;
-    header.dataCipherUuid = new KdbxUuid(Consts.CipherId.Aes);
-    header.compression = Consts.CompressionAlgorithm.GZip;
-    header.crsAlgorithm = Consts.CrsAlgorithm.ChaCha20;
-    header._createKdfParameters();
-    return header;
-};
-
-KdbxHeader.MaxFileVersion = HeaderConst.MaxFileVersionMajor;
-
-module.exports = KdbxHeader;
-
-
-/***/ }),
-/* 23 */
+/***/ "./crypto/salsa20.js":
 /*!***************************!*\
   !*** ./crypto/salsa20.js ***!
   \***************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 289:0-14 */
+/***/ ((module) => {
 
 "use strict";
 
@@ -3695,256 +1540,435 @@ module.exports = Salsa20;
 
 
 /***/ }),
-/* 24 */
-/*!****************************!*\
-  !*** ./crypto/chacha20.js ***!
-  \****************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "./defs/consts.js":
+/*!************************!*\
+  !*** ./defs/consts.js ***!
+  \************************/
+/*! default exports */
+/*! export AutoTypeObfuscationOptions [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export CipherId [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export CompressionAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export CrsAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export Defaults [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export ErrorCodes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export Icons [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export KdfId [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export Signatures [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
 
 "use strict";
 
 
-function ChaCha20(key, nonce) {
-    this.sigmaWords = [0x61707865, 0x3320646e, 0x79622d32, 0x6b206574];
-    this.block = new Uint8Array(64);
-    this.blockUsed = 64;
-    this.x = new Uint32Array(16);
-
-    var input = new Uint32Array(16);
-
-    input[0] = this.sigmaWords[0];
-    input[1] = this.sigmaWords[1];
-    input[2] = this.sigmaWords[2];
-    input[3] = this.sigmaWords[3];
-    input[4] = u8to32le(key, 0);
-    input[5] = u8to32le(key, 4);
-    input[6] = u8to32le(key, 8);
-    input[7] = u8to32le(key, 12);
-    input[8] = u8to32le(key, 16);
-    input[9] = u8to32le(key, 20);
-    input[10] = u8to32le(key, 24);
-    input[11] = u8to32le(key, 28);
-    input[12] = 0; // counter
-
-    if (nonce.length === 12) {
-        input[13] = u8to32le(nonce, 0);
-        input[14] = u8to32le(nonce, 4);
-        input[15] = u8to32le(nonce, 8);
-    } else {
-        input[13] = 0;
-        input[14] = u8to32le(nonce, 0);
-        input[15] = u8to32le(nonce, 4);
-    }
-
-    this.input = input;
-}
-
-ChaCha20.prototype.getBytes = function (numberOfBytes) {
-    var out = new Uint8Array(numberOfBytes);
-    for (var i = 0; i < numberOfBytes; i++) {
-        if (this.blockUsed === 64) {
-            this._generateBlock();
-            this.blockUsed = 0;
-        }
-        out[i] = this.block[this.blockUsed];
-        this.blockUsed++;
-    }
-    return out;
+module.exports.Signatures = {
+    FileMagic: 0x9aa2d903,
+    Sig2Kdbx: 0xb54bfb67,
+    Sig2Kdb: 0xb54bfb65
 };
 
-ChaCha20.prototype._generateBlock = function () {
-    var input = this.input;
-    var x = this.x;
-    var block = this.block;
-    var i;
-
-    x.set(input);
-    for (i = 20; i > 0; i -= 2) {
-        quarterRound(x, 0, 4, 8, 12);
-        quarterRound(x, 1, 5, 9, 13);
-        quarterRound(x, 2, 6, 10, 14);
-        quarterRound(x, 3, 7, 11, 15);
-        quarterRound(x, 0, 5, 10, 15);
-        quarterRound(x, 1, 6, 11, 12);
-        quarterRound(x, 2, 7, 8, 13);
-        quarterRound(x, 3, 4, 9, 14);
-    }
-    for (i = 16; i--; ) {
-        x[i] += input[i];
-    }
-    for (i = 16; i--; ) {
-        u32to8le(block, 4 * i, x[i]);
-    }
-
-    input[12] += 1;
-    if (!input[12]) {
-        input[13] += 1;
-    }
+module.exports.ErrorCodes = {
+    NotImplemented: 'NotImplemented',
+    InvalidArg: 'InvalidArg',
+    BadSignature: 'BadSignature',
+    InvalidVersion: 'InvalidVersion',
+    Unsupported: 'Unsupported',
+    FileCorrupt: 'FileCorrupt',
+    InvalidKey: 'InvalidKey',
+    MergeError: 'MergeError'
 };
 
-ChaCha20.prototype.encrypt = function (data) {
-    var length = data.length;
-    var res = new Uint8Array(length);
-    var pos = 0;
-    var block = this.block;
-    while (pos < length) {
-        this._generateBlock();
-        var blockLength = Math.min(length - pos, 64);
-        for (var i = 0; i < blockLength; i++) {
-            res[pos] = data[pos] ^ block[i];
-            pos++;
-        }
-    }
-    return res;
+module.exports.CompressionAlgorithm = {
+    None: 0,
+    GZip: 1
 };
 
-function quarterRound(x, a, b, c, d) {
-    x[a] += x[b];
-    x[d] = rotate(x[d] ^ x[a], 16);
-    x[c] += x[d];
-    x[b] = rotate(x[b] ^ x[c], 12);
-    x[a] += x[b];
-    x[d] = rotate(x[d] ^ x[a], 8);
-    x[c] += x[d];
-    x[b] = rotate(x[b] ^ x[c], 7);
-}
+module.exports.CrsAlgorithm = {
+    Null: 0,
+    ArcFourVariant: 1,
+    Salsa20: 2,
+    ChaCha20: 3
+};
 
-function u8to32le(x, i) {
-    return x[i] | (x[i + 1] << 8) | (x[i + 2] << 16) | (x[i + 3] << 24);
-}
+module.exports.KdfId = {
+    Argon2: '72Nt34wpREuR96mkA+MKDA==',
+    Argon2d: '72Nt34wpREuR96mkA+MKDA==',
+    Argon2id: 'nimLGVbbR3OyPfw+xvCh5g==',
+    Aes: 'ydnzmmKKRGC/dA0IwYpP6g=='
+};
 
-function u32to8le(x, i, u) {
-    x[i] = u;
-    u >>>= 8;
-    x[i + 1] = u;
-    u >>>= 8;
-    x[i + 2] = u;
-    u >>>= 8;
-    x[i + 3] = u;
-}
+module.exports.CipherId = {
+    Aes: 'McHy5r9xQ1C+WAUhavxa/w==',
+    ChaCha20: '1gOKK4tvTLWlJDOaMdu1mg=='
+};
 
-function rotate(v, c) {
-    return (v << c) | (v >>> (32 - c));
-}
+module.exports.AutoTypeObfuscationOptions = {
+    None: 0,
+    UseClipboard: 1
+};
 
-module.exports = ChaCha20;
+module.exports.Defaults = {
+    KeyEncryptionRounds: 300000,
+    MntncHistoryDays: 365,
+    HistoryMaxItems: 10,
+    HistoryMaxSize: 6 * 1024 * 1024,
+    RecycleBinName: 'Recycle Bin'
+};
+
+module.exports.Icons = {
+    Key: 0,
+    World: 1,
+    Warning: 2,
+    NetworkServer: 3,
+    MarkedDirectory: 4,
+    UserCommunication: 5,
+    Parts: 6,
+    Notepad: 7,
+    WorldSocket: 8,
+    Identity: 9,
+    PaperReady: 10,
+    Digicam: 11,
+    IRCommunication: 12,
+    MultiKeys: 13,
+    Energy: 14,
+    Scanner: 15,
+    WorldStar: 16,
+    CDRom: 17,
+    Monitor: 18,
+    EMail: 19,
+    Configuration: 20,
+    ClipboardReady: 21,
+    PaperNew: 22,
+    Screen: 23,
+    EnergyCareful: 24,
+    EMailBox: 25,
+    Disk: 26,
+    Drive: 27,
+    PaperQ: 28,
+    TerminalEncrypted: 29,
+    Console: 30,
+    Printer: 31,
+    ProgramIcons: 32,
+    Run: 33,
+    Settings: 34,
+    WorldComputer: 35,
+    Archive: 36,
+    Homebanking: 37,
+    DriveWindows: 39,
+    Clock: 39,
+    EMailSearch: 40,
+    PaperFlag: 41,
+    Memory: 42,
+    TrashBin: 43,
+    Note: 44,
+    Expired: 45,
+    Info: 46,
+    Package: 47,
+    Folder: 48,
+    FolderOpen: 49,
+    FolderPackage: 50,
+    LockOpen: 51,
+    PaperLocked: 52,
+    Checked: 53,
+    Pen: 54,
+    Thumbnail: 55,
+    Book: 56,
+    List: 57,
+    UserKey: 58,
+    Tool: 59,
+    Home: 60,
+    Star: 61,
+    Tux: 62,
+    Feather: 63,
+    Apple: 64,
+    Wiki: 65,
+    Money: 66,
+    Certificate: 67,
+    BlackBerry: 68
+};
 
 
 /***/ }),
-/* 25 */
-/*!*************************************!*\
-  !*** ./crypto/key-encryptor-aes.js ***!
-  \*************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "./defs/xml-names.js":
+/*!***************************!*\
+  !*** ./defs/xml-names.js ***!
+  \***************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 3:0-14 */
+/***/ ((module) => {
 
 "use strict";
 
 
-var ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
+module.exports = {
+    Elem: {
+        DocNode: 'KeePassFile',
 
-var maxRoundsPreIteration = 10000;
-var aesBlockSize = 16;
-var credentialSize = 32;
+        Meta: 'Meta',
+        Root: 'Root',
+        Group: 'Group',
+        Entry: 'Entry',
 
-/*
-In order to simulate multiple rounds of ECB encryption, we do CBC encryption
-across a zero buffer of large length with the IV being the desired plaintext.
-The zero buffer does not contribute to the xor, so xoring the previous block
-with the next one simulates running ECB multiple times. We limit the maximum
-size of the zero buffer to prevent enormous memory usage.
-*/
+        Generator: 'Generator',
+        HeaderHash: 'HeaderHash',
+        SettingsChanged: 'SettingsChanged',
+        DbName: 'DatabaseName',
+        DbNameChanged: 'DatabaseNameChanged',
+        DbDesc: 'DatabaseDescription',
+        DbDescChanged: 'DatabaseDescriptionChanged',
+        DbDefaultUser: 'DefaultUserName',
+        DbDefaultUserChanged: 'DefaultUserNameChanged',
+        DbMntncHistoryDays: 'MaintenanceHistoryDays',
+        DbColor: 'Color',
+        DbKeyChanged: 'MasterKeyChanged',
+        DbKeyChangeRec: 'MasterKeyChangeRec',
+        DbKeyChangeForce: 'MasterKeyChangeForce',
+        RecycleBinEnabled: 'RecycleBinEnabled',
+        RecycleBinUuid: 'RecycleBinUUID',
+        RecycleBinChanged: 'RecycleBinChanged',
+        EntryTemplatesGroup: 'EntryTemplatesGroup',
+        EntryTemplatesGroupChanged: 'EntryTemplatesGroupChanged',
+        HistoryMaxItems: 'HistoryMaxItems',
+        HistoryMaxSize: 'HistoryMaxSize',
+        LastSelectedGroup: 'LastSelectedGroup',
+        LastTopVisibleGroup: 'LastTopVisibleGroup',
 
-function encrypt(credentials, key, rounds) {
-    var algo = CryptoEngine.createAesCbc();
-    return algo
-        .importKey(ByteUtils.arrayToBuffer(key))
-        .then(function () {
-            var resolvers = [];
-            for (var idx = 0; idx < credentialSize; idx += aesBlockSize) {
-                resolvers.push(
-                    encryptBlock(algo, credentials.subarray(idx, idx + aesBlockSize), rounds)
-                );
-            }
-            return Promise.all(resolvers);
-        })
-        .then(function (results) {
-            var res = new Uint8Array(credentialSize);
-            results.forEach(function (result, idx) {
-                var base = idx * aesBlockSize;
-                for (var i = 0; i < aesBlockSize; ++i) {
-                    res[i + base] = result[i];
-                }
-                ByteUtils.zeroBuffer(result);
-            });
-            return res;
-        });
+        MemoryProt: 'MemoryProtection',
+        ProtTitle: 'ProtectTitle',
+        ProtUserName: 'ProtectUserName',
+        ProtPassword: 'ProtectPassword',
+        ProtUrl: 'ProtectURL',
+        ProtNotes: 'ProtectNotes',
+
+        CustomIcons: 'CustomIcons',
+        CustomIconItem: 'Icon',
+        CustomIconItemID: 'UUID',
+        CustomIconItemData: 'Data',
+
+        AutoType: 'AutoType',
+        History: 'History',
+
+        Name: 'Name',
+        Notes: 'Notes',
+        Uuid: 'UUID',
+        Icon: 'IconID',
+        CustomIconID: 'CustomIconUUID',
+        FgColor: 'ForegroundColor',
+        BgColor: 'BackgroundColor',
+        OverrideUrl: 'OverrideURL',
+        Times: 'Times',
+        Tags: 'Tags',
+
+        CreationTime: 'CreationTime',
+        LastModTime: 'LastModificationTime',
+        LastAccessTime: 'LastAccessTime',
+        ExpiryTime: 'ExpiryTime',
+        Expires: 'Expires',
+        UsageCount: 'UsageCount',
+        LocationChanged: 'LocationChanged',
+
+        GroupDefaultAutoTypeSeq: 'DefaultAutoTypeSequence',
+        EnableAutoType: 'EnableAutoType',
+        EnableSearching: 'EnableSearching',
+
+        String: 'String',
+        Binary: 'Binary',
+        Key: 'Key',
+        Value: 'Value',
+
+        AutoTypeEnabled: 'Enabled',
+        AutoTypeObfuscation: 'DataTransferObfuscation',
+        AutoTypeDefaultSeq: 'DefaultSequence',
+        AutoTypeItem: 'Association',
+        Window: 'Window',
+        KeystrokeSequence: 'KeystrokeSequence',
+
+        Binaries: 'Binaries',
+
+        IsExpanded: 'IsExpanded',
+        LastTopVisibleEntry: 'LastTopVisibleEntry',
+
+        DeletedObjects: 'DeletedObjects',
+        DeletedObject: 'DeletedObject',
+        DeletionTime: 'DeletionTime',
+
+        CustomData: 'CustomData',
+        StringDictExItem: 'Item'
+    },
+
+    Attr: {
+        Id: 'ID',
+        Ref: 'Ref',
+        Protected: 'Protected',
+        ProtectedInMemPlainXml: 'ProtectInMemory',
+        Compressed: 'Compressed'
+    },
+
+    Val: {
+        False: 'False',
+        True: 'True'
+    }
+};
+
+
+/***/ }),
+
+/***/ "./errors/kdbx-error.js":
+/*!******************************!*\
+  !*** ./errors/kdbx-error.js ***!
+  \******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 11:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+function KdbxError(code, message) {
+    this.name = 'KdbxError';
+    this.code = code;
+    this.message = 'Error ' + code + (message ? ': ' + message : '');
 }
 
-function encryptBlock(algo, iv, rounds) {
-    var result = Promise.resolve(ByteUtils.arrayToBuffer(iv));
-    var buffer = new Uint8Array(aesBlockSize * Math.min(rounds, maxRoundsPreIteration));
+KdbxError.prototype = Error.prototype;
 
-    while (rounds > 0) {
-        var currentRounds = Math.min(rounds, maxRoundsPreIteration);
-        rounds -= currentRounds;
+module.exports = KdbxError;
 
-        var dataLen = aesBlockSize * currentRounds;
-        var zeroData =
-            buffer.length === dataLen
-                ? buffer.buffer
-                : ByteUtils.arrayToBuffer(buffer.subarray(0, dataLen));
-        result = encryptBlockBuffer(algo, result, zeroData);
-    }
 
-    return result.then(function (res) {
-        return new Uint8Array(res);
+/***/ }),
+
+/***/ "./format/kdbx-binaries.js":
+/*!*********************************!*\
+  !*** ./format/kdbx-binaries.js ***!
+  \*********************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 55:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ "./crypto/protected-value.js"),
+    CryptoEngine = __webpack_require__(/*! ./../crypto/crypto-engine */ "./crypto/crypto-engine.js"),
+    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ "./utils/byte-utils.js");
+
+var KdbxBinaries = function () {
+    Object.defineProperties(this, {
+        idToHash: { value: {} },
+        hashOrder: { value: null, configurable: true }
     });
-}
+};
 
-function encryptBlockBuffer(algo, promisedIv, buffer) {
-    return promisedIv
-        .then(function (iv) {
-            return algo.encrypt(buffer, iv);
-        })
-        .then(function (buf) {
-            var res = ByteUtils.arrayToBuffer(
-                new Uint8Array(buf).subarray(-2 * aesBlockSize, -aesBlockSize)
-            );
-            ByteUtils.zeroBuffer(buf);
-            return res;
-        });
-}
+KdbxBinaries.prototype.hash = function () {
+    var promises = [];
+    var that = this;
+    Object.keys(that).forEach(function (id) {
+        var binary = that[id];
+        promises.push(
+            that.getBinaryHash(binary).then(function (hash) {
+                that.idToHash[id] = hash;
+                that[hash] = that[id];
+                delete that[id];
+            })
+        );
+    });
+    return Promise.all(promises);
+};
 
-module.exports.encrypt = encrypt;
+KdbxBinaries.prototype.getBinaryHash = function (binary) {
+    var promise;
+    if (binary instanceof ProtectedValue) {
+        promise = binary.getHash();
+    } else if (binary instanceof ArrayBuffer || binary instanceof Uint8Array) {
+        binary = ByteUtils.arrayToBuffer(binary);
+        promise = CryptoEngine.sha256(binary);
+    }
+    return promise.then(function (hash) {
+        return ByteUtils.bytesToHex(hash);
+    });
+};
+
+KdbxBinaries.prototype.assignIds = function () {
+    Object.defineProperty(this, 'hashOrder', { value: Object.keys(this), configurable: true });
+};
+
+KdbxBinaries.prototype.add = function (value) {
+    var that = this;
+    return this.getBinaryHash(value).then(function (hash) {
+        that[hash] = value;
+        return { ref: hash, value: value };
+    });
+};
+
+module.exports = KdbxBinaries;
 
 
 /***/ }),
-/* 26 */
+
+/***/ "./format/kdbx-context.js":
+/*!********************************!*\
+  !*** ./format/kdbx-context.js ***!
+  \********************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 26:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ "./utils/xml-utils.js");
+
+/**
+ * Context with helper methods for load/save
+ * @param {Kdbx} opts.kdbx - kdbx file
+ * @param {boolean} [opts.exportXml=false] - whether we are exporting as xml
+ * @constructor
+ */
+var KdbxContext = function (opts) {
+    this.kdbx = opts.kdbx;
+    this.exportXml = opts.exportXml || false;
+};
+
+/**
+ * Sets XML date, respecting date saving settings
+ * @param {Node} node
+ * @param {Date} dt
+ */
+KdbxContext.prototype.setXmlDate = function (node, dt) {
+    var isBinary = this.kdbx.header.versionMajor >= 4 && !this.exportXml;
+    XmlUtils.setDate(node, dt, isBinary);
+};
+
+module.exports = KdbxContext;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-credentials.js":
 /*!************************************!*\
   !*** ./format/kdbx-credentials.js ***!
   \************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 182:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4),
-    Random = __webpack_require__(/*! ../crypto/random */ 10),
-    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3);
+var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ "./crypto/protected-value.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ "./utils/xml-utils.js"),
+    Random = __webpack_require__(/*! ../crypto/random */ "./crypto/random.js"),
+    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ "./crypto/crypto-engine.js");
 
 /**
  * Credentials
@@ -4121,82 +2145,117 @@ module.exports = KdbxCredentials;
 
 
 /***/ }),
-/* 27 */
-/*!******************************!*\
-  !*** ./format/kdbx-times.js ***!
-  \******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "./format/kdbx-custom-data.js":
+/*!************************************!*\
+  !*** ./format/kdbx-custom-data.js ***!
+  \************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 62:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4);
+var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js");
 
-/**
- * Kdbx times
- * @constructor
- */
-var KdbxTimes = function () {
-    this.creationTime = undefined;
-    this.lastModTime = undefined;
-    this.lastAccessTime = undefined;
-    this.expiryTime = undefined;
-    this.expires = undefined;
-    this.usageCount = undefined;
-    this.locationChanged = new Date();
-    Object.preventExtensions(this);
-};
+var KdbxCustomData = {
+    /**
+     * Reads custom data from xml
+     * @param {Node} node - xml node
+     * @returns {object} - custom data dictionary
+     */
+    read: function (node) {
+        var customData = {};
+        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+            var childNode = cn[i];
+            if (childNode.tagName === XmlNames.Elem.StringDictExItem) {
+                KdbxCustomData._readItem(childNode, customData);
+            }
+        }
+        return customData;
+    },
 
-KdbxTimes.prototype._readNode = function (node) {
-    switch (node.tagName) {
-        case XmlNames.Elem.CreationTime:
-            this.creationTime = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.LastModTime:
-            this.lastModTime = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.LastAccessTime:
-            this.lastAccessTime = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.ExpiryTime:
-            this.expiryTime = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.Expires:
-            this.expires = XmlUtils.getBoolean(node);
-            break;
-        case XmlNames.Elem.UsageCount:
-            this.usageCount = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.LocationChanged:
-            this.locationChanged = XmlUtils.getDate(node);
-            break;
+    /**
+     * Writes custom data to xml
+     * @param {Node} parentNode - xml node
+     * @param {object} customData - custom data dictionary
+     */
+    write: function (parentNode, customData) {
+        if (!customData) {
+            return;
+        }
+        var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomData);
+        Object.keys(customData).forEach(function (key) {
+            var value = customData[key];
+            if (value) {
+                var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.StringDictExItem);
+                XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Key), key);
+                XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Value), value);
+            }
+        });
+    },
+
+    _readItem: function (node, customData) {
+        var key, value;
+        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+            var childNode = cn[i];
+            switch (childNode.tagName) {
+                case XmlNames.Elem.Key:
+                    key = XmlUtils.getText(childNode);
+                    break;
+                case XmlNames.Elem.Value:
+                    value = XmlUtils.getText(childNode);
+                    break;
+            }
+        }
+        if (key) {
+            customData[key] = value;
+        }
     }
 };
 
+module.exports = KdbxCustomData;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-deleted-object.js":
+/*!***************************************!*\
+  !*** ./format/kdbx-deleted-object.js ***!
+  \***************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 54:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js");
+
 /**
- * Clones object
- * @returns {KdbxTimes}
+ * Deleted object
+ * @constructor
  */
-KdbxTimes.prototype.clone = function () {
-    var clone = new KdbxTimes();
-    clone.creationTime = this.creationTime;
-    clone.lastModTime = this.lastModTime;
-    clone.lastAccessTime = this.lastAccessTime;
-    clone.expiryTime = this.expiryTime;
-    clone.expires = this.expires;
-    clone.usageCount = this.usageCount;
-    clone.locationChanged = this.locationChanged;
-    return clone;
+var KdbxDeletedObject = function () {
+    this.uuid = undefined;
+    this.deletionTime = undefined;
+    Object.preventExtensions(this);
 };
 
-KdbxTimes.prototype.update = function () {
-    var now = new Date();
-    this.lastModTime = now;
-    this.lastAccessTime = now;
+KdbxDeletedObject.prototype._readNode = function (node) {
+    switch (node.tagName) {
+        case XmlNames.Elem.Uuid:
+            this.uuid = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.DeletionTime:
+            this.deletionTime = XmlUtils.getDate(node);
+            break;
+    }
 };
 
 /**
@@ -4204,44 +2263,19 @@ KdbxTimes.prototype.update = function () {
  * @param {Node} parentNode - xml document node
  * @param {KdbxContext} ctx
  */
-KdbxTimes.prototype.write = function (parentNode, ctx) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Times);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.CreationTime), this.creationTime);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LastModTime), this.lastModTime);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LastAccessTime), this.lastAccessTime);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.ExpiryTime), this.expiryTime);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.Expires), this.expires);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.UsageCount), this.usageCount);
-    ctx.setXmlDate(
-        XmlUtils.addChildNode(node, XmlNames.Elem.LocationChanged),
-        this.locationChanged
-    );
+KdbxDeletedObject.prototype.write = function (parentNode, ctx) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.DeletedObject);
+    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DeletionTime), this.deletionTime);
 };
 
 /**
- * Creates new times
- * @return {KdbxTimes}
- */
-KdbxTimes.create = function () {
-    var times = new KdbxTimes();
-    var now = new Date();
-    times.creationTime = now;
-    times.lastModTime = now;
-    times.lastAccessTime = now;
-    times.expiryTime = now;
-    times.expires = false;
-    times.usageCount = 0;
-    times.locationChanged = now;
-    return times;
-};
-
-/**
- * Read times from xml
+ * Read deleted object from xml
  * @param {Node} xmlNode
  * @return {KdbxTimes}
  */
-KdbxTimes.read = function (xmlNode) {
-    var obj = new KdbxTimes();
+KdbxDeletedObject.read = function (xmlNode) {
+    var obj = new KdbxDeletedObject();
     for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
         var childNode = cn[i];
         if (childNode.tagName) {
@@ -4251,29 +2285,30 @@ KdbxTimes.read = function (xmlNode) {
     return obj;
 };
 
-module.exports = KdbxTimes;
+module.exports = KdbxDeletedObject;
 
 
 /***/ }),
-/* 28 */
+
+/***/ "./format/kdbx-entry.js":
 /*!******************************!*\
   !*** ./format/kdbx-entry.js ***!
   \******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 512:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ 9),
-    XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
-    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27);
+var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ "./crypto/protected-value.js"),
+    XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ "./format/kdbx-custom-data.js"),
+    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ "./format/kdbx-uuid.js"),
+    KdbxTimes = __webpack_require__(/*! ./kdbx-times */ "./format/kdbx-times.js");
 
 var tagsSplitRegex = /\s*[;,:]\s*/;
 
@@ -4780,54 +2815,2107 @@ module.exports = KdbxEntry;
 
 
 /***/ }),
-/* 29 */
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-module.exports.Kdbx = __webpack_require__(/*! ./format/kdbx */ 30);
-module.exports.KdbxUuid = __webpack_require__(/*! ./format/kdbx-uuid */ 7);
-module.exports.KdbxError = __webpack_require__(/*! ./errors/kdbx-error */ 2);
-module.exports.Credentials = __webpack_require__(/*! ./format/kdbx-credentials */ 26);
-module.exports.Consts = __webpack_require__(/*! ./defs/consts */ 1);
-module.exports.ProtectedValue = __webpack_require__(/*! ./crypto/protected-value */ 9);
-module.exports.ByteUtils = __webpack_require__(/*! ./utils/byte-utils */ 0);
-module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ 14);
-module.exports.Int64 = __webpack_require__(/*! ./utils/int64 */ 8);
-module.exports.Random = __webpack_require__(/*! ./crypto/random */ 10);
-module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 3);
-
-
-/***/ }),
-/* 30 */
-/*!************************!*\
-  !*** ./format/kdbx.js ***!
-  \************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "./format/kdbx-format.js":
+/*!*******************************!*\
+  !*** ./format/kdbx-format.js ***!
+  \*******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 431:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
-var KdbxFormat = __webpack_require__(/*! ./kdbx-format */ 31),
-    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
-    KdbxCredentials = __webpack_require__(/*! ./kdbx-credentials */ 26),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
-    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ 49),
-    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ 50),
-    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ 51),
-    KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28),
-    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ 52),
-    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    Consts = __webpack_require__(/*! ./../defs/consts */ 1),
-    XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4);
+var pako = __webpack_require__(/*! pako */ "../node_modules/pako/index.js"),
+    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ "./format/kdbx-header.js"),
+    KdbxContext = __webpack_require__(/*! ./kdbx-context */ "./format/kdbx-context.js"),
+    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ "./crypto/crypto-engine.js"),
+    BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ "./utils/binary-stream.js"),
+    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ "./utils/xml-utils.js"),
+    Int64 = __webpack_require__(/*! ../utils/int64 */ "./utils/int64.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ "./crypto/hashed-block-transform.js"),
+    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ "./crypto/hmac-block-transform.js"),
+    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ "./crypto/protect-salt-generator.js"),
+    KeyEncryptorAes = __webpack_require__(/*! ../crypto/key-encryptor-aes */ "./crypto/key-encryptor-aes.js"),
+    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ "./crypto/key-encryptor-kdf.js");
+
+var KdbxFormat = function (kdbx) {
+    this.kdbx = kdbx;
+};
+
+/**
+ * Load kdbx file
+ * If there was an error loading file, throws an exception
+ * @param {ArrayBuffer} data - database file contents
+ * @returns {Promise.<Kdbx>}
+ */
+KdbxFormat.prototype.load = function (data) {
+    var stm = new BinaryStream(data);
+    var kdbx = this.kdbx;
+    var that = this;
+    that.ctx = new KdbxContext({ kdbx: kdbx });
+    return kdbx.credentials.ready.then(function () {
+        kdbx.header = KdbxHeader.read(stm, that.ctx);
+        if (kdbx.header.versionMajor === 3) {
+            return that._loadV3(stm);
+        } else if (kdbx.header.versionMajor === 4) {
+            return that._loadV4(stm);
+        } else {
+            throw new KdbxError(
+                Consts.ErrorCodes.InvalidVersion,
+                'bad version: ' + kdbx.header.versionMajor
+            );
+        }
+    });
+};
+
+KdbxFormat.prototype._loadV3 = function (stm) {
+    var kdbx = this.kdbx;
+    var that = this;
+    return that._decryptXmlV3(kdbx, stm).then(function (xmlStr) {
+        kdbx.xml = XmlUtils.parse(xmlStr);
+        return that._setProtectedValues().then(function () {
+            return kdbx._loadFromXml(that.ctx).then(function () {
+                return that._checkHeaderHashV3(stm).then(function () {
+                    return kdbx;
+                });
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype._loadV4 = function (stm) {
+    var that = this;
+    return that._getHeaderHash(stm).then(function (headerSha) {
+        var expectedHeaderSha = stm.readBytes(headerSha.byteLength);
+        if (!ByteUtils.arrayBufferEquals(expectedHeaderSha, headerSha)) {
+            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
+        }
+        return that._computeKeysV4().then(function (keys) {
+            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
+                var expectedHeaderHmac = stm.readBytes(headerHmac.byteLength);
+                if (!ByteUtils.arrayBufferEquals(expectedHeaderHmac, headerHmac)) {
+                    throw new KdbxError(Consts.ErrorCodes.InvalidKey);
+                }
+                return HmacBlockTransform.decrypt(stm.readBytesToEnd(), keys.hmacKey).then(
+                    function (data) {
+                        ByteUtils.zeroBuffer(keys.hmacKey);
+                        return that._decryptData(data, keys.cipherKey).then(function (data) {
+                            ByteUtils.zeroBuffer(keys.cipherKey);
+                            if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
+                                data = pako.ungzip(data);
+                            }
+                            stm = new BinaryStream(ByteUtils.arrayToBuffer(data));
+                            that.kdbx.header.readInnerHeader(stm, that.ctx);
+                            data = stm.readBytesToEnd();
+                            var xmlStr = ByteUtils.bytesToString(data);
+                            that.kdbx.xml = XmlUtils.parse(xmlStr);
+                            return that._setProtectedValues().then(function () {
+                                return that.kdbx._loadFromXml(that.ctx);
+                            });
+                        });
+                    }
+                );
+            });
+        });
+    });
+};
+
+/**
+ * Load XML file
+ * @param {string} xmlStr
+ * @returns {Promise.<Kdbx>}
+ */
+KdbxFormat.prototype.loadXml = function (xmlStr) {
+    var kdbx = this.kdbx;
+    var ctx = new KdbxContext({ kdbx: kdbx });
+    return kdbx.credentials.ready.then(function () {
+        kdbx.header = KdbxHeader.create();
+        kdbx.xml = XmlUtils.parse(xmlStr);
+        XmlUtils.protectPlainValues(kdbx.xml.documentElement);
+        return kdbx._loadFromXml(ctx);
+    });
+};
+
+/**
+ * Save kdbx file
+ * @returns {Promise.<ArrayBuffer>}
+ */
+KdbxFormat.prototype.save = function () {
+    var kdbx = this.kdbx;
+    var that = this;
+    that.ctx = new KdbxContext({ kdbx: kdbx });
+    kdbx.binaries.assignIds();
+    return kdbx.credentials.ready.then(function () {
+        var stm = new BinaryStream();
+        kdbx.header.generateSalts();
+        kdbx.header.write(stm);
+        if (kdbx.header.versionMajor === 3) {
+            return that._saveV3(stm);
+        } else if (kdbx.header.versionMajor === 4) {
+            return that._saveV4(stm);
+        } else {
+            throw new KdbxError(
+                Consts.ErrorCodes.InvalidVersion,
+                'bad version: ' + kdbx.header.versionMajor
+            );
+        }
+    });
+};
+
+KdbxFormat.prototype._saveV3 = function (stm) {
+    var that = this;
+    return that._getHeaderHash(stm).then(function (headerHash) {
+        that.kdbx.meta.headerHash = headerHash;
+        that.kdbx._buildXml(that.ctx);
+        return that._getProtectSaltGenerator().then(function (gen) {
+            XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
+            return that._encryptXmlV3().then(function (data) {
+                stm.writeBytes(data);
+                return stm.getWrittenBytes();
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype._saveV4 = function (stm) {
+    var that = this;
+    that.kdbx._buildXml(that.ctx);
+    return that._getHeaderHash(stm).then(function (headerSha) {
+        stm.writeBytes(headerSha);
+        return that._computeKeysV4().then(function (keys) {
+            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
+                stm.writeBytes(headerHmac);
+                return that._getProtectSaltGenerator().then(function (gen) {
+                    XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
+                    var xml = XmlUtils.serialize(that.kdbx.xml);
+                    var innerHeaderStm = new BinaryStream();
+                    that.kdbx.header.writeInnerHeader(innerHeaderStm, that.ctx);
+                    var innerHeaderData = innerHeaderStm.getWrittenBytes();
+                    var xmlData = ByteUtils.arrayToBuffer(ByteUtils.stringToBytes(xml));
+                    var data = new ArrayBuffer(innerHeaderData.byteLength + xmlData.byteLength);
+                    var dataArr = new Uint8Array(data);
+                    dataArr.set(new Uint8Array(innerHeaderData));
+                    dataArr.set(new Uint8Array(xmlData), innerHeaderData.byteLength);
+                    ByteUtils.zeroBuffer(xmlData);
+                    ByteUtils.zeroBuffer(innerHeaderData);
+                    if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
+                        data = pako.gzip(data);
+                    }
+                    return that
+                        ._encryptData(ByteUtils.arrayToBuffer(data), keys.cipherKey)
+                        .then(function (data) {
+                            ByteUtils.zeroBuffer(keys.cipherKey);
+                            return HmacBlockTransform.encrypt(data, keys.hmacKey).then(function (
+                                data
+                            ) {
+                                ByteUtils.zeroBuffer(keys.hmacKey);
+                                stm.writeBytes(data);
+                                return stm.getWrittenBytes();
+                            });
+                        });
+                });
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype.saveXml = function (prettyPrint) {
+    var kdbx = this.kdbx;
+    return kdbx.credentials.ready.then(function () {
+        kdbx.header.generateSalts();
+        var ctx = new KdbxContext({ kdbx: kdbx, exportXml: true });
+        kdbx.binaries.assignIds();
+        kdbx._buildXml(ctx);
+        XmlUtils.unprotectValues(kdbx.xml.documentElement);
+        var xml = XmlUtils.serialize(kdbx.xml, prettyPrint);
+        XmlUtils.protectUnprotectedValues(kdbx.xml.documentElement);
+        return xml;
+    });
+};
+
+KdbxFormat.prototype._decryptXmlV3 = function (kdbx, stm) {
+    var data = stm.readBytesToEnd();
+    var that = this;
+    return that._getMasterKeyV3().then(function (masterKey) {
+        return that._decryptData(data, masterKey).then(function (data) {
+            ByteUtils.zeroBuffer(masterKey);
+            data = that._trimStartBytesV3(data);
+            return HashedBlockTransform.decrypt(data).then(function (data) {
+                if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
+                    data = pako.ungzip(data);
+                }
+                return ByteUtils.bytesToString(data);
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype._encryptXmlV3 = function () {
+    var kdbx = this.kdbx;
+    var that = this;
+    var xml = XmlUtils.serialize(kdbx.xml);
+    var data = ByteUtils.arrayToBuffer(ByteUtils.stringToBytes(xml));
+    if (kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
+        data = pako.gzip(data);
+    }
+    return HashedBlockTransform.encrypt(ByteUtils.arrayToBuffer(data)).then(function (data) {
+        var ssb = new Uint8Array(kdbx.header.streamStartBytes);
+        var newData = new Uint8Array(data.byteLength + ssb.length);
+        newData.set(ssb);
+        newData.set(new Uint8Array(data), ssb.length);
+        data = newData;
+        return that._getMasterKeyV3().then(function (masterKey) {
+            return that
+                ._encryptData(ByteUtils.arrayToBuffer(data), masterKey)
+                .then(function (data) {
+                    ByteUtils.zeroBuffer(masterKey);
+                    return data;
+                });
+        });
+    });
+};
+
+KdbxFormat.prototype._getMasterKeyV3 = function () {
+    var kdbx = this.kdbx;
+    return kdbx.credentials.getHash().then(function (credHash) {
+        var transformSeed = kdbx.header.transformSeed;
+        var transformRounds = kdbx.header.keyEncryptionRounds;
+        var masterSeed = kdbx.header.masterSeed;
+
+        return kdbx.credentials.getChallengeResponse(masterSeed).then(function (chalResp) {
+            return KeyEncryptorAes.encrypt(
+                new Uint8Array(credHash),
+                transformSeed,
+                transformRounds
+            ).then(function (encKey) {
+                ByteUtils.zeroBuffer(credHash);
+                return CryptoEngine.sha256(encKey).then(function (keyHash) {
+                    ByteUtils.zeroBuffer(encKey);
+
+                    var chalRespLength = chalResp ? chalResp.byteLength : 0;
+                    var all = new Uint8Array(
+                        masterSeed.byteLength + keyHash.byteLength + chalRespLength
+                    );
+                    all.set(new Uint8Array(masterSeed), 0);
+                    if (chalResp) {
+                        all.set(new Uint8Array(chalResp), masterSeed.byteLength);
+                    }
+                    all.set(new Uint8Array(keyHash), masterSeed.byteLength + chalRespLength);
+
+                    ByteUtils.zeroBuffer(keyHash);
+                    ByteUtils.zeroBuffer(masterSeed);
+                    if (chalResp) {
+                        ByteUtils.zeroBuffer(chalResp);
+                    }
+
+                    return CryptoEngine.sha256(all.buffer).then(function (masterKey) {
+                        ByteUtils.zeroBuffer(all.buffer);
+                        return masterKey;
+                    });
+                });
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype._trimStartBytesV3 = function (data) {
+    var ssb = this.kdbx.header.streamStartBytes;
+    if (data.byteLength < ssb.byteLength) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'short start bytes');
+    }
+    if (
+        !ByteUtils.arrayBufferEquals(
+            data.slice(0, this.kdbx.header.streamStartBytes.byteLength),
+            ssb
+        )
+    ) {
+        throw new KdbxError(Consts.ErrorCodes.InvalidKey);
+    }
+    return data.slice(ssb.byteLength);
+};
+
+KdbxFormat.prototype._setProtectedValues = function () {
+    var kdbx = this.kdbx;
+    return this._getProtectSaltGenerator().then(function (gen) {
+        XmlUtils.setProtectedValues(kdbx.xml.documentElement, gen);
+    });
+};
+
+KdbxFormat.prototype._getProtectSaltGenerator = function () {
+    return ProtectSaltGenerator.create(
+        this.kdbx.header.protectedStreamKey,
+        this.kdbx.header.crsAlgorithm
+    );
+};
+
+KdbxFormat.prototype._getHeaderHash = function (stm) {
+    var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
+    return CryptoEngine.sha256(src);
+};
+
+KdbxFormat.prototype._getHeaderHmac = function (stm, key) {
+    var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
+    return HmacBlockTransform.getHmacKey(key, new Int64(0xffffffff, 0xffffffff)).then(function (
+        keySha
+    ) {
+        return CryptoEngine.hmacSha256(keySha, src);
+    });
+};
+
+KdbxFormat.prototype._checkHeaderHashV3 = function (stm) {
+    if (this.kdbx.meta.headerHash) {
+        var metaHash = this.kdbx.meta.headerHash;
+        return this._getHeaderHash(stm).then(function (actualHash) {
+            if (!ByteUtils.arrayBufferEquals(metaHash, actualHash)) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
+            }
+        });
+    } else {
+        return Promise.resolve();
+    }
+};
+
+KdbxFormat.prototype._computeKeysV4 = function () {
+    var that = this;
+    var masterSeed = that.kdbx.header.masterSeed;
+    if (!masterSeed || masterSeed.byteLength !== 32) {
+        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad master seed'));
+    }
+    var kdfParams = that.kdbx.header.kdfParameters;
+    var kdfSalt = kdfParams.get('S');
+    return that.kdbx.credentials.getHash(kdfSalt).then(function (credHash) {
+        return KeyEncryptorKdf.encrypt(credHash, kdfParams).then(function (encKey) {
+            ByteUtils.zeroBuffer(credHash);
+            if (!encKey || encKey.byteLength !== 32) {
+                return Promise.reject(
+                    new KdbxError(Consts.ErrorCodes.Unsupported, 'bad derived key')
+                );
+            }
+            var keyWithSeed = new Uint8Array(65);
+            keyWithSeed.set(new Uint8Array(masterSeed), 0);
+            keyWithSeed.set(new Uint8Array(encKey), masterSeed.byteLength);
+            keyWithSeed[64] = 1;
+            ByteUtils.zeroBuffer(encKey);
+            ByteUtils.zeroBuffer(masterSeed);
+            return Promise.all([
+                CryptoEngine.sha256(keyWithSeed.buffer.slice(0, 64)),
+                CryptoEngine.sha512(keyWithSeed.buffer)
+            ]).then(function (keys) {
+                ByteUtils.zeroBuffer(keyWithSeed);
+                return { cipherKey: keys[0], hmacKey: keys[1] };
+            });
+        });
+    });
+};
+
+KdbxFormat.prototype._decryptData = function (data, cipherKey) {
+    var cipherId = this.kdbx.header.dataCipherUuid;
+    switch (cipherId.toString()) {
+        case Consts.CipherId.Aes:
+            return this._transformDataV4Aes(data, cipherKey, false);
+        case Consts.CipherId.ChaCha20:
+            return this._transformDataV4ChaCha20(data, cipherKey);
+        default:
+            return Promise.reject(
+                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
+            );
+    }
+};
+
+KdbxFormat.prototype._encryptData = function (data, cipherKey) {
+    var cipherId = this.kdbx.header.dataCipherUuid;
+    switch (cipherId.toString()) {
+        case Consts.CipherId.Aes:
+            return this._transformDataV4Aes(data, cipherKey, true);
+        case Consts.CipherId.ChaCha20:
+            return this._transformDataV4ChaCha20(data, cipherKey);
+        default:
+            return Promise.reject(
+                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
+            );
+    }
+};
+
+KdbxFormat.prototype._transformDataV4Aes = function (data, cipherKey, encrypt) {
+    var that = this;
+    var aesCbc = CryptoEngine.createAesCbc();
+    return aesCbc.importKey(cipherKey).then(function () {
+        return encrypt
+            ? aesCbc.encrypt(data, that.kdbx.header.encryptionIV)
+            : aesCbc.decrypt(data, that.kdbx.header.encryptionIV);
+    });
+};
+
+KdbxFormat.prototype._transformDataV4ChaCha20 = function (data, cipherKey) {
+    return CryptoEngine.chacha20(data, cipherKey, this.kdbx.header.encryptionIV);
+};
+
+module.exports = KdbxFormat;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-group.js":
+/*!******************************!*\
+  !*** ./format/kdbx-group.js ***!
+  \******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 295:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js"),
+    Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js"),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ "./format/kdbx-custom-data.js"),
+    KdbxTimes = __webpack_require__(/*! ./kdbx-times */ "./format/kdbx-times.js"),
+    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ "./format/kdbx-uuid.js"),
+    KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ "./format/kdbx-entry.js");
+
+/**
+ * Entries group
+ * @constructor
+ */
+var KdbxGroup = function () {
+    this.uuid = undefined;
+    this.name = undefined;
+    this.notes = undefined;
+    this.icon = undefined;
+    this.customIcon = undefined;
+    this.times = new KdbxTimes();
+    this.expanded = undefined;
+    this.defaultAutoTypeSeq = undefined;
+    this.enableAutoType = undefined;
+    this.enableSearching = undefined;
+    this.lastTopVisibleEntry = undefined;
+    this.groups = [];
+    this.entries = [];
+    this.parentGroup = undefined;
+    this.customData = undefined;
+    Object.preventExtensions(this);
+};
+
+KdbxGroup.prototype._readNode = function (node, ctx) {
+    switch (node.tagName) {
+        case XmlNames.Elem.Uuid:
+            this.uuid = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.Name:
+            this.name = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.Notes:
+            this.notes = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.Icon:
+            this.icon = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.CustomIconID:
+            this.customIcon = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.Times:
+            this.times = KdbxTimes.read(node);
+            break;
+        case XmlNames.Elem.IsExpanded:
+            this.expanded = XmlUtils.getBoolean(node);
+            break;
+        case XmlNames.Elem.GroupDefaultAutoTypeSeq:
+            this.defaultAutoTypeSeq = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.EnableAutoType:
+            this.enableAutoType = XmlUtils.getBoolean(node);
+            break;
+        case XmlNames.Elem.EnableSearching:
+            this.enableSearching = XmlUtils.getBoolean(node);
+            break;
+        case XmlNames.Elem.LastTopVisibleEntry:
+            this.lastTopVisibleEntry = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.Group:
+            this.groups.push(KdbxGroup.read(node, ctx, this));
+            break;
+        case XmlNames.Elem.Entry:
+            this.entries.push(KdbxEntry.read(node, ctx, this));
+            break;
+        case XmlNames.Elem.CustomData:
+            this.customData = KdbxCustomData.read(node);
+            break;
+    }
+};
+
+/**
+ * Write to stream
+ * @param {Node} parentNode - xml document node
+ * @param {KdbxContext} ctx
+ */
+KdbxGroup.prototype.write = function (parentNode, ctx) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Group);
+    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Name), this.name);
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Notes), this.notes);
+    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon);
+    if (this.customIcon) {
+        XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID), this.customIcon);
+    }
+    KdbxCustomData.write(node, this.customData);
+    this.times.write(node, ctx);
+    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.IsExpanded), this.expanded);
+    XmlUtils.setText(
+        XmlUtils.addChildNode(node, XmlNames.Elem.GroupDefaultAutoTypeSeq),
+        this.defaultAutoTypeSeq
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EnableAutoType),
+        this.enableAutoType
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EnableSearching),
+        this.enableSearching
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleEntry),
+        this.lastTopVisibleEntry
+    );
+    this.groups.forEach(function (g) {
+        g.write(node, ctx);
+    });
+    this.entries.forEach(function (e) {
+        e.write(node, ctx);
+    });
+};
+
+/**
+ * Invokes callback for each entry in recursive way
+ * @param {function} callback - will be invoked with entry or group argument
+ * @param {function} [thisArg] - callback context
+ */
+KdbxGroup.prototype.forEach = function (callback, thisArg) {
+    callback.call(thisArg, undefined, this);
+    this.entries.forEach(function (entry) {
+        callback.call(thisArg, entry);
+    });
+    this.groups.forEach(function (group) {
+        group.forEach(callback, thisArg);
+    });
+};
+
+/**
+ * Merge group with remote group
+ * @param {{objects, remote, deleted}} objectMap
+ */
+KdbxGroup.prototype.merge = function (objectMap) {
+    var remoteGroup = objectMap.remote[this.uuid];
+    if (!remoteGroup) {
+        return;
+    }
+    if (remoteGroup.times.lastModTime > this.times.lastModTime) {
+        this.copyFrom(remoteGroup);
+    }
+    this.groups = this._mergeCollection(this.groups, remoteGroup.groups, objectMap);
+    this.entries = this._mergeCollection(this.entries, remoteGroup.entries, objectMap);
+    this.groups.forEach(function (group) {
+        group.merge(objectMap);
+    });
+    this.entries.forEach(function (entry) {
+        entry.merge(objectMap);
+    });
+};
+
+/**
+ * Merge object collection with remote collection
+ * Implements 2P-set CRDT with tombstones stored in objectMap.deleted
+ * Assumes tombstones are already merged
+ * @param {object[]} collection - local groups or entries
+ * @param {object[]} remoteCollection - remote groups or entries
+ * @param {{objects, remote, deleted}} objectMap - local objects hashmap, remote objects hashmap and tombstones
+ * @returns {object[]}
+ * @private
+ */
+KdbxGroup.prototype._mergeCollection = function (collection, remoteCollection, objectMap) {
+    var newItems = [];
+    collection.forEach(function (item) {
+        if (objectMap.deleted[item.uuid]) {
+            return; // item deleted
+        }
+        var remoteItem = objectMap.remote[item.uuid];
+        if (!remoteItem) {
+            newItems.push(item); // item added locally
+        } else if (remoteItem.times.locationChanged <= item.times.locationChanged) {
+            newItems.push(item); // item not changed or moved to this group locally later than remote
+        }
+    }, this);
+    remoteCollection.forEach(function (remoteItem, ix) {
+        if (objectMap.deleted[remoteItem.uuid]) {
+            return; // item already processed as local item or deleted
+        }
+        var item = objectMap.objects[remoteItem.uuid];
+        if (item && remoteItem.times.locationChanged > item.times.locationChanged) {
+            item.parentGroup = this; // item moved to this group remotely later than local
+            newItems.splice(this._findInsertIx(newItems, remoteCollection, ix), 0, item);
+        } else if (!item) {
+            var newItem = new remoteItem.constructor(); // item created remotely
+            newItem.copyFrom(remoteItem);
+            newItem.parentGroup = this;
+            newItems.splice(this._findInsertIx(newItems, remoteCollection, ix), 0, newItem);
+        }
+    }, this);
+    return newItems;
+};
+
+/**
+ * Finds a best place to insert new item into collection
+ * @param {object[]} dst - destination collection
+ * @param {object[]} src - source item
+ * @param {int} srcIx - source item index in collection
+ * @returns {int} - index in collection
+ * @private
+ */
+KdbxGroup.prototype._findInsertIx = function (dst, src, srcIx) {
+    var selectedIx = dst.length,
+        selectedScore = -1;
+    for (var dstIx = 0; dstIx <= dst.length; dstIx++) {
+        var score = 0;
+        var srcPrev = srcIx > 0 ? src[srcIx - 1].uuid.id : undefined,
+            srcNext = srcIx + 1 < src.length ? src[srcIx + 1].uuid.id : undefined,
+            dstPrev = dstIx > 0 ? dst[dstIx - 1].uuid.id : undefined,
+            dstNext = dstIx < dst.length ? dst[dstIx].uuid.id : undefined;
+        if (!srcPrev && !dstPrev) {
+            score += 1; // start of sequence
+        } else if (srcPrev === dstPrev) {
+            score += 5; // previous element equals
+        }
+        if (!srcNext && !dstNext) {
+            score += 2; // end of sequence
+        } else if (srcNext === dstNext) {
+            score += 5; // next element equals
+        }
+        if (score > selectedScore) {
+            selectedIx = dstIx;
+            selectedScore = score;
+        }
+    }
+    return selectedIx;
+};
+
+/**
+ * Clone group state from another group
+ */
+KdbxGroup.prototype.copyFrom = function (group) {
+    this.uuid = group.uuid;
+    this.name = group.name;
+    this.notes = group.notes;
+    this.icon = group.icon;
+    this.customIcon = group.customIcon;
+    this.times = group.times.clone();
+    this.expanded = group.expanded;
+    this.defaultAutoTypeSeq = group.defaultAutoTypeSeq;
+    this.enableAutoType = group.enableAutoType;
+    this.enableSearching = group.enableSearching;
+    this.lastTopVisibleEntry = group.lastTopVisibleEntry;
+};
+
+/**
+ * Creates new group
+ * @param {string} name
+ * @param {KdbxGroup} [parentGroup]
+ * @returns {KdbxGroup}
+ */
+KdbxGroup.create = function (name, parentGroup) {
+    var group = new KdbxGroup();
+    group.uuid = KdbxUuid.random();
+    group.icon = Consts.Icons.Folder;
+    group.times = KdbxTimes.create();
+    group.name = name;
+    group.parentGroup = parentGroup;
+    group.expanded = true;
+    group.enableAutoType = null;
+    group.enableSearching = null;
+    group.lastTopVisibleEntry = new KdbxUuid();
+    return group;
+};
+
+/**
+ * Read group from xml
+ * @param {Node} xmlNode
+ * @param {KdbxContext} ctx
+ * @param {KdbxGroup} [parentGroup]
+ * @return {KdbxGroup}
+ */
+KdbxGroup.read = function (xmlNode, ctx, parentGroup) {
+    var grp = new KdbxGroup();
+    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName) {
+            grp._readNode(childNode, ctx);
+        }
+    }
+    if (!grp.uuid) {
+        // some clients don't write ids
+        grp.uuid = KdbxUuid.random();
+    }
+    grp.parentGroup = parentGroup;
+    return grp;
+};
+
+module.exports = KdbxGroup;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-header.js":
+/*!*******************************!*\
+  !*** ./format/kdbx-header.js ***!
+  \*******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 563:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+/* Docs for the KDBX header schema:
+ * https://keepass.info/help/kb/kdbx_4.html#innerhdr
+ */
+
+var KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ "./format/kdbx-uuid.js"),
+    Consts = __webpack_require__(/*! ./../defs/consts */ "./defs/consts.js"),
+    ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ "./crypto/protected-value.js"),
+    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ "./utils/binary-stream.js"),
+    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ "./utils/byte-utils.js"),
+    VarDictionary = __webpack_require__(/*! ./../utils/var-dictionary */ "./utils/var-dictionary.js"),
+    Int64 = __webpack_require__(/*! ./../utils/int64 */ "./utils/int64.js"),
+    Random = __webpack_require__(/*! ../crypto/random */ "./crypto/random.js");
+
+var HeaderFields = [
+    { name: 'EndOfHeader' },
+
+    { name: 'Comment' },
+    { name: 'CipherID' },
+    { name: 'CompressionFlags' },
+    { name: 'MasterSeed' },
+    { name: 'TransformSeed', ver: [3] },
+    { name: 'TransformRounds', ver: [3] },
+    { name: 'EncryptionIV' },
+    { name: 'ProtectedStreamKey', ver: [3] },
+    { name: 'StreamStartBytes', ver: [3] },
+    { name: 'InnerRandomStreamID', ver: [3] },
+
+    { name: 'KdfParameters', ver: [4] },
+    { name: 'PublicCustomData', ver: [4] }
+];
+
+var InnerHeaderFields = [
+    { name: 'EndOfHeader' },
+
+    { name: 'InnerRandomStreamID' },
+    { name: 'InnerRandomStreamKey' },
+    { name: 'Binary', skipHeader: true }
+];
+
+var HeaderConst = {
+    DefaultFileVersionMajor: 4,
+    DefaultFileVersionMinor: 0,
+    MaxFileVersionMajor: 4,
+    MaxFileVersionMinor: 1,
+    MaxSupportedVersion: 4,
+    FlagBinaryProtected: 0x01,
+    InnerHeaderBinaryFieldId: 0x03,
+
+    DefaultKdfAlgo: Consts.KdfId.Argon2d,
+    DefaultKdfSaltLength: 32,
+    DefaultKdfParallelism: 1,
+    DefaultKdfIterations: 2,
+    DefaultKdfMemory: 1024 * 1024,
+    DefaultKdfVersion: 0x13
+};
+
+var LastMinorVersions = {
+    3: 1,
+    4: 0
+};
+
+/**
+ * Binary file header reader/writer
+ * @constructor
+ */
+var KdbxHeader = function () {
+    this.versionMajor = undefined;
+    this.versionMinor = undefined;
+    this.dataCipherUuid = undefined;
+    this.compression = undefined;
+    this.masterSeed = undefined;
+    this.transformSeed = undefined;
+    this.keyEncryptionRounds = undefined;
+    this.encryptionIV = undefined;
+    this.protectedStreamKey = undefined;
+    this.streamStartBytes = undefined;
+    this.crsAlgorithm = undefined;
+    this.endPos = undefined;
+    this.kdfParameters = undefined;
+    this.publicCustomData = undefined;
+    Object.preventExtensions(this);
+};
+
+KdbxHeader.prototype._readSignature = function (stm) {
+    if (stm.byteLength < 8) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'not enough data');
+    }
+    var sig1 = stm.getUint32(true),
+        sig2 = stm.getUint32(true);
+    if (!(sig1 === Consts.Signatures.FileMagic && sig2 === Consts.Signatures.Sig2Kdbx)) {
+        throw new KdbxError(Consts.ErrorCodes.BadSignature);
+    }
+};
+
+KdbxHeader.prototype._writeSignature = function (stm) {
+    stm.setUint32(Consts.Signatures.FileMagic, true);
+    stm.setUint32(Consts.Signatures.Sig2Kdbx, true);
+};
+
+KdbxHeader.prototype._readVersion = function (stm) {
+    var versionMinor = stm.getUint16(true);
+    var versionMajor = stm.getUint16(true);
+    if (versionMajor > HeaderConst.MaxSupportedVersion) {
+        throw new KdbxError(Consts.ErrorCodes.InvalidVersion);
+    }
+    this.versionMinor = versionMinor;
+    this.versionMajor = versionMajor;
+};
+
+KdbxHeader.prototype._writeVersion = function (stm) {
+    stm.setUint16(this.versionMinor, true);
+    stm.setUint16(this.versionMajor, true);
+};
+
+KdbxHeader.prototype._readCipherID = function (bytes) {
+    if (bytes.byteLength !== 16) {
+        throw new KdbxError(Consts.ErrorCodes.Unsupported, 'cipher');
+    }
+    this.dataCipherUuid = new KdbxUuid(bytes);
+};
+
+KdbxHeader.prototype._writeCipherID = function (stm) {
+    this._writeFieldSize(stm, 16);
+    stm.writeBytes(this.dataCipherUuid.bytes);
+};
+
+KdbxHeader.prototype._readCompressionFlags = function (bytes) {
+    var id = new DataView(bytes).getUint32(bytes, true);
+    if (id < 0 || id >= Object.keys(Consts.CompressionAlgorithm).length) {
+        throw new KdbxError(Consts.ErrorCodes.Unsupported, 'compression');
+    }
+    this.compression = id;
+};
+
+KdbxHeader.prototype._writeCompressionFlags = function (stm) {
+    this._writeFieldSize(stm, 4);
+    stm.setUint32(this.compression, true);
+};
+
+KdbxHeader.prototype._readMasterSeed = function (bytes) {
+    this.masterSeed = bytes;
+};
+
+KdbxHeader.prototype._writeMasterSeed = function (stm) {
+    this._writeFieldBytes(stm, this.masterSeed);
+};
+
+KdbxHeader.prototype._readTransformSeed = function (bytes) {
+    this.transformSeed = bytes;
+};
+
+KdbxHeader.prototype._writeTransformSeed = function (stm) {
+    this._writeFieldBytes(stm, this.transformSeed);
+};
+
+KdbxHeader.prototype._readTransformRounds = function (bytes) {
+    this.keyEncryptionRounds = new BinaryStream(bytes).getUint64(true);
+};
+
+KdbxHeader.prototype._writeTransformRounds = function (stm) {
+    this._writeFieldSize(stm, 8);
+    stm.setUint64(this.keyEncryptionRounds, true);
+};
+
+KdbxHeader.prototype._readEncryptionIV = function (bytes) {
+    this.encryptionIV = bytes;
+};
+
+KdbxHeader.prototype._writeEncryptionIV = function (stm) {
+    this._writeFieldBytes(stm, this.encryptionIV);
+};
+
+KdbxHeader.prototype._readProtectedStreamKey = function (bytes) {
+    this.protectedStreamKey = bytes;
+};
+
+KdbxHeader.prototype._writeProtectedStreamKey = function (stm) {
+    this._writeFieldBytes(stm, this.protectedStreamKey);
+};
+
+KdbxHeader.prototype._readStreamStartBytes = function (bytes) {
+    this.streamStartBytes = bytes;
+};
+
+KdbxHeader.prototype._writeStreamStartBytes = function (stm) {
+    this._writeFieldBytes(stm, this.streamStartBytes);
+};
+
+KdbxHeader.prototype._readInnerRandomStreamID = function (bytes) {
+    this.crsAlgorithm = new DataView(bytes).getUint32(bytes, true);
+};
+
+KdbxHeader.prototype._writeInnerRandomStreamID = function (stm) {
+    this._writeFieldSize(stm, 4);
+    stm.setUint32(this.crsAlgorithm, true);
+};
+
+KdbxHeader.prototype._readInnerRandomStreamKey = function (bytes) {
+    this.protectedStreamKey = bytes;
+};
+
+KdbxHeader.prototype._writeInnerRandomStreamKey = function (stm) {
+    this._writeFieldBytes(stm, this.protectedStreamKey);
+};
+
+KdbxHeader.prototype._readKdfParameters = function (bytes) {
+    this.kdfParameters = VarDictionary.read(new BinaryStream(bytes));
+};
+
+KdbxHeader.prototype._writeKdfParameters = function (stm) {
+    var innerStream = new BinaryStream();
+    this.kdfParameters.write(innerStream);
+    this._writeFieldBytes(stm, innerStream.getWrittenBytes());
+};
+
+KdbxHeader.prototype._readPublicCustomData = function (bytes) {
+    this.publicCustomData = VarDictionary.read(new BinaryStream(bytes));
+};
+
+KdbxHeader.prototype._hasPublicCustomData = function () {
+    return this.publicCustomData;
+};
+
+KdbxHeader.prototype._writePublicCustomData = function (stm) {
+    if (this.publicCustomData) {
+        var innerStream = new BinaryStream();
+        this.publicCustomData.write(innerStream);
+        this._writeFieldBytes(stm, innerStream.getWrittenBytes());
+    }
+};
+
+KdbxHeader.prototype._readBinary = function (bytes, ctx) {
+    var view = new DataView(bytes);
+    var flags = view.getUint8(0);
+    var isProtected = flags & HeaderConst.FlagBinaryProtected;
+    var binaryData = bytes.slice(1); // Actual data comes after the flag byte
+
+    var binary = isProtected ? ProtectedValue.fromBinary(binaryData) : binaryData;
+
+    var binaryIndex = Object.keys(ctx.kdbx.binaries).length;
+    ctx.kdbx.binaries[binaryIndex] = binary;
+};
+
+KdbxHeader.prototype._writeBinary = function (stm, ctx) {
+    if (this.versionMajor < 4) {
+        return;
+    }
+    var binaryHashes = ctx.kdbx.binaries.hashOrder;
+    for (var index = 0; index < binaryHashes.length; index++) {
+        stm.setUint8(HeaderConst.InnerHeaderBinaryFieldId);
+        var binary = ctx.kdbx.binaries[binaryHashes[index]];
+        if (!binary) {
+            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no binary ' + index);
+        }
+        if (binary instanceof ProtectedValue) {
+            var binaryData = binary.getBinary();
+            this._writeFieldSize(stm, binaryData.byteLength + 1);
+            stm.setUint8(HeaderConst.FlagBinaryProtected);
+            stm.writeBytes(binaryData);
+            ByteUtils.zeroBuffer(binaryData);
+        } else {
+            binary = ByteUtils.arrayToBuffer(binary);
+            this._writeFieldSize(stm, binary.byteLength + 1);
+            stm.setUint8(0);
+            stm.writeBytes(binary);
+        }
+    }
+};
+
+KdbxHeader.prototype._writeEndOfHeader = function (stm) {
+    this._writeFieldSize(stm, 4);
+    stm.setUint32(0x0d0ad0a);
+};
+
+KdbxHeader.prototype._readField = function (stm, fields, ctx) {
+    var headerId = stm.getUint8();
+    var size = this._readFieldSize(stm);
+    var bytes;
+    if (size > 0) {
+        bytes = stm.readBytes(size);
+    }
+
+    var headerField = fields[headerId];
+    if (headerField) {
+        var method = this['_read' + headerField.name];
+        if (method) {
+            method.call(this, bytes, ctx);
+        }
+    }
+    return headerId !== 0;
+};
+
+KdbxHeader.prototype._writeField = function (stm, headerId, fields, ctx) {
+    var headerField = fields[headerId];
+    if (headerField) {
+        if (headerField.ver && headerField.ver.indexOf(this.versionMajor) < 0) {
+            return;
+        }
+        var method = this['_write' + headerField.name];
+        if (method) {
+            var hasMethod = this['_has' + headerField.name];
+            if (hasMethod && !hasMethod.call(this)) {
+                return;
+            }
+            if (!headerField.skipHeader) {
+                stm.setUint8(headerId);
+            }
+            method.call(this, stm, ctx);
+        }
+    }
+};
+
+KdbxHeader.prototype._readFieldSize = function (stm) {
+    return this.versionMajor >= 4 ? stm.getUint32(true) : stm.getUint16(true);
+};
+
+KdbxHeader.prototype._writeFieldSize = function (stm, size) {
+    if (this.versionMajor >= 4) {
+        stm.setUint32(size, true);
+    } else {
+        stm.setUint16(size, true);
+    }
+};
+
+KdbxHeader.prototype._writeFieldBytes = function (stm, bytes) {
+    this._writeFieldSize(stm, bytes.byteLength);
+    stm.writeBytes(bytes);
+};
+
+KdbxHeader.prototype._validate = function () {
+    if (this.dataCipherUuid === undefined) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no cipher in header');
+    }
+    if (this.compression === undefined) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no compression in header');
+    }
+    if (!this.masterSeed) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no master seed in header');
+    }
+    if (this.versionMajor < 4 && !this.transformSeed) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no transform seed in header');
+    }
+    if (this.versionMajor < 4 && !this.keyEncryptionRounds) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no key encryption rounds in header');
+    }
+    if (!this.encryptionIV) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no encryption iv in header');
+    }
+    if (this.versionMajor < 4 && !this.protectedStreamKey) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no protected stream key in header');
+    }
+    if (this.versionMajor < 4 && !this.streamStartBytes) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no stream start bytes in header');
+    }
+    if (this.versionMajor < 4 && !this.crsAlgorithm) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no crs algorithm in header');
+    }
+    if (this.versionMajor >= 4 && !this.kdfParameters) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no kdf parameters in header');
+    }
+};
+
+KdbxHeader.prototype._validateInner = function () {
+    if (!this.protectedStreamKey) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no protected stream key in header');
+    }
+    if (!this.crsAlgorithm) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no crs algorithm in header');
+    }
+};
+
+KdbxHeader.prototype._createKdfParameters = function (algo) {
+    if (!algo) {
+        algo = HeaderConst.DefaultKdfAlgo;
+    }
+    switch (algo) {
+        case Consts.KdfId.Argon2d:
+            this.kdfParameters = new VarDictionary();
+            this.kdfParameters.set(
+                '$UUID',
+                VarDictionary.ValueType.Bytes,
+                ByteUtils.base64ToBytes(Consts.KdfId.Argon2d)
+            );
+            this.kdfParameters.set(
+                'S',
+                VarDictionary.ValueType.Bytes,
+                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
+            );
+            this.kdfParameters.set(
+                'P',
+                VarDictionary.ValueType.UInt32,
+                HeaderConst.DefaultKdfParallelism
+            );
+            this.kdfParameters.set(
+                'I',
+                VarDictionary.ValueType.UInt64,
+                new Int64(HeaderConst.DefaultKdfIterations)
+            );
+            this.kdfParameters.set(
+                'M',
+                VarDictionary.ValueType.UInt64,
+                new Int64(HeaderConst.DefaultKdfMemory)
+            );
+            this.kdfParameters.set(
+                'V',
+                VarDictionary.ValueType.UInt32,
+                HeaderConst.DefaultKdfVersion
+            );
+            break;
+        case Consts.KdfId.Aes:
+            this.kdfParameters = new VarDictionary();
+            this.kdfParameters.set(
+                '$UUID',
+                VarDictionary.ValueType.Bytes,
+                ByteUtils.base64ToBytes(Consts.KdfId.Aes)
+            );
+            this.kdfParameters.set(
+                'S',
+                VarDictionary.ValueType.Bytes,
+                Random.getBytes(HeaderConst.DefaultKdfSaltLength)
+            );
+            this.kdfParameters.set(
+                'R',
+                VarDictionary.ValueType.UInt64,
+                new Int64(Consts.Defaults.KeyEncryptionRounds)
+            );
+            break;
+        default:
+            throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad KDF algo');
+    }
+};
+
+/**
+ * Saves header to stream
+ * @param {BinaryStream} stm
+ */
+KdbxHeader.prototype.write = function (stm) {
+    this._validate();
+    this._writeSignature(stm);
+    this._writeVersion(stm);
+    for (var id = 1; id < HeaderFields.length; id++) {
+        this._writeField(stm, id, HeaderFields);
+    }
+    this._writeField(stm, 0, HeaderFields);
+    this.endPos = stm.pos;
+};
+
+/**
+ * Saves inner header to stream
+ * @param {BinaryStream} stm
+ * @param {KdbxContext} ctx
+ */
+KdbxHeader.prototype.writeInnerHeader = function (stm, ctx) {
+    this._validateInner();
+    for (var id = 1; id < InnerHeaderFields.length; id++) {
+        this._writeField(stm, id, InnerHeaderFields, ctx);
+    }
+    this._writeField(stm, 0, InnerHeaderFields);
+};
+
+/**
+ * Updates header random salts
+ */
+KdbxHeader.prototype.generateSalts = function () {
+    this.masterSeed = Random.getBytes(32);
+    if (this.versionMajor < 4) {
+        this.transformSeed = Random.getBytes(32);
+        this.streamStartBytes = Random.getBytes(32);
+        this.protectedStreamKey = Random.getBytes(32);
+        this.encryptionIV = Random.getBytes(16);
+    } else {
+        this.protectedStreamKey = Random.getBytes(64);
+        this.kdfParameters.set('S', VarDictionary.ValueType.Bytes, Random.getBytes(32));
+        var ivLength = this.dataCipherUuid.toString() === Consts.CipherId.ChaCha20 ? 12 : 16;
+        this.encryptionIV = Random.getBytes(ivLength);
+    }
+};
+
+/**
+ * Upgrade the header to the specified version
+ * @param {Number} version - major file version
+ */
+KdbxHeader.prototype.setVersion = function (version) {
+    if (version !== 3 && version !== 4) {
+        throw new KdbxError(Consts.ErrorCodes.InvalidArg, 'bad file version');
+    }
+    this.versionMajor = version;
+    this.versionMinor = LastMinorVersions[version];
+    if (this.versionMajor === 4) {
+        if (!this.kdfParameters) {
+            this._createKdfParameters();
+        }
+        this.crsAlgorithm = Consts.CrsAlgorithm.ChaCha20;
+        this.keyEncryptionRounds = undefined;
+    } else {
+        this.kdfParameters = undefined;
+        this.crsAlgorithm = Consts.CrsAlgorithm.Salsa20;
+        this.keyEncryptionRounds = Consts.Defaults.KeyEncryptionRounds;
+    }
+};
+
+/**
+ * Set file KDF
+ * @param kdf - KDF ID, from Consts.KdfId
+ */
+KdbxHeader.prototype.setKdf = function (kdf) {
+    this._createKdfParameters(kdf);
+};
+
+/**
+ * Read header from stream
+ * @param {BinaryStream} stm
+ * @param {KdbxContext} ctx
+ * @return {KdbxHeader}
+ * @static
+ */
+KdbxHeader.read = function (stm, ctx) {
+    var header = new KdbxHeader();
+    header._readSignature(stm);
+    header._readVersion(stm);
+    while (header._readField(stm, HeaderFields, ctx)) {
+        continue;
+    }
+    header.endPos = stm.pos;
+    header._validate();
+    return header;
+};
+
+/**
+ * Reads inner header from stream
+ * @param {BinaryStream} stm
+ * @param {KdbxContext} ctx
+ */
+KdbxHeader.prototype.readInnerHeader = function (stm, ctx) {
+    while (this._readField(stm, InnerHeaderFields, ctx)) {
+        continue;
+    }
+    this._validateInner();
+};
+
+/**
+ * Creates new header
+ * @param {Kdbx} kdbx
+ * @return {KdbxHeader}
+ * @static
+ */
+KdbxHeader.create = function () {
+    var header = new KdbxHeader();
+    header.versionMajor = HeaderConst.DefaultFileVersionMajor;
+    header.versionMinor = HeaderConst.DefaultFileVersionMinor;
+    header.dataCipherUuid = new KdbxUuid(Consts.CipherId.Aes);
+    header.compression = Consts.CompressionAlgorithm.GZip;
+    header.crsAlgorithm = Consts.CrsAlgorithm.ChaCha20;
+    header._createKdfParameters();
+    return header;
+};
+
+KdbxHeader.MaxFileVersion = HeaderConst.MaxFileVersionMajor;
+
+module.exports = KdbxHeader;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-meta.js":
+/*!*****************************!*\
+  !*** ./format/kdbx-meta.js ***!
+  \*****************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 512:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ "./format/kdbx-uuid.js"),
+    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ "./format/kdbx-custom-data.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js"),
+    Consts = __webpack_require__(/*! ./../defs/consts */ "./defs/consts.js");
+
+var Constants = {
+    Generator: 'KdbxWeb'
+};
+
+/**
+ * Db metadata
+ * @constructor
+ */
+var KdbxMeta = function () {
+    this.generator = undefined;
+    this.headerHash = undefined;
+    this.settingsChanged = undefined;
+    this._name = undefined;
+    this.nameChanged = undefined;
+    this._desc = undefined;
+    this.descChanged = undefined;
+    this._defaultUser = undefined;
+    this.defaultUserChanged = undefined;
+    this._mntncHistoryDays = undefined;
+    this._color = undefined;
+    this.keyChanged = undefined;
+    this._keyChangeRec = undefined;
+    this._keyChangeForce = undefined;
+    this._recycleBinEnabled = undefined;
+    this._recycleBinUuid = undefined;
+    this.recycleBinChanged = undefined;
+    this._entryTemplatesGroup = undefined;
+    this.entryTemplatesGroupChanged = undefined;
+    this._historyMaxItems = undefined;
+    this._historyMaxSize = undefined;
+    this._lastSelectedGroup = undefined;
+    this._lastTopVisibleGroup = undefined;
+    this._memoryProtection = {
+        title: undefined,
+        userName: undefined,
+        password: undefined,
+        url: undefined,
+        notes: undefined
+    };
+    this.customData = {};
+    this.customIcons = {};
+    this._editState = undefined;
+    Object.preventExtensions(this);
+};
+
+var props = {
+    name: 'nameChanged',
+    desc: 'descChanged',
+    defaultUser: 'defaultUserChanged',
+    mntncHistoryDays: null,
+    color: null,
+    keyChangeRec: null,
+    keyChangeForce: null,
+    recycleBinEnabled: 'recycleBinChanged',
+    recycleBinUuid: 'recycleBinChanged',
+    entryTemplatesGroup: 'entryTemplatesGroupChanged',
+    historyMaxItems: null,
+    historyMaxSize: null,
+    lastSelectedGroup: null,
+    lastTopVisibleGroup: null,
+    memoryProtection: null
+};
+
+Object.keys(props).forEach(function (prop) {
+    createProperty(prop, props[prop]);
+});
+
+function createProperty(prop, propChanged) {
+    var field = '_' + prop;
+    Object.defineProperty(KdbxMeta.prototype, prop, {
+        enumerable: true,
+        get: function () {
+            return this[field];
+        },
+        set: function (value) {
+            if (value !== this[field]) {
+                this[field] = value;
+                if (propChanged) {
+                    this[propChanged] = new Date();
+                } else {
+                    this._setPropModDate(prop);
+                }
+            }
+        }
+    });
+}
+
+KdbxMeta.prototype._setPropModDate = function (prop) {
+    if (!this._editState) {
+        this._editState = {};
+    }
+    this._editState[prop] = new Date().getTime();
+};
+
+KdbxMeta.prototype._readNode = function (node, ctx) {
+    switch (node.tagName) {
+        case XmlNames.Elem.Generator:
+            this.generator = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.HeaderHash:
+            this.headerHash = XmlUtils.getBytes(node);
+            break;
+        case XmlNames.Elem.SettingsChanged:
+            this.settingsChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.DbName:
+            this._name = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.DbNameChanged:
+            this.nameChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.DbDesc:
+            this._desc = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.DbDescChanged:
+            this.descChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.DbDefaultUser:
+            this._defaultUser = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.DbDefaultUserChanged:
+            this.defaultUserChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.DbMntncHistoryDays:
+            this._mntncHistoryDays = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.DbColor:
+            this._color = XmlUtils.getText(node);
+            break;
+        case XmlNames.Elem.DbKeyChanged:
+            this.keyChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.DbKeyChangeRec:
+            this._keyChangeRec = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.DbKeyChangeForce:
+            this._keyChangeForce = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.RecycleBinEnabled:
+            this._recycleBinEnabled = XmlUtils.getBoolean(node);
+            break;
+        case XmlNames.Elem.RecycleBinUuid:
+            this._recycleBinUuid = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.RecycleBinChanged:
+            this.recycleBinChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.EntryTemplatesGroup:
+            this._entryTemplatesGroup = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.EntryTemplatesGroupChanged:
+            this.entryTemplatesGroupChanged = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.HistoryMaxItems:
+            this._historyMaxItems = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.HistoryMaxSize:
+            this._historyMaxSize = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.LastSelectedGroup:
+            this._lastSelectedGroup = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.LastTopVisibleGroup:
+            this._lastTopVisibleGroup = XmlUtils.getUuid(node);
+            break;
+        case XmlNames.Elem.MemoryProt:
+            this._readMemoryProtection(node);
+            break;
+        case XmlNames.Elem.CustomIcons:
+            this._readCustomIcons(node);
+            break;
+        case XmlNames.Elem.Binaries:
+            this._readBinaries(node, ctx);
+            break;
+        case XmlNames.Elem.CustomData:
+            this._readCustomData(node);
+            break;
+    }
+};
+
+KdbxMeta.prototype._readMemoryProtection = function (node) {
+    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        switch (childNode.tagName) {
+            case XmlNames.Elem.ProtTitle:
+                this.memoryProtection.title = XmlUtils.getBoolean(childNode);
+                break;
+            case XmlNames.Elem.ProtUserName:
+                this.memoryProtection.userName = XmlUtils.getBoolean(childNode);
+                break;
+            case XmlNames.Elem.ProtPassword:
+                this.memoryProtection.password = XmlUtils.getBoolean(childNode);
+                break;
+            case XmlNames.Elem.ProtUrl:
+                this.memoryProtection.url = XmlUtils.getBoolean(childNode);
+                break;
+            case XmlNames.Elem.ProtNotes:
+                this.memoryProtection.notes = XmlUtils.getBoolean(childNode);
+                break;
+        }
+    }
+};
+
+KdbxMeta.prototype._writeMemoryProtection = function (parentNode) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.MemoryProt);
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtTitle),
+        this.memoryProtection.title
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUserName),
+        this.memoryProtection.userName
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtPassword),
+        this.memoryProtection.password
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUrl),
+        this.memoryProtection.url
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.ProtNotes),
+        this.memoryProtection.notes
+    );
+};
+
+KdbxMeta.prototype._readCustomIcons = function (node) {
+    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName === XmlNames.Elem.CustomIconItem) {
+            this._readCustomIcon(childNode);
+        }
+    }
+};
+
+KdbxMeta.prototype._readCustomIcon = function (node) {
+    var uuid, data;
+    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        switch (childNode.tagName) {
+            case XmlNames.Elem.CustomIconItemID:
+                uuid = XmlUtils.getUuid(childNode);
+                break;
+            case XmlNames.Elem.CustomIconItemData:
+                data = XmlUtils.getBytes(childNode);
+                break;
+        }
+    }
+    if (uuid && data) {
+        this.customIcons[uuid] = data;
+    }
+};
+
+KdbxMeta.prototype._writeCustomIcons = function (parentNode) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomIcons);
+    var customIcons = this.customIcons;
+    Object.keys(customIcons).forEach(function (uuid) {
+        var data = customIcons[uuid];
+        if (data) {
+            var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconItem);
+            XmlUtils.setUuid(XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemID), uuid);
+            XmlUtils.setBytes(
+                XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemData),
+                data
+            );
+        }
+    });
+};
+
+KdbxMeta.prototype._readBinaries = function (node, ctx) {
+    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName === XmlNames.Elem.Binary) {
+            this._readBinary(childNode, ctx);
+        }
+    }
+};
+
+KdbxMeta.prototype._readBinary = function (node, ctx) {
+    var id = node.getAttribute(XmlNames.Attr.Id);
+    var binary = XmlUtils.getProtectedBinary(node);
+    if (id && binary) {
+        ctx.kdbx.binaries[id] = binary;
+    }
+};
+
+KdbxMeta.prototype._writeBinaries = function (parentNode, ctx) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Binaries);
+    var binaries = ctx.kdbx.binaries;
+    binaries.hashOrder.forEach(function (hash, index) {
+        var data = binaries[hash];
+        if (data) {
+            var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.Binary);
+            itemNode.setAttribute(XmlNames.Attr.Id, index.toString());
+            XmlUtils.setProtectedBinary(itemNode, data);
+        }
+    });
+};
+
+KdbxMeta.prototype._readCustomData = function (node) {
+    this.customData = KdbxCustomData.read(node);
+};
+
+KdbxMeta.prototype._writeCustomData = function (parentNode) {
+    KdbxCustomData.write(parentNode, this.customData);
+};
+
+/**
+ * Write to stream
+ * @param {Node} parentNode - xml document node
+ * @param {KdbxContext} ctx
+ */
+KdbxMeta.prototype.write = function (parentNode, ctx) {
+    this.generator = Constants.generator;
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Meta);
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Generator), Constants.Generator);
+    if (ctx.kdbx.header.versionMajor < 4) {
+        XmlUtils.setBytes(XmlUtils.addChildNode(node, XmlNames.Elem.HeaderHash), this.headerHash);
+    } else if (this.settingsChanged) {
+        ctx.setXmlDate(
+            XmlUtils.addChildNode(node, XmlNames.Elem.SettingsChanged),
+            this.settingsChanged
+        );
+    }
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbName), this.name);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbNameChanged), this.nameChanged);
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDesc), this.desc);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbDescChanged), this.descChanged);
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUser), this.defaultUser);
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUserChanged),
+        this.defaultUserChanged
+    );
+    XmlUtils.setText(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbMntncHistoryDays),
+        this.mntncHistoryDays
+    );
+    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbColor), this.color);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChanged), this.keyChanged);
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeRec),
+        this.keyChangeRec
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeForce),
+        this.keyChangeForce
+    );
+    XmlUtils.setBoolean(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinEnabled),
+        this.recycleBinEnabled
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinUuid),
+        this.recycleBinUuid
+    );
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinChanged),
+        this.recycleBinChanged
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroup),
+        this.entryTemplatesGroup
+    );
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroupChanged),
+        this.entryTemplatesGroupChanged
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxItems),
+        this.historyMaxItems
+    );
+    XmlUtils.setNumber(
+        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxSize),
+        this.historyMaxSize
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastSelectedGroup),
+        this.lastSelectedGroup
+    );
+    XmlUtils.setUuid(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleGroup),
+        this.lastTopVisibleGroup
+    );
+    this._writeMemoryProtection(node);
+    this._writeCustomIcons(node);
+    if (ctx.exportXml || ctx.kdbx.header.versionMajor < 4) {
+        this._writeBinaries(node, ctx);
+    }
+    this._writeCustomData(node);
+};
+
+/**
+ * Merge meta with another db
+ * @param {KdbxMeta} remote
+ * @param {{objects, remote, deleted}} objectMap
+ */
+KdbxMeta.prototype.merge = function (remote, objectMap) {
+    if (remote.nameChanged > this.nameChanged) {
+        this._name = remote.name;
+        this.nameChanged = remote.nameChanged;
+    }
+    if (remote.descChanged > this.descChanged) {
+        this._desc = remote.desc;
+        this.descChanged = remote.descChanged;
+    }
+    if (remote.defaultUserChanged > this.defaultUserChanged) {
+        this._defaultUser = remote.defaultUser;
+        this.defaultUserChanged = remote.defaultUserChanged;
+    }
+    if (remote.keyChanged > this.keyChanged) {
+        this.keyChanged = remote.keyChanged;
+    }
+    if (remote.settingsChanged > this.settingsChanged) {
+        this.settingsChanged = remote.settingsChanged;
+    }
+    if (remote.recycleBinChanged > this.recycleBinChanged) {
+        this._recycleBinEnabled = remote.recycleBinEnabled;
+        this._recycleBinUuid = remote.recycleBinUuid;
+        this.recycleBinChanged = remote.recycleBinChanged;
+    }
+    if (remote.entryTemplatesGroupChanged > this.entryTemplatesGroupChanged) {
+        this._entryTemplatesGroup = remote.entryTemplatesGroup;
+        this.entryTemplatesGroupChanged = remote.entryTemplatesGroupChanged;
+    }
+    Object.keys(remote.customData).forEach(function (key) {
+        if (!this.customData[key] && !objectMap.deleted[key]) {
+            this.customData[key] = remote.customData[key];
+        }
+    }, this);
+    Object.keys(remote.customIcons).forEach(function (key) {
+        if (!this.customIcons[key] && !objectMap.deleted[key]) {
+            this.customIcons[key] = remote.customIcons[key];
+        }
+    }, this);
+    if (!this._editState || !this._editState.historyMaxItems) {
+        this.historyMaxItems = remote.historyMaxItems;
+    }
+    if (!this._editState || !this._editState.historyMaxSize) {
+        this.historyMaxSize = remote.historyMaxSize;
+    }
+    if (!this._editState || !this._editState.keyChangeRec) {
+        this.keyChangeRec = remote.keyChangeRec;
+    }
+    if (!this._editState || !this._editState.keyChangeForce) {
+        this.keyChangeForce = remote.keyChangeForce;
+    }
+    if (!this._editState || !this._editState.mntncHistoryDays) {
+        this.mntncHistoryDays = remote.mntncHistoryDays;
+    }
+    if (!this._editState || !this._editState.color) {
+        this.color = remote.color;
+    }
+};
+
+/**
+ * Creates new meta
+ * @returns {KdbxMeta}
+ */
+KdbxMeta.create = function () {
+    var now = new Date();
+    var meta = new KdbxMeta();
+    meta.generator = Constants.Generator;
+    meta.settingsChanged = now;
+    meta.mntncHistoryDays = Consts.Defaults.MntncHistoryDays;
+    meta.recycleBinEnabled = true;
+    meta.historyMaxItems = Consts.Defaults.HistoryMaxItems;
+    meta.historyMaxSize = Consts.Defaults.HistoryMaxSize;
+    meta.nameChanged = now;
+    meta.descChanged = now;
+    meta.defaultUserChanged = now;
+    meta.recycleBinChanged = now;
+    meta.keyChangeRec = -1;
+    meta.keyChangeForce = -1;
+    meta.entryTemplatesGroup = new KdbxUuid();
+    meta.entryTemplatesGroupChanged = now;
+    meta.memoryProtection = {
+        title: false,
+        userName: false,
+        password: true,
+        url: false,
+        notes: false
+    };
+    return meta;
+};
+
+/**
+ * Read KdbxMeta from stream
+ * @param {Node} xmlNode - xml Meta node
+ * @param {KdbxContext} ctx
+ * @return {KdbxMeta}
+ */
+KdbxMeta.read = function (xmlNode, ctx) {
+    var meta = new KdbxMeta();
+    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName) {
+            meta._readNode(childNode, ctx);
+        }
+    }
+    return meta;
+};
+
+module.exports = KdbxMeta;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-times.js":
+/*!******************************!*\
+  !*** ./format/kdbx-times.js ***!
+  \******************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 121:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js");
+
+/**
+ * Kdbx times
+ * @constructor
+ */
+var KdbxTimes = function () {
+    this.creationTime = undefined;
+    this.lastModTime = undefined;
+    this.lastAccessTime = undefined;
+    this.expiryTime = undefined;
+    this.expires = undefined;
+    this.usageCount = undefined;
+    this.locationChanged = new Date();
+    Object.preventExtensions(this);
+};
+
+KdbxTimes.prototype._readNode = function (node) {
+    switch (node.tagName) {
+        case XmlNames.Elem.CreationTime:
+            this.creationTime = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.LastModTime:
+            this.lastModTime = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.LastAccessTime:
+            this.lastAccessTime = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.ExpiryTime:
+            this.expiryTime = XmlUtils.getDate(node);
+            break;
+        case XmlNames.Elem.Expires:
+            this.expires = XmlUtils.getBoolean(node);
+            break;
+        case XmlNames.Elem.UsageCount:
+            this.usageCount = XmlUtils.getNumber(node);
+            break;
+        case XmlNames.Elem.LocationChanged:
+            this.locationChanged = XmlUtils.getDate(node);
+            break;
+    }
+};
+
+/**
+ * Clones object
+ * @returns {KdbxTimes}
+ */
+KdbxTimes.prototype.clone = function () {
+    var clone = new KdbxTimes();
+    clone.creationTime = this.creationTime;
+    clone.lastModTime = this.lastModTime;
+    clone.lastAccessTime = this.lastAccessTime;
+    clone.expiryTime = this.expiryTime;
+    clone.expires = this.expires;
+    clone.usageCount = this.usageCount;
+    clone.locationChanged = this.locationChanged;
+    return clone;
+};
+
+KdbxTimes.prototype.update = function () {
+    var now = new Date();
+    this.lastModTime = now;
+    this.lastAccessTime = now;
+};
+
+/**
+ * Write to stream
+ * @param {Node} parentNode - xml document node
+ * @param {KdbxContext} ctx
+ */
+KdbxTimes.prototype.write = function (parentNode, ctx) {
+    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Times);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.CreationTime), this.creationTime);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LastModTime), this.lastModTime);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.LastAccessTime), this.lastAccessTime);
+    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.ExpiryTime), this.expiryTime);
+    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.Expires), this.expires);
+    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.UsageCount), this.usageCount);
+    ctx.setXmlDate(
+        XmlUtils.addChildNode(node, XmlNames.Elem.LocationChanged),
+        this.locationChanged
+    );
+};
+
+/**
+ * Creates new times
+ * @return {KdbxTimes}
+ */
+KdbxTimes.create = function () {
+    var times = new KdbxTimes();
+    var now = new Date();
+    times.creationTime = now;
+    times.lastModTime = now;
+    times.lastAccessTime = now;
+    times.expiryTime = now;
+    times.expires = false;
+    times.usageCount = 0;
+    times.locationChanged = now;
+    return times;
+};
+
+/**
+ * Read times from xml
+ * @param {Node} xmlNode
+ * @return {KdbxTimes}
+ */
+KdbxTimes.read = function (xmlNode) {
+    var obj = new KdbxTimes();
+    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName) {
+            obj._readNode(childNode);
+        }
+    }
+    return obj;
+};
+
+module.exports = KdbxTimes;
+
+
+/***/ }),
+
+/***/ "./format/kdbx-uuid.js":
+/*!*****************************!*\
+  !*** ./format/kdbx-uuid.js ***!
+  \*****************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 69:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js"),
+    Random = __webpack_require__(/*! ../crypto/random */ "./crypto/random.js");
+
+var UuidLength = 16;
+
+/**
+ * Uuid for passwords
+ * @param {ArrayBuffer|string} ab - ArrayBuffer with data
+ * @constructor
+ */
+function KdbxUuid(ab) {
+    if (ab === undefined) {
+        ab = new ArrayBuffer(UuidLength);
+    }
+    if (typeof ab === 'string') {
+        ab = ByteUtils.base64ToBytes(ab);
+    }
+    this.id = ab.byteLength === 16 ? ByteUtils.bytesToBase64(ab) : undefined;
+    this.empty = true;
+    if (ab) {
+        var bytes = new Uint8Array(ab);
+        for (var i = 0, len = bytes.length; i < len; i++) {
+            if (bytes[i] !== 0) {
+                this.empty = false;
+                return;
+            }
+        }
+    }
+}
+
+/**
+ * Checks whether two uuids are equal
+ * @param {KdbxUuid|string} other
+ */
+KdbxUuid.prototype.equals = function (other) {
+    return (other && other.toString() === this.toString()) || false;
+};
+
+Object.defineProperty(KdbxUuid.prototype, 'bytes', {
+    enumerable: true,
+    get: function () {
+        return ByteUtils.base64ToBytes(this.id);
+    }
+});
+
+/**
+ * Generated random uuid
+ * @return {KdbxUuid}
+ * @static
+ */
+KdbxUuid.random = function () {
+    return new KdbxUuid(Random.getBytes(UuidLength));
+};
+
+KdbxUuid.prototype.toString = function () {
+    return this.id;
+};
+
+KdbxUuid.prototype.valueOf = function () {
+    return this.id;
+};
+
+KdbxUuid.prototype.toBytes = function () {
+    return this.id ? ByteUtils.base64ToBytes(this.id) : undefined;
+};
+
+module.exports = KdbxUuid;
+
+
+/***/ }),
+
+/***/ "./format/kdbx.js":
+/*!************************!*\
+  !*** ./format/kdbx.js ***!
+  \************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 572:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var KdbxFormat = __webpack_require__(/*! ./kdbx-format */ "./format/kdbx-format.js"),
+    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    KdbxCredentials = __webpack_require__(/*! ./kdbx-credentials */ "./format/kdbx-credentials.js"),
+    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ "./format/kdbx-header.js"),
+    KdbxMeta = __webpack_require__(/*! ./kdbx-meta */ "./format/kdbx-meta.js"),
+    KdbxBinaries = __webpack_require__(/*! ./kdbx-binaries */ "./format/kdbx-binaries.js"),
+    KdbxGroup = __webpack_require__(/*! ./kdbx-group */ "./format/kdbx-group.js"),
+    KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ "./format/kdbx-entry.js"),
+    KdbxDeletedObject = __webpack_require__(/*! ./kdbx-deleted-object */ "./format/kdbx-deleted-object.js"),
+    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ "./format/kdbx-uuid.js"),
+    Consts = __webpack_require__(/*! ./../defs/consts */ "./defs/consts.js"),
+    XmlNames = __webpack_require__(/*! ./../defs/xml-names */ "./defs/xml-names.js"),
+    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ "./utils/xml-utils.js");
 
 /**
  * Kdbx file (KeePass database v2)
@@ -5388,468 +5476,1368 @@ module.exports = Kdbx;
 
 
 /***/ }),
-/* 31 */
-/*!*******************************!*\
-  !*** ./format/kdbx-format.js ***!
-  \*******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! default exports */
+/*! export ByteUtils [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/byte-utils.js */
+/*!   export arrayBufferEquals [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export arrayToBuffer [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export base64ToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export bytesToBase64 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export bytesToHex [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export bytesToString [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export hexToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export stringToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export zeroBuffer [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   other exports [not provided] [no usage info] */
+/*! export Consts [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./defs/consts.js */
+/*!   export AutoTypeObfuscationOptions [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export CipherId [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export CompressionAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export CrsAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export Defaults [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export ErrorCodes [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export Icons [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export KdfId [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export Signatures [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   other exports [not provided] [no usage info] */
+/*! export Credentials [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx-credentials.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export CryptoEngine [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/crypto-engine.js */
+/*!   export Argon2TypeArgon2d [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export Argon2TypeArgon2id [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export argon2 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export chacha20 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export configure [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export createAesCbc [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export hmacSha256 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export nodeCrypto [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export random [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export sha256 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export sha512 [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export subtle [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   export webCrypto [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   other exports [not provided] [no usage info] */
+/*! export Int64 [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/int64.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export Kdbx [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export KdbxError [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./errors/kdbx-error.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export KdbxUuid [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx-uuid.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export ProtectedValue [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/protected-value.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export Random [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/random.js */
+/*!   export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*!   other exports [not provided] [no usage info] */
+/*! export VarDictionary [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/var-dictionary.js */
+/*!   exports [maybe provided (runtime-defined)] [no usage info] */
+/*! other exports [not provided] [maybe used in main (runtime-defined)] */
+/*! runtime requirements: module, __webpack_require__ */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-
-var pako = __webpack_require__(/*! pako */ 16),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    KdbxHeader = __webpack_require__(/*! ./kdbx-header */ 22),
-    KdbxContext = __webpack_require__(/*! ./kdbx-context */ 43),
-    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
-    BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ 11),
-    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4),
-    Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    HashedBlockTransform = __webpack_require__(/*! ../crypto/hashed-block-transform */ 45),
-    HmacBlockTransform = __webpack_require__(/*! ../crypto/hmac-block-transform */ 46),
-    ProtectSaltGenerator = __webpack_require__(/*! ../crypto/protect-salt-generator */ 47),
-    KeyEncryptorAes = __webpack_require__(/*! ../crypto/key-encryptor-aes */ 25),
-    KeyEncryptorKdf = __webpack_require__(/*! ../crypto/key-encryptor-kdf */ 48);
-
-var KdbxFormat = function (kdbx) {
-    this.kdbx = kdbx;
-};
-
-/**
- * Load kdbx file
- * If there was an error loading file, throws an exception
- * @param {ArrayBuffer} data - database file contents
- * @returns {Promise.<Kdbx>}
- */
-KdbxFormat.prototype.load = function (data) {
-    var stm = new BinaryStream(data);
-    var kdbx = this.kdbx;
-    var that = this;
-    that.ctx = new KdbxContext({ kdbx: kdbx });
-    return kdbx.credentials.ready.then(function () {
-        kdbx.header = KdbxHeader.read(stm, that.ctx);
-        if (kdbx.header.versionMajor === 3) {
-            return that._loadV3(stm);
-        } else if (kdbx.header.versionMajor === 4) {
-            return that._loadV4(stm);
-        } else {
-            throw new KdbxError(
-                Consts.ErrorCodes.InvalidVersion,
-                'bad version: ' + kdbx.header.versionMajor
-            );
-        }
-    });
-};
-
-KdbxFormat.prototype._loadV3 = function (stm) {
-    var kdbx = this.kdbx;
-    var that = this;
-    return that._decryptXmlV3(kdbx, stm).then(function (xmlStr) {
-        kdbx.xml = XmlUtils.parse(xmlStr);
-        return that._setProtectedValues().then(function () {
-            return kdbx._loadFromXml(that.ctx).then(function () {
-                return that._checkHeaderHashV3(stm).then(function () {
-                    return kdbx;
-                });
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype._loadV4 = function (stm) {
-    var that = this;
-    return that._getHeaderHash(stm).then(function (headerSha) {
-        var expectedHeaderSha = stm.readBytes(headerSha.byteLength);
-        if (!ByteUtils.arrayBufferEquals(expectedHeaderSha, headerSha)) {
-            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
-        }
-        return that._computeKeysV4().then(function (keys) {
-            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
-                var expectedHeaderHmac = stm.readBytes(headerHmac.byteLength);
-                if (!ByteUtils.arrayBufferEquals(expectedHeaderHmac, headerHmac)) {
-                    throw new KdbxError(Consts.ErrorCodes.InvalidKey);
-                }
-                return HmacBlockTransform.decrypt(stm.readBytesToEnd(), keys.hmacKey).then(
-                    function (data) {
-                        ByteUtils.zeroBuffer(keys.hmacKey);
-                        return that._decryptData(data, keys.cipherKey).then(function (data) {
-                            ByteUtils.zeroBuffer(keys.cipherKey);
-                            if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
-                                data = pako.ungzip(data);
-                            }
-                            stm = new BinaryStream(ByteUtils.arrayToBuffer(data));
-                            that.kdbx.header.readInnerHeader(stm, that.ctx);
-                            data = stm.readBytesToEnd();
-                            var xmlStr = ByteUtils.bytesToString(data);
-                            that.kdbx.xml = XmlUtils.parse(xmlStr);
-                            return that._setProtectedValues().then(function () {
-                                return that.kdbx._loadFromXml(that.ctx);
-                            });
-                        });
-                    }
-                );
-            });
-        });
-    });
-};
-
-/**
- * Load XML file
- * @param {string} xmlStr
- * @returns {Promise.<Kdbx>}
- */
-KdbxFormat.prototype.loadXml = function (xmlStr) {
-    var kdbx = this.kdbx;
-    var ctx = new KdbxContext({ kdbx: kdbx });
-    return kdbx.credentials.ready.then(function () {
-        kdbx.header = KdbxHeader.create();
-        kdbx.xml = XmlUtils.parse(xmlStr);
-        XmlUtils.protectPlainValues(kdbx.xml.documentElement);
-        return kdbx._loadFromXml(ctx);
-    });
-};
-
-/**
- * Save kdbx file
- * @returns {Promise.<ArrayBuffer>}
- */
-KdbxFormat.prototype.save = function () {
-    var kdbx = this.kdbx;
-    var that = this;
-    that.ctx = new KdbxContext({ kdbx: kdbx });
-    kdbx.binaries.assignIds();
-    return kdbx.credentials.ready.then(function () {
-        var stm = new BinaryStream();
-        kdbx.header.generateSalts();
-        kdbx.header.write(stm);
-        if (kdbx.header.versionMajor === 3) {
-            return that._saveV3(stm);
-        } else if (kdbx.header.versionMajor === 4) {
-            return that._saveV4(stm);
-        } else {
-            throw new KdbxError(
-                Consts.ErrorCodes.InvalidVersion,
-                'bad version: ' + kdbx.header.versionMajor
-            );
-        }
-    });
-};
-
-KdbxFormat.prototype._saveV3 = function (stm) {
-    var that = this;
-    return that._getHeaderHash(stm).then(function (headerHash) {
-        that.kdbx.meta.headerHash = headerHash;
-        that.kdbx._buildXml(that.ctx);
-        return that._getProtectSaltGenerator().then(function (gen) {
-            XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
-            return that._encryptXmlV3().then(function (data) {
-                stm.writeBytes(data);
-                return stm.getWrittenBytes();
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype._saveV4 = function (stm) {
-    var that = this;
-    that.kdbx._buildXml(that.ctx);
-    return that._getHeaderHash(stm).then(function (headerSha) {
-        stm.writeBytes(headerSha);
-        return that._computeKeysV4().then(function (keys) {
-            return that._getHeaderHmac(stm, keys.hmacKey).then(function (headerHmac) {
-                stm.writeBytes(headerHmac);
-                return that._getProtectSaltGenerator().then(function (gen) {
-                    XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
-                    var xml = XmlUtils.serialize(that.kdbx.xml);
-                    var innerHeaderStm = new BinaryStream();
-                    that.kdbx.header.writeInnerHeader(innerHeaderStm, that.ctx);
-                    var innerHeaderData = innerHeaderStm.getWrittenBytes();
-                    var xmlData = ByteUtils.arrayToBuffer(ByteUtils.stringToBytes(xml));
-                    var data = new ArrayBuffer(innerHeaderData.byteLength + xmlData.byteLength);
-                    var dataArr = new Uint8Array(data);
-                    dataArr.set(new Uint8Array(innerHeaderData));
-                    dataArr.set(new Uint8Array(xmlData), innerHeaderData.byteLength);
-                    ByteUtils.zeroBuffer(xmlData);
-                    ByteUtils.zeroBuffer(innerHeaderData);
-                    if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
-                        data = pako.gzip(data);
-                    }
-                    return that
-                        ._encryptData(ByteUtils.arrayToBuffer(data), keys.cipherKey)
-                        .then(function (data) {
-                            ByteUtils.zeroBuffer(keys.cipherKey);
-                            return HmacBlockTransform.encrypt(data, keys.hmacKey).then(function (
-                                data
-                            ) {
-                                ByteUtils.zeroBuffer(keys.hmacKey);
-                                stm.writeBytes(data);
-                                return stm.getWrittenBytes();
-                            });
-                        });
-                });
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype.saveXml = function (prettyPrint) {
-    var kdbx = this.kdbx;
-    return kdbx.credentials.ready.then(function () {
-        kdbx.header.generateSalts();
-        var ctx = new KdbxContext({ kdbx: kdbx, exportXml: true });
-        kdbx.binaries.assignIds();
-        kdbx._buildXml(ctx);
-        XmlUtils.unprotectValues(kdbx.xml.documentElement);
-        var xml = XmlUtils.serialize(kdbx.xml, prettyPrint);
-        XmlUtils.protectUnprotectedValues(kdbx.xml.documentElement);
-        return xml;
-    });
-};
-
-KdbxFormat.prototype._decryptXmlV3 = function (kdbx, stm) {
-    var data = stm.readBytesToEnd();
-    var that = this;
-    return that._getMasterKeyV3().then(function (masterKey) {
-        return that._decryptData(data, masterKey).then(function (data) {
-            ByteUtils.zeroBuffer(masterKey);
-            data = that._trimStartBytesV3(data);
-            return HashedBlockTransform.decrypt(data).then(function (data) {
-                if (that.kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
-                    data = pako.ungzip(data);
-                }
-                return ByteUtils.bytesToString(data);
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype._encryptXmlV3 = function () {
-    var kdbx = this.kdbx;
-    var that = this;
-    var xml = XmlUtils.serialize(kdbx.xml);
-    var data = ByteUtils.arrayToBuffer(ByteUtils.stringToBytes(xml));
-    if (kdbx.header.compression === Consts.CompressionAlgorithm.GZip) {
-        data = pako.gzip(data);
-    }
-    return HashedBlockTransform.encrypt(ByteUtils.arrayToBuffer(data)).then(function (data) {
-        var ssb = new Uint8Array(kdbx.header.streamStartBytes);
-        var newData = new Uint8Array(data.byteLength + ssb.length);
-        newData.set(ssb);
-        newData.set(new Uint8Array(data), ssb.length);
-        data = newData;
-        return that._getMasterKeyV3().then(function (masterKey) {
-            return that
-                ._encryptData(ByteUtils.arrayToBuffer(data), masterKey)
-                .then(function (data) {
-                    ByteUtils.zeroBuffer(masterKey);
-                    return data;
-                });
-        });
-    });
-};
-
-KdbxFormat.prototype._getMasterKeyV3 = function () {
-    var kdbx = this.kdbx;
-    return kdbx.credentials.getHash().then(function (credHash) {
-        var transformSeed = kdbx.header.transformSeed;
-        var transformRounds = kdbx.header.keyEncryptionRounds;
-        var masterSeed = kdbx.header.masterSeed;
-
-        return kdbx.credentials.getChallengeResponse(masterSeed).then(function (chalResp) {
-            return KeyEncryptorAes.encrypt(
-                new Uint8Array(credHash),
-                transformSeed,
-                transformRounds
-            ).then(function (encKey) {
-                ByteUtils.zeroBuffer(credHash);
-                return CryptoEngine.sha256(encKey).then(function (keyHash) {
-                    ByteUtils.zeroBuffer(encKey);
-
-                    var chalRespLength = chalResp ? chalResp.byteLength : 0;
-                    var all = new Uint8Array(
-                        masterSeed.byteLength + keyHash.byteLength + chalRespLength
-                    );
-                    all.set(new Uint8Array(masterSeed), 0);
-                    if (chalResp) {
-                        all.set(new Uint8Array(chalResp), masterSeed.byteLength);
-                    }
-                    all.set(new Uint8Array(keyHash), masterSeed.byteLength + chalRespLength);
-
-                    ByteUtils.zeroBuffer(keyHash);
-                    ByteUtils.zeroBuffer(masterSeed);
-                    if (chalResp) {
-                        ByteUtils.zeroBuffer(chalResp);
-                    }
-
-                    return CryptoEngine.sha256(all.buffer).then(function (masterKey) {
-                        ByteUtils.zeroBuffer(all.buffer);
-                        return masterKey;
-                    });
-                });
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype._trimStartBytesV3 = function (data) {
-    var ssb = this.kdbx.header.streamStartBytes;
-    if (data.byteLength < ssb.byteLength) {
-        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'short start bytes');
-    }
-    if (
-        !ByteUtils.arrayBufferEquals(
-            data.slice(0, this.kdbx.header.streamStartBytes.byteLength),
-            ssb
-        )
-    ) {
-        throw new KdbxError(Consts.ErrorCodes.InvalidKey);
-    }
-    return data.slice(ssb.byteLength);
-};
-
-KdbxFormat.prototype._setProtectedValues = function () {
-    var kdbx = this.kdbx;
-    return this._getProtectSaltGenerator().then(function (gen) {
-        XmlUtils.setProtectedValues(kdbx.xml.documentElement, gen);
-    });
-};
-
-KdbxFormat.prototype._getProtectSaltGenerator = function () {
-    return ProtectSaltGenerator.create(
-        this.kdbx.header.protectedStreamKey,
-        this.kdbx.header.crsAlgorithm
-    );
-};
-
-KdbxFormat.prototype._getHeaderHash = function (stm) {
-    var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
-    return CryptoEngine.sha256(src);
-};
-
-KdbxFormat.prototype._getHeaderHmac = function (stm, key) {
-    var src = stm.readBytesNoAdvance(0, this.kdbx.header.endPos);
-    return HmacBlockTransform.getHmacKey(key, new Int64(0xffffffff, 0xffffffff)).then(function (
-        keySha
-    ) {
-        return CryptoEngine.hmacSha256(keySha, src);
-    });
-};
-
-KdbxFormat.prototype._checkHeaderHashV3 = function (stm) {
-    if (this.kdbx.meta.headerHash) {
-        var metaHash = this.kdbx.meta.headerHash;
-        return this._getHeaderHash(stm).then(function (actualHash) {
-            if (!ByteUtils.arrayBufferEquals(metaHash, actualHash)) {
-                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'header hash mismatch');
-            }
-        });
-    } else {
-        return Promise.resolve();
-    }
-};
-
-KdbxFormat.prototype._computeKeysV4 = function () {
-    var that = this;
-    var masterSeed = that.kdbx.header.masterSeed;
-    if (!masterSeed || masterSeed.byteLength !== 32) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad master seed'));
-    }
-    var kdfParams = that.kdbx.header.kdfParameters;
-    var kdfSalt = kdfParams.get('S');
-    return that.kdbx.credentials.getHash(kdfSalt).then(function (credHash) {
-        return KeyEncryptorKdf.encrypt(credHash, kdfParams).then(function (encKey) {
-            ByteUtils.zeroBuffer(credHash);
-            if (!encKey || encKey.byteLength !== 32) {
-                return Promise.reject(
-                    new KdbxError(Consts.ErrorCodes.Unsupported, 'bad derived key')
-                );
-            }
-            var keyWithSeed = new Uint8Array(65);
-            keyWithSeed.set(new Uint8Array(masterSeed), 0);
-            keyWithSeed.set(new Uint8Array(encKey), masterSeed.byteLength);
-            keyWithSeed[64] = 1;
-            ByteUtils.zeroBuffer(encKey);
-            ByteUtils.zeroBuffer(masterSeed);
-            return Promise.all([
-                CryptoEngine.sha256(keyWithSeed.buffer.slice(0, 64)),
-                CryptoEngine.sha512(keyWithSeed.buffer)
-            ]).then(function (keys) {
-                ByteUtils.zeroBuffer(keyWithSeed);
-                return { cipherKey: keys[0], hmacKey: keys[1] };
-            });
-        });
-    });
-};
-
-KdbxFormat.prototype._decryptData = function (data, cipherKey) {
-    var cipherId = this.kdbx.header.dataCipherUuid;
-    switch (cipherId.toString()) {
-        case Consts.CipherId.Aes:
-            return this._transformDataV4Aes(data, cipherKey, false);
-        case Consts.CipherId.ChaCha20:
-            return this._transformDataV4ChaCha20(data, cipherKey);
-        default:
-            return Promise.reject(
-                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
-            );
-    }
-};
-
-KdbxFormat.prototype._encryptData = function (data, cipherKey) {
-    var cipherId = this.kdbx.header.dataCipherUuid;
-    switch (cipherId.toString()) {
-        case Consts.CipherId.Aes:
-            return this._transformDataV4Aes(data, cipherKey, true);
-        case Consts.CipherId.ChaCha20:
-            return this._transformDataV4ChaCha20(data, cipherKey);
-        default:
-            return Promise.reject(
-                new KdbxError(Consts.ErrorCodes.Unsupported, 'unsupported cipher')
-            );
-    }
-};
-
-KdbxFormat.prototype._transformDataV4Aes = function (data, cipherKey, encrypt) {
-    var that = this;
-    var aesCbc = CryptoEngine.createAesCbc();
-    return aesCbc.importKey(cipherKey).then(function () {
-        return encrypt
-            ? aesCbc.encrypt(data, that.kdbx.header.encryptionIV)
-            : aesCbc.decrypt(data, that.kdbx.header.encryptionIV);
-    });
-};
-
-KdbxFormat.prototype._transformDataV4ChaCha20 = function (data, cipherKey) {
-    return CryptoEngine.chacha20(data, cipherKey, this.kdbx.header.encryptionIV);
-};
-
-module.exports = KdbxFormat;
+module.exports.Kdbx = __webpack_require__(/*! ./format/kdbx */ "./format/kdbx.js");
+module.exports.KdbxUuid = __webpack_require__(/*! ./format/kdbx-uuid */ "./format/kdbx-uuid.js");
+module.exports.KdbxError = __webpack_require__(/*! ./errors/kdbx-error */ "./errors/kdbx-error.js");
+module.exports.Credentials = __webpack_require__(/*! ./format/kdbx-credentials */ "./format/kdbx-credentials.js");
+module.exports.Consts = __webpack_require__(/*! ./defs/consts */ "./defs/consts.js");
+module.exports.ProtectedValue = __webpack_require__(/*! ./crypto/protected-value */ "./crypto/protected-value.js");
+module.exports.ByteUtils = __webpack_require__(/*! ./utils/byte-utils */ "./utils/byte-utils.js");
+module.exports.VarDictionary = __webpack_require__(/*! ./utils/var-dictionary */ "./utils/var-dictionary.js");
+module.exports.Int64 = __webpack_require__(/*! ./utils/int64 */ "./utils/int64.js");
+module.exports.Random = __webpack_require__(/*! ./crypto/random */ "./crypto/random.js");
+module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ "./crypto/crypto-engine.js");
 
 
 /***/ }),
-/* 32 */
+
+/***/ "./utils/binary-stream.js":
+/*!********************************!*\
+  !*** ./utils/binary-stream.js ***!
+  \********************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 111:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+/**
+ * Stream for accessing array buffer with auto-advanced position
+ * @param {ArrayBuffer} [arrayBuffer]
+ * @constructor
+ */
+function BinaryStream(arrayBuffer) {
+    this._arrayBuffer = arrayBuffer || new ArrayBuffer(1024);
+    this._dataView = new DataView(this._arrayBuffer);
+    this._pos = 0;
+    this._canExpand = !arrayBuffer;
+}
+
+['Int', 'Uint', 'Float'].forEach(function (type) {
+    (type === 'Float' ? [4, 8] : [1, 2, 4]).forEach(function (bytes) {
+        var getMethod = 'get' + type + bytes * 8;
+        BinaryStream.prototype[getMethod] = function (littleEndian) {
+            var res = this._dataView[getMethod].call(this._dataView, this._pos, littleEndian);
+            this._pos += bytes;
+            return res;
+        };
+        var setMethod = 'set' + type + bytes * 8;
+        BinaryStream.prototype[setMethod] = function (value, littleEndian) {
+            this._checkCapacity(bytes);
+            this._dataView[setMethod].call(this._dataView, this._pos, value, littleEndian);
+            this._pos += bytes;
+        };
+    });
+});
+
+BinaryStream.prototype.getUint64 = function (littleEndian) {
+    var part1 = this.getUint32(littleEndian),
+        part2 = this.getUint32(littleEndian);
+    if (littleEndian) {
+        part2 *= 0x100000000;
+    } else {
+        part1 *= 0x100000000;
+    }
+    return part1 + part2;
+};
+
+BinaryStream.prototype.setUint64 = function (value, littleEndian) {
+    if (littleEndian) {
+        this.setUint32(value & 0xffffffff, true);
+        this.setUint32(Math.floor(value / 0x100000000), true);
+    } else {
+        this._checkCapacity(8);
+        this.setUint32(Math.floor(value / 0x100000000), false);
+        this.setUint32(value & 0xffffffff, false);
+    }
+};
+
+BinaryStream.prototype.readBytes = function (size) {
+    var buffer = this._arrayBuffer.slice(this._pos, this._pos + size);
+    this._pos += size;
+    return buffer;
+};
+
+BinaryStream.prototype.readBytesToEnd = function () {
+    var size = this._arrayBuffer.byteLength - this._pos;
+    return this.readBytes(size);
+};
+
+BinaryStream.prototype.readBytesNoAdvance = function (startPos, endPos) {
+    return this._arrayBuffer.slice(startPos, endPos);
+};
+
+BinaryStream.prototype.writeBytes = function (bytes) {
+    if (bytes instanceof ArrayBuffer) {
+        bytes = new Uint8Array(bytes);
+    }
+    this._checkCapacity(bytes.length);
+    new Uint8Array(this._arrayBuffer).set(bytes, this._pos);
+    this._pos += bytes.length;
+};
+
+BinaryStream.prototype.getWrittenBytes = function () {
+    return this._arrayBuffer.slice(0, this._pos);
+};
+
+BinaryStream.prototype._checkCapacity = function (addBytes) {
+    var available = this._arrayBuffer.byteLength - this._pos;
+    if (this._canExpand && available < addBytes) {
+        var newLen = this._arrayBuffer.byteLength,
+            requestedLen = this._pos + addBytes;
+        while (newLen < requestedLen) {
+            newLen *= 2;
+        }
+        var newData = new Uint8Array(newLen);
+        newData.set(new Uint8Array(this._arrayBuffer));
+        this._arrayBuffer = newData.buffer;
+        this._dataView = new DataView(this._arrayBuffer);
+    }
+};
+
+Object.defineProperty(BinaryStream.prototype, 'pos', {
+    enumerable: true,
+    get: function () {
+        return this._pos;
+    }
+});
+
+Object.defineProperty(BinaryStream.prototype, 'byteLength', {
+    enumerable: true,
+    get: function () {
+        return this._arrayBuffer.byteLength;
+    }
+});
+
+module.exports = BinaryStream;
+
+
+/***/ }),
+
+/***/ "./utils/byte-utils.js":
+/*!*****************************!*\
+  !*** ./utils/byte-utils.js ***!
+  \*****************************/
+/*! default exports */
+/*! export arrayBufferEquals [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export arrayToBuffer [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export base64ToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export bytesToBase64 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export bytesToHex [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export bytesToString [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export hexToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export stringToBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export zeroBuffer [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__.g, __webpack_require__, __webpack_require__.* */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var TextEncoder = __webpack_require__.g.TextEncoder;
+var TextDecoder = __webpack_require__.g.TextDecoder;
+
+if (!TextEncoder || !TextDecoder) {
+    var textEncoding = __webpack_require__(/*! text-encoding */ "../node_modules/text-encoding/index.js");
+    TextEncoder = textEncoding.TextEncoder;
+    TextDecoder = textEncoding.TextDecoder;
+}
+
+var textEncoder = new TextEncoder();
+var textDecoder = new TextDecoder();
+
+/**
+ * Checks if two ArrayBuffers are equal
+ * @param {ArrayBuffer} ab1
+ * @param {ArrayBuffer} ab2
+ * @returns {boolean}
+ */
+function arrayBufferEquals(ab1, ab2) {
+    if (ab1.byteLength !== ab2.byteLength) {
+        return false;
+    }
+    var arr1 = new Uint8Array(ab1);
+    var arr2 = new Uint8Array(ab2);
+    for (var i = 0, len = arr1.length; i < len; i++) {
+        if (arr1[i] !== arr2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Converts Array or ArrayBuffer to string
+ * @param {Array|Uint8Array|ArrayBuffer} arr
+ * @return {string}
+ */
+function bytesToString(arr) {
+    if (arr instanceof ArrayBuffer) {
+        arr = new Uint8Array(arr);
+    }
+    return textDecoder.decode(arr);
+}
+
+/**
+ * Converts string to byte array
+ * @param {string} str
+ * @return {Uint8Array}
+ */
+function stringToBytes(str) {
+    return textEncoder.encode(str);
+}
+
+/**
+ * Converts base64 string to array
+ * @param {string} str
+ * @return {Uint8Array}
+ */
+function base64ToBytes(str) {
+    if (typeof atob === 'undefined' && typeof Buffer === 'function') {
+        // node.js doesn't have atob
+        var buffer = Buffer.from(str, 'base64');
+        return new Uint8Array(buffer);
+    }
+    var byteStr = atob(str);
+    var arr = new Uint8Array(byteStr.length);
+    for (var i = 0; i < byteStr.length; i++) {
+        arr[i] = byteStr.charCodeAt(i);
+    }
+    return arr;
+}
+
+/**
+ * Converts Array or ArrayBuffer to base64-string
+ * @param {Array|Uint8Array|ArrayBuffer} arr
+ * @return {string}
+ */
+function bytesToBase64(arr) {
+    if (arr instanceof ArrayBuffer) {
+        arr = new Uint8Array(arr);
+    }
+    if (typeof btoa === 'undefined' && typeof Buffer === 'function') {
+        // node.js doesn't have btoa
+        var buffer = Buffer.from(arr);
+        return buffer.toString('base64');
+    }
+    var str = '';
+    for (var i = 0; i < arr.length; i++) {
+        str += String.fromCharCode(arr[i]);
+    }
+    return btoa(str);
+}
+
+/**
+ * Convert hex-string to byte array
+ * @param {string} hex
+ * @return Uint8Array
+ */
+function hexToBytes(hex) {
+    var arr = new Uint8Array(Math.ceil(hex.length / 2));
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = parseInt(hex.substr(i * 2, 2), 16);
+    }
+    return arr;
+}
+
+/**
+ * Convert hex-string to byte array
+ * @param {Array|Uint8Array|ArrayBuffer} arr
+ * @return {string}
+ */
+function bytesToHex(arr) {
+    if (arr instanceof ArrayBuffer) {
+        arr = new Uint8Array(arr);
+    }
+    var str = '';
+    for (var i = 0; i < arr.length; i++) {
+        var byte = arr[i].toString(16);
+        if (byte.length === 1) {
+            str += '0';
+        }
+        str += byte;
+    }
+    return str;
+}
+
+/**
+ * Converts byte array to array buffer
+ * @param {Uint8Array|ArrayBuffer} arr
+ * @returns {ArrayBuffer}
+ */
+function arrayToBuffer(arr) {
+    if (arr instanceof ArrayBuffer) {
+        return arr;
+    }
+    var ab = arr.buffer;
+    if (arr.byteOffset === 0 && arr.byteLength === ab.byteLength) {
+        return ab;
+    }
+    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
+}
+
+/**
+ * Fills array or arraybuffer with zeroes
+ * @param {Uint8Array|ArrayBuffer} buffer
+ */
+function zeroBuffer(buffer) {
+    if (buffer instanceof ArrayBuffer) {
+        buffer = new Uint8Array(buffer);
+    }
+    buffer.fill(0);
+}
+
+module.exports.arrayBufferEquals = arrayBufferEquals;
+module.exports.bytesToString = bytesToString;
+module.exports.stringToBytes = stringToBytes;
+module.exports.base64ToBytes = base64ToBytes;
+module.exports.bytesToBase64 = bytesToBase64;
+module.exports.hexToBytes = hexToBytes;
+module.exports.bytesToHex = bytesToHex;
+module.exports.arrayToBuffer = arrayToBuffer;
+module.exports.zeroBuffer = zeroBuffer;
+
+
+/***/ }),
+
+/***/ "./utils/int64.js":
+/*!************************!*\
+  !*** ./utils/int64.js ***!
+  \************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 54:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+/**
+ * Represents 64-bit number
+ * @param {number} [lo=0]
+ * @param {number} [hi=0]
+ * @constructor
+ */
+function Int64(lo, hi) {
+    this.lo = lo || 0;
+    this.hi = hi || 0;
+}
+
+/**
+ * Number value as float
+ * @returns {Number}
+ */
+Object.defineProperty(Int64.prototype, 'value', {
+    enumerable: true,
+    get: function () {
+        if (this.hi) {
+            if (this.hi >= 0x200000) {
+                throw new Error('too large number');
+            }
+            return this.hi * 0x100000000 + this.lo;
+        }
+        return this.lo;
+    }
+});
+
+/**
+ * Gets number value
+ * @returns {Number}
+ */
+Int64.prototype.valueOf = function () {
+    return this.value;
+};
+
+/**
+ * Creates int64 from number
+ * @param {number} value
+ * @returns {Int64}
+ * @static
+ */
+Int64.from = function (value) {
+    if (value > 0x1fffffffffffff) {
+        throw new Error('too large number');
+    }
+    var lo = value >>> 0;
+    var hi = ((value - lo) / 0x100000000) >>> 0;
+    return new Int64(lo, hi);
+};
+
+module.exports = Int64;
+
+
+/***/ }),
+
+/***/ "./utils/var-dictionary.js":
+/*!*********************************!*\
+  !*** ./utils/var-dictionary.js ***!
+  \*********************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 291:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ "./errors/kdbx-error.js");
+var Consts = __webpack_require__(/*! ../defs/consts */ "./defs/consts.js");
+var ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ "./utils/byte-utils.js");
+var Int64 = __webpack_require__(/*! ../utils/int64 */ "./utils/int64.js");
+
+var MaxSupportedVersion = 1;
+var DefaultVersion = 0x0100;
+
+/**
+ * Value type
+ * @enum
+ */
+var ValueType = {
+    UInt32: 0x04,
+    UInt64: 0x05,
+    Bool: 0x08,
+    Int32: 0x0c,
+    Int64: 0x0d,
+    String: 0x18,
+    Bytes: 0x42
+};
+
+/**
+ * Variant dictionary, capable to store/load different values from byte array
+ * @constructor
+ */
+function VarDictionary() {
+    this._items = [];
+    this._dict = {};
+    Object.preventExtensions(this);
+}
+
+/**
+ * Available value types enum
+ * @enum
+ */
+VarDictionary.ValueType = ValueType;
+
+/**
+ * Gets value or undefined
+ * @param {string} key
+ * @returns {*}
+ */
+VarDictionary.prototype.get = function (key) {
+    var item = this._dict[key];
+    return item ? item.value : undefined;
+};
+
+/**
+ * Get all keys
+ * @return {string[]} keys array
+ */
+VarDictionary.prototype.keys = function () {
+    return this._items.map(function (item) {
+        return item.key;
+    });
+};
+
+/**
+ * Keys count
+ * @returns {Number}
+ */
+Object.defineProperty(VarDictionary.prototype, 'length', {
+    enumberable: true,
+    get: function () {
+        return this._items.length;
+    }
+});
+
+/**
+ * Sets or replaces existing item
+ * @param {String} key
+ * @param {VarDictionary.ValueType|Number} type
+ * @param {*} value
+ */
+VarDictionary.prototype.set = function (key, type, value) {
+    switch (type) {
+        case ValueType.UInt32:
+            if (typeof value !== 'number' || value < 0) {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.UInt64:
+            if (!(value instanceof Int64)) {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.Bool:
+            if (typeof value !== 'boolean') {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.Int32:
+            if (typeof value !== 'number') {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.Int64:
+            if (!(value instanceof Int64)) {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.String:
+            if (typeof value !== 'string') {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        case ValueType.Bytes:
+            if (value instanceof Uint8Array) {
+                value = ByteUtils.arrayToBuffer(value);
+            }
+            if (!(value instanceof ArrayBuffer)) {
+                throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+            }
+            break;
+        default:
+            throw new KdbxError(Consts.ErrorCodes.InvalidArg);
+    }
+    var item = { key: key, type: type, value: value };
+    if (this._dict[key]) {
+        var ix = this._items.indexOf(this._dict[key]);
+        this._items.splice(ix, 1, item);
+    } else {
+        this._items.push(item);
+    }
+    this._dict[key] = item;
+};
+
+/**
+ * Removes key from dictionary
+ * @param {string} key
+ */
+VarDictionary.prototype.remove = function (key) {
+    this._items = this._items.filter(function (item) {
+        return item.key !== key;
+    });
+    delete this._dict[key];
+};
+
+/**
+ * Reads dictionary from stream
+ * @param {BinaryStream} stm
+ * @returns {VarDictionary}
+ * @static
+ */
+VarDictionary.read = function (stm) {
+    var dict = new VarDictionary();
+    dict._readVersion(stm);
+    while (true) {
+        var item = dict._readItem(stm);
+        if (!item) {
+            break;
+        }
+        dict._items.push(item);
+        dict._dict[item.key] = item;
+    }
+    return dict;
+};
+
+VarDictionary.prototype._readVersion = function (stm) {
+    stm.getUint8();
+    var versionMajor = stm.getUint8();
+    if (versionMajor === 0 || versionMajor > MaxSupportedVersion) {
+        throw new KdbxError(Consts.ErrorCodes.InvalidVersion);
+    }
+};
+
+VarDictionary.prototype._readItem = function (stm) {
+    var type = stm.getUint8();
+    if (!type) {
+        return false;
+    }
+    var keyLength = stm.getInt32(true);
+    if (keyLength <= 0) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad key length');
+    }
+    var key = ByteUtils.bytesToString(stm.readBytes(keyLength));
+    var valueLength = stm.getInt32(true);
+    if (valueLength < 0) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad value length');
+    }
+    var value;
+    switch (type) {
+        case ValueType.UInt32:
+            if (valueLength !== 4) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad uint32');
+            }
+            value = stm.getUint32(true);
+            break;
+        case ValueType.UInt64:
+            if (valueLength !== 8) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad uint64');
+            }
+            var loInt = stm.getUint32(true);
+            var hiInt = stm.getUint32(true);
+            value = new Int64(loInt, hiInt);
+            break;
+        case ValueType.Bool:
+            if (valueLength !== 1) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad bool');
+            }
+            value = stm.getUint8() !== 0;
+            break;
+        case ValueType.Int32:
+            if (valueLength !== 4) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad int32');
+            }
+            value = stm.getInt32(true);
+            break;
+        case ValueType.Int64:
+            if (valueLength !== 8) {
+                throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad int64');
+            }
+            var loUint = stm.getUint32(true);
+            var hiUint = stm.getUint32(true);
+            value = new Int64(loUint, hiUint);
+            break;
+        case ValueType.String:
+            value = ByteUtils.bytesToString(stm.readBytes(valueLength));
+            break;
+        case ValueType.Bytes:
+            value = stm.readBytes(valueLength);
+            break;
+        default:
+            throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad value type: ' + type);
+    }
+    return { key: key, type: type, value: value };
+};
+
+/**
+ * Writes self to binary stream
+ * @param {BinaryStream} stm
+ */
+VarDictionary.prototype.write = function (stm) {
+    this._writeVersion(stm);
+    Object.keys(this._items).forEach(function (key) {
+        this._writeItem(stm, this._items[key]);
+    }, this);
+    stm.setUint8(0);
+};
+
+VarDictionary.prototype._writeVersion = function (stm) {
+    stm.setUint16(DefaultVersion, true);
+};
+
+VarDictionary.prototype._writeItem = function (stm, item) {
+    stm.setUint8(item.type);
+    var keyBytes = ByteUtils.stringToBytes(item.key);
+    stm.setInt32(keyBytes.length, true);
+    stm.writeBytes(keyBytes);
+    switch (item.type) {
+        case ValueType.UInt32:
+            stm.setInt32(4, true);
+            stm.setUint32(item.value, true);
+            break;
+        case ValueType.UInt64:
+            stm.setInt32(8, true);
+            stm.setUint32(item.value.lo, true);
+            stm.setUint32(item.value.hi, true);
+            break;
+        case ValueType.Bool:
+            stm.setInt32(1, true);
+            stm.setUint8(item.value ? 1 : 0);
+            break;
+        case ValueType.Int32:
+            stm.setInt32(4, true);
+            stm.setInt32(item.value, true);
+            break;
+        case ValueType.Int64:
+            stm.setInt32(8, true);
+            stm.setUint32(item.value.lo, true);
+            stm.setUint32(item.value.hi, true);
+            break;
+        case ValueType.String:
+            var strBytes = ByteUtils.stringToBytes(item.value);
+            stm.setInt32(strBytes.length, true);
+            stm.writeBytes(strBytes);
+            break;
+        case ValueType.Bytes:
+            var bytesBuffer = ByteUtils.arrayToBuffer(item.value);
+            stm.setInt32(bytesBuffer.byteLength, true);
+            stm.writeBytes(bytesBuffer);
+            break;
+        default:
+            throw new KdbxError(Consts.ErrorCodes.Unsupported);
+    }
+};
+
+module.exports = VarDictionary;
+
+
+/***/ }),
+
+/***/ "./utils/xml-utils.js":
+/*!****************************!*\
+  !*** ./utils/xml-utils.js ***!
+  \****************************/
+/*! default exports */
+/*! export addChildNode [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export create [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getBoolean [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getChildNode [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getDate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getNumber [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getProtectedBinary [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getProtectedText [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getText [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getUuid [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export parse [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export protectPlainValues [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export protectUnprotectedValues [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export serialize [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setBoolean [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setBytes [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setDate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setNumber [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setProtectedBinary [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setProtectedText [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setProtectedValues [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setText [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export setUuid [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export strToBoolean [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export unprotectValues [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export updateProtectedValuesSalt [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: module, __webpack_require__, __webpack_require__.g, __webpack_require__.* */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ "./errors/kdbx-error.js"),
+    Consts = __webpack_require__(/*! ./../defs/consts */ "./defs/consts.js"),
+    XmlNames = __webpack_require__(/*! ../defs/xml-names */ "./defs/xml-names.js"),
+    KdbxUuid = __webpack_require__(/*! ./../format/kdbx-uuid */ "./format/kdbx-uuid.js"),
+    ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ "./crypto/protected-value.js"),
+    ByteUtils = __webpack_require__(/*! ./byte-utils */ "./utils/byte-utils.js"),
+    Int64 = __webpack_require__(/*! ./int64 */ "./utils/int64.js"),
+    pako = __webpack_require__(/*! pako */ "../node_modules/pako/index.js");
+
+var dateRegex = /\.\d\d\d/;
+
+var dom = __webpack_require__.g.DOMParser ? __webpack_require__.g : __webpack_require__(/*! xmldom */ "xmldom");
+var domParserArg = __webpack_require__.g.DOMParser
+    ? undefined
+    : {
+          errorHandler: {
+              error: function (e) {
+                  throw e;
+              },
+              fatalError: function (e) {
+                  throw e;
+              }
+          }
+      };
+
+var EpochSeconds = 62135596800;
+
+/**
+ * Parses XML document
+ * Throws an error in case of invalid XML
+ * @param {string} xml - xml document
+ * @returns {Document}
+ */
+function parse(xml) {
+    var parser = domParserArg ? new dom.DOMParser(domParserArg) : new dom.DOMParser();
+    var doc;
+    try {
+        doc = parser.parseFromString(xml, 'application/xml');
+    } catch (e) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml: ' + e.message);
+    }
+    if (!doc.documentElement) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml');
+    }
+    var parserError = doc.getElementsByTagName('parsererror')[0];
+    if (parserError) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad xml: ' + parserError.textContent);
+    }
+    return doc;
+}
+
+/**
+ * Serializes document to XML string
+ * @param {Document} doc - source document
+ * @param {boolean} [prettyPrint=false] - whether to add whitespace around tags
+ * @returns {string} - xml content
+ */
+function serialize(doc, prettyPrint) {
+    if (prettyPrint) {
+        prettyPrintXmlNode(doc, 0);
+    }
+    var xml = new dom.XMLSerializer().serializeToString(doc);
+    if (prettyPrint && xml.startsWith('<?')) {
+        xml = xml.replace(/^(<\?.*?\?>)</, '$1\n<');
+    }
+    return xml;
+}
+
+function prettyPrintXmlNode(node, indentationLevel) {
+    var numChildNodes = node.childNodes.length;
+
+    if (numChildNodes === 0) {
+        return;
+    }
+
+    var formatStr = '\n' + '    '.repeat(indentationLevel);
+    var prevFormatStr = indentationLevel > 0 ? '\n' + '    '.repeat(indentationLevel - 1) : '';
+    var doc = node.ownerDocument || node;
+
+    var childNodes = [];
+    var childNode;
+
+    for (var i = 0; i < numChildNodes; i++) {
+        childNode = node.childNodes[i];
+        if (
+            childNode.nodeType !== doc.TEXT_NODE &&
+            childNode.nodeType !== doc.PROCESSING_INSTRUCTION_NODE
+        ) {
+            childNodes.push(childNode);
+        }
+    }
+
+    for (var j = 0; j < childNodes.length; j++) {
+        childNode = childNodes[j];
+
+        var isFirstDocumentNode = indentationLevel === 0 && j === 0;
+        if (!isFirstDocumentNode) {
+            var textNodeBefore = doc.createTextNode(formatStr);
+            node.insertBefore(textNodeBefore, childNode);
+        }
+
+        if (!childNode.nextSibling && indentationLevel > 0) {
+            var textNodeAfter = doc.createTextNode(prevFormatStr);
+            node.appendChild(textNodeAfter);
+        }
+
+        prettyPrintXmlNode(childNode, indentationLevel + 1);
+    }
+}
+
+/**
+ * Creates a document with specified root node name
+ * @param {string} rootNode - root node name
+ * @returns {Document} - created XML document
+ */
+function create(rootNode) {
+    return parse('<?xml version="1.0" encoding="utf-8" standalone="yes"?><' + rootNode + '/>');
+}
+
+/**
+ * Gets first child node from xml
+ * @param {Node} node - parent node for search
+ * @param {string} tagName - child node tag name
+ * @param {string} [errorMsgIfAbsent] - if set, error will be thrown if node is absent
+ * @returns {Node} - first found node, or null, if there's no such node
+ */
+function getChildNode(node, tagName, errorMsgIfAbsent) {
+    if (node && node.childNodes) {
+        for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+            if (cn[i].tagName === tagName) {
+                return cn[i];
+            }
+        }
+    }
+    if (errorMsgIfAbsent) {
+        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, errorMsgIfAbsent);
+    } else {
+        return null;
+    }
+}
+
+/**
+ * Adds child node to xml
+ * @param {Node} node - parent node
+ * @param {string} tagName - child node tag name
+ * @returns {Node} - created node
+ */
+function addChildNode(node, tagName) {
+    return node.appendChild((node.ownerDocument || node).createElement(tagName));
+}
+
+/**
+ * Gets node inner text
+ * @param {Node} node - xml node
+ * @return {string|undefined} - node inner text or undefined, if the node is empty
+ */
+function getText(node) {
+    if (!node || !node.childNodes) {
+        return undefined;
+    }
+    return node.protectedValue ? node.protectedValue.text : node.textContent;
+}
+
+/**
+ * Sets node inner text
+ * @param {Node} node
+ * @param {string} text
+ */
+function setText(node, text) {
+    node.textContent = text || '';
+}
+
+/**
+ * Parses bytes saved by KeePass from XML
+ * @param {Node} node - xml node with bytes saved by KeePass (base64 format)
+ * @return {ArrayBuffer} - ArrayBuffer or undefined, if the tag is empty
+ */
+function getBytes(node) {
+    var text = getText(node);
+    return text ? ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(text)) : undefined;
+}
+
+/**
+ * Sets bytes for node
+ * @param {Node} node
+ * @param {ArrayBuffer|Uint8Array|string|undefined} bytes
+ */
+function setBytes(node, bytes) {
+    if (typeof bytes === 'string') {
+        bytes = ByteUtils.base64ToBytes(bytes);
+    }
+    setText(node, bytes ? ByteUtils.bytesToBase64(ByteUtils.arrayToBuffer(bytes)) : undefined);
+}
+
+/**
+ * Parses date saved by KeePass from XML
+ * @param {Node} node - xml node with date saved by KeePass (ISO format or base64-uint64) format
+ * @return {Date} - date or undefined, if the tag is empty
+ */
+function getDate(node) {
+    var text = getText(node);
+    if (!text) {
+        return undefined;
+    }
+    if (text.indexOf(':') > 0) {
+        return new Date(text);
+    }
+    var bytes = new DataView(ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(text)));
+    var secondsFrom00 = new Int64(bytes.getUint32(0, true), bytes.getUint32(4, true)).value;
+    var diff = (secondsFrom00 - EpochSeconds) * 1000;
+    return new Date(diff);
+}
+
+/**
+ * Sets node date as string or binary
+ * @param {Node} node
+ * @param {Date|undefined} date
+ * @param {boolean} [binary=false]
+ */
+function setDate(node, date, binary) {
+    if (date) {
+        if (binary) {
+            var secondsFrom00 = Math.floor(date.getTime() / 1000) + EpochSeconds;
+            var bytes = new DataView(new ArrayBuffer(8));
+            var val64 = Int64.from(secondsFrom00);
+            bytes.setUint32(0, val64.lo, true);
+            bytes.setUint32(4, val64.hi, true);
+            setText(node, ByteUtils.bytesToBase64(bytes.buffer));
+        } else {
+            setText(node, date.toISOString().replace(dateRegex, ''));
+        }
+    } else {
+        setText(node, '');
+    }
+}
+
+/**
+ * Parses number saved by KeePass from XML
+ * @param {Node} node - xml node with number saved by KeePass
+ * @return {Number|undefined} - number or undefined, if the tag is empty
+ */
+function getNumber(node) {
+    var text = getText(node);
+    return text ? +text : undefined;
+}
+
+/**
+ * Sets node number
+ * @param {Node} node
+ * @return {Number|undefined} number
+ */
+function setNumber(node, number) {
+    setText(node, typeof number === 'number' && !isNaN(number) ? number.toString() : undefined);
+}
+
+/**
+ * Parses boolean saved by KeePass from XML
+ * @param {Node} node - xml node with boolean saved by KeePass
+ * @return {boolean|undefined} - boolean or undefined, if the tag is empty
+ */
+function getBoolean(node) {
+    var text = getText(node);
+    return text ? strToBoolean(text) : undefined;
+}
+
+/**
+ * Sets node boolean
+ * @param {Node} node
+ * @param {boolean|undefined} boolean
+ */
+function setBoolean(node, boolean) {
+    setText(
+        node,
+        boolean === undefined ? '' : boolean === null ? 'null' : boolean ? 'True' : 'False'
+    );
+}
+
+/**
+ * Converts saved string to boolean
+ * @param {string} str
+ * @returns {boolean}
+ */
+function strToBoolean(str) {
+    switch (str && str.toLowerCase && str.toLowerCase()) {
+        case 'true':
+            return true;
+        case 'false':
+            return false;
+        case 'null':
+            return null;
+    }
+    return undefined;
+}
+
+/**
+ * Parses Uuid saved by KeePass from XML
+ * @param {Node} node - xml node with Uuid saved by KeePass
+ * @return {KdbxUuid} - Uuid or undefined, if the tag is empty
+ */
+function getUuid(node) {
+    var bytes = getBytes(node);
+    return bytes ? new KdbxUuid(bytes) : undefined;
+}
+
+/**
+ * Sets node uuid
+ * @param {Node} node
+ * @param {KdbxUuid} uuid
+ */
+function setUuid(node, uuid) {
+    var uuidBytes = uuid instanceof KdbxUuid ? uuid.toBytes() : uuid;
+    setBytes(node, uuidBytes);
+}
+
+/**
+ * Gets node protected text from inner text
+ * @param {Node} node
+ * @return {ProtectedValue|string}
+ */
+function getProtectedText(node) {
+    return node.protectedValue || node.textContent;
+}
+
+/**
+ * Sets node protected text
+ * @param {Node} node
+ * @param {ProtectedValue|string} text
+ */
+function setProtectedText(node, text) {
+    if (text instanceof ProtectedValue) {
+        node.protectedValue = text;
+        node.setAttribute(XmlNames.Attr.Protected, 'True');
+    } else {
+        setText(node, text);
+    }
+}
+
+/**
+ * Gets node protected text from inner text
+ * @param {Node} node
+ * @return {ProtectedValue|ArrayBuffer|{ref: string}} - protected value, or array buffer, or reference to binary
+ */
+function getProtectedBinary(node) {
+    if (node.protectedValue) {
+        return node.protectedValue;
+    }
+    var text = node.textContent;
+    var ref = node.getAttribute(XmlNames.Attr.Ref);
+    if (ref) {
+        return { ref: ref };
+    }
+    if (!text) {
+        return undefined;
+    }
+    var compressed = strToBoolean(node.getAttribute(XmlNames.Attr.Compressed));
+    var bytes = ByteUtils.base64ToBytes(text);
+    if (compressed) {
+        bytes = pako.ungzip(bytes);
+    }
+    return ByteUtils.arrayToBuffer(bytes);
+}
+
+/**
+ * Sets node protected binary
+ * @param {Node} node
+ * @param {ProtectedValue|ArrayBuffer|{ref: string}|string} binary
+ */
+function setProtectedBinary(node, binary) {
+    if (binary instanceof ProtectedValue) {
+        node.protectedValue = binary;
+        node.setAttribute(XmlNames.Attr.Protected, 'True');
+    } else if (binary && binary.ref) {
+        node.setAttribute(XmlNames.Attr.Ref, binary.ref);
+    } else {
+        setBytes(node, binary);
+    }
+}
+
+/**
+ * Traversed XML tree with depth-first preorder search
+ * @param {Node} node
+ * @param {function} callback
+ */
+function traverse(node, callback) {
+    callback(node);
+    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
+        var childNode = cn[i];
+        if (childNode.tagName) {
+            traverse(childNode, callback);
+        }
+    }
+}
+
+/**
+ * Reads protected values for all nodes in tree
+ * @param {Node} node
+ * @param {ProtectSaltGenerator} protectSaltGenerator
+ */
+function setProtectedValues(node, protectSaltGenerator) {
+    traverse(node, function (node) {
+        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected))) {
+            try {
+                var value = ByteUtils.arrayToBuffer(ByteUtils.base64ToBytes(node.textContent));
+                if (value.byteLength) {
+                    var salt = protectSaltGenerator.getSalt(value.byteLength);
+                    node.protectedValue = new ProtectedValue(value, salt);
+                }
+            } catch (e) {
+                throw new KdbxError(
+                    Consts.ErrorCodes.FileCorrupt,
+                    'bad protected value at line ' + node.lineNumber + ': ' + e
+                );
+            }
+        }
+    });
+}
+
+/**
+ * Updates protected values salt for all nodes in tree which have protected values assigned
+ * @param {Node} node
+ * @param {ProtectSaltGenerator} protectSaltGenerator
+ */
+function updateProtectedValuesSalt(node, protectSaltGenerator) {
+    traverse(node, function (node) {
+        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
+            var newSalt = protectSaltGenerator.getSalt(node.protectedValue.byteLength);
+            node.protectedValue.setSalt(newSalt);
+            node.textContent = node.protectedValue.toString();
+        }
+    });
+}
+
+/**
+ * Unprotect protected values for all nodes in tree which have protected values assigned
+ * @param {Node} node
+ */
+function unprotectValues(node) {
+    traverse(node, function (node) {
+        if (strToBoolean(node.getAttribute(XmlNames.Attr.Protected)) && node.protectedValue) {
+            node.removeAttribute(XmlNames.Attr.Protected);
+            node.setAttribute(XmlNames.Attr.ProtectedInMemPlainXml, 'True');
+            node.textContent = node.protectedValue.getText();
+        }
+    });
+}
+
+/**
+ * Protect protected values back for all nodes in tree which have been unprotected
+ * @param {Node} node
+ */
+function protectUnprotectedValues(node) {
+    traverse(node, function (node) {
+        if (
+            strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml)) &&
+            node.protectedValue
+        ) {
+            node.removeAttribute(XmlNames.Attr.ProtectedInMemPlainXml);
+            node.setAttribute(XmlNames.Attr.Protected, 'True');
+            node.textContent = node.protectedValue.toString();
+        }
+    });
+}
+
+/**
+ * Protect plain values in xml for all nodes in tree which should be protected
+ * @param {Node} node
+ */
+function protectPlainValues(node) {
+    traverse(node, function (node) {
+        if (strToBoolean(node.getAttribute(XmlNames.Attr.ProtectedInMemPlainXml))) {
+            node.protectedValue = ProtectedValue.fromString(node.textContent);
+            node.textContent = node.protectedValue.toString();
+            node.removeAttribute(XmlNames.Attr.ProtectedInMemPlainXml);
+            node.setAttribute(XmlNames.Attr.Protected, 'True');
+        }
+    });
+}
+
+module.exports.parse = parse;
+module.exports.serialize = serialize;
+module.exports.create = create;
+module.exports.getChildNode = getChildNode;
+module.exports.addChildNode = addChildNode;
+module.exports.getText = getText;
+module.exports.setText = setText;
+module.exports.getBytes = getBytes;
+module.exports.setBytes = setBytes;
+module.exports.getDate = getDate;
+module.exports.setDate = setDate;
+module.exports.getNumber = getNumber;
+module.exports.setNumber = setNumber;
+module.exports.getBoolean = getBoolean;
+module.exports.setBoolean = setBoolean;
+module.exports.strToBoolean = strToBoolean;
+module.exports.getUuid = getUuid;
+module.exports.setUuid = setUuid;
+module.exports.getProtectedText = getProtectedText;
+module.exports.setProtectedText = setProtectedText;
+module.exports.getProtectedBinary = getProtectedBinary;
+module.exports.setProtectedBinary = setProtectedBinary;
+module.exports.setProtectedValues = setProtectedValues;
+module.exports.updateProtectedValuesSalt = updateProtectedValuesSalt;
+module.exports.unprotectValues = unprotectValues;
+module.exports.protectUnprotectedValues = protectUnprotectedValues;
+module.exports.protectPlainValues = protectPlainValues;
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/index.js":
+/*!*************************************!*\
+  !*** ../node_modules/pako/index.js ***!
+  \*************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: __webpack_require__, module */
+/*! CommonJS bailout: module.exports is used directly at 14:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// Top level file is just a mixin of submodules & constants
+
+
+var assign    = __webpack_require__(/*! ./lib/utils/common */ "../node_modules/pako/lib/utils/common.js").assign;
+
+var deflate   = __webpack_require__(/*! ./lib/deflate */ "../node_modules/pako/lib/deflate.js");
+var inflate   = __webpack_require__(/*! ./lib/inflate */ "../node_modules/pako/lib/inflate.js");
+var constants = __webpack_require__(/*! ./lib/zlib/constants */ "../node_modules/pako/lib/zlib/constants.js");
+
+var pako = {};
+
+assign(pako, deflate, inflate, constants);
+
+module.exports = pako;
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/deflate.js":
 /*!*******************************************!*\
   !*** ../node_modules/pako/lib/deflate.js ***!
   \*******************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! default exports */
+/*! export Deflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateRaw [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export gzip [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 
-var zlib_deflate = __webpack_require__(/*! ./zlib/deflate */ 33);
-var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 19);
-var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
+var zlib_deflate = __webpack_require__(/*! ./zlib/deflate */ "../node_modules/pako/lib/zlib/deflate.js");
+var utils        = __webpack_require__(/*! ./utils/common */ "../node_modules/pako/lib/utils/common.js");
+var strings      = __webpack_require__(/*! ./utils/strings */ "../node_modules/pako/lib/utils/strings.js");
+var msg          = __webpack_require__(/*! ./zlib/messages */ "../node_modules/pako/lib/zlib/messages.js");
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ "../node_modules/pako/lib/zlib/zstream.js");
 
 var toString = Object.prototype.toString;
 
@@ -6245,23 +7233,958 @@ exports.gzip = gzip;
 
 
 /***/ }),
-/* 33 */
-/*!************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/deflate.js ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "../node_modules/pako/lib/inflate.js":
+/*!*******************************************!*\
+  !*** ../node_modules/pako/lib/inflate.js ***!
+  \*******************************************/
+/*! default exports */
+/*! export Inflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateRaw [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export ungzip [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
-var utils   = __webpack_require__(/*! ../utils/common */ 5);
-var trees   = __webpack_require__(/*! ./trees */ 34);
-var adler32 = __webpack_require__(/*! ./adler32 */ 17);
-var crc32   = __webpack_require__(/*! ./crc32 */ 18);
-var msg     = __webpack_require__(/*! ./messages */ 12);
+
+var zlib_inflate = __webpack_require__(/*! ./zlib/inflate */ "../node_modules/pako/lib/zlib/inflate.js");
+var utils        = __webpack_require__(/*! ./utils/common */ "../node_modules/pako/lib/utils/common.js");
+var strings      = __webpack_require__(/*! ./utils/strings */ "../node_modules/pako/lib/utils/strings.js");
+var c            = __webpack_require__(/*! ./zlib/constants */ "../node_modules/pako/lib/zlib/constants.js");
+var msg          = __webpack_require__(/*! ./zlib/messages */ "../node_modules/pako/lib/zlib/messages.js");
+var ZStream      = __webpack_require__(/*! ./zlib/zstream */ "../node_modules/pako/lib/zlib/zstream.js");
+var GZheader     = __webpack_require__(/*! ./zlib/gzheader */ "../node_modules/pako/lib/zlib/gzheader.js");
+
+var toString = Object.prototype.toString;
+
+/**
+ * class Inflate
+ *
+ * Generic JS-style wrapper for zlib calls. If you don't need
+ * streaming behaviour - use more simple functions: [[inflate]]
+ * and [[inflateRaw]].
+ **/
+
+/* internal
+ * inflate.chunks -> Array
+ *
+ * Chunks of output data, if [[Inflate#onData]] not overriden.
+ **/
+
+/**
+ * Inflate.result -> Uint8Array|Array|String
+ *
+ * Uncompressed result, generated by default [[Inflate#onData]]
+ * and [[Inflate#onEnd]] handlers. Filled after you push last chunk
+ * (call [[Inflate#push]] with `Z_FINISH` / `true` param) or if you
+ * push a chunk with explicit flush (call [[Inflate#push]] with
+ * `Z_SYNC_FLUSH` param).
+ **/
+
+/**
+ * Inflate.err -> Number
+ *
+ * Error code after inflate finished. 0 (Z_OK) on success.
+ * Should be checked if broken data possible.
+ **/
+
+/**
+ * Inflate.msg -> String
+ *
+ * Error message, if [[Inflate.err]] != 0
+ **/
+
+
+/**
+ * new Inflate(options)
+ * - options (Object): zlib inflate options.
+ *
+ * Creates new inflator instance with specified params. Throws exception
+ * on bad params. Supported options:
+ *
+ * - `windowBits`
+ * - `dictionary`
+ *
+ * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
+ * for more information on these.
+ *
+ * Additional options, for internal needs:
+ *
+ * - `chunkSize` - size of generated data chunks (16K by default)
+ * - `raw` (Boolean) - do raw inflate
+ * - `to` (String) - if equal to 'string', then result will be converted
+ *   from utf8 to utf16 (javascript) string. When string output requested,
+ *   chunk length can differ from `chunkSize`, depending on content.
+ *
+ * By default, when no options set, autodetect deflate/gzip data format via
+ * wrapper header.
+ *
+ * ##### Example:
+ *
+ * ```javascript
+ * var pako = require('pako')
+ *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
+ *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
+ *
+ * var inflate = new pako.Inflate({ level: 3});
+ *
+ * inflate.push(chunk1, false);
+ * inflate.push(chunk2, true);  // true -> last chunk
+ *
+ * if (inflate.err) { throw new Error(inflate.err); }
+ *
+ * console.log(inflate.result);
+ * ```
+ **/
+function Inflate(options) {
+  if (!(this instanceof Inflate)) return new Inflate(options);
+
+  this.options = utils.assign({
+    chunkSize: 16384,
+    windowBits: 0,
+    to: ''
+  }, options || {});
+
+  var opt = this.options;
+
+  // Force window size for `raw` data, if not set directly,
+  // because we have no header for autodetect.
+  if (opt.raw && (opt.windowBits >= 0) && (opt.windowBits < 16)) {
+    opt.windowBits = -opt.windowBits;
+    if (opt.windowBits === 0) { opt.windowBits = -15; }
+  }
+
+  // If `windowBits` not defined (and mode not raw) - set autodetect flag for gzip/deflate
+  if ((opt.windowBits >= 0) && (opt.windowBits < 16) &&
+      !(options && options.windowBits)) {
+    opt.windowBits += 32;
+  }
+
+  // Gzip header has no info about windows size, we can do autodetect only
+  // for deflate. So, if window size not set, force it to max when gzip possible
+  if ((opt.windowBits > 15) && (opt.windowBits < 48)) {
+    // bit 3 (16) -> gzipped data
+    // bit 4 (32) -> autodetect gzip/deflate
+    if ((opt.windowBits & 15) === 0) {
+      opt.windowBits |= 15;
+    }
+  }
+
+  this.err    = 0;      // error code, if happens (0 = Z_OK)
+  this.msg    = '';     // error message
+  this.ended  = false;  // used to avoid multiple onEnd() calls
+  this.chunks = [];     // chunks of compressed data
+
+  this.strm   = new ZStream();
+  this.strm.avail_out = 0;
+
+  var status  = zlib_inflate.inflateInit2(
+    this.strm,
+    opt.windowBits
+  );
+
+  if (status !== c.Z_OK) {
+    throw new Error(msg[status]);
+  }
+
+  this.header = new GZheader();
+
+  zlib_inflate.inflateGetHeader(this.strm, this.header);
+}
+
+/**
+ * Inflate#push(data[, mode]) -> Boolean
+ * - data (Uint8Array|Array|ArrayBuffer|String): input data
+ * - mode (Number|Boolean): 0..6 for corresponding Z_NO_FLUSH..Z_TREE modes.
+ *   See constants. Skipped or `false` means Z_NO_FLUSH, `true` meansh Z_FINISH.
+ *
+ * Sends input data to inflate pipe, generating [[Inflate#onData]] calls with
+ * new output chunks. Returns `true` on success. The last data block must have
+ * mode Z_FINISH (or `true`). That will flush internal pending buffers and call
+ * [[Inflate#onEnd]]. For interim explicit flushes (without ending the stream) you
+ * can use mode Z_SYNC_FLUSH, keeping the decompression context.
+ *
+ * On fail call [[Inflate#onEnd]] with error code and return false.
+ *
+ * We strongly recommend to use `Uint8Array` on input for best speed (output
+ * format is detected automatically). Also, don't skip last param and always
+ * use the same type in your code (boolean or number). That will improve JS speed.
+ *
+ * For regular `Array`-s make sure all elements are [0..255].
+ *
+ * ##### Example
+ *
+ * ```javascript
+ * push(chunk, false); // push one of data chunks
+ * ...
+ * push(chunk, true);  // push last chunk
+ * ```
+ **/
+Inflate.prototype.push = function (data, mode) {
+  var strm = this.strm;
+  var chunkSize = this.options.chunkSize;
+  var dictionary = this.options.dictionary;
+  var status, _mode;
+  var next_out_utf8, tail, utf8str;
+  var dict;
+
+  // Flag to properly process Z_BUF_ERROR on testing inflate call
+  // when we check that all output data was flushed.
+  var allowBufError = false;
+
+  if (this.ended) { return false; }
+  _mode = (mode === ~~mode) ? mode : ((mode === true) ? c.Z_FINISH : c.Z_NO_FLUSH);
+
+  // Convert data if needed
+  if (typeof data === 'string') {
+    // Only binary strings can be decompressed on practice
+    strm.input = strings.binstring2buf(data);
+  } else if (toString.call(data) === '[object ArrayBuffer]') {
+    strm.input = new Uint8Array(data);
+  } else {
+    strm.input = data;
+  }
+
+  strm.next_in = 0;
+  strm.avail_in = strm.input.length;
+
+  do {
+    if (strm.avail_out === 0) {
+      strm.output = new utils.Buf8(chunkSize);
+      strm.next_out = 0;
+      strm.avail_out = chunkSize;
+    }
+
+    status = zlib_inflate.inflate(strm, c.Z_NO_FLUSH);    /* no bad return value */
+
+    if (status === c.Z_NEED_DICT && dictionary) {
+      // Convert data if needed
+      if (typeof dictionary === 'string') {
+        dict = strings.string2buf(dictionary);
+      } else if (toString.call(dictionary) === '[object ArrayBuffer]') {
+        dict = new Uint8Array(dictionary);
+      } else {
+        dict = dictionary;
+      }
+
+      status = zlib_inflate.inflateSetDictionary(this.strm, dict);
+
+    }
+
+    if (status === c.Z_BUF_ERROR && allowBufError === true) {
+      status = c.Z_OK;
+      allowBufError = false;
+    }
+
+    if (status !== c.Z_STREAM_END && status !== c.Z_OK) {
+      this.onEnd(status);
+      this.ended = true;
+      return false;
+    }
+
+    if (strm.next_out) {
+      if (strm.avail_out === 0 || status === c.Z_STREAM_END || (strm.avail_in === 0 && (_mode === c.Z_FINISH || _mode === c.Z_SYNC_FLUSH))) {
+
+        if (this.options.to === 'string') {
+
+          next_out_utf8 = strings.utf8border(strm.output, strm.next_out);
+
+          tail = strm.next_out - next_out_utf8;
+          utf8str = strings.buf2string(strm.output, next_out_utf8);
+
+          // move tail
+          strm.next_out = tail;
+          strm.avail_out = chunkSize - tail;
+          if (tail) { utils.arraySet(strm.output, strm.output, next_out_utf8, tail, 0); }
+
+          this.onData(utf8str);
+
+        } else {
+          this.onData(utils.shrinkBuf(strm.output, strm.next_out));
+        }
+      }
+    }
+
+    // When no more input data, we should check that internal inflate buffers
+    // are flushed. The only way to do it when avail_out = 0 - run one more
+    // inflate pass. But if output data not exists, inflate return Z_BUF_ERROR.
+    // Here we set flag to process this error properly.
+    //
+    // NOTE. Deflate does not return error in this case and does not needs such
+    // logic.
+    if (strm.avail_in === 0 && strm.avail_out === 0) {
+      allowBufError = true;
+    }
+
+  } while ((strm.avail_in > 0 || strm.avail_out === 0) && status !== c.Z_STREAM_END);
+
+  if (status === c.Z_STREAM_END) {
+    _mode = c.Z_FINISH;
+  }
+
+  // Finalize on the last chunk.
+  if (_mode === c.Z_FINISH) {
+    status = zlib_inflate.inflateEnd(this.strm);
+    this.onEnd(status);
+    this.ended = true;
+    return status === c.Z_OK;
+  }
+
+  // callback interim results if Z_SYNC_FLUSH.
+  if (_mode === c.Z_SYNC_FLUSH) {
+    this.onEnd(c.Z_OK);
+    strm.avail_out = 0;
+    return true;
+  }
+
+  return true;
+};
+
+
+/**
+ * Inflate#onData(chunk) -> Void
+ * - chunk (Uint8Array|Array|String): ouput data. Type of array depends
+ *   on js engine support. When string output requested, each chunk
+ *   will be string.
+ *
+ * By default, stores data blocks in `chunks[]` property and glue
+ * those in `onEnd`. Override this handler, if you need another behaviour.
+ **/
+Inflate.prototype.onData = function (chunk) {
+  this.chunks.push(chunk);
+};
+
+
+/**
+ * Inflate#onEnd(status) -> Void
+ * - status (Number): inflate status. 0 (Z_OK) on success,
+ *   other if not.
+ *
+ * Called either after you tell inflate that the input stream is
+ * complete (Z_FINISH) or should be flushed (Z_SYNC_FLUSH)
+ * or if an error happened. By default - join collected chunks,
+ * free memory and fill `results` / `err` properties.
+ **/
+Inflate.prototype.onEnd = function (status) {
+  // On success - join
+  if (status === c.Z_OK) {
+    if (this.options.to === 'string') {
+      // Glue & convert here, until we teach pako to send
+      // utf8 alligned strings to onData
+      this.result = this.chunks.join('');
+    } else {
+      this.result = utils.flattenChunks(this.chunks);
+    }
+  }
+  this.chunks = [];
+  this.err = status;
+  this.msg = this.strm.msg;
+};
+
+
+/**
+ * inflate(data[, options]) -> Uint8Array|Array|String
+ * - data (Uint8Array|Array|String): input data to decompress.
+ * - options (Object): zlib inflate options.
+ *
+ * Decompress `data` with inflate/ungzip and `options`. Autodetect
+ * format via wrapper header by default. That's why we don't provide
+ * separate `ungzip` method.
+ *
+ * Supported options are:
+ *
+ * - windowBits
+ *
+ * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
+ * for more information.
+ *
+ * Sugar (options):
+ *
+ * - `raw` (Boolean) - say that we work with raw stream, if you don't wish to specify
+ *   negative windowBits implicitly.
+ * - `to` (String) - if equal to 'string', then result will be converted
+ *   from utf8 to utf16 (javascript) string. When string output requested,
+ *   chunk length can differ from `chunkSize`, depending on content.
+ *
+ *
+ * ##### Example:
+ *
+ * ```javascript
+ * var pako = require('pako')
+ *   , input = pako.deflate([1,2,3,4,5,6,7,8,9])
+ *   , output;
+ *
+ * try {
+ *   output = pako.inflate(input);
+ * } catch (err)
+ *   console.log(err);
+ * }
+ * ```
+ **/
+function inflate(input, options) {
+  var inflator = new Inflate(options);
+
+  inflator.push(input, true);
+
+  // That will never happens, if you don't cheat with options :)
+  if (inflator.err) { throw inflator.msg; }
+
+  return inflator.result;
+}
+
+
+/**
+ * inflateRaw(data[, options]) -> Uint8Array|Array|String
+ * - data (Uint8Array|Array|String): input data to decompress.
+ * - options (Object): zlib inflate options.
+ *
+ * The same as [[inflate]], but creates raw data, without wrapper
+ * (header and adler32 crc).
+ **/
+function inflateRaw(input, options) {
+  options = options || {};
+  options.raw = true;
+  return inflate(input, options);
+}
+
+
+/**
+ * ungzip(data[, options]) -> Uint8Array|Array|String
+ * - data (Uint8Array|Array|String): input data to decompress.
+ * - options (Object): zlib inflate options.
+ *
+ * Just shortcut to [[inflate]], because it autodetects format
+ * by header.content. Done for convenience.
+ **/
+
+
+exports.Inflate = Inflate;
+exports.inflate = inflate;
+exports.inflateRaw = inflateRaw;
+exports.ungzip  = inflate;
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/utils/common.js":
+/*!************************************************!*\
+  !*** ../node_modules/pako/lib/utils/common.js ***!
+  \************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: __webpack_exports__ */
+/*! CommonJS bailout: exports.assign(...) prevents optimization as exports is passed as call context at 93:4-18 */
+/*! CommonJS bailout: exports is used directly at 93:19-26 */
+/*! CommonJS bailout: exports.assign(...) prevents optimization as exports is passed as call context at 98:4-18 */
+/*! CommonJS bailout: exports is used directly at 98:19-26 */
+/*! CommonJS bailout: exports.setTyped(...) prevents optimization as exports is passed as call context at 102:0-16 */
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+
+var TYPED_OK =  (typeof Uint8Array !== 'undefined') &&
+                (typeof Uint16Array !== 'undefined') &&
+                (typeof Int32Array !== 'undefined');
+
+
+exports.assign = function (obj /*from1, from2, from3, ...*/) {
+  var sources = Array.prototype.slice.call(arguments, 1);
+  while (sources.length) {
+    var source = sources.shift();
+    if (!source) { continue; }
+
+    if (typeof source !== 'object') {
+      throw new TypeError(source + 'must be non-object');
+    }
+
+    for (var p in source) {
+      if (source.hasOwnProperty(p)) {
+        obj[p] = source[p];
+      }
+    }
+  }
+
+  return obj;
+};
+
+
+// reduce buffer size, avoiding mem copy
+exports.shrinkBuf = function (buf, size) {
+  if (buf.length === size) { return buf; }
+  if (buf.subarray) { return buf.subarray(0, size); }
+  buf.length = size;
+  return buf;
+};
+
+
+var fnTyped = {
+  arraySet: function (dest, src, src_offs, len, dest_offs) {
+    if (src.subarray && dest.subarray) {
+      dest.set(src.subarray(src_offs, src_offs + len), dest_offs);
+      return;
+    }
+    // Fallback to ordinary array
+    for (var i = 0; i < len; i++) {
+      dest[dest_offs + i] = src[src_offs + i];
+    }
+  },
+  // Join array of chunks to single array.
+  flattenChunks: function (chunks) {
+    var i, l, len, pos, chunk, result;
+
+    // calculate data length
+    len = 0;
+    for (i = 0, l = chunks.length; i < l; i++) {
+      len += chunks[i].length;
+    }
+
+    // join chunks
+    result = new Uint8Array(len);
+    pos = 0;
+    for (i = 0, l = chunks.length; i < l; i++) {
+      chunk = chunks[i];
+      result.set(chunk, pos);
+      pos += chunk.length;
+    }
+
+    return result;
+  }
+};
+
+var fnUntyped = {
+  arraySet: function (dest, src, src_offs, len, dest_offs) {
+    for (var i = 0; i < len; i++) {
+      dest[dest_offs + i] = src[src_offs + i];
+    }
+  },
+  // Join array of chunks to single array.
+  flattenChunks: function (chunks) {
+    return [].concat.apply([], chunks);
+  }
+};
+
+
+// Enable/Disable typed arrays use, for testing
+//
+exports.setTyped = function (on) {
+  if (on) {
+    exports.Buf8  = Uint8Array;
+    exports.Buf16 = Uint16Array;
+    exports.Buf32 = Int32Array;
+    exports.assign(exports, fnTyped);
+  } else {
+    exports.Buf8  = Array;
+    exports.Buf16 = Array;
+    exports.Buf32 = Array;
+    exports.assign(exports, fnUntyped);
+  }
+};
+
+exports.setTyped(TYPED_OK);
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/utils/strings.js":
+/*!*************************************************!*\
+  !*** ../node_modules/pako/lib/utils/strings.js ***!
+  \*************************************************/
+/*! default exports */
+/*! export binstring2buf [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export buf2binstring [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export buf2string [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export string2buf [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export utf8border [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+// String encode/decode helpers
+
+
+
+var utils = __webpack_require__(/*! ./common */ "../node_modules/pako/lib/utils/common.js");
+
+
+// Quick check if we can use fast array to bin string conversion
+//
+// - apply(Array) can fail on Android 2.2
+// - apply(Uint8Array) can fail on iOS 5.1 Safary
+//
+var STR_APPLY_OK = true;
+var STR_APPLY_UIA_OK = true;
+
+try { String.fromCharCode.apply(null, [ 0 ]); } catch (__) { STR_APPLY_OK = false; }
+try { String.fromCharCode.apply(null, new Uint8Array(1)); } catch (__) { STR_APPLY_UIA_OK = false; }
+
+
+// Table with utf8 lengths (calculated by first byte of sequence)
+// Note, that 5 & 6-byte values and some 4-byte values can not be represented in JS,
+// because max possible codepoint is 0x10ffff
+var _utf8len = new utils.Buf8(256);
+for (var q = 0; q < 256; q++) {
+  _utf8len[q] = (q >= 252 ? 6 : q >= 248 ? 5 : q >= 240 ? 4 : q >= 224 ? 3 : q >= 192 ? 2 : 1);
+}
+_utf8len[254] = _utf8len[254] = 1; // Invalid sequence start
+
+
+// convert string to array (typed, when possible)
+exports.string2buf = function (str) {
+  var buf, c, c2, m_pos, i, str_len = str.length, buf_len = 0;
+
+  // count binary size
+  for (m_pos = 0; m_pos < str_len; m_pos++) {
+    c = str.charCodeAt(m_pos);
+    if ((c & 0xfc00) === 0xd800 && (m_pos + 1 < str_len)) {
+      c2 = str.charCodeAt(m_pos + 1);
+      if ((c2 & 0xfc00) === 0xdc00) {
+        c = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
+        m_pos++;
+      }
+    }
+    buf_len += c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
+  }
+
+  // allocate buffer
+  buf = new utils.Buf8(buf_len);
+
+  // convert
+  for (i = 0, m_pos = 0; i < buf_len; m_pos++) {
+    c = str.charCodeAt(m_pos);
+    if ((c & 0xfc00) === 0xd800 && (m_pos + 1 < str_len)) {
+      c2 = str.charCodeAt(m_pos + 1);
+      if ((c2 & 0xfc00) === 0xdc00) {
+        c = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
+        m_pos++;
+      }
+    }
+    if (c < 0x80) {
+      /* one byte */
+      buf[i++] = c;
+    } else if (c < 0x800) {
+      /* two bytes */
+      buf[i++] = 0xC0 | (c >>> 6);
+      buf[i++] = 0x80 | (c & 0x3f);
+    } else if (c < 0x10000) {
+      /* three bytes */
+      buf[i++] = 0xE0 | (c >>> 12);
+      buf[i++] = 0x80 | (c >>> 6 & 0x3f);
+      buf[i++] = 0x80 | (c & 0x3f);
+    } else {
+      /* four bytes */
+      buf[i++] = 0xf0 | (c >>> 18);
+      buf[i++] = 0x80 | (c >>> 12 & 0x3f);
+      buf[i++] = 0x80 | (c >>> 6 & 0x3f);
+      buf[i++] = 0x80 | (c & 0x3f);
+    }
+  }
+
+  return buf;
+};
+
+// Helper (used in 2 places)
+function buf2binstring(buf, len) {
+  // use fallback for big arrays to avoid stack overflow
+  if (len < 65537) {
+    if ((buf.subarray && STR_APPLY_UIA_OK) || (!buf.subarray && STR_APPLY_OK)) {
+      return String.fromCharCode.apply(null, utils.shrinkBuf(buf, len));
+    }
+  }
+
+  var result = '';
+  for (var i = 0; i < len; i++) {
+    result += String.fromCharCode(buf[i]);
+  }
+  return result;
+}
+
+
+// Convert byte array to binary string
+exports.buf2binstring = function (buf) {
+  return buf2binstring(buf, buf.length);
+};
+
+
+// Convert binary string (typed, when possible)
+exports.binstring2buf = function (str) {
+  var buf = new utils.Buf8(str.length);
+  for (var i = 0, len = buf.length; i < len; i++) {
+    buf[i] = str.charCodeAt(i);
+  }
+  return buf;
+};
+
+
+// convert array to string
+exports.buf2string = function (buf, max) {
+  var i, out, c, c_len;
+  var len = max || buf.length;
+
+  // Reserve max possible length (2 words per char)
+  // NB: by unknown reasons, Array is significantly faster for
+  //     String.fromCharCode.apply than Uint16Array.
+  var utf16buf = new Array(len * 2);
+
+  for (out = 0, i = 0; i < len;) {
+    c = buf[i++];
+    // quick process ascii
+    if (c < 0x80) { utf16buf[out++] = c; continue; }
+
+    c_len = _utf8len[c];
+    // skip 5 & 6 byte codes
+    if (c_len > 4) { utf16buf[out++] = 0xfffd; i += c_len - 1; continue; }
+
+    // apply mask on first byte
+    c &= c_len === 2 ? 0x1f : c_len === 3 ? 0x0f : 0x07;
+    // join the rest
+    while (c_len > 1 && i < len) {
+      c = (c << 6) | (buf[i++] & 0x3f);
+      c_len--;
+    }
+
+    // terminated by end of string?
+    if (c_len > 1) { utf16buf[out++] = 0xfffd; continue; }
+
+    if (c < 0x10000) {
+      utf16buf[out++] = c;
+    } else {
+      c -= 0x10000;
+      utf16buf[out++] = 0xd800 | ((c >> 10) & 0x3ff);
+      utf16buf[out++] = 0xdc00 | (c & 0x3ff);
+    }
+  }
+
+  return buf2binstring(utf16buf, out);
+};
+
+
+// Calculate max possible position in utf8 buffer,
+// that will not break sequence. If that's not possible
+// - (very small limits) return max size as is.
+//
+// buf[] - utf8 bytes array
+// max   - length limit (mandatory);
+exports.utf8border = function (buf, max) {
+  var pos;
+
+  max = max || buf.length;
+  if (max > buf.length) { max = buf.length; }
+
+  // go back from last position, until start of sequence found
+  pos = max - 1;
+  while (pos >= 0 && (buf[pos] & 0xC0) === 0x80) { pos--; }
+
+  // Fuckup - very small and broken sequence,
+  // return max, because we should return something anyway.
+  if (pos < 0) { return max; }
+
+  // If we came to start of buffer - that means vuffer is too small,
+  // return max too.
+  if (pos === 0) { return max; }
+
+  return (pos + _utf8len[buf[pos]] > max) ? pos : max;
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/adler32.js":
+/*!************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/adler32.js ***!
+  \************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 32:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+// Note: adler32 takes 12% for level 0 and 2% for level 6.
+// It doesn't worth to make additional optimizationa as in original.
+// Small size is preferable.
+
+function adler32(adler, buf, len, pos) {
+  var s1 = (adler & 0xffff) |0,
+      s2 = ((adler >>> 16) & 0xffff) |0,
+      n = 0;
+
+  while (len !== 0) {
+    // Set limit ~ twice less than 5552, to keep
+    // s2 in 31-bits, because we force signed ints.
+    // in other case %= will fail.
+    n = len > 2000 ? 2000 : len;
+    len -= n;
+
+    do {
+      s1 = (s1 + buf[pos++]) |0;
+      s2 = (s2 + s1) |0;
+    } while (--n);
+
+    s1 %= 65521;
+    s2 %= 65521;
+  }
+
+  return (s1 | (s2 << 16)) |0;
+}
+
+
+module.exports = adler32;
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/constants.js":
+/*!**************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/constants.js ***!
+  \**************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 4:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+
+module.exports = {
+
+  /* Allowed flush values; see deflate() and inflate() below for details */
+  Z_NO_FLUSH:         0,
+  Z_PARTIAL_FLUSH:    1,
+  Z_SYNC_FLUSH:       2,
+  Z_FULL_FLUSH:       3,
+  Z_FINISH:           4,
+  Z_BLOCK:            5,
+  Z_TREES:            6,
+
+  /* Return codes for the compression/decompression functions. Negative values
+  * are errors, positive values are used for special but normal events.
+  */
+  Z_OK:               0,
+  Z_STREAM_END:       1,
+  Z_NEED_DICT:        2,
+  Z_ERRNO:           -1,
+  Z_STREAM_ERROR:    -2,
+  Z_DATA_ERROR:      -3,
+  //Z_MEM_ERROR:     -4,
+  Z_BUF_ERROR:       -5,
+  //Z_VERSION_ERROR: -6,
+
+  /* compression levels */
+  Z_NO_COMPRESSION:         0,
+  Z_BEST_SPEED:             1,
+  Z_BEST_COMPRESSION:       9,
+  Z_DEFAULT_COMPRESSION:   -1,
+
+
+  Z_FILTERED:               1,
+  Z_HUFFMAN_ONLY:           2,
+  Z_RLE:                    3,
+  Z_FIXED:                  4,
+  Z_DEFAULT_STRATEGY:       0,
+
+  /* Possible values of the data_type field (though see inflate()) */
+  Z_BINARY:                 0,
+  Z_TEXT:                   1,
+  //Z_ASCII:                1, // = Z_TEXT (deprecated)
+  Z_UNKNOWN:                2,
+
+  /* The deflate compression method */
+  Z_DEFLATED:               8
+  //Z_NULL:                 null // Use -1 or null inline, depending on var type
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/crc32.js":
+/*!**********************************************!*\
+  !*** ../node_modules/pako/lib/zlib/crc32.js ***!
+  \**********************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 41:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+// Note: we can't get significant speed boost here.
+// So write code to minimize size - no pregenerated tables
+// and array tools dependencies.
+
+
+// Use ordinary array, since untyped makes no boost here
+function makeTable() {
+  var c, table = [];
+
+  for (var n = 0; n < 256; n++) {
+    c = n;
+    for (var k = 0; k < 8; k++) {
+      c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+    }
+    table[n] = c;
+  }
+
+  return table;
+}
+
+// Create table on load. Just 255 signed longs. Not a problem.
+var crcTable = makeTable();
+
+
+function crc32(crc, buf, len, pos) {
+  var t = crcTable,
+      end = pos + len;
+
+  crc ^= -1;
+
+  for (var i = pos; i < end; i++) {
+    crc = (crc >>> 8) ^ t[(crc ^ buf[i]) & 0xFF];
+  }
+
+  return (crc ^ (-1)); // >>> 0;
+}
+
+
+module.exports = crc32;
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/deflate.js":
+/*!************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/deflate.js ***!
+  \************************************************/
+/*! default exports */
+/*! export deflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateEnd [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateInfo [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateInit [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateInit2 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateReset [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateResetKeep [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateSetDictionary [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export deflateSetHeader [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var utils   = __webpack_require__(/*! ../utils/common */ "../node_modules/pako/lib/utils/common.js");
+var trees   = __webpack_require__(/*! ./trees */ "../node_modules/pako/lib/zlib/trees.js");
+var adler32 = __webpack_require__(/*! ./adler32 */ "../node_modules/pako/lib/zlib/adler32.js");
+var crc32   = __webpack_require__(/*! ./crc32 */ "../node_modules/pako/lib/zlib/crc32.js");
+var msg     = __webpack_require__(/*! ./messages */ "../node_modules/pako/lib/zlib/messages.js");
 
 /* Public constants ==========================================================*/
 /* ===========================================================================*/
@@ -8113,1670 +10036,429 @@ exports.deflateTune = deflateTune;
 
 
 /***/ }),
-/* 34 */
-/*!**********************************************!*\
-  !*** ../node_modules/pako/lib/zlib/trees.js ***!
-  \**********************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+
+/***/ "../node_modules/pako/lib/zlib/gzheader.js":
+/*!*************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/gzheader.js ***!
+  \*************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 40:0-14 */
+/***/ ((module) => {
 
 "use strict";
 
 
 
-var utils = __webpack_require__(/*! ../utils/common */ 5);
+function GZheader() {
+  /* true if compressed data believed to be text */
+  this.text       = 0;
+  /* modification time */
+  this.time       = 0;
+  /* extra flags (not used when writing a gzip file) */
+  this.xflags     = 0;
+  /* operating system */
+  this.os         = 0;
+  /* pointer to extra field or Z_NULL if none */
+  this.extra      = null;
+  /* extra field length (valid if extra != Z_NULL) */
+  this.extra_len  = 0; // Actually, we don't need it in JS,
+                       // but leave for few code modifications
 
-/* Public constants ==========================================================*/
-/* ===========================================================================*/
+  //
+  // Setup limits is not necessary because in js we should not preallocate memory
+  // for inflate use constant limit in 65536 bytes
+  //
 
-
-//var Z_FILTERED          = 1;
-//var Z_HUFFMAN_ONLY      = 2;
-//var Z_RLE               = 3;
-var Z_FIXED               = 4;
-//var Z_DEFAULT_STRATEGY  = 0;
-
-/* Possible values of the data_type field (though see inflate()) */
-var Z_BINARY              = 0;
-var Z_TEXT                = 1;
-//var Z_ASCII             = 1; // = Z_TEXT
-var Z_UNKNOWN             = 2;
-
-/*============================================================================*/
-
-
-function zero(buf) { var len = buf.length; while (--len >= 0) { buf[len] = 0; } }
-
-// From zutil.h
-
-var STORED_BLOCK = 0;
-var STATIC_TREES = 1;
-var DYN_TREES    = 2;
-/* The three kinds of block type */
-
-var MIN_MATCH    = 3;
-var MAX_MATCH    = 258;
-/* The minimum and maximum match lengths */
-
-// From deflate.h
-/* ===========================================================================
- * Internal compression state.
- */
-
-var LENGTH_CODES  = 29;
-/* number of length codes, not counting the special END_BLOCK code */
-
-var LITERALS      = 256;
-/* number of literal bytes 0..255 */
-
-var L_CODES       = LITERALS + 1 + LENGTH_CODES;
-/* number of Literal or Length codes, including the END_BLOCK code */
-
-var D_CODES       = 30;
-/* number of distance codes */
-
-var BL_CODES      = 19;
-/* number of codes used to transfer the bit lengths */
-
-var HEAP_SIZE     = 2 * L_CODES + 1;
-/* maximum heap size */
-
-var MAX_BITS      = 15;
-/* All codes must not exceed MAX_BITS bits */
-
-var Buf_size      = 16;
-/* size of bit buffer in bi_buf */
-
-
-/* ===========================================================================
- * Constants
- */
-
-var MAX_BL_BITS = 7;
-/* Bit length codes must not exceed MAX_BL_BITS bits */
-
-var END_BLOCK   = 256;
-/* end of block literal code */
-
-var REP_3_6     = 16;
-/* repeat previous bit length 3-6 times (2 bits of repeat count) */
-
-var REPZ_3_10   = 17;
-/* repeat a zero length 3-10 times  (3 bits of repeat count) */
-
-var REPZ_11_138 = 18;
-/* repeat a zero length 11-138 times  (7 bits of repeat count) */
-
-/* eslint-disable comma-spacing,array-bracket-spacing */
-var extra_lbits =   /* extra bits for each length code */
-  [0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0];
-
-var extra_dbits =   /* extra bits for each distance code */
-  [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
-
-var extra_blbits =  /* extra bits for each bit length code */
-  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,7];
-
-var bl_order =
-  [16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
-/* eslint-enable comma-spacing,array-bracket-spacing */
-
-/* The lengths of the bit length codes are sent in order of decreasing
- * probability, to avoid transmitting the lengths for unused bit length codes.
- */
-
-/* ===========================================================================
- * Local data. These are initialized only once.
- */
-
-// We pre-fill arrays with 0 to avoid uninitialized gaps
-
-var DIST_CODE_LEN = 512; /* see definition of array dist_code below */
-
-// !!!! Use flat array insdead of structure, Freq = i*2, Len = i*2+1
-var static_ltree  = new Array((L_CODES + 2) * 2);
-zero(static_ltree);
-/* The static literal tree. Since the bit lengths are imposed, there is no
- * need for the L_CODES extra codes used during heap construction. However
- * The codes 286 and 287 are needed to build a canonical tree (see _tr_init
- * below).
- */
-
-var static_dtree  = new Array(D_CODES * 2);
-zero(static_dtree);
-/* The static distance tree. (Actually a trivial tree since all codes use
- * 5 bits.)
- */
-
-var _dist_code    = new Array(DIST_CODE_LEN);
-zero(_dist_code);
-/* Distance codes. The first 256 values correspond to the distances
- * 3 .. 258, the last 256 values correspond to the top 8 bits of
- * the 15 bit distances.
- */
-
-var _length_code  = new Array(MAX_MATCH - MIN_MATCH + 1);
-zero(_length_code);
-/* length code for each normalized match length (0 == MIN_MATCH) */
-
-var base_length   = new Array(LENGTH_CODES);
-zero(base_length);
-/* First normalized length for each code (0 = MIN_MATCH) */
-
-var base_dist     = new Array(D_CODES);
-zero(base_dist);
-/* First normalized distance for each code (0 = distance of 1) */
-
-
-function StaticTreeDesc(static_tree, extra_bits, extra_base, elems, max_length) {
-
-  this.static_tree  = static_tree;  /* static tree or NULL */
-  this.extra_bits   = extra_bits;   /* extra bits for each code or NULL */
-  this.extra_base   = extra_base;   /* base index for extra_bits */
-  this.elems        = elems;        /* max number of elements in the tree */
-  this.max_length   = max_length;   /* max bit length for the codes */
-
-  // show if `static_tree` has data or dummy - needed for monomorphic objects
-  this.has_stree    = static_tree && static_tree.length;
+  /* space at extra (only when reading header) */
+  // this.extra_max  = 0;
+  /* pointer to zero-terminated file name or Z_NULL */
+  this.name       = '';
+  /* space at name (only when reading header) */
+  // this.name_max   = 0;
+  /* pointer to zero-terminated comment or Z_NULL */
+  this.comment    = '';
+  /* space at comment (only when reading header) */
+  // this.comm_max   = 0;
+  /* true if there was or will be a header crc */
+  this.hcrc       = 0;
+  /* true when done reading gzip header (not used when writing a gzip file) */
+  this.done       = false;
 }
 
-
-var static_l_desc;
-var static_d_desc;
-var static_bl_desc;
+module.exports = GZheader;
 
 
-function TreeDesc(dyn_tree, stat_desc) {
-  this.dyn_tree = dyn_tree;     /* the dynamic tree */
-  this.max_code = 0;            /* largest code with non zero frequency */
-  this.stat_desc = stat_desc;   /* the corresponding static tree */
-}
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/inffast.js":
+/*!************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/inffast.js ***!
+  \************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 42:0-14 */
+/***/ ((module) => {
+
+"use strict";
 
 
+// See state defs from inflate.js
+var BAD = 30;       /* got a data error -- remain here until reset */
+var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
 
-function d_code(dist) {
-  return dist < 256 ? _dist_code[dist] : _dist_code[256 + (dist >>> 7)];
-}
+/*
+   Decode literal, length, and distance codes and write out the resulting
+   literal and match bytes until either not enough input or output is
+   available, an end-of-block is encountered, or a data error is encountered.
+   When large enough input and output buffers are supplied to inflate(), for
+   example, a 16K input buffer and a 64K output buffer, more than 95% of the
+   inflate execution time is spent in this routine.
 
+   Entry assumptions:
 
-/* ===========================================================================
- * Output a short LSB first on the stream.
- * IN assertion: there is enough room in pendingBuf.
+        state.mode === LEN
+        strm.avail_in >= 6
+        strm.avail_out >= 258
+        start >= strm.avail_out
+        state.bits < 8
+
+   On return, state.mode is one of:
+
+        LEN -- ran out of enough output space or enough available input
+        TYPE -- reached end of block code, inflate() to interpret next block
+        BAD -- error in block data
+
+   Notes:
+
+    - The maximum input bits used by a length/distance pair is 15 bits for the
+      length code, 5 bits for the length extra, 15 bits for the distance code,
+      and 13 bits for the distance extra.  This totals 48 bits, or six bytes.
+      Therefore if strm.avail_in >= 6, then there is enough input to avoid
+      checking for available input while decoding.
+
+    - The maximum bytes that a single length/distance pair can output is 258
+      bytes, which is the maximum length that can be coded.  inflate_fast()
+      requires strm.avail_out >= 258 for each loop to avoid checking for
+      output space.
  */
-function put_short(s, w) {
-//    put_byte(s, (uch)((w) & 0xff));
-//    put_byte(s, (uch)((ush)(w) >> 8));
-  s.pending_buf[s.pending++] = (w) & 0xff;
-  s.pending_buf[s.pending++] = (w >>> 8) & 0xff;
-}
+module.exports = function inflate_fast(strm, start) {
+  var state;
+  var _in;                    /* local strm.input */
+  var last;                   /* have enough input while in < last */
+  var _out;                   /* local strm.output */
+  var beg;                    /* inflate()'s initial strm.output */
+  var end;                    /* while out < end, enough space available */
+//#ifdef INFLATE_STRICT
+  var dmax;                   /* maximum distance from zlib header */
+//#endif
+  var wsize;                  /* window size or zero if not using window */
+  var whave;                  /* valid bytes in the window */
+  var wnext;                  /* window write index */
+  // Use `s_window` instead `window`, avoid conflict with instrumentation tools
+  var s_window;               /* allocated sliding window, if wsize != 0 */
+  var hold;                   /* local strm.hold */
+  var bits;                   /* local strm.bits */
+  var lcode;                  /* local strm.lencode */
+  var dcode;                  /* local strm.distcode */
+  var lmask;                  /* mask for first level of length codes */
+  var dmask;                  /* mask for first level of distance codes */
+  var here;                   /* retrieved table entry */
+  var op;                     /* code bits, operation, extra bits, or */
+                              /*  window position, window bytes to copy */
+  var len;                    /* match length, unused bytes */
+  var dist;                   /* match distance */
+  var from;                   /* where to copy match from */
+  var from_source;
 
 
-/* ===========================================================================
- * Send a value on a given number of bits.
- * IN assertion: length <= 16 and value fits in length bits.
- */
-function send_bits(s, value, length) {
-  if (s.bi_valid > (Buf_size - length)) {
-    s.bi_buf |= (value << s.bi_valid) & 0xffff;
-    put_short(s, s.bi_buf);
-    s.bi_buf = value >> (Buf_size - s.bi_valid);
-    s.bi_valid += length - Buf_size;
-  } else {
-    s.bi_buf |= (value << s.bi_valid) & 0xffff;
-    s.bi_valid += length;
-  }
-}
+  var input, output; // JS specific, because we have no pointers
+
+  /* copy state to local variables */
+  state = strm.state;
+  //here = state.here;
+  _in = strm.next_in;
+  input = strm.input;
+  last = _in + (strm.avail_in - 5);
+  _out = strm.next_out;
+  output = strm.output;
+  beg = _out - (start - strm.avail_out);
+  end = _out + (strm.avail_out - 257);
+//#ifdef INFLATE_STRICT
+  dmax = state.dmax;
+//#endif
+  wsize = state.wsize;
+  whave = state.whave;
+  wnext = state.wnext;
+  s_window = state.window;
+  hold = state.hold;
+  bits = state.bits;
+  lcode = state.lencode;
+  dcode = state.distcode;
+  lmask = (1 << state.lenbits) - 1;
+  dmask = (1 << state.distbits) - 1;
 
 
-function send_code(s, c, tree) {
-  send_bits(s, tree[c * 2]/*.Code*/, tree[c * 2 + 1]/*.Len*/);
-}
+  /* decode literals and length/distances until end-of-block or not enough
+     input data or output space */
 
-
-/* ===========================================================================
- * Reverse the first len bits of a code, using straightforward code (a faster
- * method would use a table)
- * IN assertion: 1 <= len <= 15
- */
-function bi_reverse(code, len) {
-  var res = 0;
+  top:
   do {
-    res |= code & 1;
-    code >>>= 1;
-    res <<= 1;
-  } while (--len > 0);
-  return res >>> 1;
-}
-
-
-/* ===========================================================================
- * Flush the bit buffer, keeping at most 7 bits in it.
- */
-function bi_flush(s) {
-  if (s.bi_valid === 16) {
-    put_short(s, s.bi_buf);
-    s.bi_buf = 0;
-    s.bi_valid = 0;
-
-  } else if (s.bi_valid >= 8) {
-    s.pending_buf[s.pending++] = s.bi_buf & 0xff;
-    s.bi_buf >>= 8;
-    s.bi_valid -= 8;
-  }
-}
-
-
-/* ===========================================================================
- * Compute the optimal bit lengths for a tree and update the total bit length
- * for the current block.
- * IN assertion: the fields freq and dad are set, heap[heap_max] and
- *    above are the tree nodes sorted by increasing frequency.
- * OUT assertions: the field len is set to the optimal bit length, the
- *     array bl_count contains the frequencies for each bit length.
- *     The length opt_len is updated; static_len is also updated if stree is
- *     not null.
- */
-function gen_bitlen(s, desc)
-//    deflate_state *s;
-//    tree_desc *desc;    /* the tree descriptor */
-{
-  var tree            = desc.dyn_tree;
-  var max_code        = desc.max_code;
-  var stree           = desc.stat_desc.static_tree;
-  var has_stree       = desc.stat_desc.has_stree;
-  var extra           = desc.stat_desc.extra_bits;
-  var base            = desc.stat_desc.extra_base;
-  var max_length      = desc.stat_desc.max_length;
-  var h;              /* heap index */
-  var n, m;           /* iterate over the tree elements */
-  var bits;           /* bit length */
-  var xbits;          /* extra bits */
-  var f;              /* frequency */
-  var overflow = 0;   /* number of elements with bit length too large */
-
-  for (bits = 0; bits <= MAX_BITS; bits++) {
-    s.bl_count[bits] = 0;
-  }
-
-  /* In a first pass, compute the optimal bit lengths (which may
-   * overflow in the case of the bit length tree).
-   */
-  tree[s.heap[s.heap_max] * 2 + 1]/*.Len*/ = 0; /* root of the heap */
-
-  for (h = s.heap_max + 1; h < HEAP_SIZE; h++) {
-    n = s.heap[h];
-    bits = tree[tree[n * 2 + 1]/*.Dad*/ * 2 + 1]/*.Len*/ + 1;
-    if (bits > max_length) {
-      bits = max_length;
-      overflow++;
+    if (bits < 15) {
+      hold += input[_in++] << bits;
+      bits += 8;
+      hold += input[_in++] << bits;
+      bits += 8;
     }
-    tree[n * 2 + 1]/*.Len*/ = bits;
-    /* We overwrite tree[n].Dad which is no longer needed */
 
-    if (n > max_code) { continue; } /* not a leaf node */
+    here = lcode[hold & lmask];
 
-    s.bl_count[bits]++;
-    xbits = 0;
-    if (n >= base) {
-      xbits = extra[n - base];
-    }
-    f = tree[n * 2]/*.Freq*/;
-    s.opt_len += f * (bits + xbits);
-    if (has_stree) {
-      s.static_len += f * (stree[n * 2 + 1]/*.Len*/ + xbits);
-    }
-  }
-  if (overflow === 0) { return; }
-
-  // Trace((stderr,"\nbit length overflow\n"));
-  /* This happens for example on obj2 and pic of the Calgary corpus */
-
-  /* Find the first bit length which could increase: */
-  do {
-    bits = max_length - 1;
-    while (s.bl_count[bits] === 0) { bits--; }
-    s.bl_count[bits]--;      /* move one leaf down the tree */
-    s.bl_count[bits + 1] += 2; /* move one overflow item as its brother */
-    s.bl_count[max_length]--;
-    /* The brother of the overflow item also moves one step up,
-     * but this does not affect bl_count[max_length]
-     */
-    overflow -= 2;
-  } while (overflow > 0);
-
-  /* Now recompute all bit lengths, scanning in increasing frequency.
-   * h is still equal to HEAP_SIZE. (It is simpler to reconstruct all
-   * lengths instead of fixing only the wrong ones. This idea is taken
-   * from 'ar' written by Haruhiko Okumura.)
-   */
-  for (bits = max_length; bits !== 0; bits--) {
-    n = s.bl_count[bits];
-    while (n !== 0) {
-      m = s.heap[--h];
-      if (m > max_code) { continue; }
-      if (tree[m * 2 + 1]/*.Len*/ !== bits) {
-        // Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
-        s.opt_len += (bits - tree[m * 2 + 1]/*.Len*/) * tree[m * 2]/*.Freq*/;
-        tree[m * 2 + 1]/*.Len*/ = bits;
+    dolen:
+    for (;;) { // Goto emulation
+      op = here >>> 24/*here.bits*/;
+      hold >>>= op;
+      bits -= op;
+      op = (here >>> 16) & 0xff/*here.op*/;
+      if (op === 0) {                          /* literal */
+        //Tracevv((stderr, here.val >= 0x20 && here.val < 0x7f ?
+        //        "inflate:         literal '%c'\n" :
+        //        "inflate:         literal 0x%02x\n", here.val));
+        output[_out++] = here & 0xffff/*here.val*/;
       }
-      n--;
-    }
-  }
-}
-
-
-/* ===========================================================================
- * Generate the codes for a given tree and bit counts (which need not be
- * optimal).
- * IN assertion: the array bl_count contains the bit length statistics for
- * the given tree and the field len is set for all tree elements.
- * OUT assertion: the field code is set for all tree elements of non
- *     zero code length.
- */
-function gen_codes(tree, max_code, bl_count)
-//    ct_data *tree;             /* the tree to decorate */
-//    int max_code;              /* largest code with non zero frequency */
-//    ushf *bl_count;            /* number of codes at each bit length */
-{
-  var next_code = new Array(MAX_BITS + 1); /* next code value for each bit length */
-  var code = 0;              /* running code value */
-  var bits;                  /* bit index */
-  var n;                     /* code index */
-
-  /* The distribution counts are first used to generate the code values
-   * without bit reversal.
-   */
-  for (bits = 1; bits <= MAX_BITS; bits++) {
-    next_code[bits] = code = (code + bl_count[bits - 1]) << 1;
-  }
-  /* Check that the bit counts in bl_count are consistent. The last code
-   * must be all ones.
-   */
-  //Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
-  //        "inconsistent bit counts");
-  //Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
-
-  for (n = 0;  n <= max_code; n++) {
-    var len = tree[n * 2 + 1]/*.Len*/;
-    if (len === 0) { continue; }
-    /* Now reverse the bits */
-    tree[n * 2]/*.Code*/ = bi_reverse(next_code[len]++, len);
-
-    //Tracecv(tree != static_ltree, (stderr,"\nn %3d %c l %2d c %4x (%x) ",
-    //     n, (isgraph(n) ? n : ' '), len, tree[n].Code, next_code[len]-1));
-  }
-}
-
-
-/* ===========================================================================
- * Initialize the various 'constant' tables.
- */
-function tr_static_init() {
-  var n;        /* iterates over tree elements */
-  var bits;     /* bit counter */
-  var length;   /* length value */
-  var code;     /* code value */
-  var dist;     /* distance index */
-  var bl_count = new Array(MAX_BITS + 1);
-  /* number of codes at each bit length for an optimal tree */
-
-  // do check in _tr_init()
-  //if (static_init_done) return;
-
-  /* For some embedded targets, global variables are not initialized: */
-/*#ifdef NO_INIT_GLOBAL_POINTERS
-  static_l_desc.static_tree = static_ltree;
-  static_l_desc.extra_bits = extra_lbits;
-  static_d_desc.static_tree = static_dtree;
-  static_d_desc.extra_bits = extra_dbits;
-  static_bl_desc.extra_bits = extra_blbits;
-#endif*/
-
-  /* Initialize the mapping length (0..255) -> length code (0..28) */
-  length = 0;
-  for (code = 0; code < LENGTH_CODES - 1; code++) {
-    base_length[code] = length;
-    for (n = 0; n < (1 << extra_lbits[code]); n++) {
-      _length_code[length++] = code;
-    }
-  }
-  //Assert (length == 256, "tr_static_init: length != 256");
-  /* Note that the length 255 (match length 258) can be represented
-   * in two different ways: code 284 + 5 bits or code 285, so we
-   * overwrite length_code[255] to use the best encoding:
-   */
-  _length_code[length - 1] = code;
-
-  /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
-  dist = 0;
-  for (code = 0; code < 16; code++) {
-    base_dist[code] = dist;
-    for (n = 0; n < (1 << extra_dbits[code]); n++) {
-      _dist_code[dist++] = code;
-    }
-  }
-  //Assert (dist == 256, "tr_static_init: dist != 256");
-  dist >>= 7; /* from now on, all distances are divided by 128 */
-  for (; code < D_CODES; code++) {
-    base_dist[code] = dist << 7;
-    for (n = 0; n < (1 << (extra_dbits[code] - 7)); n++) {
-      _dist_code[256 + dist++] = code;
-    }
-  }
-  //Assert (dist == 256, "tr_static_init: 256+dist != 512");
-
-  /* Construct the codes of the static literal tree */
-  for (bits = 0; bits <= MAX_BITS; bits++) {
-    bl_count[bits] = 0;
-  }
-
-  n = 0;
-  while (n <= 143) {
-    static_ltree[n * 2 + 1]/*.Len*/ = 8;
-    n++;
-    bl_count[8]++;
-  }
-  while (n <= 255) {
-    static_ltree[n * 2 + 1]/*.Len*/ = 9;
-    n++;
-    bl_count[9]++;
-  }
-  while (n <= 279) {
-    static_ltree[n * 2 + 1]/*.Len*/ = 7;
-    n++;
-    bl_count[7]++;
-  }
-  while (n <= 287) {
-    static_ltree[n * 2 + 1]/*.Len*/ = 8;
-    n++;
-    bl_count[8]++;
-  }
-  /* Codes 286 and 287 do not exist, but we must include them in the
-   * tree construction to get a canonical Huffman tree (longest code
-   * all ones)
-   */
-  gen_codes(static_ltree, L_CODES + 1, bl_count);
-
-  /* The static distance tree is trivial: */
-  for (n = 0; n < D_CODES; n++) {
-    static_dtree[n * 2 + 1]/*.Len*/ = 5;
-    static_dtree[n * 2]/*.Code*/ = bi_reverse(n, 5);
-  }
-
-  // Now data ready and we can init static trees
-  static_l_desc = new StaticTreeDesc(static_ltree, extra_lbits, LITERALS + 1, L_CODES, MAX_BITS);
-  static_d_desc = new StaticTreeDesc(static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS);
-  static_bl_desc = new StaticTreeDesc(new Array(0), extra_blbits, 0,         BL_CODES, MAX_BL_BITS);
-
-  //static_init_done = true;
-}
-
-
-/* ===========================================================================
- * Initialize a new block.
- */
-function init_block(s) {
-  var n; /* iterates over tree elements */
-
-  /* Initialize the trees. */
-  for (n = 0; n < L_CODES;  n++) { s.dyn_ltree[n * 2]/*.Freq*/ = 0; }
-  for (n = 0; n < D_CODES;  n++) { s.dyn_dtree[n * 2]/*.Freq*/ = 0; }
-  for (n = 0; n < BL_CODES; n++) { s.bl_tree[n * 2]/*.Freq*/ = 0; }
-
-  s.dyn_ltree[END_BLOCK * 2]/*.Freq*/ = 1;
-  s.opt_len = s.static_len = 0;
-  s.last_lit = s.matches = 0;
-}
-
-
-/* ===========================================================================
- * Flush the bit buffer and align the output on a byte boundary
- */
-function bi_windup(s)
-{
-  if (s.bi_valid > 8) {
-    put_short(s, s.bi_buf);
-  } else if (s.bi_valid > 0) {
-    //put_byte(s, (Byte)s->bi_buf);
-    s.pending_buf[s.pending++] = s.bi_buf;
-  }
-  s.bi_buf = 0;
-  s.bi_valid = 0;
-}
-
-/* ===========================================================================
- * Copy a stored block, storing first the length and its
- * one's complement if requested.
- */
-function copy_block(s, buf, len, header)
-//DeflateState *s;
-//charf    *buf;    /* the input data */
-//unsigned len;     /* its length */
-//int      header;  /* true if block header must be written */
-{
-  bi_windup(s);        /* align on byte boundary */
-
-  if (header) {
-    put_short(s, len);
-    put_short(s, ~len);
-  }
-//  while (len--) {
-//    put_byte(s, *buf++);
-//  }
-  utils.arraySet(s.pending_buf, s.window, buf, len, s.pending);
-  s.pending += len;
-}
-
-/* ===========================================================================
- * Compares to subtrees, using the tree depth as tie breaker when
- * the subtrees have equal frequency. This minimizes the worst case length.
- */
-function smaller(tree, n, m, depth) {
-  var _n2 = n * 2;
-  var _m2 = m * 2;
-  return (tree[_n2]/*.Freq*/ < tree[_m2]/*.Freq*/ ||
-         (tree[_n2]/*.Freq*/ === tree[_m2]/*.Freq*/ && depth[n] <= depth[m]));
-}
-
-/* ===========================================================================
- * Restore the heap property by moving down the tree starting at node k,
- * exchanging a node with the smallest of its two sons if necessary, stopping
- * when the heap property is re-established (each father smaller than its
- * two sons).
- */
-function pqdownheap(s, tree, k)
-//    deflate_state *s;
-//    ct_data *tree;  /* the tree to restore */
-//    int k;               /* node to move down */
-{
-  var v = s.heap[k];
-  var j = k << 1;  /* left son of k */
-  while (j <= s.heap_len) {
-    /* Set j to the smallest of the two sons: */
-    if (j < s.heap_len &&
-      smaller(tree, s.heap[j + 1], s.heap[j], s.depth)) {
-      j++;
-    }
-    /* Exit if v is smaller than both sons */
-    if (smaller(tree, v, s.heap[j], s.depth)) { break; }
-
-    /* Exchange v with the smallest son */
-    s.heap[k] = s.heap[j];
-    k = j;
-
-    /* And continue down the tree, setting j to the left son of k */
-    j <<= 1;
-  }
-  s.heap[k] = v;
-}
-
-
-// inlined manually
-// var SMALLEST = 1;
-
-/* ===========================================================================
- * Send the block data compressed using the given Huffman trees
- */
-function compress_block(s, ltree, dtree)
-//    deflate_state *s;
-//    const ct_data *ltree; /* literal tree */
-//    const ct_data *dtree; /* distance tree */
-{
-  var dist;           /* distance of matched string */
-  var lc;             /* match length or unmatched char (if dist == 0) */
-  var lx = 0;         /* running index in l_buf */
-  var code;           /* the code to send */
-  var extra;          /* number of extra bits to send */
-
-  if (s.last_lit !== 0) {
-    do {
-      dist = (s.pending_buf[s.d_buf + lx * 2] << 8) | (s.pending_buf[s.d_buf + lx * 2 + 1]);
-      lc = s.pending_buf[s.l_buf + lx];
-      lx++;
-
-      if (dist === 0) {
-        send_code(s, lc, ltree); /* send a literal byte */
-        //Tracecv(isgraph(lc), (stderr," '%c' ", lc));
-      } else {
-        /* Here, lc is the match length - MIN_MATCH */
-        code = _length_code[lc];
-        send_code(s, code + LITERALS + 1, ltree); /* send the length code */
-        extra = extra_lbits[code];
-        if (extra !== 0) {
-          lc -= base_length[code];
-          send_bits(s, lc, extra);       /* send the extra length bits */
+      else if (op & 16) {                     /* length base */
+        len = here & 0xffff/*here.val*/;
+        op &= 15;                           /* number of extra bits */
+        if (op) {
+          if (bits < op) {
+            hold += input[_in++] << bits;
+            bits += 8;
+          }
+          len += hold & ((1 << op) - 1);
+          hold >>>= op;
+          bits -= op;
         }
-        dist--; /* dist is now the match distance - 1 */
-        code = d_code(dist);
-        //Assert (code < D_CODES, "bad d_code");
-
-        send_code(s, code, dtree);       /* send the distance code */
-        extra = extra_dbits[code];
-        if (extra !== 0) {
-          dist -= base_dist[code];
-          send_bits(s, dist, extra);   /* send the extra distance bits */
+        //Tracevv((stderr, "inflate:         length %u\n", len));
+        if (bits < 15) {
+          hold += input[_in++] << bits;
+          bits += 8;
+          hold += input[_in++] << bits;
+          bits += 8;
         }
-      } /* literal or match pair ? */
-
-      /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
-      //Assert((uInt)(s->pending) < s->lit_bufsize + 2*lx,
-      //       "pendingBuf overflow");
-
-    } while (lx < s.last_lit);
-  }
-
-  send_code(s, END_BLOCK, ltree);
-}
-
-
-/* ===========================================================================
- * Construct one Huffman tree and assigns the code bit strings and lengths.
- * Update the total bit length for the current block.
- * IN assertion: the field freq is set for all tree elements.
- * OUT assertions: the fields len and code are set to the optimal bit length
- *     and corresponding code. The length opt_len is updated; static_len is
- *     also updated if stree is not null. The field max_code is set.
- */
-function build_tree(s, desc)
-//    deflate_state *s;
-//    tree_desc *desc; /* the tree descriptor */
-{
-  var tree     = desc.dyn_tree;
-  var stree    = desc.stat_desc.static_tree;
-  var has_stree = desc.stat_desc.has_stree;
-  var elems    = desc.stat_desc.elems;
-  var n, m;          /* iterate over heap elements */
-  var max_code = -1; /* largest code with non zero frequency */
-  var node;          /* new node being created */
-
-  /* Construct the initial heap, with least frequent element in
-   * heap[SMALLEST]. The sons of heap[n] are heap[2*n] and heap[2*n+1].
-   * heap[0] is not used.
-   */
-  s.heap_len = 0;
-  s.heap_max = HEAP_SIZE;
-
-  for (n = 0; n < elems; n++) {
-    if (tree[n * 2]/*.Freq*/ !== 0) {
-      s.heap[++s.heap_len] = max_code = n;
-      s.depth[n] = 0;
-
-    } else {
-      tree[n * 2 + 1]/*.Len*/ = 0;
-    }
-  }
-
-  /* The pkzip format requires that at least one distance code exists,
-   * and that at least one bit should be sent even if there is only one
-   * possible code. So to avoid special checks later on we force at least
-   * two codes of non zero frequency.
-   */
-  while (s.heap_len < 2) {
-    node = s.heap[++s.heap_len] = (max_code < 2 ? ++max_code : 0);
-    tree[node * 2]/*.Freq*/ = 1;
-    s.depth[node] = 0;
-    s.opt_len--;
-
-    if (has_stree) {
-      s.static_len -= stree[node * 2 + 1]/*.Len*/;
-    }
-    /* node is 0 or 1 so it does not have extra bits */
-  }
-  desc.max_code = max_code;
-
-  /* The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
-   * establish sub-heaps of increasing lengths:
-   */
-  for (n = (s.heap_len >> 1/*int /2*/); n >= 1; n--) { pqdownheap(s, tree, n); }
-
-  /* Construct the Huffman tree by repeatedly combining the least two
-   * frequent nodes.
-   */
-  node = elems;              /* next internal node of the tree */
-  do {
-    //pqremove(s, tree, n);  /* n = node of least frequency */
-    /*** pqremove ***/
-    n = s.heap[1/*SMALLEST*/];
-    s.heap[1/*SMALLEST*/] = s.heap[s.heap_len--];
-    pqdownheap(s, tree, 1/*SMALLEST*/);
-    /***/
-
-    m = s.heap[1/*SMALLEST*/]; /* m = node of next least frequency */
-
-    s.heap[--s.heap_max] = n; /* keep the nodes sorted by frequency */
-    s.heap[--s.heap_max] = m;
-
-    /* Create a new node father of n and m */
-    tree[node * 2]/*.Freq*/ = tree[n * 2]/*.Freq*/ + tree[m * 2]/*.Freq*/;
-    s.depth[node] = (s.depth[n] >= s.depth[m] ? s.depth[n] : s.depth[m]) + 1;
-    tree[n * 2 + 1]/*.Dad*/ = tree[m * 2 + 1]/*.Dad*/ = node;
-
-    /* and insert the new node in the heap */
-    s.heap[1/*SMALLEST*/] = node++;
-    pqdownheap(s, tree, 1/*SMALLEST*/);
-
-  } while (s.heap_len >= 2);
-
-  s.heap[--s.heap_max] = s.heap[1/*SMALLEST*/];
-
-  /* At this point, the fields freq and dad are set. We can now
-   * generate the bit lengths.
-   */
-  gen_bitlen(s, desc);
-
-  /* The field len is now set, we can generate the bit codes */
-  gen_codes(tree, max_code, s.bl_count);
-}
-
-
-/* ===========================================================================
- * Scan a literal or distance tree to determine the frequencies of the codes
- * in the bit length tree.
- */
-function scan_tree(s, tree, max_code)
-//    deflate_state *s;
-//    ct_data *tree;   /* the tree to be scanned */
-//    int max_code;    /* and its largest code of non zero frequency */
-{
-  var n;                     /* iterates over all tree elements */
-  var prevlen = -1;          /* last emitted length */
-  var curlen;                /* length of current code */
-
-  var nextlen = tree[0 * 2 + 1]/*.Len*/; /* length of next code */
-
-  var count = 0;             /* repeat count of the current code */
-  var max_count = 7;         /* max repeat count */
-  var min_count = 4;         /* min repeat count */
-
-  if (nextlen === 0) {
-    max_count = 138;
-    min_count = 3;
-  }
-  tree[(max_code + 1) * 2 + 1]/*.Len*/ = 0xffff; /* guard */
-
-  for (n = 0; n <= max_code; n++) {
-    curlen = nextlen;
-    nextlen = tree[(n + 1) * 2 + 1]/*.Len*/;
-
-    if (++count < max_count && curlen === nextlen) {
-      continue;
-
-    } else if (count < min_count) {
-      s.bl_tree[curlen * 2]/*.Freq*/ += count;
-
-    } else if (curlen !== 0) {
-
-      if (curlen !== prevlen) { s.bl_tree[curlen * 2]/*.Freq*/++; }
-      s.bl_tree[REP_3_6 * 2]/*.Freq*/++;
-
-    } else if (count <= 10) {
-      s.bl_tree[REPZ_3_10 * 2]/*.Freq*/++;
-
-    } else {
-      s.bl_tree[REPZ_11_138 * 2]/*.Freq*/++;
-    }
-
-    count = 0;
-    prevlen = curlen;
-
-    if (nextlen === 0) {
-      max_count = 138;
-      min_count = 3;
-
-    } else if (curlen === nextlen) {
-      max_count = 6;
-      min_count = 3;
-
-    } else {
-      max_count = 7;
-      min_count = 4;
-    }
-  }
-}
-
-
-/* ===========================================================================
- * Send a literal or distance tree in compressed form, using the codes in
- * bl_tree.
- */
-function send_tree(s, tree, max_code)
-//    deflate_state *s;
-//    ct_data *tree; /* the tree to be scanned */
-//    int max_code;       /* and its largest code of non zero frequency */
-{
-  var n;                     /* iterates over all tree elements */
-  var prevlen = -1;          /* last emitted length */
-  var curlen;                /* length of current code */
-
-  var nextlen = tree[0 * 2 + 1]/*.Len*/; /* length of next code */
-
-  var count = 0;             /* repeat count of the current code */
-  var max_count = 7;         /* max repeat count */
-  var min_count = 4;         /* min repeat count */
-
-  /* tree[max_code+1].Len = -1; */  /* guard already set */
-  if (nextlen === 0) {
-    max_count = 138;
-    min_count = 3;
-  }
-
-  for (n = 0; n <= max_code; n++) {
-    curlen = nextlen;
-    nextlen = tree[(n + 1) * 2 + 1]/*.Len*/;
-
-    if (++count < max_count && curlen === nextlen) {
-      continue;
-
-    } else if (count < min_count) {
-      do { send_code(s, curlen, s.bl_tree); } while (--count !== 0);
-
-    } else if (curlen !== 0) {
-      if (curlen !== prevlen) {
-        send_code(s, curlen, s.bl_tree);
-        count--;
-      }
-      //Assert(count >= 3 && count <= 6, " 3_6?");
-      send_code(s, REP_3_6, s.bl_tree);
-      send_bits(s, count - 3, 2);
-
-    } else if (count <= 10) {
-      send_code(s, REPZ_3_10, s.bl_tree);
-      send_bits(s, count - 3, 3);
-
-    } else {
-      send_code(s, REPZ_11_138, s.bl_tree);
-      send_bits(s, count - 11, 7);
-    }
-
-    count = 0;
-    prevlen = curlen;
-    if (nextlen === 0) {
-      max_count = 138;
-      min_count = 3;
-
-    } else if (curlen === nextlen) {
-      max_count = 6;
-      min_count = 3;
-
-    } else {
-      max_count = 7;
-      min_count = 4;
-    }
-  }
-}
-
-
-/* ===========================================================================
- * Construct the Huffman tree for the bit lengths and return the index in
- * bl_order of the last bit length code to send.
- */
-function build_bl_tree(s) {
-  var max_blindex;  /* index of last bit length code of non zero freq */
-
-  /* Determine the bit length frequencies for literal and distance trees */
-  scan_tree(s, s.dyn_ltree, s.l_desc.max_code);
-  scan_tree(s, s.dyn_dtree, s.d_desc.max_code);
-
-  /* Build the bit length tree: */
-  build_tree(s, s.bl_desc);
-  /* opt_len now includes the length of the tree representations, except
-   * the lengths of the bit lengths codes and the 5+5+4 bits for the counts.
-   */
-
-  /* Determine the number of bit length codes to send. The pkzip format
-   * requires that at least 4 bit length codes be sent. (appnote.txt says
-   * 3 but the actual value used is 4.)
-   */
-  for (max_blindex = BL_CODES - 1; max_blindex >= 3; max_blindex--) {
-    if (s.bl_tree[bl_order[max_blindex] * 2 + 1]/*.Len*/ !== 0) {
-      break;
-    }
-  }
-  /* Update opt_len to include the bit length tree and counts */
-  s.opt_len += 3 * (max_blindex + 1) + 5 + 5 + 4;
-  //Tracev((stderr, "\ndyn trees: dyn %ld, stat %ld",
-  //        s->opt_len, s->static_len));
-
-  return max_blindex;
-}
-
-
-/* ===========================================================================
- * Send the header for a block using dynamic Huffman trees: the counts, the
- * lengths of the bit length codes, the literal tree and the distance tree.
- * IN assertion: lcodes >= 257, dcodes >= 1, blcodes >= 4.
- */
-function send_all_trees(s, lcodes, dcodes, blcodes)
-//    deflate_state *s;
-//    int lcodes, dcodes, blcodes; /* number of codes for each tree */
-{
-  var rank;                    /* index in bl_order */
-
-  //Assert (lcodes >= 257 && dcodes >= 1 && blcodes >= 4, "not enough codes");
-  //Assert (lcodes <= L_CODES && dcodes <= D_CODES && blcodes <= BL_CODES,
-  //        "too many codes");
-  //Tracev((stderr, "\nbl counts: "));
-  send_bits(s, lcodes - 257, 5); /* not +255 as stated in appnote.txt */
-  send_bits(s, dcodes - 1,   5);
-  send_bits(s, blcodes - 4,  4); /* not -3 as stated in appnote.txt */
-  for (rank = 0; rank < blcodes; rank++) {
-    //Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
-    send_bits(s, s.bl_tree[bl_order[rank] * 2 + 1]/*.Len*/, 3);
-  }
-  //Tracev((stderr, "\nbl tree: sent %ld", s->bits_sent));
-
-  send_tree(s, s.dyn_ltree, lcodes - 1); /* literal tree */
-  //Tracev((stderr, "\nlit tree: sent %ld", s->bits_sent));
-
-  send_tree(s, s.dyn_dtree, dcodes - 1); /* distance tree */
-  //Tracev((stderr, "\ndist tree: sent %ld", s->bits_sent));
-}
-
-
-/* ===========================================================================
- * Check if the data type is TEXT or BINARY, using the following algorithm:
- * - TEXT if the two conditions below are satisfied:
- *    a) There are no non-portable control characters belonging to the
- *       "black list" (0..6, 14..25, 28..31).
- *    b) There is at least one printable character belonging to the
- *       "white list" (9 {TAB}, 10 {LF}, 13 {CR}, 32..255).
- * - BINARY otherwise.
- * - The following partially-portable control characters form a
- *   "gray list" that is ignored in this detection algorithm:
- *   (7 {BEL}, 8 {BS}, 11 {VT}, 12 {FF}, 26 {SUB}, 27 {ESC}).
- * IN assertion: the fields Freq of dyn_ltree are set.
- */
-function detect_data_type(s) {
-  /* black_mask is the bit mask of black-listed bytes
-   * set bits 0..6, 14..25, and 28..31
-   * 0xf3ffc07f = binary 11110011111111111100000001111111
-   */
-  var black_mask = 0xf3ffc07f;
-  var n;
-
-  /* Check for non-textual ("black-listed") bytes. */
-  for (n = 0; n <= 31; n++, black_mask >>>= 1) {
-    if ((black_mask & 1) && (s.dyn_ltree[n * 2]/*.Freq*/ !== 0)) {
-      return Z_BINARY;
-    }
-  }
-
-  /* Check for textual ("white-listed") bytes. */
-  if (s.dyn_ltree[9 * 2]/*.Freq*/ !== 0 || s.dyn_ltree[10 * 2]/*.Freq*/ !== 0 ||
-      s.dyn_ltree[13 * 2]/*.Freq*/ !== 0) {
-    return Z_TEXT;
-  }
-  for (n = 32; n < LITERALS; n++) {
-    if (s.dyn_ltree[n * 2]/*.Freq*/ !== 0) {
-      return Z_TEXT;
-    }
-  }
-
-  /* There are no "black-listed" or "white-listed" bytes:
-   * this stream either is empty or has tolerated ("gray-listed") bytes only.
-   */
-  return Z_BINARY;
-}
-
-
-var static_init_done = false;
-
-/* ===========================================================================
- * Initialize the tree data structures for a new zlib stream.
- */
-function _tr_init(s)
-{
-
-  if (!static_init_done) {
-    tr_static_init();
-    static_init_done = true;
-  }
-
-  s.l_desc  = new TreeDesc(s.dyn_ltree, static_l_desc);
-  s.d_desc  = new TreeDesc(s.dyn_dtree, static_d_desc);
-  s.bl_desc = new TreeDesc(s.bl_tree, static_bl_desc);
-
-  s.bi_buf = 0;
-  s.bi_valid = 0;
-
-  /* Initialize the first block of the first file: */
-  init_block(s);
-}
-
-
-/* ===========================================================================
- * Send a stored block
- */
-function _tr_stored_block(s, buf, stored_len, last)
-//DeflateState *s;
-//charf *buf;       /* input block */
-//ulg stored_len;   /* length of input block */
-//int last;         /* one if this is the last block for a file */
-{
-  send_bits(s, (STORED_BLOCK << 1) + (last ? 1 : 0), 3);    /* send block type */
-  copy_block(s, buf, stored_len, true); /* with header */
-}
-
-
-/* ===========================================================================
- * Send one empty static block to give enough lookahead for inflate.
- * This takes 10 bits, of which 7 may remain in the bit buffer.
- */
-function _tr_align(s) {
-  send_bits(s, STATIC_TREES << 1, 3);
-  send_code(s, END_BLOCK, static_ltree);
-  bi_flush(s);
-}
-
-
-/* ===========================================================================
- * Determine the best encoding for the current block: dynamic trees, static
- * trees or store, and output the encoded block to the zip file.
- */
-function _tr_flush_block(s, buf, stored_len, last)
-//DeflateState *s;
-//charf *buf;       /* input block, or NULL if too old */
-//ulg stored_len;   /* length of input block */
-//int last;         /* one if this is the last block for a file */
-{
-  var opt_lenb, static_lenb;  /* opt_len and static_len in bytes */
-  var max_blindex = 0;        /* index of last bit length code of non zero freq */
-
-  /* Build the Huffman trees unless a stored block is forced */
-  if (s.level > 0) {
-
-    /* Check if the file is binary or text */
-    if (s.strm.data_type === Z_UNKNOWN) {
-      s.strm.data_type = detect_data_type(s);
-    }
-
-    /* Construct the literal and distance trees */
-    build_tree(s, s.l_desc);
-    // Tracev((stderr, "\nlit data: dyn %ld, stat %ld", s->opt_len,
-    //        s->static_len));
-
-    build_tree(s, s.d_desc);
-    // Tracev((stderr, "\ndist data: dyn %ld, stat %ld", s->opt_len,
-    //        s->static_len));
-    /* At this point, opt_len and static_len are the total bit lengths of
-     * the compressed block data, excluding the tree representations.
-     */
-
-    /* Build the bit length tree for the above two trees, and get the index
-     * in bl_order of the last bit length code to send.
-     */
-    max_blindex = build_bl_tree(s);
-
-    /* Determine the best encoding. Compute the block lengths in bytes. */
-    opt_lenb = (s.opt_len + 3 + 7) >>> 3;
-    static_lenb = (s.static_len + 3 + 7) >>> 3;
-
-    // Tracev((stderr, "\nopt %lu(%lu) stat %lu(%lu) stored %lu lit %u ",
-    //        opt_lenb, s->opt_len, static_lenb, s->static_len, stored_len,
-    //        s->last_lit));
-
-    if (static_lenb <= opt_lenb) { opt_lenb = static_lenb; }
-
-  } else {
-    // Assert(buf != (char*)0, "lost buf");
-    opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
-  }
-
-  if ((stored_len + 4 <= opt_lenb) && (buf !== -1)) {
-    /* 4: two words for the lengths */
-
-    /* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
-     * Otherwise we can't have processed more than WSIZE input bytes since
-     * the last block flush, because compression would have been
-     * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
-     * transform a block into a stored block.
-     */
-    _tr_stored_block(s, buf, stored_len, last);
-
-  } else if (s.strategy === Z_FIXED || static_lenb === opt_lenb) {
-
-    send_bits(s, (STATIC_TREES << 1) + (last ? 1 : 0), 3);
-    compress_block(s, static_ltree, static_dtree);
-
-  } else {
-    send_bits(s, (DYN_TREES << 1) + (last ? 1 : 0), 3);
-    send_all_trees(s, s.l_desc.max_code + 1, s.d_desc.max_code + 1, max_blindex + 1);
-    compress_block(s, s.dyn_ltree, s.dyn_dtree);
-  }
-  // Assert (s->compressed_len == s->bits_sent, "bad compressed size");
-  /* The above check is made mod 2^32, for files larger than 512 MB
-   * and uLong implemented on 32 bits.
-   */
-  init_block(s);
-
-  if (last) {
-    bi_windup(s);
-  }
-  // Tracev((stderr,"\ncomprlen %lu(%lu) ", s->compressed_len>>3,
-  //       s->compressed_len-7*last));
-}
-
-/* ===========================================================================
- * Save the match info and tally the frequency counts. Return true if
- * the current block must be flushed.
- */
-function _tr_tally(s, dist, lc)
-//    deflate_state *s;
-//    unsigned dist;  /* distance of matched string */
-//    unsigned lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
-{
-  //var out_length, in_length, dcode;
-
-  s.pending_buf[s.d_buf + s.last_lit * 2]     = (dist >>> 8) & 0xff;
-  s.pending_buf[s.d_buf + s.last_lit * 2 + 1] = dist & 0xff;
-
-  s.pending_buf[s.l_buf + s.last_lit] = lc & 0xff;
-  s.last_lit++;
-
-  if (dist === 0) {
-    /* lc is the unmatched char */
-    s.dyn_ltree[lc * 2]/*.Freq*/++;
-  } else {
-    s.matches++;
-    /* Here, lc is the match length - MIN_MATCH */
-    dist--;             /* dist = match distance - 1 */
-    //Assert((ush)dist < (ush)MAX_DIST(s) &&
-    //       (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
-    //       (ush)d_code(dist) < (ush)D_CODES,  "_tr_tally: bad match");
-
-    s.dyn_ltree[(_length_code[lc] + LITERALS + 1) * 2]/*.Freq*/++;
-    s.dyn_dtree[d_code(dist) * 2]/*.Freq*/++;
-  }
+        here = dcode[hold & dmask];
+
+        dodist:
+        for (;;) { // goto emulation
+          op = here >>> 24/*here.bits*/;
+          hold >>>= op;
+          bits -= op;
+          op = (here >>> 16) & 0xff/*here.op*/;
+
+          if (op & 16) {                      /* distance base */
+            dist = here & 0xffff/*here.val*/;
+            op &= 15;                       /* number of extra bits */
+            if (bits < op) {
+              hold += input[_in++] << bits;
+              bits += 8;
+              if (bits < op) {
+                hold += input[_in++] << bits;
+                bits += 8;
+              }
+            }
+            dist += hold & ((1 << op) - 1);
+//#ifdef INFLATE_STRICT
+            if (dist > dmax) {
+              strm.msg = 'invalid distance too far back';
+              state.mode = BAD;
+              break top;
+            }
+//#endif
+            hold >>>= op;
+            bits -= op;
+            //Tracevv((stderr, "inflate:         distance %u\n", dist));
+            op = _out - beg;                /* max distance in output */
+            if (dist > op) {                /* see if copy from window */
+              op = dist - op;               /* distance back in window */
+              if (op > whave) {
+                if (state.sane) {
+                  strm.msg = 'invalid distance too far back';
+                  state.mode = BAD;
+                  break top;
+                }
 
 // (!) This block is disabled in zlib defailts,
 // don't enable it for binary compatibility
-
-//#ifdef TRUNCATE_BLOCK
-//  /* Try to guess if it is profitable to stop the current block here */
-//  if ((s.last_lit & 0x1fff) === 0 && s.level > 2) {
-//    /* Compute an upper bound for the compressed length */
-//    out_length = s.last_lit*8;
-//    in_length = s.strstart - s.block_start;
-//
-//    for (dcode = 0; dcode < D_CODES; dcode++) {
-//      out_length += s.dyn_dtree[dcode*2]/*.Freq*/ * (5 + extra_dbits[dcode]);
-//    }
-//    out_length >>>= 3;
-//    //Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
-//    //       s->last_lit, in_length, out_length,
-//    //       100L - out_length*100L/in_length));
-//    if (s.matches < (s.last_lit>>1)/*int /2*/ && out_length < (in_length>>1)/*int /2*/) {
-//      return true;
-//    }
-//  }
+//#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
+//                if (len <= op - whave) {
+//                  do {
+//                    output[_out++] = 0;
+//                  } while (--len);
+//                  continue top;
+//                }
+//                len -= op - whave;
+//                do {
+//                  output[_out++] = 0;
+//                } while (--op > whave);
+//                if (op === 0) {
+//                  from = _out - dist;
+//                  do {
+//                    output[_out++] = output[from++];
+//                  } while (--len);
+//                  continue top;
+//                }
 //#endif
+              }
+              from = 0; // window index
+              from_source = s_window;
+              if (wnext === 0) {           /* very common case */
+                from += wsize - op;
+                if (op < len) {         /* some from window */
+                  len -= op;
+                  do {
+                    output[_out++] = s_window[from++];
+                  } while (--op);
+                  from = _out - dist;  /* rest from output */
+                  from_source = output;
+                }
+              }
+              else if (wnext < op) {      /* wrap around window */
+                from += wsize + wnext - op;
+                op -= wnext;
+                if (op < len) {         /* some from end of window */
+                  len -= op;
+                  do {
+                    output[_out++] = s_window[from++];
+                  } while (--op);
+                  from = 0;
+                  if (wnext < len) {  /* some from start of window */
+                    op = wnext;
+                    len -= op;
+                    do {
+                      output[_out++] = s_window[from++];
+                    } while (--op);
+                    from = _out - dist;      /* rest from output */
+                    from_source = output;
+                  }
+                }
+              }
+              else {                      /* contiguous in window */
+                from += wnext - op;
+                if (op < len) {         /* some from window */
+                  len -= op;
+                  do {
+                    output[_out++] = s_window[from++];
+                  } while (--op);
+                  from = _out - dist;  /* rest from output */
+                  from_source = output;
+                }
+              }
+              while (len > 2) {
+                output[_out++] = from_source[from++];
+                output[_out++] = from_source[from++];
+                output[_out++] = from_source[from++];
+                len -= 3;
+              }
+              if (len) {
+                output[_out++] = from_source[from++];
+                if (len > 1) {
+                  output[_out++] = from_source[from++];
+                }
+              }
+            }
+            else {
+              from = _out - dist;          /* copy direct from output */
+              do {                        /* minimum length is three */
+                output[_out++] = output[from++];
+                output[_out++] = output[from++];
+                output[_out++] = output[from++];
+                len -= 3;
+              } while (len > 2);
+              if (len) {
+                output[_out++] = output[from++];
+                if (len > 1) {
+                  output[_out++] = output[from++];
+                }
+              }
+            }
+          }
+          else if ((op & 64) === 0) {          /* 2nd level distance code */
+            here = dcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
+            continue dodist;
+          }
+          else {
+            strm.msg = 'invalid distance code';
+            state.mode = BAD;
+            break top;
+          }
 
-  return (s.last_lit === s.lit_bufsize - 1);
-  /* We avoid equality with lit_bufsize because of wraparound at 64K
-   * on 16 bit machines and because stored blocks are restricted to
-   * 64K-1 bytes.
-   */
-}
-
-exports._tr_init  = _tr_init;
-exports._tr_stored_block = _tr_stored_block;
-exports._tr_flush_block  = _tr_flush_block;
-exports._tr_tally = _tr_tally;
-exports._tr_align = _tr_align;
-
-
-/***/ }),
-/* 35 */
-/*!*******************************************!*\
-  !*** ../node_modules/pako/lib/inflate.js ***!
-  \*******************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-var zlib_inflate = __webpack_require__(/*! ./zlib/inflate */ 36);
-var utils        = __webpack_require__(/*! ./utils/common */ 5);
-var strings      = __webpack_require__(/*! ./utils/strings */ 19);
-var c            = __webpack_require__(/*! ./zlib/constants */ 21);
-var msg          = __webpack_require__(/*! ./zlib/messages */ 12);
-var ZStream      = __webpack_require__(/*! ./zlib/zstream */ 20);
-var GZheader     = __webpack_require__(/*! ./zlib/gzheader */ 39);
-
-var toString = Object.prototype.toString;
-
-/**
- * class Inflate
- *
- * Generic JS-style wrapper for zlib calls. If you don't need
- * streaming behaviour - use more simple functions: [[inflate]]
- * and [[inflateRaw]].
- **/
-
-/* internal
- * inflate.chunks -> Array
- *
- * Chunks of output data, if [[Inflate#onData]] not overriden.
- **/
-
-/**
- * Inflate.result -> Uint8Array|Array|String
- *
- * Uncompressed result, generated by default [[Inflate#onData]]
- * and [[Inflate#onEnd]] handlers. Filled after you push last chunk
- * (call [[Inflate#push]] with `Z_FINISH` / `true` param) or if you
- * push a chunk with explicit flush (call [[Inflate#push]] with
- * `Z_SYNC_FLUSH` param).
- **/
-
-/**
- * Inflate.err -> Number
- *
- * Error code after inflate finished. 0 (Z_OK) on success.
- * Should be checked if broken data possible.
- **/
-
-/**
- * Inflate.msg -> String
- *
- * Error message, if [[Inflate.err]] != 0
- **/
-
-
-/**
- * new Inflate(options)
- * - options (Object): zlib inflate options.
- *
- * Creates new inflator instance with specified params. Throws exception
- * on bad params. Supported options:
- *
- * - `windowBits`
- * - `dictionary`
- *
- * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
- * for more information on these.
- *
- * Additional options, for internal needs:
- *
- * - `chunkSize` - size of generated data chunks (16K by default)
- * - `raw` (Boolean) - do raw inflate
- * - `to` (String) - if equal to 'string', then result will be converted
- *   from utf8 to utf16 (javascript) string. When string output requested,
- *   chunk length can differ from `chunkSize`, depending on content.
- *
- * By default, when no options set, autodetect deflate/gzip data format via
- * wrapper header.
- *
- * ##### Example:
- *
- * ```javascript
- * var pako = require('pako')
- *   , chunk1 = Uint8Array([1,2,3,4,5,6,7,8,9])
- *   , chunk2 = Uint8Array([10,11,12,13,14,15,16,17,18,19]);
- *
- * var inflate = new pako.Inflate({ level: 3});
- *
- * inflate.push(chunk1, false);
- * inflate.push(chunk2, true);  // true -> last chunk
- *
- * if (inflate.err) { throw new Error(inflate.err); }
- *
- * console.log(inflate.result);
- * ```
- **/
-function Inflate(options) {
-  if (!(this instanceof Inflate)) return new Inflate(options);
-
-  this.options = utils.assign({
-    chunkSize: 16384,
-    windowBits: 0,
-    to: ''
-  }, options || {});
-
-  var opt = this.options;
-
-  // Force window size for `raw` data, if not set directly,
-  // because we have no header for autodetect.
-  if (opt.raw && (opt.windowBits >= 0) && (opt.windowBits < 16)) {
-    opt.windowBits = -opt.windowBits;
-    if (opt.windowBits === 0) { opt.windowBits = -15; }
-  }
-
-  // If `windowBits` not defined (and mode not raw) - set autodetect flag for gzip/deflate
-  if ((opt.windowBits >= 0) && (opt.windowBits < 16) &&
-      !(options && options.windowBits)) {
-    opt.windowBits += 32;
-  }
-
-  // Gzip header has no info about windows size, we can do autodetect only
-  // for deflate. So, if window size not set, force it to max when gzip possible
-  if ((opt.windowBits > 15) && (opt.windowBits < 48)) {
-    // bit 3 (16) -> gzipped data
-    // bit 4 (32) -> autodetect gzip/deflate
-    if ((opt.windowBits & 15) === 0) {
-      opt.windowBits |= 15;
-    }
-  }
-
-  this.err    = 0;      // error code, if happens (0 = Z_OK)
-  this.msg    = '';     // error message
-  this.ended  = false;  // used to avoid multiple onEnd() calls
-  this.chunks = [];     // chunks of compressed data
-
-  this.strm   = new ZStream();
-  this.strm.avail_out = 0;
-
-  var status  = zlib_inflate.inflateInit2(
-    this.strm,
-    opt.windowBits
-  );
-
-  if (status !== c.Z_OK) {
-    throw new Error(msg[status]);
-  }
-
-  this.header = new GZheader();
-
-  zlib_inflate.inflateGetHeader(this.strm, this.header);
-}
-
-/**
- * Inflate#push(data[, mode]) -> Boolean
- * - data (Uint8Array|Array|ArrayBuffer|String): input data
- * - mode (Number|Boolean): 0..6 for corresponding Z_NO_FLUSH..Z_TREE modes.
- *   See constants. Skipped or `false` means Z_NO_FLUSH, `true` meansh Z_FINISH.
- *
- * Sends input data to inflate pipe, generating [[Inflate#onData]] calls with
- * new output chunks. Returns `true` on success. The last data block must have
- * mode Z_FINISH (or `true`). That will flush internal pending buffers and call
- * [[Inflate#onEnd]]. For interim explicit flushes (without ending the stream) you
- * can use mode Z_SYNC_FLUSH, keeping the decompression context.
- *
- * On fail call [[Inflate#onEnd]] with error code and return false.
- *
- * We strongly recommend to use `Uint8Array` on input for best speed (output
- * format is detected automatically). Also, don't skip last param and always
- * use the same type in your code (boolean or number). That will improve JS speed.
- *
- * For regular `Array`-s make sure all elements are [0..255].
- *
- * ##### Example
- *
- * ```javascript
- * push(chunk, false); // push one of data chunks
- * ...
- * push(chunk, true);  // push last chunk
- * ```
- **/
-Inflate.prototype.push = function (data, mode) {
-  var strm = this.strm;
-  var chunkSize = this.options.chunkSize;
-  var dictionary = this.options.dictionary;
-  var status, _mode;
-  var next_out_utf8, tail, utf8str;
-  var dict;
-
-  // Flag to properly process Z_BUF_ERROR on testing inflate call
-  // when we check that all output data was flushed.
-  var allowBufError = false;
-
-  if (this.ended) { return false; }
-  _mode = (mode === ~~mode) ? mode : ((mode === true) ? c.Z_FINISH : c.Z_NO_FLUSH);
-
-  // Convert data if needed
-  if (typeof data === 'string') {
-    // Only binary strings can be decompressed on practice
-    strm.input = strings.binstring2buf(data);
-  } else if (toString.call(data) === '[object ArrayBuffer]') {
-    strm.input = new Uint8Array(data);
-  } else {
-    strm.input = data;
-  }
-
-  strm.next_in = 0;
-  strm.avail_in = strm.input.length;
-
-  do {
-    if (strm.avail_out === 0) {
-      strm.output = new utils.Buf8(chunkSize);
-      strm.next_out = 0;
-      strm.avail_out = chunkSize;
-    }
-
-    status = zlib_inflate.inflate(strm, c.Z_NO_FLUSH);    /* no bad return value */
-
-    if (status === c.Z_NEED_DICT && dictionary) {
-      // Convert data if needed
-      if (typeof dictionary === 'string') {
-        dict = strings.string2buf(dictionary);
-      } else if (toString.call(dictionary) === '[object ArrayBuffer]') {
-        dict = new Uint8Array(dictionary);
-      } else {
-        dict = dictionary;
-      }
-
-      status = zlib_inflate.inflateSetDictionary(this.strm, dict);
-
-    }
-
-    if (status === c.Z_BUF_ERROR && allowBufError === true) {
-      status = c.Z_OK;
-      allowBufError = false;
-    }
-
-    if (status !== c.Z_STREAM_END && status !== c.Z_OK) {
-      this.onEnd(status);
-      this.ended = true;
-      return false;
-    }
-
-    if (strm.next_out) {
-      if (strm.avail_out === 0 || status === c.Z_STREAM_END || (strm.avail_in === 0 && (_mode === c.Z_FINISH || _mode === c.Z_SYNC_FLUSH))) {
-
-        if (this.options.to === 'string') {
-
-          next_out_utf8 = strings.utf8border(strm.output, strm.next_out);
-
-          tail = strm.next_out - next_out_utf8;
-          utf8str = strings.buf2string(strm.output, next_out_utf8);
-
-          // move tail
-          strm.next_out = tail;
-          strm.avail_out = chunkSize - tail;
-          if (tail) { utils.arraySet(strm.output, strm.output, next_out_utf8, tail, 0); }
-
-          this.onData(utf8str);
-
-        } else {
-          this.onData(utils.shrinkBuf(strm.output, strm.next_out));
+          break; // need to emulate goto via "continue"
         }
       }
+      else if ((op & 64) === 0) {              /* 2nd level length code */
+        here = lcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
+        continue dolen;
+      }
+      else if (op & 32) {                     /* end-of-block */
+        //Tracevv((stderr, "inflate:         end of block\n"));
+        state.mode = TYPE;
+        break top;
+      }
+      else {
+        strm.msg = 'invalid literal/length code';
+        state.mode = BAD;
+        break top;
+      }
+
+      break; // need to emulate goto via "continue"
     }
+  } while (_in < last && _out < end);
 
-    // When no more input data, we should check that internal inflate buffers
-    // are flushed. The only way to do it when avail_out = 0 - run one more
-    // inflate pass. But if output data not exists, inflate return Z_BUF_ERROR.
-    // Here we set flag to process this error properly.
-    //
-    // NOTE. Deflate does not return error in this case and does not needs such
-    // logic.
-    if (strm.avail_in === 0 && strm.avail_out === 0) {
-      allowBufError = true;
-    }
+  /* return unused bytes (on entry, bits < 8, so in won't go too far back) */
+  len = bits >> 3;
+  _in -= len;
+  bits -= len << 3;
+  hold &= (1 << bits) - 1;
 
-  } while ((strm.avail_in > 0 || strm.avail_out === 0) && status !== c.Z_STREAM_END);
-
-  if (status === c.Z_STREAM_END) {
-    _mode = c.Z_FINISH;
-  }
-
-  // Finalize on the last chunk.
-  if (_mode === c.Z_FINISH) {
-    status = zlib_inflate.inflateEnd(this.strm);
-    this.onEnd(status);
-    this.ended = true;
-    return status === c.Z_OK;
-  }
-
-  // callback interim results if Z_SYNC_FLUSH.
-  if (_mode === c.Z_SYNC_FLUSH) {
-    this.onEnd(c.Z_OK);
-    strm.avail_out = 0;
-    return true;
-  }
-
-  return true;
+  /* update state and return */
+  strm.next_in = _in;
+  strm.next_out = _out;
+  strm.avail_in = (_in < last ? 5 + (last - _in) : 5 - (_in - last));
+  strm.avail_out = (_out < end ? 257 + (end - _out) : 257 - (_out - end));
+  state.hold = hold;
+  state.bits = bits;
+  return;
 };
-
-
-/**
- * Inflate#onData(chunk) -> Void
- * - chunk (Uint8Array|Array|String): ouput data. Type of array depends
- *   on js engine support. When string output requested, each chunk
- *   will be string.
- *
- * By default, stores data blocks in `chunks[]` property and glue
- * those in `onEnd`. Override this handler, if you need another behaviour.
- **/
-Inflate.prototype.onData = function (chunk) {
-  this.chunks.push(chunk);
-};
-
-
-/**
- * Inflate#onEnd(status) -> Void
- * - status (Number): inflate status. 0 (Z_OK) on success,
- *   other if not.
- *
- * Called either after you tell inflate that the input stream is
- * complete (Z_FINISH) or should be flushed (Z_SYNC_FLUSH)
- * or if an error happened. By default - join collected chunks,
- * free memory and fill `results` / `err` properties.
- **/
-Inflate.prototype.onEnd = function (status) {
-  // On success - join
-  if (status === c.Z_OK) {
-    if (this.options.to === 'string') {
-      // Glue & convert here, until we teach pako to send
-      // utf8 alligned strings to onData
-      this.result = this.chunks.join('');
-    } else {
-      this.result = utils.flattenChunks(this.chunks);
-    }
-  }
-  this.chunks = [];
-  this.err = status;
-  this.msg = this.strm.msg;
-};
-
-
-/**
- * inflate(data[, options]) -> Uint8Array|Array|String
- * - data (Uint8Array|Array|String): input data to decompress.
- * - options (Object): zlib inflate options.
- *
- * Decompress `data` with inflate/ungzip and `options`. Autodetect
- * format via wrapper header by default. That's why we don't provide
- * separate `ungzip` method.
- *
- * Supported options are:
- *
- * - windowBits
- *
- * [http://zlib.net/manual.html#Advanced](http://zlib.net/manual.html#Advanced)
- * for more information.
- *
- * Sugar (options):
- *
- * - `raw` (Boolean) - say that we work with raw stream, if you don't wish to specify
- *   negative windowBits implicitly.
- * - `to` (String) - if equal to 'string', then result will be converted
- *   from utf8 to utf16 (javascript) string. When string output requested,
- *   chunk length can differ from `chunkSize`, depending on content.
- *
- *
- * ##### Example:
- *
- * ```javascript
- * var pako = require('pako')
- *   , input = pako.deflate([1,2,3,4,5,6,7,8,9])
- *   , output;
- *
- * try {
- *   output = pako.inflate(input);
- * } catch (err)
- *   console.log(err);
- * }
- * ```
- **/
-function inflate(input, options) {
-  var inflator = new Inflate(options);
-
-  inflator.push(input, true);
-
-  // That will never happens, if you don't cheat with options :)
-  if (inflator.err) { throw inflator.msg; }
-
-  return inflator.result;
-}
-
-
-/**
- * inflateRaw(data[, options]) -> Uint8Array|Array|String
- * - data (Uint8Array|Array|String): input data to decompress.
- * - options (Object): zlib inflate options.
- *
- * The same as [[inflate]], but creates raw data, without wrapper
- * (header and adler32 crc).
- **/
-function inflateRaw(input, options) {
-  options = options || {};
-  options.raw = true;
-  return inflate(input, options);
-}
-
-
-/**
- * ungzip(data[, options]) -> Uint8Array|Array|String
- * - data (Uint8Array|Array|String): input data to decompress.
- * - options (Object): zlib inflate options.
- *
- * Just shortcut to [[inflate]], because it autodetects format
- * by header.content. Done for convenience.
- **/
-
-
-exports.Inflate = Inflate;
-exports.inflate = inflate;
-exports.inflateRaw = inflateRaw;
-exports.ungzip  = inflate;
 
 
 /***/ }),
-/* 36 */
+
+/***/ "../node_modules/pako/lib/zlib/inflate.js":
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/inflate.js ***!
   \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! default exports */
+/*! export inflate [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateEnd [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateGetHeader [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateInfo [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateInit [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateInit2 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateReset [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateReset2 [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateResetKeep [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export inflateSetDictionary [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 
-var utils         = __webpack_require__(/*! ../utils/common */ 5);
-var adler32       = __webpack_require__(/*! ./adler32 */ 17);
-var crc32         = __webpack_require__(/*! ./crc32 */ 18);
-var inflate_fast  = __webpack_require__(/*! ./inffast */ 37);
-var inflate_table = __webpack_require__(/*! ./inftrees */ 38);
+var utils         = __webpack_require__(/*! ../utils/common */ "../node_modules/pako/lib/utils/common.js");
+var adler32       = __webpack_require__(/*! ./adler32 */ "../node_modules/pako/lib/zlib/adler32.js");
+var crc32         = __webpack_require__(/*! ./crc32 */ "../node_modules/pako/lib/zlib/crc32.js");
+var inflate_fast  = __webpack_require__(/*! ./inffast */ "../node_modules/pako/lib/zlib/inffast.js");
+var inflate_table = __webpack_require__(/*! ./inftrees */ "../node_modules/pako/lib/zlib/inftrees.js");
 
 var CODES = 0;
 var LENS = 1;
@@ -11310,359 +11992,21 @@ exports.inflateUndermine = inflateUndermine;
 
 
 /***/ }),
-/* 37 */
-/*!************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/inffast.js ***!
-  \************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-
-
-// See state defs from inflate.js
-var BAD = 30;       /* got a data error -- remain here until reset */
-var TYPE = 12;      /* i: waiting for type bits, including last-flag bit */
-
-/*
-   Decode literal, length, and distance codes and write out the resulting
-   literal and match bytes until either not enough input or output is
-   available, an end-of-block is encountered, or a data error is encountered.
-   When large enough input and output buffers are supplied to inflate(), for
-   example, a 16K input buffer and a 64K output buffer, more than 95% of the
-   inflate execution time is spent in this routine.
-
-   Entry assumptions:
-
-        state.mode === LEN
-        strm.avail_in >= 6
-        strm.avail_out >= 258
-        start >= strm.avail_out
-        state.bits < 8
-
-   On return, state.mode is one of:
-
-        LEN -- ran out of enough output space or enough available input
-        TYPE -- reached end of block code, inflate() to interpret next block
-        BAD -- error in block data
-
-   Notes:
-
-    - The maximum input bits used by a length/distance pair is 15 bits for the
-      length code, 5 bits for the length extra, 15 bits for the distance code,
-      and 13 bits for the distance extra.  This totals 48 bits, or six bytes.
-      Therefore if strm.avail_in >= 6, then there is enough input to avoid
-      checking for available input while decoding.
-
-    - The maximum bytes that a single length/distance pair can output is 258
-      bytes, which is the maximum length that can be coded.  inflate_fast()
-      requires strm.avail_out >= 258 for each loop to avoid checking for
-      output space.
- */
-module.exports = function inflate_fast(strm, start) {
-  var state;
-  var _in;                    /* local strm.input */
-  var last;                   /* have enough input while in < last */
-  var _out;                   /* local strm.output */
-  var beg;                    /* inflate()'s initial strm.output */
-  var end;                    /* while out < end, enough space available */
-//#ifdef INFLATE_STRICT
-  var dmax;                   /* maximum distance from zlib header */
-//#endif
-  var wsize;                  /* window size or zero if not using window */
-  var whave;                  /* valid bytes in the window */
-  var wnext;                  /* window write index */
-  // Use `s_window` instead `window`, avoid conflict with instrumentation tools
-  var s_window;               /* allocated sliding window, if wsize != 0 */
-  var hold;                   /* local strm.hold */
-  var bits;                   /* local strm.bits */
-  var lcode;                  /* local strm.lencode */
-  var dcode;                  /* local strm.distcode */
-  var lmask;                  /* mask for first level of length codes */
-  var dmask;                  /* mask for first level of distance codes */
-  var here;                   /* retrieved table entry */
-  var op;                     /* code bits, operation, extra bits, or */
-                              /*  window position, window bytes to copy */
-  var len;                    /* match length, unused bytes */
-  var dist;                   /* match distance */
-  var from;                   /* where to copy match from */
-  var from_source;
-
-
-  var input, output; // JS specific, because we have no pointers
-
-  /* copy state to local variables */
-  state = strm.state;
-  //here = state.here;
-  _in = strm.next_in;
-  input = strm.input;
-  last = _in + (strm.avail_in - 5);
-  _out = strm.next_out;
-  output = strm.output;
-  beg = _out - (start - strm.avail_out);
-  end = _out + (strm.avail_out - 257);
-//#ifdef INFLATE_STRICT
-  dmax = state.dmax;
-//#endif
-  wsize = state.wsize;
-  whave = state.whave;
-  wnext = state.wnext;
-  s_window = state.window;
-  hold = state.hold;
-  bits = state.bits;
-  lcode = state.lencode;
-  dcode = state.distcode;
-  lmask = (1 << state.lenbits) - 1;
-  dmask = (1 << state.distbits) - 1;
-
-
-  /* decode literals and length/distances until end-of-block or not enough
-     input data or output space */
-
-  top:
-  do {
-    if (bits < 15) {
-      hold += input[_in++] << bits;
-      bits += 8;
-      hold += input[_in++] << bits;
-      bits += 8;
-    }
-
-    here = lcode[hold & lmask];
-
-    dolen:
-    for (;;) { // Goto emulation
-      op = here >>> 24/*here.bits*/;
-      hold >>>= op;
-      bits -= op;
-      op = (here >>> 16) & 0xff/*here.op*/;
-      if (op === 0) {                          /* literal */
-        //Tracevv((stderr, here.val >= 0x20 && here.val < 0x7f ?
-        //        "inflate:         literal '%c'\n" :
-        //        "inflate:         literal 0x%02x\n", here.val));
-        output[_out++] = here & 0xffff/*here.val*/;
-      }
-      else if (op & 16) {                     /* length base */
-        len = here & 0xffff/*here.val*/;
-        op &= 15;                           /* number of extra bits */
-        if (op) {
-          if (bits < op) {
-            hold += input[_in++] << bits;
-            bits += 8;
-          }
-          len += hold & ((1 << op) - 1);
-          hold >>>= op;
-          bits -= op;
-        }
-        //Tracevv((stderr, "inflate:         length %u\n", len));
-        if (bits < 15) {
-          hold += input[_in++] << bits;
-          bits += 8;
-          hold += input[_in++] << bits;
-          bits += 8;
-        }
-        here = dcode[hold & dmask];
-
-        dodist:
-        for (;;) { // goto emulation
-          op = here >>> 24/*here.bits*/;
-          hold >>>= op;
-          bits -= op;
-          op = (here >>> 16) & 0xff/*here.op*/;
-
-          if (op & 16) {                      /* distance base */
-            dist = here & 0xffff/*here.val*/;
-            op &= 15;                       /* number of extra bits */
-            if (bits < op) {
-              hold += input[_in++] << bits;
-              bits += 8;
-              if (bits < op) {
-                hold += input[_in++] << bits;
-                bits += 8;
-              }
-            }
-            dist += hold & ((1 << op) - 1);
-//#ifdef INFLATE_STRICT
-            if (dist > dmax) {
-              strm.msg = 'invalid distance too far back';
-              state.mode = BAD;
-              break top;
-            }
-//#endif
-            hold >>>= op;
-            bits -= op;
-            //Tracevv((stderr, "inflate:         distance %u\n", dist));
-            op = _out - beg;                /* max distance in output */
-            if (dist > op) {                /* see if copy from window */
-              op = dist - op;               /* distance back in window */
-              if (op > whave) {
-                if (state.sane) {
-                  strm.msg = 'invalid distance too far back';
-                  state.mode = BAD;
-                  break top;
-                }
-
-// (!) This block is disabled in zlib defailts,
-// don't enable it for binary compatibility
-//#ifdef INFLATE_ALLOW_INVALID_DISTANCE_TOOFAR_ARRR
-//                if (len <= op - whave) {
-//                  do {
-//                    output[_out++] = 0;
-//                  } while (--len);
-//                  continue top;
-//                }
-//                len -= op - whave;
-//                do {
-//                  output[_out++] = 0;
-//                } while (--op > whave);
-//                if (op === 0) {
-//                  from = _out - dist;
-//                  do {
-//                    output[_out++] = output[from++];
-//                  } while (--len);
-//                  continue top;
-//                }
-//#endif
-              }
-              from = 0; // window index
-              from_source = s_window;
-              if (wnext === 0) {           /* very common case */
-                from += wsize - op;
-                if (op < len) {         /* some from window */
-                  len -= op;
-                  do {
-                    output[_out++] = s_window[from++];
-                  } while (--op);
-                  from = _out - dist;  /* rest from output */
-                  from_source = output;
-                }
-              }
-              else if (wnext < op) {      /* wrap around window */
-                from += wsize + wnext - op;
-                op -= wnext;
-                if (op < len) {         /* some from end of window */
-                  len -= op;
-                  do {
-                    output[_out++] = s_window[from++];
-                  } while (--op);
-                  from = 0;
-                  if (wnext < len) {  /* some from start of window */
-                    op = wnext;
-                    len -= op;
-                    do {
-                      output[_out++] = s_window[from++];
-                    } while (--op);
-                    from = _out - dist;      /* rest from output */
-                    from_source = output;
-                  }
-                }
-              }
-              else {                      /* contiguous in window */
-                from += wnext - op;
-                if (op < len) {         /* some from window */
-                  len -= op;
-                  do {
-                    output[_out++] = s_window[from++];
-                  } while (--op);
-                  from = _out - dist;  /* rest from output */
-                  from_source = output;
-                }
-              }
-              while (len > 2) {
-                output[_out++] = from_source[from++];
-                output[_out++] = from_source[from++];
-                output[_out++] = from_source[from++];
-                len -= 3;
-              }
-              if (len) {
-                output[_out++] = from_source[from++];
-                if (len > 1) {
-                  output[_out++] = from_source[from++];
-                }
-              }
-            }
-            else {
-              from = _out - dist;          /* copy direct from output */
-              do {                        /* minimum length is three */
-                output[_out++] = output[from++];
-                output[_out++] = output[from++];
-                output[_out++] = output[from++];
-                len -= 3;
-              } while (len > 2);
-              if (len) {
-                output[_out++] = output[from++];
-                if (len > 1) {
-                  output[_out++] = output[from++];
-                }
-              }
-            }
-          }
-          else if ((op & 64) === 0) {          /* 2nd level distance code */
-            here = dcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
-            continue dodist;
-          }
-          else {
-            strm.msg = 'invalid distance code';
-            state.mode = BAD;
-            break top;
-          }
-
-          break; // need to emulate goto via "continue"
-        }
-      }
-      else if ((op & 64) === 0) {              /* 2nd level length code */
-        here = lcode[(here & 0xffff)/*here.val*/ + (hold & ((1 << op) - 1))];
-        continue dolen;
-      }
-      else if (op & 32) {                     /* end-of-block */
-        //Tracevv((stderr, "inflate:         end of block\n"));
-        state.mode = TYPE;
-        break top;
-      }
-      else {
-        strm.msg = 'invalid literal/length code';
-        state.mode = BAD;
-        break top;
-      }
-
-      break; // need to emulate goto via "continue"
-    }
-  } while (_in < last && _out < end);
-
-  /* return unused bytes (on entry, bits < 8, so in won't go too far back) */
-  len = bits >> 3;
-  _in -= len;
-  bits -= len << 3;
-  hold &= (1 << bits) - 1;
-
-  /* update state and return */
-  strm.next_in = _in;
-  strm.next_out = _out;
-  strm.avail_in = (_in < last ? 5 + (last - _in) : 5 - (_in - last));
-  strm.avail_out = (_out < end ? 257 + (end - _out) : 257 - (_out - end));
-  state.hold = hold;
-  state.bits = bits;
-  return;
-};
-
-
-/***/ }),
-/* 38 */
+/***/ "../node_modules/pako/lib/zlib/inftrees.js":
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/zlib/inftrees.js ***!
   \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 37:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 
 
 
-var utils = __webpack_require__(/*! ../utils/common */ 5);
+var utils = __webpack_require__(/*! ../utils/common */ "../node_modules/pako/lib/utils/common.js");
 
 var MAXBITS = 15;
 var ENOUGH_LENS = 852;
@@ -11989,72 +12333,1311 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
 
 
 /***/ }),
-/* 39 */
+
+/***/ "../node_modules/pako/lib/zlib/messages.js":
 /*!*************************************************!*\
-  !*** ../node_modules/pako/lib/zlib/gzheader.js ***!
+  !*** ../node_modules/pako/lib/zlib/messages.js ***!
   \*************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 3:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = {
+  2:      'need dictionary',     /* Z_NEED_DICT       2  */
+  1:      'stream end',          /* Z_STREAM_END      1  */
+  0:      '',                    /* Z_OK              0  */
+  '-1':   'file error',          /* Z_ERRNO         (-1) */
+  '-2':   'stream error',        /* Z_STREAM_ERROR  (-2) */
+  '-3':   'data error',          /* Z_DATA_ERROR    (-3) */
+  '-4':   'insufficient memory', /* Z_MEM_ERROR     (-4) */
+  '-5':   'buffer error',        /* Z_BUF_ERROR     (-5) */
+  '-6':   'incompatible version' /* Z_VERSION_ERROR (-6) */
+};
+
+
+/***/ }),
+
+/***/ "../node_modules/pako/lib/zlib/trees.js":
+/*!**********************************************!*\
+  !*** ../node_modules/pako/lib/zlib/trees.js ***!
+  \**********************************************/
+/*! default exports */
+/*! export _tr_align [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export _tr_flush_block [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export _tr_init [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export _tr_stored_block [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export _tr_tally [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 
 
-function GZheader() {
-  /* true if compressed data believed to be text */
-  this.text       = 0;
-  /* modification time */
-  this.time       = 0;
-  /* extra flags (not used when writing a gzip file) */
-  this.xflags     = 0;
-  /* operating system */
-  this.os         = 0;
-  /* pointer to extra field or Z_NULL if none */
-  this.extra      = null;
-  /* extra field length (valid if extra != Z_NULL) */
-  this.extra_len  = 0; // Actually, we don't need it in JS,
-                       // but leave for few code modifications
+var utils = __webpack_require__(/*! ../utils/common */ "../node_modules/pako/lib/utils/common.js");
 
-  //
-  // Setup limits is not necessary because in js we should not preallocate memory
-  // for inflate use constant limit in 65536 bytes
-  //
+/* Public constants ==========================================================*/
+/* ===========================================================================*/
 
-  /* space at extra (only when reading header) */
-  // this.extra_max  = 0;
-  /* pointer to zero-terminated file name or Z_NULL */
-  this.name       = '';
-  /* space at name (only when reading header) */
-  // this.name_max   = 0;
-  /* pointer to zero-terminated comment or Z_NULL */
-  this.comment    = '';
-  /* space at comment (only when reading header) */
-  // this.comm_max   = 0;
-  /* true if there was or will be a header crc */
-  this.hcrc       = 0;
-  /* true when done reading gzip header (not used when writing a gzip file) */
-  this.done       = false;
+
+//var Z_FILTERED          = 1;
+//var Z_HUFFMAN_ONLY      = 2;
+//var Z_RLE               = 3;
+var Z_FIXED               = 4;
+//var Z_DEFAULT_STRATEGY  = 0;
+
+/* Possible values of the data_type field (though see inflate()) */
+var Z_BINARY              = 0;
+var Z_TEXT                = 1;
+//var Z_ASCII             = 1; // = Z_TEXT
+var Z_UNKNOWN             = 2;
+
+/*============================================================================*/
+
+
+function zero(buf) { var len = buf.length; while (--len >= 0) { buf[len] = 0; } }
+
+// From zutil.h
+
+var STORED_BLOCK = 0;
+var STATIC_TREES = 1;
+var DYN_TREES    = 2;
+/* The three kinds of block type */
+
+var MIN_MATCH    = 3;
+var MAX_MATCH    = 258;
+/* The minimum and maximum match lengths */
+
+// From deflate.h
+/* ===========================================================================
+ * Internal compression state.
+ */
+
+var LENGTH_CODES  = 29;
+/* number of length codes, not counting the special END_BLOCK code */
+
+var LITERALS      = 256;
+/* number of literal bytes 0..255 */
+
+var L_CODES       = LITERALS + 1 + LENGTH_CODES;
+/* number of Literal or Length codes, including the END_BLOCK code */
+
+var D_CODES       = 30;
+/* number of distance codes */
+
+var BL_CODES      = 19;
+/* number of codes used to transfer the bit lengths */
+
+var HEAP_SIZE     = 2 * L_CODES + 1;
+/* maximum heap size */
+
+var MAX_BITS      = 15;
+/* All codes must not exceed MAX_BITS bits */
+
+var Buf_size      = 16;
+/* size of bit buffer in bi_buf */
+
+
+/* ===========================================================================
+ * Constants
+ */
+
+var MAX_BL_BITS = 7;
+/* Bit length codes must not exceed MAX_BL_BITS bits */
+
+var END_BLOCK   = 256;
+/* end of block literal code */
+
+var REP_3_6     = 16;
+/* repeat previous bit length 3-6 times (2 bits of repeat count) */
+
+var REPZ_3_10   = 17;
+/* repeat a zero length 3-10 times  (3 bits of repeat count) */
+
+var REPZ_11_138 = 18;
+/* repeat a zero length 11-138 times  (7 bits of repeat count) */
+
+/* eslint-disable comma-spacing,array-bracket-spacing */
+var extra_lbits =   /* extra bits for each length code */
+  [0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0];
+
+var extra_dbits =   /* extra bits for each distance code */
+  [0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13];
+
+var extra_blbits =  /* extra bits for each bit length code */
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,7];
+
+var bl_order =
+  [16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15];
+/* eslint-enable comma-spacing,array-bracket-spacing */
+
+/* The lengths of the bit length codes are sent in order of decreasing
+ * probability, to avoid transmitting the lengths for unused bit length codes.
+ */
+
+/* ===========================================================================
+ * Local data. These are initialized only once.
+ */
+
+// We pre-fill arrays with 0 to avoid uninitialized gaps
+
+var DIST_CODE_LEN = 512; /* see definition of array dist_code below */
+
+// !!!! Use flat array insdead of structure, Freq = i*2, Len = i*2+1
+var static_ltree  = new Array((L_CODES + 2) * 2);
+zero(static_ltree);
+/* The static literal tree. Since the bit lengths are imposed, there is no
+ * need for the L_CODES extra codes used during heap construction. However
+ * The codes 286 and 287 are needed to build a canonical tree (see _tr_init
+ * below).
+ */
+
+var static_dtree  = new Array(D_CODES * 2);
+zero(static_dtree);
+/* The static distance tree. (Actually a trivial tree since all codes use
+ * 5 bits.)
+ */
+
+var _dist_code    = new Array(DIST_CODE_LEN);
+zero(_dist_code);
+/* Distance codes. The first 256 values correspond to the distances
+ * 3 .. 258, the last 256 values correspond to the top 8 bits of
+ * the 15 bit distances.
+ */
+
+var _length_code  = new Array(MAX_MATCH - MIN_MATCH + 1);
+zero(_length_code);
+/* length code for each normalized match length (0 == MIN_MATCH) */
+
+var base_length   = new Array(LENGTH_CODES);
+zero(base_length);
+/* First normalized length for each code (0 = MIN_MATCH) */
+
+var base_dist     = new Array(D_CODES);
+zero(base_dist);
+/* First normalized distance for each code (0 = distance of 1) */
+
+
+function StaticTreeDesc(static_tree, extra_bits, extra_base, elems, max_length) {
+
+  this.static_tree  = static_tree;  /* static tree or NULL */
+  this.extra_bits   = extra_bits;   /* extra bits for each code or NULL */
+  this.extra_base   = extra_base;   /* base index for extra_bits */
+  this.elems        = elems;        /* max number of elements in the tree */
+  this.max_length   = max_length;   /* max bit length for the codes */
+
+  // show if `static_tree` has data or dummy - needed for monomorphic objects
+  this.has_stree    = static_tree && static_tree.length;
 }
 
-module.exports = GZheader;
+
+var static_l_desc;
+var static_d_desc;
+var static_bl_desc;
+
+
+function TreeDesc(dyn_tree, stat_desc) {
+  this.dyn_tree = dyn_tree;     /* the dynamic tree */
+  this.max_code = 0;            /* largest code with non zero frequency */
+  this.stat_desc = stat_desc;   /* the corresponding static tree */
+}
+
+
+
+function d_code(dist) {
+  return dist < 256 ? _dist_code[dist] : _dist_code[256 + (dist >>> 7)];
+}
+
+
+/* ===========================================================================
+ * Output a short LSB first on the stream.
+ * IN assertion: there is enough room in pendingBuf.
+ */
+function put_short(s, w) {
+//    put_byte(s, (uch)((w) & 0xff));
+//    put_byte(s, (uch)((ush)(w) >> 8));
+  s.pending_buf[s.pending++] = (w) & 0xff;
+  s.pending_buf[s.pending++] = (w >>> 8) & 0xff;
+}
+
+
+/* ===========================================================================
+ * Send a value on a given number of bits.
+ * IN assertion: length <= 16 and value fits in length bits.
+ */
+function send_bits(s, value, length) {
+  if (s.bi_valid > (Buf_size - length)) {
+    s.bi_buf |= (value << s.bi_valid) & 0xffff;
+    put_short(s, s.bi_buf);
+    s.bi_buf = value >> (Buf_size - s.bi_valid);
+    s.bi_valid += length - Buf_size;
+  } else {
+    s.bi_buf |= (value << s.bi_valid) & 0xffff;
+    s.bi_valid += length;
+  }
+}
+
+
+function send_code(s, c, tree) {
+  send_bits(s, tree[c * 2]/*.Code*/, tree[c * 2 + 1]/*.Len*/);
+}
+
+
+/* ===========================================================================
+ * Reverse the first len bits of a code, using straightforward code (a faster
+ * method would use a table)
+ * IN assertion: 1 <= len <= 15
+ */
+function bi_reverse(code, len) {
+  var res = 0;
+  do {
+    res |= code & 1;
+    code >>>= 1;
+    res <<= 1;
+  } while (--len > 0);
+  return res >>> 1;
+}
+
+
+/* ===========================================================================
+ * Flush the bit buffer, keeping at most 7 bits in it.
+ */
+function bi_flush(s) {
+  if (s.bi_valid === 16) {
+    put_short(s, s.bi_buf);
+    s.bi_buf = 0;
+    s.bi_valid = 0;
+
+  } else if (s.bi_valid >= 8) {
+    s.pending_buf[s.pending++] = s.bi_buf & 0xff;
+    s.bi_buf >>= 8;
+    s.bi_valid -= 8;
+  }
+}
+
+
+/* ===========================================================================
+ * Compute the optimal bit lengths for a tree and update the total bit length
+ * for the current block.
+ * IN assertion: the fields freq and dad are set, heap[heap_max] and
+ *    above are the tree nodes sorted by increasing frequency.
+ * OUT assertions: the field len is set to the optimal bit length, the
+ *     array bl_count contains the frequencies for each bit length.
+ *     The length opt_len is updated; static_len is also updated if stree is
+ *     not null.
+ */
+function gen_bitlen(s, desc)
+//    deflate_state *s;
+//    tree_desc *desc;    /* the tree descriptor */
+{
+  var tree            = desc.dyn_tree;
+  var max_code        = desc.max_code;
+  var stree           = desc.stat_desc.static_tree;
+  var has_stree       = desc.stat_desc.has_stree;
+  var extra           = desc.stat_desc.extra_bits;
+  var base            = desc.stat_desc.extra_base;
+  var max_length      = desc.stat_desc.max_length;
+  var h;              /* heap index */
+  var n, m;           /* iterate over the tree elements */
+  var bits;           /* bit length */
+  var xbits;          /* extra bits */
+  var f;              /* frequency */
+  var overflow = 0;   /* number of elements with bit length too large */
+
+  for (bits = 0; bits <= MAX_BITS; bits++) {
+    s.bl_count[bits] = 0;
+  }
+
+  /* In a first pass, compute the optimal bit lengths (which may
+   * overflow in the case of the bit length tree).
+   */
+  tree[s.heap[s.heap_max] * 2 + 1]/*.Len*/ = 0; /* root of the heap */
+
+  for (h = s.heap_max + 1; h < HEAP_SIZE; h++) {
+    n = s.heap[h];
+    bits = tree[tree[n * 2 + 1]/*.Dad*/ * 2 + 1]/*.Len*/ + 1;
+    if (bits > max_length) {
+      bits = max_length;
+      overflow++;
+    }
+    tree[n * 2 + 1]/*.Len*/ = bits;
+    /* We overwrite tree[n].Dad which is no longer needed */
+
+    if (n > max_code) { continue; } /* not a leaf node */
+
+    s.bl_count[bits]++;
+    xbits = 0;
+    if (n >= base) {
+      xbits = extra[n - base];
+    }
+    f = tree[n * 2]/*.Freq*/;
+    s.opt_len += f * (bits + xbits);
+    if (has_stree) {
+      s.static_len += f * (stree[n * 2 + 1]/*.Len*/ + xbits);
+    }
+  }
+  if (overflow === 0) { return; }
+
+  // Trace((stderr,"\nbit length overflow\n"));
+  /* This happens for example on obj2 and pic of the Calgary corpus */
+
+  /* Find the first bit length which could increase: */
+  do {
+    bits = max_length - 1;
+    while (s.bl_count[bits] === 0) { bits--; }
+    s.bl_count[bits]--;      /* move one leaf down the tree */
+    s.bl_count[bits + 1] += 2; /* move one overflow item as its brother */
+    s.bl_count[max_length]--;
+    /* The brother of the overflow item also moves one step up,
+     * but this does not affect bl_count[max_length]
+     */
+    overflow -= 2;
+  } while (overflow > 0);
+
+  /* Now recompute all bit lengths, scanning in increasing frequency.
+   * h is still equal to HEAP_SIZE. (It is simpler to reconstruct all
+   * lengths instead of fixing only the wrong ones. This idea is taken
+   * from 'ar' written by Haruhiko Okumura.)
+   */
+  for (bits = max_length; bits !== 0; bits--) {
+    n = s.bl_count[bits];
+    while (n !== 0) {
+      m = s.heap[--h];
+      if (m > max_code) { continue; }
+      if (tree[m * 2 + 1]/*.Len*/ !== bits) {
+        // Trace((stderr,"code %d bits %d->%d\n", m, tree[m].Len, bits));
+        s.opt_len += (bits - tree[m * 2 + 1]/*.Len*/) * tree[m * 2]/*.Freq*/;
+        tree[m * 2 + 1]/*.Len*/ = bits;
+      }
+      n--;
+    }
+  }
+}
+
+
+/* ===========================================================================
+ * Generate the codes for a given tree and bit counts (which need not be
+ * optimal).
+ * IN assertion: the array bl_count contains the bit length statistics for
+ * the given tree and the field len is set for all tree elements.
+ * OUT assertion: the field code is set for all tree elements of non
+ *     zero code length.
+ */
+function gen_codes(tree, max_code, bl_count)
+//    ct_data *tree;             /* the tree to decorate */
+//    int max_code;              /* largest code with non zero frequency */
+//    ushf *bl_count;            /* number of codes at each bit length */
+{
+  var next_code = new Array(MAX_BITS + 1); /* next code value for each bit length */
+  var code = 0;              /* running code value */
+  var bits;                  /* bit index */
+  var n;                     /* code index */
+
+  /* The distribution counts are first used to generate the code values
+   * without bit reversal.
+   */
+  for (bits = 1; bits <= MAX_BITS; bits++) {
+    next_code[bits] = code = (code + bl_count[bits - 1]) << 1;
+  }
+  /* Check that the bit counts in bl_count are consistent. The last code
+   * must be all ones.
+   */
+  //Assert (code + bl_count[MAX_BITS]-1 == (1<<MAX_BITS)-1,
+  //        "inconsistent bit counts");
+  //Tracev((stderr,"\ngen_codes: max_code %d ", max_code));
+
+  for (n = 0;  n <= max_code; n++) {
+    var len = tree[n * 2 + 1]/*.Len*/;
+    if (len === 0) { continue; }
+    /* Now reverse the bits */
+    tree[n * 2]/*.Code*/ = bi_reverse(next_code[len]++, len);
+
+    //Tracecv(tree != static_ltree, (stderr,"\nn %3d %c l %2d c %4x (%x) ",
+    //     n, (isgraph(n) ? n : ' '), len, tree[n].Code, next_code[len]-1));
+  }
+}
+
+
+/* ===========================================================================
+ * Initialize the various 'constant' tables.
+ */
+function tr_static_init() {
+  var n;        /* iterates over tree elements */
+  var bits;     /* bit counter */
+  var length;   /* length value */
+  var code;     /* code value */
+  var dist;     /* distance index */
+  var bl_count = new Array(MAX_BITS + 1);
+  /* number of codes at each bit length for an optimal tree */
+
+  // do check in _tr_init()
+  //if (static_init_done) return;
+
+  /* For some embedded targets, global variables are not initialized: */
+/*#ifdef NO_INIT_GLOBAL_POINTERS
+  static_l_desc.static_tree = static_ltree;
+  static_l_desc.extra_bits = extra_lbits;
+  static_d_desc.static_tree = static_dtree;
+  static_d_desc.extra_bits = extra_dbits;
+  static_bl_desc.extra_bits = extra_blbits;
+#endif*/
+
+  /* Initialize the mapping length (0..255) -> length code (0..28) */
+  length = 0;
+  for (code = 0; code < LENGTH_CODES - 1; code++) {
+    base_length[code] = length;
+    for (n = 0; n < (1 << extra_lbits[code]); n++) {
+      _length_code[length++] = code;
+    }
+  }
+  //Assert (length == 256, "tr_static_init: length != 256");
+  /* Note that the length 255 (match length 258) can be represented
+   * in two different ways: code 284 + 5 bits or code 285, so we
+   * overwrite length_code[255] to use the best encoding:
+   */
+  _length_code[length - 1] = code;
+
+  /* Initialize the mapping dist (0..32K) -> dist code (0..29) */
+  dist = 0;
+  for (code = 0; code < 16; code++) {
+    base_dist[code] = dist;
+    for (n = 0; n < (1 << extra_dbits[code]); n++) {
+      _dist_code[dist++] = code;
+    }
+  }
+  //Assert (dist == 256, "tr_static_init: dist != 256");
+  dist >>= 7; /* from now on, all distances are divided by 128 */
+  for (; code < D_CODES; code++) {
+    base_dist[code] = dist << 7;
+    for (n = 0; n < (1 << (extra_dbits[code] - 7)); n++) {
+      _dist_code[256 + dist++] = code;
+    }
+  }
+  //Assert (dist == 256, "tr_static_init: 256+dist != 512");
+
+  /* Construct the codes of the static literal tree */
+  for (bits = 0; bits <= MAX_BITS; bits++) {
+    bl_count[bits] = 0;
+  }
+
+  n = 0;
+  while (n <= 143) {
+    static_ltree[n * 2 + 1]/*.Len*/ = 8;
+    n++;
+    bl_count[8]++;
+  }
+  while (n <= 255) {
+    static_ltree[n * 2 + 1]/*.Len*/ = 9;
+    n++;
+    bl_count[9]++;
+  }
+  while (n <= 279) {
+    static_ltree[n * 2 + 1]/*.Len*/ = 7;
+    n++;
+    bl_count[7]++;
+  }
+  while (n <= 287) {
+    static_ltree[n * 2 + 1]/*.Len*/ = 8;
+    n++;
+    bl_count[8]++;
+  }
+  /* Codes 286 and 287 do not exist, but we must include them in the
+   * tree construction to get a canonical Huffman tree (longest code
+   * all ones)
+   */
+  gen_codes(static_ltree, L_CODES + 1, bl_count);
+
+  /* The static distance tree is trivial: */
+  for (n = 0; n < D_CODES; n++) {
+    static_dtree[n * 2 + 1]/*.Len*/ = 5;
+    static_dtree[n * 2]/*.Code*/ = bi_reverse(n, 5);
+  }
+
+  // Now data ready and we can init static trees
+  static_l_desc = new StaticTreeDesc(static_ltree, extra_lbits, LITERALS + 1, L_CODES, MAX_BITS);
+  static_d_desc = new StaticTreeDesc(static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS);
+  static_bl_desc = new StaticTreeDesc(new Array(0), extra_blbits, 0,         BL_CODES, MAX_BL_BITS);
+
+  //static_init_done = true;
+}
+
+
+/* ===========================================================================
+ * Initialize a new block.
+ */
+function init_block(s) {
+  var n; /* iterates over tree elements */
+
+  /* Initialize the trees. */
+  for (n = 0; n < L_CODES;  n++) { s.dyn_ltree[n * 2]/*.Freq*/ = 0; }
+  for (n = 0; n < D_CODES;  n++) { s.dyn_dtree[n * 2]/*.Freq*/ = 0; }
+  for (n = 0; n < BL_CODES; n++) { s.bl_tree[n * 2]/*.Freq*/ = 0; }
+
+  s.dyn_ltree[END_BLOCK * 2]/*.Freq*/ = 1;
+  s.opt_len = s.static_len = 0;
+  s.last_lit = s.matches = 0;
+}
+
+
+/* ===========================================================================
+ * Flush the bit buffer and align the output on a byte boundary
+ */
+function bi_windup(s)
+{
+  if (s.bi_valid > 8) {
+    put_short(s, s.bi_buf);
+  } else if (s.bi_valid > 0) {
+    //put_byte(s, (Byte)s->bi_buf);
+    s.pending_buf[s.pending++] = s.bi_buf;
+  }
+  s.bi_buf = 0;
+  s.bi_valid = 0;
+}
+
+/* ===========================================================================
+ * Copy a stored block, storing first the length and its
+ * one's complement if requested.
+ */
+function copy_block(s, buf, len, header)
+//DeflateState *s;
+//charf    *buf;    /* the input data */
+//unsigned len;     /* its length */
+//int      header;  /* true if block header must be written */
+{
+  bi_windup(s);        /* align on byte boundary */
+
+  if (header) {
+    put_short(s, len);
+    put_short(s, ~len);
+  }
+//  while (len--) {
+//    put_byte(s, *buf++);
+//  }
+  utils.arraySet(s.pending_buf, s.window, buf, len, s.pending);
+  s.pending += len;
+}
+
+/* ===========================================================================
+ * Compares to subtrees, using the tree depth as tie breaker when
+ * the subtrees have equal frequency. This minimizes the worst case length.
+ */
+function smaller(tree, n, m, depth) {
+  var _n2 = n * 2;
+  var _m2 = m * 2;
+  return (tree[_n2]/*.Freq*/ < tree[_m2]/*.Freq*/ ||
+         (tree[_n2]/*.Freq*/ === tree[_m2]/*.Freq*/ && depth[n] <= depth[m]));
+}
+
+/* ===========================================================================
+ * Restore the heap property by moving down the tree starting at node k,
+ * exchanging a node with the smallest of its two sons if necessary, stopping
+ * when the heap property is re-established (each father smaller than its
+ * two sons).
+ */
+function pqdownheap(s, tree, k)
+//    deflate_state *s;
+//    ct_data *tree;  /* the tree to restore */
+//    int k;               /* node to move down */
+{
+  var v = s.heap[k];
+  var j = k << 1;  /* left son of k */
+  while (j <= s.heap_len) {
+    /* Set j to the smallest of the two sons: */
+    if (j < s.heap_len &&
+      smaller(tree, s.heap[j + 1], s.heap[j], s.depth)) {
+      j++;
+    }
+    /* Exit if v is smaller than both sons */
+    if (smaller(tree, v, s.heap[j], s.depth)) { break; }
+
+    /* Exchange v with the smallest son */
+    s.heap[k] = s.heap[j];
+    k = j;
+
+    /* And continue down the tree, setting j to the left son of k */
+    j <<= 1;
+  }
+  s.heap[k] = v;
+}
+
+
+// inlined manually
+// var SMALLEST = 1;
+
+/* ===========================================================================
+ * Send the block data compressed using the given Huffman trees
+ */
+function compress_block(s, ltree, dtree)
+//    deflate_state *s;
+//    const ct_data *ltree; /* literal tree */
+//    const ct_data *dtree; /* distance tree */
+{
+  var dist;           /* distance of matched string */
+  var lc;             /* match length or unmatched char (if dist == 0) */
+  var lx = 0;         /* running index in l_buf */
+  var code;           /* the code to send */
+  var extra;          /* number of extra bits to send */
+
+  if (s.last_lit !== 0) {
+    do {
+      dist = (s.pending_buf[s.d_buf + lx * 2] << 8) | (s.pending_buf[s.d_buf + lx * 2 + 1]);
+      lc = s.pending_buf[s.l_buf + lx];
+      lx++;
+
+      if (dist === 0) {
+        send_code(s, lc, ltree); /* send a literal byte */
+        //Tracecv(isgraph(lc), (stderr," '%c' ", lc));
+      } else {
+        /* Here, lc is the match length - MIN_MATCH */
+        code = _length_code[lc];
+        send_code(s, code + LITERALS + 1, ltree); /* send the length code */
+        extra = extra_lbits[code];
+        if (extra !== 0) {
+          lc -= base_length[code];
+          send_bits(s, lc, extra);       /* send the extra length bits */
+        }
+        dist--; /* dist is now the match distance - 1 */
+        code = d_code(dist);
+        //Assert (code < D_CODES, "bad d_code");
+
+        send_code(s, code, dtree);       /* send the distance code */
+        extra = extra_dbits[code];
+        if (extra !== 0) {
+          dist -= base_dist[code];
+          send_bits(s, dist, extra);   /* send the extra distance bits */
+        }
+      } /* literal or match pair ? */
+
+      /* Check that the overlay between pending_buf and d_buf+l_buf is ok: */
+      //Assert((uInt)(s->pending) < s->lit_bufsize + 2*lx,
+      //       "pendingBuf overflow");
+
+    } while (lx < s.last_lit);
+  }
+
+  send_code(s, END_BLOCK, ltree);
+}
+
+
+/* ===========================================================================
+ * Construct one Huffman tree and assigns the code bit strings and lengths.
+ * Update the total bit length for the current block.
+ * IN assertion: the field freq is set for all tree elements.
+ * OUT assertions: the fields len and code are set to the optimal bit length
+ *     and corresponding code. The length opt_len is updated; static_len is
+ *     also updated if stree is not null. The field max_code is set.
+ */
+function build_tree(s, desc)
+//    deflate_state *s;
+//    tree_desc *desc; /* the tree descriptor */
+{
+  var tree     = desc.dyn_tree;
+  var stree    = desc.stat_desc.static_tree;
+  var has_stree = desc.stat_desc.has_stree;
+  var elems    = desc.stat_desc.elems;
+  var n, m;          /* iterate over heap elements */
+  var max_code = -1; /* largest code with non zero frequency */
+  var node;          /* new node being created */
+
+  /* Construct the initial heap, with least frequent element in
+   * heap[SMALLEST]. The sons of heap[n] are heap[2*n] and heap[2*n+1].
+   * heap[0] is not used.
+   */
+  s.heap_len = 0;
+  s.heap_max = HEAP_SIZE;
+
+  for (n = 0; n < elems; n++) {
+    if (tree[n * 2]/*.Freq*/ !== 0) {
+      s.heap[++s.heap_len] = max_code = n;
+      s.depth[n] = 0;
+
+    } else {
+      tree[n * 2 + 1]/*.Len*/ = 0;
+    }
+  }
+
+  /* The pkzip format requires that at least one distance code exists,
+   * and that at least one bit should be sent even if there is only one
+   * possible code. So to avoid special checks later on we force at least
+   * two codes of non zero frequency.
+   */
+  while (s.heap_len < 2) {
+    node = s.heap[++s.heap_len] = (max_code < 2 ? ++max_code : 0);
+    tree[node * 2]/*.Freq*/ = 1;
+    s.depth[node] = 0;
+    s.opt_len--;
+
+    if (has_stree) {
+      s.static_len -= stree[node * 2 + 1]/*.Len*/;
+    }
+    /* node is 0 or 1 so it does not have extra bits */
+  }
+  desc.max_code = max_code;
+
+  /* The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
+   * establish sub-heaps of increasing lengths:
+   */
+  for (n = (s.heap_len >> 1/*int /2*/); n >= 1; n--) { pqdownheap(s, tree, n); }
+
+  /* Construct the Huffman tree by repeatedly combining the least two
+   * frequent nodes.
+   */
+  node = elems;              /* next internal node of the tree */
+  do {
+    //pqremove(s, tree, n);  /* n = node of least frequency */
+    /*** pqremove ***/
+    n = s.heap[1/*SMALLEST*/];
+    s.heap[1/*SMALLEST*/] = s.heap[s.heap_len--];
+    pqdownheap(s, tree, 1/*SMALLEST*/);
+    /***/
+
+    m = s.heap[1/*SMALLEST*/]; /* m = node of next least frequency */
+
+    s.heap[--s.heap_max] = n; /* keep the nodes sorted by frequency */
+    s.heap[--s.heap_max] = m;
+
+    /* Create a new node father of n and m */
+    tree[node * 2]/*.Freq*/ = tree[n * 2]/*.Freq*/ + tree[m * 2]/*.Freq*/;
+    s.depth[node] = (s.depth[n] >= s.depth[m] ? s.depth[n] : s.depth[m]) + 1;
+    tree[n * 2 + 1]/*.Dad*/ = tree[m * 2 + 1]/*.Dad*/ = node;
+
+    /* and insert the new node in the heap */
+    s.heap[1/*SMALLEST*/] = node++;
+    pqdownheap(s, tree, 1/*SMALLEST*/);
+
+  } while (s.heap_len >= 2);
+
+  s.heap[--s.heap_max] = s.heap[1/*SMALLEST*/];
+
+  /* At this point, the fields freq and dad are set. We can now
+   * generate the bit lengths.
+   */
+  gen_bitlen(s, desc);
+
+  /* The field len is now set, we can generate the bit codes */
+  gen_codes(tree, max_code, s.bl_count);
+}
+
+
+/* ===========================================================================
+ * Scan a literal or distance tree to determine the frequencies of the codes
+ * in the bit length tree.
+ */
+function scan_tree(s, tree, max_code)
+//    deflate_state *s;
+//    ct_data *tree;   /* the tree to be scanned */
+//    int max_code;    /* and its largest code of non zero frequency */
+{
+  var n;                     /* iterates over all tree elements */
+  var prevlen = -1;          /* last emitted length */
+  var curlen;                /* length of current code */
+
+  var nextlen = tree[0 * 2 + 1]/*.Len*/; /* length of next code */
+
+  var count = 0;             /* repeat count of the current code */
+  var max_count = 7;         /* max repeat count */
+  var min_count = 4;         /* min repeat count */
+
+  if (nextlen === 0) {
+    max_count = 138;
+    min_count = 3;
+  }
+  tree[(max_code + 1) * 2 + 1]/*.Len*/ = 0xffff; /* guard */
+
+  for (n = 0; n <= max_code; n++) {
+    curlen = nextlen;
+    nextlen = tree[(n + 1) * 2 + 1]/*.Len*/;
+
+    if (++count < max_count && curlen === nextlen) {
+      continue;
+
+    } else if (count < min_count) {
+      s.bl_tree[curlen * 2]/*.Freq*/ += count;
+
+    } else if (curlen !== 0) {
+
+      if (curlen !== prevlen) { s.bl_tree[curlen * 2]/*.Freq*/++; }
+      s.bl_tree[REP_3_6 * 2]/*.Freq*/++;
+
+    } else if (count <= 10) {
+      s.bl_tree[REPZ_3_10 * 2]/*.Freq*/++;
+
+    } else {
+      s.bl_tree[REPZ_11_138 * 2]/*.Freq*/++;
+    }
+
+    count = 0;
+    prevlen = curlen;
+
+    if (nextlen === 0) {
+      max_count = 138;
+      min_count = 3;
+
+    } else if (curlen === nextlen) {
+      max_count = 6;
+      min_count = 3;
+
+    } else {
+      max_count = 7;
+      min_count = 4;
+    }
+  }
+}
+
+
+/* ===========================================================================
+ * Send a literal or distance tree in compressed form, using the codes in
+ * bl_tree.
+ */
+function send_tree(s, tree, max_code)
+//    deflate_state *s;
+//    ct_data *tree; /* the tree to be scanned */
+//    int max_code;       /* and its largest code of non zero frequency */
+{
+  var n;                     /* iterates over all tree elements */
+  var prevlen = -1;          /* last emitted length */
+  var curlen;                /* length of current code */
+
+  var nextlen = tree[0 * 2 + 1]/*.Len*/; /* length of next code */
+
+  var count = 0;             /* repeat count of the current code */
+  var max_count = 7;         /* max repeat count */
+  var min_count = 4;         /* min repeat count */
+
+  /* tree[max_code+1].Len = -1; */  /* guard already set */
+  if (nextlen === 0) {
+    max_count = 138;
+    min_count = 3;
+  }
+
+  for (n = 0; n <= max_code; n++) {
+    curlen = nextlen;
+    nextlen = tree[(n + 1) * 2 + 1]/*.Len*/;
+
+    if (++count < max_count && curlen === nextlen) {
+      continue;
+
+    } else if (count < min_count) {
+      do { send_code(s, curlen, s.bl_tree); } while (--count !== 0);
+
+    } else if (curlen !== 0) {
+      if (curlen !== prevlen) {
+        send_code(s, curlen, s.bl_tree);
+        count--;
+      }
+      //Assert(count >= 3 && count <= 6, " 3_6?");
+      send_code(s, REP_3_6, s.bl_tree);
+      send_bits(s, count - 3, 2);
+
+    } else if (count <= 10) {
+      send_code(s, REPZ_3_10, s.bl_tree);
+      send_bits(s, count - 3, 3);
+
+    } else {
+      send_code(s, REPZ_11_138, s.bl_tree);
+      send_bits(s, count - 11, 7);
+    }
+
+    count = 0;
+    prevlen = curlen;
+    if (nextlen === 0) {
+      max_count = 138;
+      min_count = 3;
+
+    } else if (curlen === nextlen) {
+      max_count = 6;
+      min_count = 3;
+
+    } else {
+      max_count = 7;
+      min_count = 4;
+    }
+  }
+}
+
+
+/* ===========================================================================
+ * Construct the Huffman tree for the bit lengths and return the index in
+ * bl_order of the last bit length code to send.
+ */
+function build_bl_tree(s) {
+  var max_blindex;  /* index of last bit length code of non zero freq */
+
+  /* Determine the bit length frequencies for literal and distance trees */
+  scan_tree(s, s.dyn_ltree, s.l_desc.max_code);
+  scan_tree(s, s.dyn_dtree, s.d_desc.max_code);
+
+  /* Build the bit length tree: */
+  build_tree(s, s.bl_desc);
+  /* opt_len now includes the length of the tree representations, except
+   * the lengths of the bit lengths codes and the 5+5+4 bits for the counts.
+   */
+
+  /* Determine the number of bit length codes to send. The pkzip format
+   * requires that at least 4 bit length codes be sent. (appnote.txt says
+   * 3 but the actual value used is 4.)
+   */
+  for (max_blindex = BL_CODES - 1; max_blindex >= 3; max_blindex--) {
+    if (s.bl_tree[bl_order[max_blindex] * 2 + 1]/*.Len*/ !== 0) {
+      break;
+    }
+  }
+  /* Update opt_len to include the bit length tree and counts */
+  s.opt_len += 3 * (max_blindex + 1) + 5 + 5 + 4;
+  //Tracev((stderr, "\ndyn trees: dyn %ld, stat %ld",
+  //        s->opt_len, s->static_len));
+
+  return max_blindex;
+}
+
+
+/* ===========================================================================
+ * Send the header for a block using dynamic Huffman trees: the counts, the
+ * lengths of the bit length codes, the literal tree and the distance tree.
+ * IN assertion: lcodes >= 257, dcodes >= 1, blcodes >= 4.
+ */
+function send_all_trees(s, lcodes, dcodes, blcodes)
+//    deflate_state *s;
+//    int lcodes, dcodes, blcodes; /* number of codes for each tree */
+{
+  var rank;                    /* index in bl_order */
+
+  //Assert (lcodes >= 257 && dcodes >= 1 && blcodes >= 4, "not enough codes");
+  //Assert (lcodes <= L_CODES && dcodes <= D_CODES && blcodes <= BL_CODES,
+  //        "too many codes");
+  //Tracev((stderr, "\nbl counts: "));
+  send_bits(s, lcodes - 257, 5); /* not +255 as stated in appnote.txt */
+  send_bits(s, dcodes - 1,   5);
+  send_bits(s, blcodes - 4,  4); /* not -3 as stated in appnote.txt */
+  for (rank = 0; rank < blcodes; rank++) {
+    //Tracev((stderr, "\nbl code %2d ", bl_order[rank]));
+    send_bits(s, s.bl_tree[bl_order[rank] * 2 + 1]/*.Len*/, 3);
+  }
+  //Tracev((stderr, "\nbl tree: sent %ld", s->bits_sent));
+
+  send_tree(s, s.dyn_ltree, lcodes - 1); /* literal tree */
+  //Tracev((stderr, "\nlit tree: sent %ld", s->bits_sent));
+
+  send_tree(s, s.dyn_dtree, dcodes - 1); /* distance tree */
+  //Tracev((stderr, "\ndist tree: sent %ld", s->bits_sent));
+}
+
+
+/* ===========================================================================
+ * Check if the data type is TEXT or BINARY, using the following algorithm:
+ * - TEXT if the two conditions below are satisfied:
+ *    a) There are no non-portable control characters belonging to the
+ *       "black list" (0..6, 14..25, 28..31).
+ *    b) There is at least one printable character belonging to the
+ *       "white list" (9 {TAB}, 10 {LF}, 13 {CR}, 32..255).
+ * - BINARY otherwise.
+ * - The following partially-portable control characters form a
+ *   "gray list" that is ignored in this detection algorithm:
+ *   (7 {BEL}, 8 {BS}, 11 {VT}, 12 {FF}, 26 {SUB}, 27 {ESC}).
+ * IN assertion: the fields Freq of dyn_ltree are set.
+ */
+function detect_data_type(s) {
+  /* black_mask is the bit mask of black-listed bytes
+   * set bits 0..6, 14..25, and 28..31
+   * 0xf3ffc07f = binary 11110011111111111100000001111111
+   */
+  var black_mask = 0xf3ffc07f;
+  var n;
+
+  /* Check for non-textual ("black-listed") bytes. */
+  for (n = 0; n <= 31; n++, black_mask >>>= 1) {
+    if ((black_mask & 1) && (s.dyn_ltree[n * 2]/*.Freq*/ !== 0)) {
+      return Z_BINARY;
+    }
+  }
+
+  /* Check for textual ("white-listed") bytes. */
+  if (s.dyn_ltree[9 * 2]/*.Freq*/ !== 0 || s.dyn_ltree[10 * 2]/*.Freq*/ !== 0 ||
+      s.dyn_ltree[13 * 2]/*.Freq*/ !== 0) {
+    return Z_TEXT;
+  }
+  for (n = 32; n < LITERALS; n++) {
+    if (s.dyn_ltree[n * 2]/*.Freq*/ !== 0) {
+      return Z_TEXT;
+    }
+  }
+
+  /* There are no "black-listed" or "white-listed" bytes:
+   * this stream either is empty or has tolerated ("gray-listed") bytes only.
+   */
+  return Z_BINARY;
+}
+
+
+var static_init_done = false;
+
+/* ===========================================================================
+ * Initialize the tree data structures for a new zlib stream.
+ */
+function _tr_init(s)
+{
+
+  if (!static_init_done) {
+    tr_static_init();
+    static_init_done = true;
+  }
+
+  s.l_desc  = new TreeDesc(s.dyn_ltree, static_l_desc);
+  s.d_desc  = new TreeDesc(s.dyn_dtree, static_d_desc);
+  s.bl_desc = new TreeDesc(s.bl_tree, static_bl_desc);
+
+  s.bi_buf = 0;
+  s.bi_valid = 0;
+
+  /* Initialize the first block of the first file: */
+  init_block(s);
+}
+
+
+/* ===========================================================================
+ * Send a stored block
+ */
+function _tr_stored_block(s, buf, stored_len, last)
+//DeflateState *s;
+//charf *buf;       /* input block */
+//ulg stored_len;   /* length of input block */
+//int last;         /* one if this is the last block for a file */
+{
+  send_bits(s, (STORED_BLOCK << 1) + (last ? 1 : 0), 3);    /* send block type */
+  copy_block(s, buf, stored_len, true); /* with header */
+}
+
+
+/* ===========================================================================
+ * Send one empty static block to give enough lookahead for inflate.
+ * This takes 10 bits, of which 7 may remain in the bit buffer.
+ */
+function _tr_align(s) {
+  send_bits(s, STATIC_TREES << 1, 3);
+  send_code(s, END_BLOCK, static_ltree);
+  bi_flush(s);
+}
+
+
+/* ===========================================================================
+ * Determine the best encoding for the current block: dynamic trees, static
+ * trees or store, and output the encoded block to the zip file.
+ */
+function _tr_flush_block(s, buf, stored_len, last)
+//DeflateState *s;
+//charf *buf;       /* input block, or NULL if too old */
+//ulg stored_len;   /* length of input block */
+//int last;         /* one if this is the last block for a file */
+{
+  var opt_lenb, static_lenb;  /* opt_len and static_len in bytes */
+  var max_blindex = 0;        /* index of last bit length code of non zero freq */
+
+  /* Build the Huffman trees unless a stored block is forced */
+  if (s.level > 0) {
+
+    /* Check if the file is binary or text */
+    if (s.strm.data_type === Z_UNKNOWN) {
+      s.strm.data_type = detect_data_type(s);
+    }
+
+    /* Construct the literal and distance trees */
+    build_tree(s, s.l_desc);
+    // Tracev((stderr, "\nlit data: dyn %ld, stat %ld", s->opt_len,
+    //        s->static_len));
+
+    build_tree(s, s.d_desc);
+    // Tracev((stderr, "\ndist data: dyn %ld, stat %ld", s->opt_len,
+    //        s->static_len));
+    /* At this point, opt_len and static_len are the total bit lengths of
+     * the compressed block data, excluding the tree representations.
+     */
+
+    /* Build the bit length tree for the above two trees, and get the index
+     * in bl_order of the last bit length code to send.
+     */
+    max_blindex = build_bl_tree(s);
+
+    /* Determine the best encoding. Compute the block lengths in bytes. */
+    opt_lenb = (s.opt_len + 3 + 7) >>> 3;
+    static_lenb = (s.static_len + 3 + 7) >>> 3;
+
+    // Tracev((stderr, "\nopt %lu(%lu) stat %lu(%lu) stored %lu lit %u ",
+    //        opt_lenb, s->opt_len, static_lenb, s->static_len, stored_len,
+    //        s->last_lit));
+
+    if (static_lenb <= opt_lenb) { opt_lenb = static_lenb; }
+
+  } else {
+    // Assert(buf != (char*)0, "lost buf");
+    opt_lenb = static_lenb = stored_len + 5; /* force a stored block */
+  }
+
+  if ((stored_len + 4 <= opt_lenb) && (buf !== -1)) {
+    /* 4: two words for the lengths */
+
+    /* The test buf != NULL is only necessary if LIT_BUFSIZE > WSIZE.
+     * Otherwise we can't have processed more than WSIZE input bytes since
+     * the last block flush, because compression would have been
+     * successful. If LIT_BUFSIZE <= WSIZE, it is never too late to
+     * transform a block into a stored block.
+     */
+    _tr_stored_block(s, buf, stored_len, last);
+
+  } else if (s.strategy === Z_FIXED || static_lenb === opt_lenb) {
+
+    send_bits(s, (STATIC_TREES << 1) + (last ? 1 : 0), 3);
+    compress_block(s, static_ltree, static_dtree);
+
+  } else {
+    send_bits(s, (DYN_TREES << 1) + (last ? 1 : 0), 3);
+    send_all_trees(s, s.l_desc.max_code + 1, s.d_desc.max_code + 1, max_blindex + 1);
+    compress_block(s, s.dyn_ltree, s.dyn_dtree);
+  }
+  // Assert (s->compressed_len == s->bits_sent, "bad compressed size");
+  /* The above check is made mod 2^32, for files larger than 512 MB
+   * and uLong implemented on 32 bits.
+   */
+  init_block(s);
+
+  if (last) {
+    bi_windup(s);
+  }
+  // Tracev((stderr,"\ncomprlen %lu(%lu) ", s->compressed_len>>3,
+  //       s->compressed_len-7*last));
+}
+
+/* ===========================================================================
+ * Save the match info and tally the frequency counts. Return true if
+ * the current block must be flushed.
+ */
+function _tr_tally(s, dist, lc)
+//    deflate_state *s;
+//    unsigned dist;  /* distance of matched string */
+//    unsigned lc;    /* match length-MIN_MATCH or unmatched char (if dist==0) */
+{
+  //var out_length, in_length, dcode;
+
+  s.pending_buf[s.d_buf + s.last_lit * 2]     = (dist >>> 8) & 0xff;
+  s.pending_buf[s.d_buf + s.last_lit * 2 + 1] = dist & 0xff;
+
+  s.pending_buf[s.l_buf + s.last_lit] = lc & 0xff;
+  s.last_lit++;
+
+  if (dist === 0) {
+    /* lc is the unmatched char */
+    s.dyn_ltree[lc * 2]/*.Freq*/++;
+  } else {
+    s.matches++;
+    /* Here, lc is the match length - MIN_MATCH */
+    dist--;             /* dist = match distance - 1 */
+    //Assert((ush)dist < (ush)MAX_DIST(s) &&
+    //       (ush)lc <= (ush)(MAX_MATCH-MIN_MATCH) &&
+    //       (ush)d_code(dist) < (ush)D_CODES,  "_tr_tally: bad match");
+
+    s.dyn_ltree[(_length_code[lc] + LITERALS + 1) * 2]/*.Freq*/++;
+    s.dyn_dtree[d_code(dist) * 2]/*.Freq*/++;
+  }
+
+// (!) This block is disabled in zlib defailts,
+// don't enable it for binary compatibility
+
+//#ifdef TRUNCATE_BLOCK
+//  /* Try to guess if it is profitable to stop the current block here */
+//  if ((s.last_lit & 0x1fff) === 0 && s.level > 2) {
+//    /* Compute an upper bound for the compressed length */
+//    out_length = s.last_lit*8;
+//    in_length = s.strstart - s.block_start;
+//
+//    for (dcode = 0; dcode < D_CODES; dcode++) {
+//      out_length += s.dyn_dtree[dcode*2]/*.Freq*/ * (5 + extra_dbits[dcode]);
+//    }
+//    out_length >>>= 3;
+//    //Tracev((stderr,"\nlast_lit %u, in %ld, out ~%ld(%ld%%) ",
+//    //       s->last_lit, in_length, out_length,
+//    //       100L - out_length*100L/in_length));
+//    if (s.matches < (s.last_lit>>1)/*int /2*/ && out_length < (in_length>>1)/*int /2*/) {
+//      return true;
+//    }
+//  }
+//#endif
+
+  return (s.last_lit === s.lit_bufsize - 1);
+  /* We avoid equality with lit_bufsize because of wraparound at 64K
+   * on 16 bit machines and because stored blocks are restricted to
+   * 64K-1 bytes.
+   */
+}
+
+exports._tr_init  = _tr_init;
+exports._tr_stored_block = _tr_stored_block;
+exports._tr_flush_block  = _tr_flush_block;
+exports._tr_tally = _tr_tally;
+exports._tr_align = _tr_align;
 
 
 /***/ }),
-/* 40 */
+
+/***/ "../node_modules/pako/lib/zlib/zstream.js":
+/*!************************************************!*\
+  !*** ../node_modules/pako/lib/zlib/zstream.js ***!
+  \************************************************/
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module */
+/*! CommonJS bailout: module.exports is used directly at 29:0-14 */
+/***/ ((module) => {
+
+"use strict";
+
+
+
+function ZStream() {
+  /* next input byte */
+  this.input = null; // JS specific, because we have no pointers
+  this.next_in = 0;
+  /* number of bytes available at input */
+  this.avail_in = 0;
+  /* total number of input bytes read so far */
+  this.total_in = 0;
+  /* next output byte should be put there */
+  this.output = null; // JS specific, because we have no pointers
+  this.next_out = 0;
+  /* remaining free space at output */
+  this.avail_out = 0;
+  /* total number of bytes output so far */
+  this.total_out = 0;
+  /* last error message, NULL if no error */
+  this.msg = ''/*Z_NULL*/;
+  /* not visible by applications */
+  this.state = null;
+  /* best guess about the data type: binary or text */
+  this.data_type = 2/*Z_UNKNOWN*/;
+  /* adler32 value of the uncompressed data */
+  this.adler = 0;
+}
+
+module.exports = ZStream;
+
+
+/***/ }),
+
+/***/ "../node_modules/text-encoding/index.js":
 /*!**********************************************!*\
   !*** ../node_modules/text-encoding/index.js ***!
   \**********************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, __webpack_require__ */
+/*! CommonJS bailout: module.exports is used directly at 6:0-14 */
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // This is free and unencumbered software released into the public domain.
 // See LICENSE.md for more information.
 
-var encoding = __webpack_require__(/*! ./lib/encoding.js */ 41);
+var encoding = __webpack_require__(/*! ./lib/encoding.js */ "../node_modules/text-encoding/lib/encoding.js");
 
 module.exports = {
   TextEncoder: encoding.TextEncoder,
@@ -12063,14 +13646,17 @@ module.exports = {
 
 
 /***/ }),
-/* 41 */
+
+/***/ "../node_modules/text-encoding/lib/encoding.js":
 /*!*****************************************************!*\
   !*** ../node_modules/text-encoding/lib/encoding.js ***!
   \*****************************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! unknown exports (runtime-defined) */
+/*! runtime requirements: module, top-level-this-exports */
+/*! CommonJS bailout: this is used directly at 933:2-6 */
+/*! CommonJS bailout: module.exports is used directly at 927:39-53 */
+/*! CommonJS bailout: module.exports is used directly at 928:4-18 */
+/***/ (function(module) {
 
 // This is free and unencumbered software released into the public domain.
 // See LICENSE.md for more information.
@@ -13008,1517 +14594,79 @@ module.exports = {
 
 
 /***/ }),
-/* 42 */
+
+/***/ "crypto":
 /*!*************************!*\
   !*** external "crypto" ***!
   \*************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__42__;
-
-/***/ }),
-/* 43 */
-/*!********************************!*\
-  !*** ./format/kdbx-context.js ***!
-  \********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
 
 "use strict";
-
-
-var XmlUtils = __webpack_require__(/*! ../utils/xml-utils */ 4);
-
-/**
- * Context with helper methods for load/save
- * @param {Kdbx} opts.kdbx - kdbx file
- * @param {boolean} [opts.exportXml=false] - whether we are exporting as xml
- * @constructor
- */
-var KdbxContext = function (opts) {
-    this.kdbx = opts.kdbx;
-    this.exportXml = opts.exportXml || false;
-};
-
-/**
- * Sets XML date, respecting date saving settings
- * @param {Node} node
- * @param {Date} dt
- */
-KdbxContext.prototype.setXmlDate = function (node, dt) {
-    var isBinary = this.kdbx.header.versionMajor >= 4 && !this.exportXml;
-    XmlUtils.setDate(node, dt, isBinary);
-};
-
-module.exports = KdbxContext;
-
+module.exports = __WEBPACK_EXTERNAL_MODULE_crypto__;
 
 /***/ }),
-/* 44 */
+
+/***/ "xmldom":
 /*!*************************!*\
   !*** external "xmldom" ***!
   \*************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__44__;
-
-/***/ }),
-/* 45 */
-/*!******************************************!*\
-  !*** ./crypto/hashed-block-transform.js ***!
-  \******************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
+/*! dynamic exports */
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! runtime requirements: module */
+/***/ ((module) => {
 
 "use strict";
-
-
-var BinaryStream = __webpack_require__(/*! ./../utils/binary-stream */ 11),
-    KdbxError = __webpack_require__(/*! ./../errors/kdbx-error */ 2),
-    Consts = __webpack_require__(/*! ./../defs/consts */ 1),
-    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
-
-var BlockSize = 1024 * 1024;
-
-/**
- * Decrypt buffer
- * @param {ArrayBuffer} data
- * @returns {Promise.<ArrayBuffer>}
- */
-function decrypt(data) {
-    return Promise.resolve().then(function () {
-        var stm = new BinaryStream(data);
-        var buffers = [];
-        var // blockIndex = 0,
-            blockLength = 0,
-            blockHash,
-            totalLength = 0;
-
-        var next = function () {
-            /* blockIndex = */ stm.getUint32(true);
-            blockHash = stm.readBytes(32);
-            blockLength = stm.getUint32(true);
-            if (blockLength > 0) {
-                totalLength += blockLength;
-                var blockData = stm.readBytes(blockLength);
-                return CryptoEngine.sha256(blockData).then(function (calculatedHash) {
-                    if (!ByteUtils.arrayBufferEquals(calculatedHash, blockHash)) {
-                        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
-                    } else {
-                        buffers.push(blockData);
-                        return next();
-                    }
-                });
-            } else {
-                var ret = new Uint8Array(totalLength);
-                var offset = 0;
-                for (var i = 0; i < buffers.length; i++) {
-                    ret.set(new Uint8Array(buffers[i]), offset);
-                    offset += buffers[i].byteLength;
-                }
-                return ret.buffer;
-            }
-        };
-        return next();
-    });
-}
-
-/**
- * Encrypt buffer
- * @param {ArrayBuffer} data
- * @returns {Promise.<ArrayBuffer>}
- */
-function encrypt(data) {
-    return Promise.resolve().then(function () {
-        var bytesLeft = data.byteLength;
-        var currentOffset = 0,
-            blockIndex = 0,
-            totalLength = 0;
-        var buffers = [];
-
-        var next = function () {
-            if (bytesLeft > 0) {
-                var blockLength = Math.min(BlockSize, bytesLeft);
-                bytesLeft -= blockLength;
-
-                var blockData = data.slice(currentOffset, currentOffset + blockLength);
-                return CryptoEngine.sha256(blockData).then(function (blockHash) {
-                    var blockBuffer = new ArrayBuffer(4 + 32 + 4);
-                    var stm = new BinaryStream(blockBuffer);
-                    stm.setUint32(blockIndex, true);
-                    stm.writeBytes(blockHash);
-                    stm.setUint32(blockLength, true);
-
-                    buffers.push(blockBuffer);
-                    totalLength += blockBuffer.byteLength;
-                    buffers.push(blockData);
-                    totalLength += blockData.byteLength;
-
-                    blockIndex++;
-                    currentOffset += blockLength;
-
-                    return next();
-                });
-            } else {
-                var endBlockData = new ArrayBuffer(4 + 32 + 4);
-                var view = new DataView(endBlockData);
-                view.setUint32(0, blockIndex, true);
-                buffers.push(endBlockData);
-                totalLength += endBlockData.byteLength;
-
-                var ret = new Uint8Array(totalLength);
-                var offset = 0;
-                for (var i = 0; i < buffers.length; i++) {
-                    ret.set(new Uint8Array(buffers[i]), offset);
-                    offset += buffers[i].byteLength;
-                }
-                return ret.buffer;
-            }
-        };
-        return next();
-    });
-}
-
-module.exports.decrypt = decrypt;
-module.exports.encrypt = encrypt;
-
-
-/***/ }),
-/* 46 */
-/*!****************************************!*\
-  !*** ./crypto/hmac-block-transform.js ***!
-  \****************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    BinaryStream = __webpack_require__(/*! ../utils/binary-stream */ 11),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3);
-
-var BlockSize = 1024 * 1024;
-
-/**
- * Computes HMAC-SHA key
- * @param {ArrayBuffer} key
- * @param {Int64} blockIndex
- * @returns {Promise.<ArrayBuffer>}
- */
-function getHmacKey(key, blockIndex) {
-    var shaSrc = new Uint8Array(8 + key.byteLength);
-    shaSrc.set(new Uint8Array(key), 8);
-    var view = new DataView(shaSrc.buffer);
-    view.setUint32(0, blockIndex.lo, true);
-    view.setUint32(4, blockIndex.hi, true);
-    return CryptoEngine.sha512(ByteUtils.arrayToBuffer(shaSrc)).then(function (sha) {
-        ByteUtils.zeroBuffer(shaSrc);
-        return sha;
-    });
-}
-
-/**
- * Gets block HMAC
- * @param {ArrayBuffer} key
- * @param {number} blockIndex
- * @param {number} blockLength
- * @param {ArrayBuffer} blockData
- * @returns {Promise.<ArrayBuffer>}
- */
-function getBlockHmac(key, blockIndex, blockLength, blockData) {
-    return getHmacKey(key, new Int64(blockIndex)).then(function (blockKey) {
-        var blockDataForHash = new Uint8Array(blockData.byteLength + 4 + 8);
-        var blockDataForHashView = new DataView(blockDataForHash.buffer);
-        blockDataForHash.set(new Uint8Array(blockData), 4 + 8);
-        blockDataForHashView.setInt32(0, blockIndex, true);
-        blockDataForHashView.setInt32(8, blockLength, true);
-        return CryptoEngine.hmacSha256(blockKey, blockDataForHash.buffer);
-    });
-}
-
-/**
- * Decrypt buffer
- * @param {ArrayBuffer} data
- * @param {ArrayBuffer} key
- * @returns {Promise.<ArrayBuffer>}
- */
-function decrypt(data, key) {
-    var stm = new BinaryStream(data);
-    return Promise.resolve().then(function () {
-        var buffers = [];
-        var blockIndex = 0,
-            blockLength = 0,
-            blockHash,
-            totalLength = 0;
-
-        var next = function () {
-            blockHash = stm.readBytes(32);
-            blockLength = stm.getUint32(true);
-            if (blockLength > 0) {
-                totalLength += blockLength;
-                var blockData = stm.readBytes(blockLength);
-                return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (
-                    calculatedBlockHash
-                ) {
-                    if (!ByteUtils.arrayBufferEquals(calculatedBlockHash, blockHash)) {
-                        throw new KdbxError(Consts.ErrorCodes.FileCorrupt, 'invalid hash block');
-                    } else {
-                        buffers.push(blockData);
-                        blockIndex++;
-                        return next();
-                    }
-                });
-            } else {
-                var ret = new Uint8Array(totalLength);
-                var offset = 0;
-                for (var i = 0; i < buffers.length; i++) {
-                    ret.set(new Uint8Array(buffers[i]), offset);
-                    offset += buffers[i].byteLength;
-                }
-                return ret.buffer;
-            }
-        };
-        return next();
-    });
-}
-
-/**
- * Encrypt buffer
- * @param {ArrayBuffer} data
- * @param {ArrayBuffer} key
- * @returns {Promise.<ArrayBuffer>}
- */
-function encrypt(data, key) {
-    return Promise.resolve().then(function () {
-        var bytesLeft = data.byteLength;
-        var currentOffset = 0,
-            blockIndex = 0,
-            totalLength = 0;
-        var buffers = [];
-
-        var next = function () {
-            var blockLength = Math.min(BlockSize, bytesLeft);
-            bytesLeft -= blockLength;
-
-            var blockData = data.slice(currentOffset, currentOffset + blockLength);
-            return getBlockHmac(key, blockIndex, blockLength, blockData).then(function (blockHash) {
-                var blockBuffer = new ArrayBuffer(32 + 4);
-                var stm = new BinaryStream(blockBuffer);
-                stm.writeBytes(blockHash);
-                stm.setUint32(blockLength, true);
-
-                buffers.push(blockBuffer);
-                totalLength += blockBuffer.byteLength;
-
-                if (blockData.byteLength > 0) {
-                    buffers.push(blockData);
-                    totalLength += blockData.byteLength;
-                    blockIndex++;
-                    currentOffset += blockLength;
-                    return next();
-                } else {
-                    var ret = new Uint8Array(totalLength);
-                    var offset = 0;
-                    for (var i = 0; i < buffers.length; i++) {
-                        ret.set(new Uint8Array(buffers[i]), offset);
-                        offset += buffers[i].byteLength;
-                    }
-                    return ret.buffer;
-                }
-            });
-        };
-        return next();
-    });
-}
-
-module.exports.getHmacKey = getHmacKey;
-module.exports.decrypt = decrypt;
-module.exports.encrypt = encrypt;
-
-
-/***/ }),
-/* 47 */
-/*!******************************************!*\
-  !*** ./crypto/protect-salt-generator.js ***!
-  \******************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Salsa20 = __webpack_require__(/*! ./salsa20 */ 23),
-    ChaCha20 = __webpack_require__(/*! ./chacha20 */ 24),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    CryptoEngine = __webpack_require__(/*! ./crypto-engine */ 3),
-    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0);
-
-var SalsaNonce = [0xe8, 0x30, 0x09, 0x4b, 0x97, 0x20, 0x5d, 0x2a];
-
-/**
- * Protect information used for decrypt and encrypt protected data fields
- * @constructor
- */
-var ProtectSaltGenerator = function (algo) {
-    this.algo = algo;
-};
-
-/**
- * Get salt bytes
- * @param {number} len - bytes count
- * @return {ArrayBuffer} - salt bytes
- */
-ProtectSaltGenerator.prototype.getSalt = function (len) {
-    return ByteUtils.arrayToBuffer(this.algo.getBytes(len));
-};
-
-/**
- * Creates protected salt generator
- * @param {ArrayBuffer|Uint8Array} key
- * @param {Number} crsAlgorithm
- * @return {Promise.<ProtectedSaltGenerator>}
- */
-ProtectSaltGenerator.create = function (key, crsAlgorithm) {
-    switch (crsAlgorithm) {
-        case Consts.CrsAlgorithm.Salsa20:
-            return CryptoEngine.sha256(ByteUtils.arrayToBuffer(key)).then(function (hash) {
-                var key = new Uint8Array(hash);
-                var algo = new Salsa20(key, SalsaNonce);
-                return new ProtectSaltGenerator(algo);
-            });
-        case Consts.CrsAlgorithm.ChaCha20:
-            return CryptoEngine.sha512(ByteUtils.arrayToBuffer(key)).then(function (hash) {
-                var key = new Uint8Array(hash, 0, 32);
-                var nonce = new Uint8Array(hash, 32, 12);
-                var algo = new ChaCha20(key, nonce);
-                return new ProtectSaltGenerator(algo);
-            });
-        default:
-            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'crsAlgorithm'));
-    }
-};
-
-module.exports = ProtectSaltGenerator;
-
-
-/***/ }),
-/* 48 */
-/*!*************************************!*\
-  !*** ./crypto/key-encryptor-kdf.js ***!
-  \*************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    ByteUtils = __webpack_require__(/*! ../utils/byte-utils */ 0),
-    VarDictionary = __webpack_require__(/*! ../utils/var-dictionary */ 14),
-    Int64 = __webpack_require__(/*! ../utils/int64 */ 8),
-    CryptoEngine = __webpack_require__(/*! ../crypto/crypto-engine */ 3),
-    KdbxError = __webpack_require__(/*! ../errors/kdbx-error */ 2),
-    KeyEncryptorAes = __webpack_require__(/*! ./key-encryptor-aes */ 25);
-
-var KdfFields = [
-    { name: 'salt', field: 'S', type: VarDictionary.ValueType.Bytes },
-    { name: 'parallelism', field: 'P', type: VarDictionary.ValueType.UInt32 },
-    { name: 'memory', field: 'M', type: VarDictionary.ValueType.UInt64 },
-    { name: 'iterations', field: 'I', type: VarDictionary.ValueType.UInt64 },
-    { name: 'version', field: 'V', type: VarDictionary.ValueType.UInt32 },
-    { name: 'secretKey', field: 'K', type: VarDictionary.ValueType.Bytes },
-    { name: 'assocData', field: 'A', type: VarDictionary.ValueType.Bytes },
-    { name: 'rounds', field: 'R', type: VarDictionary.ValueType.UInt64 }
-];
-
-/**
- * Derives key from seed using KDF parameters
- * @param {ArrayBuffer} key
- * @param {VarDictionary} kdfParams
- */
-function encrypt(key, kdfParams) {
-    var uuid = kdfParams.get('$UUID');
-    if (!uuid || !(uuid instanceof ArrayBuffer)) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'no kdf uuid'));
-    }
-    var kdfUuid = ByteUtils.bytesToBase64(uuid);
-    switch (kdfUuid) {
-        case Consts.KdfId.Argon2:
-            return encryptArgon2(key, kdfParams);
-        case Consts.KdfId.Aes:
-            return encryptAes(key, kdfParams);
-        default:
-            return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'bad kdf'));
-    }
-}
-
-function decodeParams(kdfParams) {
-    var params = {};
-    KdfFields.forEach(function (fieldDef) {
-        var value = kdfParams.get(fieldDef.field);
-        if (value) {
-            if (value instanceof Int64) {
-                value = value.value;
-            }
-            params[fieldDef.name] = value;
-        }
-    });
-    return params;
-}
-
-function encryptArgon2(key, kdfParams) {
-    var params = decodeParams(kdfParams);
-    if (!(params.salt instanceof ArrayBuffer) || params.salt.byteLength !== 32) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 salt'));
-    }
-    if (typeof params.parallelism !== 'number' || params.parallelism < 1) {
-        return Promise.reject(
-            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 parallelism')
-        );
-    }
-    if (typeof params.iterations !== 'number' || params.iterations < 1) {
-        return Promise.reject(
-            new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 iterations')
-        );
-    }
-    if (typeof params.memory !== 'number' || params.memory < 1 || params.memory % 1024 !== 0) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 memory'));
-    }
-    if (params.version !== 0x13 && params.version !== 0x10) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad argon2 version'));
-    }
-    if (params.secretKey) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'argon2 secret key'));
-    }
-    if (params.assocData) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.Unsupported, 'argon2 assoc data'));
-    }
-    return CryptoEngine.argon2(
-        key,
-        params.salt,
-        params.memory / 1024,
-        params.iterations,
-        32,
-        params.parallelism,
-        0,
-        params.version
-    );
-}
-
-function encryptAes(key, kdfParams) {
-    var params = decodeParams(kdfParams);
-    if (!(params.salt instanceof ArrayBuffer) || params.salt.byteLength !== 32) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad aes salt'));
-    }
-    if (typeof params.rounds !== 'number' || params.rounds < 1) {
-        return Promise.reject(new KdbxError(Consts.ErrorCodes.FileCorrupt, 'bad aes rounds'));
-    }
-    return KeyEncryptorAes.encrypt(
-        new Uint8Array(key),
-        new Uint8Array(params.salt),
-        params.rounds
-    ).then(function (key) {
-        return CryptoEngine.sha256(key).then(function (hash) {
-            ByteUtils.zeroBuffer(key);
-            return hash;
-        });
-    });
-}
-
-module.exports.encrypt = encrypt;
-
-
-/***/ }),
-/* 49 */
-/*!*****************************!*\
-  !*** ./format/kdbx-meta.js ***!
-  \*****************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
-    Consts = __webpack_require__(/*! ./../defs/consts */ 1);
-
-var Constants = {
-    Generator: 'KdbxWeb'
-};
-
-/**
- * Db metadata
- * @constructor
- */
-var KdbxMeta = function () {
-    this.generator = undefined;
-    this.headerHash = undefined;
-    this.settingsChanged = undefined;
-    this._name = undefined;
-    this.nameChanged = undefined;
-    this._desc = undefined;
-    this.descChanged = undefined;
-    this._defaultUser = undefined;
-    this.defaultUserChanged = undefined;
-    this._mntncHistoryDays = undefined;
-    this._color = undefined;
-    this.keyChanged = undefined;
-    this._keyChangeRec = undefined;
-    this._keyChangeForce = undefined;
-    this._recycleBinEnabled = undefined;
-    this._recycleBinUuid = undefined;
-    this.recycleBinChanged = undefined;
-    this._entryTemplatesGroup = undefined;
-    this.entryTemplatesGroupChanged = undefined;
-    this._historyMaxItems = undefined;
-    this._historyMaxSize = undefined;
-    this._lastSelectedGroup = undefined;
-    this._lastTopVisibleGroup = undefined;
-    this._memoryProtection = {
-        title: undefined,
-        userName: undefined,
-        password: undefined,
-        url: undefined,
-        notes: undefined
-    };
-    this.customData = {};
-    this.customIcons = {};
-    this._editState = undefined;
-    Object.preventExtensions(this);
-};
-
-var props = {
-    name: 'nameChanged',
-    desc: 'descChanged',
-    defaultUser: 'defaultUserChanged',
-    mntncHistoryDays: null,
-    color: null,
-    keyChangeRec: null,
-    keyChangeForce: null,
-    recycleBinEnabled: 'recycleBinChanged',
-    recycleBinUuid: 'recycleBinChanged',
-    entryTemplatesGroup: 'entryTemplatesGroupChanged',
-    historyMaxItems: null,
-    historyMaxSize: null,
-    lastSelectedGroup: null,
-    lastTopVisibleGroup: null,
-    memoryProtection: null
-};
-
-Object.keys(props).forEach(function (prop) {
-    createProperty(prop, props[prop]);
-});
-
-function createProperty(prop, propChanged) {
-    var field = '_' + prop;
-    Object.defineProperty(KdbxMeta.prototype, prop, {
-        enumerable: true,
-        get: function () {
-            return this[field];
-        },
-        set: function (value) {
-            if (value !== this[field]) {
-                this[field] = value;
-                if (propChanged) {
-                    this[propChanged] = new Date();
-                } else {
-                    this._setPropModDate(prop);
-                }
-            }
-        }
-    });
-}
-
-KdbxMeta.prototype._setPropModDate = function (prop) {
-    if (!this._editState) {
-        this._editState = {};
-    }
-    this._editState[prop] = new Date().getTime();
-};
-
-KdbxMeta.prototype._readNode = function (node, ctx) {
-    switch (node.tagName) {
-        case XmlNames.Elem.Generator:
-            this.generator = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.HeaderHash:
-            this.headerHash = XmlUtils.getBytes(node);
-            break;
-        case XmlNames.Elem.SettingsChanged:
-            this.settingsChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.DbName:
-            this._name = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.DbNameChanged:
-            this.nameChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.DbDesc:
-            this._desc = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.DbDescChanged:
-            this.descChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.DbDefaultUser:
-            this._defaultUser = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.DbDefaultUserChanged:
-            this.defaultUserChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.DbMntncHistoryDays:
-            this._mntncHistoryDays = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.DbColor:
-            this._color = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.DbKeyChanged:
-            this.keyChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.DbKeyChangeRec:
-            this._keyChangeRec = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.DbKeyChangeForce:
-            this._keyChangeForce = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.RecycleBinEnabled:
-            this._recycleBinEnabled = XmlUtils.getBoolean(node);
-            break;
-        case XmlNames.Elem.RecycleBinUuid:
-            this._recycleBinUuid = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.RecycleBinChanged:
-            this.recycleBinChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.EntryTemplatesGroup:
-            this._entryTemplatesGroup = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.EntryTemplatesGroupChanged:
-            this.entryTemplatesGroupChanged = XmlUtils.getDate(node);
-            break;
-        case XmlNames.Elem.HistoryMaxItems:
-            this._historyMaxItems = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.HistoryMaxSize:
-            this._historyMaxSize = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.LastSelectedGroup:
-            this._lastSelectedGroup = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.LastTopVisibleGroup:
-            this._lastTopVisibleGroup = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.MemoryProt:
-            this._readMemoryProtection(node);
-            break;
-        case XmlNames.Elem.CustomIcons:
-            this._readCustomIcons(node);
-            break;
-        case XmlNames.Elem.Binaries:
-            this._readBinaries(node, ctx);
-            break;
-        case XmlNames.Elem.CustomData:
-            this._readCustomData(node);
-            break;
-    }
-};
-
-KdbxMeta.prototype._readMemoryProtection = function (node) {
-    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        switch (childNode.tagName) {
-            case XmlNames.Elem.ProtTitle:
-                this.memoryProtection.title = XmlUtils.getBoolean(childNode);
-                break;
-            case XmlNames.Elem.ProtUserName:
-                this.memoryProtection.userName = XmlUtils.getBoolean(childNode);
-                break;
-            case XmlNames.Elem.ProtPassword:
-                this.memoryProtection.password = XmlUtils.getBoolean(childNode);
-                break;
-            case XmlNames.Elem.ProtUrl:
-                this.memoryProtection.url = XmlUtils.getBoolean(childNode);
-                break;
-            case XmlNames.Elem.ProtNotes:
-                this.memoryProtection.notes = XmlUtils.getBoolean(childNode);
-                break;
-        }
-    }
-};
-
-KdbxMeta.prototype._writeMemoryProtection = function (parentNode) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.MemoryProt);
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.ProtTitle),
-        this.memoryProtection.title
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUserName),
-        this.memoryProtection.userName
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.ProtPassword),
-        this.memoryProtection.password
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.ProtUrl),
-        this.memoryProtection.url
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.ProtNotes),
-        this.memoryProtection.notes
-    );
-};
-
-KdbxMeta.prototype._readCustomIcons = function (node) {
-    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName === XmlNames.Elem.CustomIconItem) {
-            this._readCustomIcon(childNode);
-        }
-    }
-};
-
-KdbxMeta.prototype._readCustomIcon = function (node) {
-    var uuid, data;
-    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        switch (childNode.tagName) {
-            case XmlNames.Elem.CustomIconItemID:
-                uuid = XmlUtils.getUuid(childNode);
-                break;
-            case XmlNames.Elem.CustomIconItemData:
-                data = XmlUtils.getBytes(childNode);
-                break;
-        }
-    }
-    if (uuid && data) {
-        this.customIcons[uuid] = data;
-    }
-};
-
-KdbxMeta.prototype._writeCustomIcons = function (parentNode) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomIcons);
-    var customIcons = this.customIcons;
-    Object.keys(customIcons).forEach(function (uuid) {
-        var data = customIcons[uuid];
-        if (data) {
-            var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconItem);
-            XmlUtils.setUuid(XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemID), uuid);
-            XmlUtils.setBytes(
-                XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemData),
-                data
-            );
-        }
-    });
-};
-
-KdbxMeta.prototype._readBinaries = function (node, ctx) {
-    for (var i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName === XmlNames.Elem.Binary) {
-            this._readBinary(childNode, ctx);
-        }
-    }
-};
-
-KdbxMeta.prototype._readBinary = function (node, ctx) {
-    var id = node.getAttribute(XmlNames.Attr.Id);
-    var binary = XmlUtils.getProtectedBinary(node);
-    if (id && binary) {
-        ctx.kdbx.binaries[id] = binary;
-    }
-};
-
-KdbxMeta.prototype._writeBinaries = function (parentNode, ctx) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Binaries);
-    var binaries = ctx.kdbx.binaries;
-    binaries.hashOrder.forEach(function (hash, index) {
-        var data = binaries[hash];
-        if (data) {
-            var itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.Binary);
-            itemNode.setAttribute(XmlNames.Attr.Id, index.toString());
-            XmlUtils.setProtectedBinary(itemNode, data);
-        }
-    });
-};
-
-KdbxMeta.prototype._readCustomData = function (node) {
-    this.customData = KdbxCustomData.read(node);
-};
-
-KdbxMeta.prototype._writeCustomData = function (parentNode) {
-    KdbxCustomData.write(parentNode, this.customData);
-};
-
-/**
- * Write to stream
- * @param {Node} parentNode - xml document node
- * @param {KdbxContext} ctx
- */
-KdbxMeta.prototype.write = function (parentNode, ctx) {
-    this.generator = Constants.generator;
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Meta);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Generator), Constants.Generator);
-    if (ctx.kdbx.header.versionMajor < 4) {
-        XmlUtils.setBytes(XmlUtils.addChildNode(node, XmlNames.Elem.HeaderHash), this.headerHash);
-    } else if (this.settingsChanged) {
-        ctx.setXmlDate(
-            XmlUtils.addChildNode(node, XmlNames.Elem.SettingsChanged),
-            this.settingsChanged
-        );
-    }
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbName), this.name);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbNameChanged), this.nameChanged);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDesc), this.desc);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbDescChanged), this.descChanged);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUser), this.defaultUser);
-    ctx.setXmlDate(
-        XmlUtils.addChildNode(node, XmlNames.Elem.DbDefaultUserChanged),
-        this.defaultUserChanged
-    );
-    XmlUtils.setText(
-        XmlUtils.addChildNode(node, XmlNames.Elem.DbMntncHistoryDays),
-        this.mntncHistoryDays
-    );
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.DbColor), this.color);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChanged), this.keyChanged);
-    XmlUtils.setNumber(
-        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeRec),
-        this.keyChangeRec
-    );
-    XmlUtils.setNumber(
-        XmlUtils.addChildNode(node, XmlNames.Elem.DbKeyChangeForce),
-        this.keyChangeForce
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinEnabled),
-        this.recycleBinEnabled
-    );
-    XmlUtils.setUuid(
-        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinUuid),
-        this.recycleBinUuid
-    );
-    ctx.setXmlDate(
-        XmlUtils.addChildNode(node, XmlNames.Elem.RecycleBinChanged),
-        this.recycleBinChanged
-    );
-    XmlUtils.setUuid(
-        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroup),
-        this.entryTemplatesGroup
-    );
-    ctx.setXmlDate(
-        XmlUtils.addChildNode(node, XmlNames.Elem.EntryTemplatesGroupChanged),
-        this.entryTemplatesGroupChanged
-    );
-    XmlUtils.setNumber(
-        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxItems),
-        this.historyMaxItems
-    );
-    XmlUtils.setNumber(
-        XmlUtils.addChildNode(node, XmlNames.Elem.HistoryMaxSize),
-        this.historyMaxSize
-    );
-    XmlUtils.setUuid(
-        XmlUtils.addChildNode(node, XmlNames.Elem.LastSelectedGroup),
-        this.lastSelectedGroup
-    );
-    XmlUtils.setUuid(
-        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleGroup),
-        this.lastTopVisibleGroup
-    );
-    this._writeMemoryProtection(node);
-    this._writeCustomIcons(node);
-    if (ctx.exportXml || ctx.kdbx.header.versionMajor < 4) {
-        this._writeBinaries(node, ctx);
-    }
-    this._writeCustomData(node);
-};
-
-/**
- * Merge meta with another db
- * @param {KdbxMeta} remote
- * @param {{objects, remote, deleted}} objectMap
- */
-KdbxMeta.prototype.merge = function (remote, objectMap) {
-    if (remote.nameChanged > this.nameChanged) {
-        this._name = remote.name;
-        this.nameChanged = remote.nameChanged;
-    }
-    if (remote.descChanged > this.descChanged) {
-        this._desc = remote.desc;
-        this.descChanged = remote.descChanged;
-    }
-    if (remote.defaultUserChanged > this.defaultUserChanged) {
-        this._defaultUser = remote.defaultUser;
-        this.defaultUserChanged = remote.defaultUserChanged;
-    }
-    if (remote.keyChanged > this.keyChanged) {
-        this.keyChanged = remote.keyChanged;
-    }
-    if (remote.settingsChanged > this.settingsChanged) {
-        this.settingsChanged = remote.settingsChanged;
-    }
-    if (remote.recycleBinChanged > this.recycleBinChanged) {
-        this._recycleBinEnabled = remote.recycleBinEnabled;
-        this._recycleBinUuid = remote.recycleBinUuid;
-        this.recycleBinChanged = remote.recycleBinChanged;
-    }
-    if (remote.entryTemplatesGroupChanged > this.entryTemplatesGroupChanged) {
-        this._entryTemplatesGroup = remote.entryTemplatesGroup;
-        this.entryTemplatesGroupChanged = remote.entryTemplatesGroupChanged;
-    }
-    Object.keys(remote.customData).forEach(function (key) {
-        if (!this.customData[key] && !objectMap.deleted[key]) {
-            this.customData[key] = remote.customData[key];
-        }
-    }, this);
-    Object.keys(remote.customIcons).forEach(function (key) {
-        if (!this.customIcons[key] && !objectMap.deleted[key]) {
-            this.customIcons[key] = remote.customIcons[key];
-        }
-    }, this);
-    if (!this._editState || !this._editState.historyMaxItems) {
-        this.historyMaxItems = remote.historyMaxItems;
-    }
-    if (!this._editState || !this._editState.historyMaxSize) {
-        this.historyMaxSize = remote.historyMaxSize;
-    }
-    if (!this._editState || !this._editState.keyChangeRec) {
-        this.keyChangeRec = remote.keyChangeRec;
-    }
-    if (!this._editState || !this._editState.keyChangeForce) {
-        this.keyChangeForce = remote.keyChangeForce;
-    }
-    if (!this._editState || !this._editState.mntncHistoryDays) {
-        this.mntncHistoryDays = remote.mntncHistoryDays;
-    }
-    if (!this._editState || !this._editState.color) {
-        this.color = remote.color;
-    }
-};
-
-/**
- * Creates new meta
- * @returns {KdbxMeta}
- */
-KdbxMeta.create = function () {
-    var now = new Date();
-    var meta = new KdbxMeta();
-    meta.generator = Constants.Generator;
-    meta.settingsChanged = now;
-    meta.mntncHistoryDays = Consts.Defaults.MntncHistoryDays;
-    meta.recycleBinEnabled = true;
-    meta.historyMaxItems = Consts.Defaults.HistoryMaxItems;
-    meta.historyMaxSize = Consts.Defaults.HistoryMaxSize;
-    meta.nameChanged = now;
-    meta.descChanged = now;
-    meta.defaultUserChanged = now;
-    meta.recycleBinChanged = now;
-    meta.keyChangeRec = -1;
-    meta.keyChangeForce = -1;
-    meta.entryTemplatesGroup = new KdbxUuid();
-    meta.entryTemplatesGroupChanged = now;
-    meta.memoryProtection = {
-        title: false,
-        userName: false,
-        password: true,
-        url: false,
-        notes: false
-    };
-    return meta;
-};
-
-/**
- * Read KdbxMeta from stream
- * @param {Node} xmlNode - xml Meta node
- * @param {KdbxContext} ctx
- * @return {KdbxMeta}
- */
-KdbxMeta.read = function (xmlNode, ctx) {
-    var meta = new KdbxMeta();
-    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName) {
-            meta._readNode(childNode, ctx);
-        }
-    }
-    return meta;
-};
-
-module.exports = KdbxMeta;
-
-
-/***/ }),
-/* 50 */
-/*!*********************************!*\
-  !*** ./format/kdbx-binaries.js ***!
-  \*********************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var ProtectedValue = __webpack_require__(/*! ./../crypto/protected-value */ 9),
-    CryptoEngine = __webpack_require__(/*! ./../crypto/crypto-engine */ 3),
-    ByteUtils = __webpack_require__(/*! ./../utils/byte-utils */ 0);
-
-var KdbxBinaries = function () {
-    Object.defineProperties(this, {
-        idToHash: { value: {} },
-        hashOrder: { value: null, configurable: true }
-    });
-};
-
-KdbxBinaries.prototype.hash = function () {
-    var promises = [];
-    var that = this;
-    Object.keys(that).forEach(function (id) {
-        var binary = that[id];
-        promises.push(
-            that.getBinaryHash(binary).then(function (hash) {
-                that.idToHash[id] = hash;
-                that[hash] = that[id];
-                delete that[id];
-            })
-        );
-    });
-    return Promise.all(promises);
-};
-
-KdbxBinaries.prototype.getBinaryHash = function (binary) {
-    var promise;
-    if (binary instanceof ProtectedValue) {
-        promise = binary.getHash();
-    } else if (binary instanceof ArrayBuffer || binary instanceof Uint8Array) {
-        binary = ByteUtils.arrayToBuffer(binary);
-        promise = CryptoEngine.sha256(binary);
-    }
-    return promise.then(function (hash) {
-        return ByteUtils.bytesToHex(hash);
-    });
-};
-
-KdbxBinaries.prototype.assignIds = function () {
-    Object.defineProperty(this, 'hashOrder', { value: Object.keys(this), configurable: true });
-};
-
-KdbxBinaries.prototype.add = function (value) {
-    var that = this;
-    return this.getBinaryHash(value).then(function (hash) {
-        that[hash] = value;
-        return { ref: hash, value: value };
-    });
-};
-
-module.exports = KdbxBinaries;
-
-
-/***/ }),
-/* 51 */
-/*!******************************!*\
-  !*** ./format/kdbx-group.js ***!
-  \******************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4),
-    Consts = __webpack_require__(/*! ../defs/consts */ 1),
-    KdbxCustomData = __webpack_require__(/*! ./kdbx-custom-data */ 15),
-    KdbxTimes = __webpack_require__(/*! ./kdbx-times */ 27),
-    KdbxUuid = __webpack_require__(/*! ./kdbx-uuid */ 7),
-    KdbxEntry = __webpack_require__(/*! ./kdbx-entry */ 28);
-
-/**
- * Entries group
- * @constructor
- */
-var KdbxGroup = function () {
-    this.uuid = undefined;
-    this.name = undefined;
-    this.notes = undefined;
-    this.icon = undefined;
-    this.customIcon = undefined;
-    this.times = new KdbxTimes();
-    this.expanded = undefined;
-    this.defaultAutoTypeSeq = undefined;
-    this.enableAutoType = undefined;
-    this.enableSearching = undefined;
-    this.lastTopVisibleEntry = undefined;
-    this.groups = [];
-    this.entries = [];
-    this.parentGroup = undefined;
-    this.customData = undefined;
-    Object.preventExtensions(this);
-};
-
-KdbxGroup.prototype._readNode = function (node, ctx) {
-    switch (node.tagName) {
-        case XmlNames.Elem.Uuid:
-            this.uuid = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.Name:
-            this.name = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.Notes:
-            this.notes = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.Icon:
-            this.icon = XmlUtils.getNumber(node);
-            break;
-        case XmlNames.Elem.CustomIconID:
-            this.customIcon = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.Times:
-            this.times = KdbxTimes.read(node);
-            break;
-        case XmlNames.Elem.IsExpanded:
-            this.expanded = XmlUtils.getBoolean(node);
-            break;
-        case XmlNames.Elem.GroupDefaultAutoTypeSeq:
-            this.defaultAutoTypeSeq = XmlUtils.getText(node);
-            break;
-        case XmlNames.Elem.EnableAutoType:
-            this.enableAutoType = XmlUtils.getBoolean(node);
-            break;
-        case XmlNames.Elem.EnableSearching:
-            this.enableSearching = XmlUtils.getBoolean(node);
-            break;
-        case XmlNames.Elem.LastTopVisibleEntry:
-            this.lastTopVisibleEntry = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.Group:
-            this.groups.push(KdbxGroup.read(node, ctx, this));
-            break;
-        case XmlNames.Elem.Entry:
-            this.entries.push(KdbxEntry.read(node, ctx, this));
-            break;
-        case XmlNames.Elem.CustomData:
-            this.customData = KdbxCustomData.read(node);
-            break;
-    }
-};
-
-/**
- * Write to stream
- * @param {Node} parentNode - xml document node
- * @param {KdbxContext} ctx
- */
-KdbxGroup.prototype.write = function (parentNode, ctx) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.Group);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Name), this.name);
-    XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Notes), this.notes);
-    XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon);
-    if (this.customIcon) {
-        XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID), this.customIcon);
-    }
-    KdbxCustomData.write(node, this.customData);
-    this.times.write(node, ctx);
-    XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.IsExpanded), this.expanded);
-    XmlUtils.setText(
-        XmlUtils.addChildNode(node, XmlNames.Elem.GroupDefaultAutoTypeSeq),
-        this.defaultAutoTypeSeq
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.EnableAutoType),
-        this.enableAutoType
-    );
-    XmlUtils.setBoolean(
-        XmlUtils.addChildNode(node, XmlNames.Elem.EnableSearching),
-        this.enableSearching
-    );
-    XmlUtils.setUuid(
-        XmlUtils.addChildNode(node, XmlNames.Elem.LastTopVisibleEntry),
-        this.lastTopVisibleEntry
-    );
-    this.groups.forEach(function (g) {
-        g.write(node, ctx);
-    });
-    this.entries.forEach(function (e) {
-        e.write(node, ctx);
-    });
-};
-
-/**
- * Invokes callback for each entry in recursive way
- * @param {function} callback - will be invoked with entry or group argument
- * @param {function} [thisArg] - callback context
- */
-KdbxGroup.prototype.forEach = function (callback, thisArg) {
-    callback.call(thisArg, undefined, this);
-    this.entries.forEach(function (entry) {
-        callback.call(thisArg, entry);
-    });
-    this.groups.forEach(function (group) {
-        group.forEach(callback, thisArg);
-    });
-};
-
-/**
- * Merge group with remote group
- * @param {{objects, remote, deleted}} objectMap
- */
-KdbxGroup.prototype.merge = function (objectMap) {
-    var remoteGroup = objectMap.remote[this.uuid];
-    if (!remoteGroup) {
-        return;
-    }
-    if (remoteGroup.times.lastModTime > this.times.lastModTime) {
-        this.copyFrom(remoteGroup);
-    }
-    this.groups = this._mergeCollection(this.groups, remoteGroup.groups, objectMap);
-    this.entries = this._mergeCollection(this.entries, remoteGroup.entries, objectMap);
-    this.groups.forEach(function (group) {
-        group.merge(objectMap);
-    });
-    this.entries.forEach(function (entry) {
-        entry.merge(objectMap);
-    });
-};
-
-/**
- * Merge object collection with remote collection
- * Implements 2P-set CRDT with tombstones stored in objectMap.deleted
- * Assumes tombstones are already merged
- * @param {object[]} collection - local groups or entries
- * @param {object[]} remoteCollection - remote groups or entries
- * @param {{objects, remote, deleted}} objectMap - local objects hashmap, remote objects hashmap and tombstones
- * @returns {object[]}
- * @private
- */
-KdbxGroup.prototype._mergeCollection = function (collection, remoteCollection, objectMap) {
-    var newItems = [];
-    collection.forEach(function (item) {
-        if (objectMap.deleted[item.uuid]) {
-            return; // item deleted
-        }
-        var remoteItem = objectMap.remote[item.uuid];
-        if (!remoteItem) {
-            newItems.push(item); // item added locally
-        } else if (remoteItem.times.locationChanged <= item.times.locationChanged) {
-            newItems.push(item); // item not changed or moved to this group locally later than remote
-        }
-    }, this);
-    remoteCollection.forEach(function (remoteItem, ix) {
-        if (objectMap.deleted[remoteItem.uuid]) {
-            return; // item already processed as local item or deleted
-        }
-        var item = objectMap.objects[remoteItem.uuid];
-        if (item && remoteItem.times.locationChanged > item.times.locationChanged) {
-            item.parentGroup = this; // item moved to this group remotely later than local
-            newItems.splice(this._findInsertIx(newItems, remoteCollection, ix), 0, item);
-        } else if (!item) {
-            var newItem = new remoteItem.constructor(); // item created remotely
-            newItem.copyFrom(remoteItem);
-            newItem.parentGroup = this;
-            newItems.splice(this._findInsertIx(newItems, remoteCollection, ix), 0, newItem);
-        }
-    }, this);
-    return newItems;
-};
-
-/**
- * Finds a best place to insert new item into collection
- * @param {object[]} dst - destination collection
- * @param {object[]} src - source item
- * @param {int} srcIx - source item index in collection
- * @returns {int} - index in collection
- * @private
- */
-KdbxGroup.prototype._findInsertIx = function (dst, src, srcIx) {
-    var selectedIx = dst.length,
-        selectedScore = -1;
-    for (var dstIx = 0; dstIx <= dst.length; dstIx++) {
-        var score = 0;
-        var srcPrev = srcIx > 0 ? src[srcIx - 1].uuid.id : undefined,
-            srcNext = srcIx + 1 < src.length ? src[srcIx + 1].uuid.id : undefined,
-            dstPrev = dstIx > 0 ? dst[dstIx - 1].uuid.id : undefined,
-            dstNext = dstIx < dst.length ? dst[dstIx].uuid.id : undefined;
-        if (!srcPrev && !dstPrev) {
-            score += 1; // start of sequence
-        } else if (srcPrev === dstPrev) {
-            score += 5; // previous element equals
-        }
-        if (!srcNext && !dstNext) {
-            score += 2; // end of sequence
-        } else if (srcNext === dstNext) {
-            score += 5; // next element equals
-        }
-        if (score > selectedScore) {
-            selectedIx = dstIx;
-            selectedScore = score;
-        }
-    }
-    return selectedIx;
-};
-
-/**
- * Clone group state from another group
- */
-KdbxGroup.prototype.copyFrom = function (group) {
-    this.uuid = group.uuid;
-    this.name = group.name;
-    this.notes = group.notes;
-    this.icon = group.icon;
-    this.customIcon = group.customIcon;
-    this.times = group.times.clone();
-    this.expanded = group.expanded;
-    this.defaultAutoTypeSeq = group.defaultAutoTypeSeq;
-    this.enableAutoType = group.enableAutoType;
-    this.enableSearching = group.enableSearching;
-    this.lastTopVisibleEntry = group.lastTopVisibleEntry;
-};
-
-/**
- * Creates new group
- * @param {string} name
- * @param {KdbxGroup} [parentGroup]
- * @returns {KdbxGroup}
- */
-KdbxGroup.create = function (name, parentGroup) {
-    var group = new KdbxGroup();
-    group.uuid = KdbxUuid.random();
-    group.icon = Consts.Icons.Folder;
-    group.times = KdbxTimes.create();
-    group.name = name;
-    group.parentGroup = parentGroup;
-    group.expanded = true;
-    group.enableAutoType = null;
-    group.enableSearching = null;
-    group.lastTopVisibleEntry = new KdbxUuid();
-    return group;
-};
-
-/**
- * Read group from xml
- * @param {Node} xmlNode
- * @param {KdbxContext} ctx
- * @param {KdbxGroup} [parentGroup]
- * @return {KdbxGroup}
- */
-KdbxGroup.read = function (xmlNode, ctx, parentGroup) {
-    var grp = new KdbxGroup();
-    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName) {
-            grp._readNode(childNode, ctx);
-        }
-    }
-    if (!grp.uuid) {
-        // some clients don't write ids
-        grp.uuid = KdbxUuid.random();
-    }
-    grp.parentGroup = parentGroup;
-    return grp;
-};
-
-module.exports = KdbxGroup;
-
-
-/***/ }),
-/* 52 */
-/*!***************************************!*\
-  !*** ./format/kdbx-deleted-object.js ***!
-  \***************************************/
-/*! no static exports found */
-/*! all exports used */
-/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var XmlNames = __webpack_require__(/*! ./../defs/xml-names */ 6),
-    XmlUtils = __webpack_require__(/*! ./../utils/xml-utils */ 4);
-
-/**
- * Deleted object
- * @constructor
- */
-var KdbxDeletedObject = function () {
-    this.uuid = undefined;
-    this.deletionTime = undefined;
-    Object.preventExtensions(this);
-};
-
-KdbxDeletedObject.prototype._readNode = function (node) {
-    switch (node.tagName) {
-        case XmlNames.Elem.Uuid:
-            this.uuid = XmlUtils.getUuid(node);
-            break;
-        case XmlNames.Elem.DeletionTime:
-            this.deletionTime = XmlUtils.getDate(node);
-            break;
-    }
-};
-
-/**
- * Write to stream
- * @param {Node} parentNode - xml document node
- * @param {KdbxContext} ctx
- */
-KdbxDeletedObject.prototype.write = function (parentNode, ctx) {
-    var node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.DeletedObject);
-    XmlUtils.setUuid(XmlUtils.addChildNode(node, XmlNames.Elem.Uuid), this.uuid);
-    ctx.setXmlDate(XmlUtils.addChildNode(node, XmlNames.Elem.DeletionTime), this.deletionTime);
-};
-
-/**
- * Read deleted object from xml
- * @param {Node} xmlNode
- * @return {KdbxTimes}
- */
-KdbxDeletedObject.read = function (xmlNode) {
-    var obj = new KdbxDeletedObject();
-    for (var i = 0, cn = xmlNode.childNodes, len = cn.length; i < len; i++) {
-        var childNode = cn[i];
-        if (childNode.tagName) {
-            obj._readNode(childNode);
-        }
-    }
-    return obj;
-};
-
-module.exports = KdbxDeletedObject;
-
+module.exports = __WEBPACK_EXTERNAL_MODULE_xmldom__;
 
 /***/ })
-/******/ ]);
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/global */
+/******/ 	(() => {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__("./index.js");
+/******/ })()
+;
 });
 //# sourceMappingURL=kdbxweb.js.map
