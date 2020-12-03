@@ -113,6 +113,12 @@ try {
 }
 
 try {
+    res.argon2id = require('base64-loader!../../resources/Argon2id.kdbx');
+} catch (e) {
+    res.argon2id = readNodeFile('../../resources/Argon2id.kdbx');
+}
+
+try {
     res.argon2ChaCha = require('base64-loader!../../resources/Argon2ChaCha.kdbx');
 } catch (e) {
     res.argon2ChaCha = readNodeFile('../../resources/Argon2ChaCha.kdbx');

@@ -168,6 +168,24 @@ describe('Kdbx', function () {
         });
     });
 
+    it('loads kdbx4 file with argon2id kdf', function () {
+        this.timeout(10000);
+        var cred = new kdbxweb.Credentials(
+            kdbxweb.ProtectedValue.fromString('demo'),
+            TestResources.demoKey
+        );
+        return kdbxweb.Kdbx.load(TestResources.argon2id, cred).then(function (db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+            checkDb(db);
+            return db.save().then(function (ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function (db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                    checkDb(db);
+                });
+            });
+        });
+    });
+
     it('loads kdbx3 file with chacha20', function () {
         this.timeout(10000);
         var cred = new kdbxweb.Credentials(

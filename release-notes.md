@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.11.0 (2020-12-03)
+`-` Argon2id support  
+
 ##### v1.10.0 (2020-09-12)
 `-` fixed KeyEncryptionRounds header field data type  
 `-` missing polyfill added for old Edge versions  
