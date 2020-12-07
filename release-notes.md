@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.12.0 (2020-12-07)
+`-` V2 keyfiles support  
+
 ##### v1.11.0 (2020-12-03)
 `-` Argon2id support  
 

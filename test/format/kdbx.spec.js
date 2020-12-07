@@ -133,6 +133,39 @@ describe('Kdbx', function () {
         });
     });
 
+    it('loads a V2 keyfile', function () {
+        var cred = new kdbxweb.Credentials(null, TestResources.keyV2KeyFile);
+        return kdbxweb.Kdbx.load(TestResources.keyV2, cred).then(function (db) {
+            expect(db).to.be.a(kdbxweb.Kdbx);
+        });
+    });
+
+    it('generates error for bad keyfile version', function () {
+        var cred = new kdbxweb.Credentials(null, TestResources.badVersionKeyFile);
+        return kdbxweb.Kdbx.load(TestResources.keyV2, cred)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('Bad keyfile version');
+            });
+    });
+
+    it('generates error for keyfile hash mismatch', function () {
+        var cred = new kdbxweb.Credentials(null, TestResources.badHashV2KeyFile);
+        return kdbxweb.Kdbx.load(TestResources.keyV2, cred)
+            .then(function () {
+                throw 'Not expected';
+            })
+            .catch(function (e) {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+                expect(e.message).to.contain('Key file data hash mismatch');
+            });
+    });
+
     it('successfully loads saved file', function () {
         var cred = new kdbxweb.Credentials(
             kdbxweb.ProtectedValue.fromString('demo'),

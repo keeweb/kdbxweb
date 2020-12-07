@@ -107,6 +107,30 @@ try {
 }
 
 try {
+    res.keyV2 = require('base64-loader!../../resources/KeyV2.kdbx');
+} catch (e) {
+    res.keyV2 = readNodeFile('../../resources/KeyV2.kdbx');
+}
+
+try {
+    res.keyV2KeyFile = require('base64-loader!../../resources/KeyV2.keyx');
+} catch (e) {
+    res.keyV2KeyFile = readNodeFile('../../resources/KeyV2.keyx');
+}
+
+try {
+    res.badVersionKeyFile = require('base64-loader!../../resources/KeyBadVersion.keyx');
+} catch (e) {
+    res.badVersionKeyFile = readNodeFile('../../resources/KeyBadVersion.keyx');
+}
+
+try {
+    res.badHashV2KeyFile = require('base64-loader!../../resources/KeyBadHashV2.keyx');
+} catch (e) {
+    res.badHashV2KeyFile = readNodeFile('../../resources/KeyBadHashV2.keyx');
+}
+
+try {
     res.argon2 = require('base64-loader!../../resources/Argon2.kdbx');
 } catch (e) {
     res.argon2 = readNodeFile('../../resources/Argon2.kdbx');
