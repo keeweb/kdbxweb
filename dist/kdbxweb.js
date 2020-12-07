@@ -1,4 +1,4 @@
-/*! kdbxweb v1.11.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.12.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -1956,7 +1956,7 @@ module.exports = KdbxContext;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 182:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 214:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1974,6 +1974,7 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ "./cry
  * Credentials
  * @param {ProtectedValue|null} password
  * @param {String|ArrayBuffer|Uint8Array|null} [keyFile]
+ * @param challengeResponse {Function}
  * @constructor
  */
 var KdbxCredentials = function (password, keyFile, challengeResponse) {
@@ -2018,25 +2019,56 @@ KdbxCredentials.prototype.setKeyFile = function (keyFile) {
             this.keyFileHash = ProtectedValue.fromBinary(ByteUtils.arrayToBuffer(keyFile));
             return Promise.resolve();
         }
+        var keyFileVersion;
+        var dataEl;
+        var that = this;
         try {
-            var keyFileStr;
-            keyFileStr = ByteUtils.bytesToString(ByteUtils.arrayToBuffer(keyFile));
+            var keyFileStr = ByteUtils.bytesToString(ByteUtils.arrayToBuffer(keyFile));
             if (keyFileStr.match(/^[a-f\d]{64}$/i)) {
                 var bytes = ByteUtils.hexToBytes(keyFileStr);
                 this.keyFileHash = ProtectedValue.fromBinary(bytes);
                 return;
             }
             var xml = XmlUtils.parse(keyFileStr.trim());
+            var metaEl = XmlUtils.getChildNode(xml.documentElement, 'Meta');
+            var versionEl = XmlUtils.getChildNode(metaEl, 'Version');
+            keyFileVersion = versionEl.textContent;
             var keyEl = XmlUtils.getChildNode(xml.documentElement, 'Key');
-            var dataEl = XmlUtils.getChildNode(keyEl, 'Data');
-            this.keyFileHash = ProtectedValue.fromBinary(
-                ByteUtils.base64ToBytes(dataEl.textContent)
-            );
+            dataEl = XmlUtils.getChildNode(keyEl, 'Data');
         } catch (e) {
-            var that = this;
             return CryptoEngine.sha256(keyFile).then(function (hash) {
                 that.keyFileHash = ProtectedValue.fromBinary(hash);
             });
+        }
+        switch (keyFileVersion) {
+            case '1.00':
+            case '1.0': {
+                this.keyFileHash = ProtectedValue.fromBinary(
+                    ByteUtils.base64ToBytes(dataEl.textContent)
+                );
+                break;
+            }
+            case '2.0': {
+                var keyFileData = ByteUtils.hexToBytes(dataEl.textContent.replace(/\s+/g, ''));
+                var keyFileDataHash = dataEl.getAttribute('Hash');
+                return CryptoEngine.sha256(keyFileData).then(function (computedHash) {
+                    var computedHashStr = ByteUtils.bytesToHex(
+                        new Uint8Array(computedHash).subarray(0, 4)
+                    ).toUpperCase();
+                    if (computedHashStr !== keyFileDataHash) {
+                        throw new KdbxError(
+                            Consts.ErrorCodes.FileCorrupt,
+                            'Key file data hash mismatch'
+                        );
+                    }
+                    that.keyFileHash = ProtectedValue.fromBinary(keyFileData);
+                });
+            }
+            default: {
+                return Promise.reject(
+                    new KdbxError(Consts.ErrorCodes.FileCorrupt, 'Bad keyfile version')
+                );
+            }
         }
     } else {
         this.keyFileHash = null;
