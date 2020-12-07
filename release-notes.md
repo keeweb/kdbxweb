@@ -1,13 +1,13 @@
 Release notes
 -------------
 ##### v1.12.1 (2020-12-07)
-`-` relaxed keyfile version checking  
+`+` relaxed keyfile version checking  
 
 ##### v1.12.0 (2020-12-07)
-`-` V2 keyfiles support  
+`+` V2 keyfiles support  
 
 ##### v1.11.0 (2020-12-03)
-`-` Argon2id support  
+`+` Argon2id support  
 
 ##### v1.10.0 (2020-09-12)
 `-` fixed KeyEncryptionRounds header field data type  
