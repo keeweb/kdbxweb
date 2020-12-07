@@ -88,6 +88,18 @@ describe('ByteUtils', function () {
         it('converts string to Array', function () {
             expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
         });
+
+        it('works if TextEncoder is absent', function () {
+            delete require.cache[require.resolve('../../lib/utils/byte-utils')];
+            var TE = global.TextEncoder;
+            var TD = global.TextDecoder;
+            delete global.TextEncoder;
+            delete global.TextDecoder;
+            var ByteUtils = require('../../lib/utils/byte-utils');
+            expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
+            global.TextEncoder = TE;
+            global.TextDecoder = TD;
+        });
     });
 
     var base64 = 'c3Ry0L/RgNC40LLQtdGC';
