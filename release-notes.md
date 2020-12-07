@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.12.1 (2020-12-07)
+`-` relaxed keyfile version checking  
+
 ##### v1.12.0 (2020-12-07)
 `-` V2 keyfiles support  
 

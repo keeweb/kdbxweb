@@ -1,4 +1,4 @@
-/*! kdbxweb v1.12.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.12.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -1956,7 +1956,7 @@ module.exports = KdbxContext;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 214:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 213:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2032,7 +2032,7 @@ KdbxCredentials.prototype.setKeyFile = function (keyFile) {
             var xml = XmlUtils.parse(keyFileStr.trim());
             var metaEl = XmlUtils.getChildNode(xml.documentElement, 'Meta');
             var versionEl = XmlUtils.getChildNode(metaEl, 'Version');
-            keyFileVersion = versionEl.textContent;
+            keyFileVersion = +versionEl.textContent.split('.')[0];
             var keyEl = XmlUtils.getChildNode(xml.documentElement, 'Key');
             dataEl = XmlUtils.getChildNode(keyEl, 'Data');
         } catch (e) {
@@ -2040,15 +2040,14 @@ KdbxCredentials.prototype.setKeyFile = function (keyFile) {
                 that.keyFileHash = ProtectedValue.fromBinary(hash);
             });
         }
+
         switch (keyFileVersion) {
-            case '1.00':
-            case '1.0': {
+            case 1:
                 this.keyFileHash = ProtectedValue.fromBinary(
                     ByteUtils.base64ToBytes(dataEl.textContent)
                 );
                 break;
-            }
-            case '2.0': {
+            case 2: {
                 var keyFileData = ByteUtils.hexToBytes(dataEl.textContent.replace(/\s+/g, ''));
                 var keyFileDataHash = dataEl.getAttribute('Hash');
                 return CryptoEngine.sha256(keyFileData).then(function (computedHash) {
