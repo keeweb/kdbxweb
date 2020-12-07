@@ -99,6 +99,7 @@ describe('ByteUtils', function () {
             expect(ByteUtils.stringToBytes(str)).to.be.eql(strBytes);
             global.TextEncoder = TE;
             global.TextDecoder = TD;
+            delete require.cache[require.resolve('../../lib/utils/byte-utils')];
         });
     });
 
