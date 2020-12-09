@@ -1,7 +1,7 @@
 Release notes
 -------------
 ##### v1.13.0 (2020-12-09)
-`*` possibility to generate a V2 keyfile  
+`+` possibility to generate a V2 keyfile  
 `*` createRandomKeyFile returns a promise  
 
 ##### v1.12.1 (2020-12-07)
