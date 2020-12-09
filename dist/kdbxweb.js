@@ -1,4 +1,4 @@
-/*! kdbxweb v1.12.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.13.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -1956,7 +1956,7 @@ module.exports = KdbxContext;
   \************************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 213:0-14 */
+/*! CommonJS bailout: module.exports is used directly at 245:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1974,7 +1974,7 @@ var ProtectedValue = __webpack_require__(/*! ../crypto/protected-value */ "./cry
  * Credentials
  * @param {ProtectedValue|null} password
  * @param {String|ArrayBuffer|Uint8Array|null} [keyFile]
- * @param challengeResponse {Function}
+ * @param {Function|null} [challengeResponse]
  * @constructor
  */
 var KdbxCredentials = function (password, keyFile, challengeResponse) {
@@ -2137,9 +2137,10 @@ KdbxCredentials.prototype.getChallengeResponse = function (challenge) {
 
 /**
  * Creates random keyfile
- * @returns {Uint8Array}
+ * @param {Number} [version=1] keyfile version, 1 by default
+ * @returns Promise<Uint8Array>
  */
-KdbxCredentials.createRandomKeyFile = function () {
+KdbxCredentials.createRandomKeyFile = function (version) {
     var keyLength = 32;
     var keyBytes = Random.getBytes(keyLength),
         salt = Random.getBytes(keyLength);
@@ -2147,29 +2148,60 @@ KdbxCredentials.createRandomKeyFile = function () {
         keyBytes[i] ^= salt[i];
         keyBytes[i] ^= (Math.random() * 1000) % 255;
     }
-    var key = ByteUtils.bytesToBase64(keyBytes);
-    return KdbxCredentials.createKeyFileWithHash(key);
+    return KdbxCredentials.createKeyFileWithHash(keyBytes, version);
 };
 
 /**
  * Creates keyfile by given hash
- * @param {string} hash base64-encoded hash
- * @returns {Uint8Array}
+ * @param {Uint8Array} keyBytes key data
+ * @param {Number} [version=1] keyfile version, 1 by default
+ * @returns Promise<Uint8Array>
  */
-KdbxCredentials.createKeyFileWithHash = function (hash) {
-    var xml =
-        '<?xml version="1.0" encoding="utf-8"?>\n' +
-        '<KeyFile>\n' +
-        '    <Meta>\n' +
-        '        <Version>1.00</Version>\n' +
-        '    </Meta>\n' +
-        '    <Key>\n' +
-        '       <Data>' +
-        hash +
-        '</Data>\n' +
-        '   </Key>\n' +
-        '</KeyFile>';
-    return ByteUtils.stringToBytes(xml);
+KdbxCredentials.createKeyFileWithHash = function (keyBytes, version) {
+    var xmlVersion = '1.00';
+    if (version === 2) {
+        xmlVersion = '2.0';
+    }
+    var dataPadding = '        ';
+    let makeDataElPromise;
+    if (version === 2) {
+        var keyDataPadding = dataPadding + '    ';
+        makeDataElPromise = CryptoEngine.sha256(keyBytes).then(function (computedHash) {
+            var keyHash = ByteUtils.bytesToHex(
+                new Uint8Array(computedHash).subarray(0, 4)
+            ).toUpperCase();
+            var keyStr = ByteUtils.bytesToHex(keyBytes).toUpperCase();
+            var dataElXml = dataPadding + '<Data Hash="' + keyHash + '">\n';
+            for (var num = 0; num < 2; num++) {
+                var parts = [0, 1, 2, 3].map(function (ix) {
+                    return keyStr.substr(num * 32 + ix * 8, 8);
+                });
+                dataElXml += keyDataPadding;
+                dataElXml += parts.join(' ');
+                dataElXml += '\n';
+            }
+            dataElXml += dataPadding + '</Data>\n';
+            return dataElXml;
+        });
+    } else {
+        var dataElXml = dataPadding + '<Data>' + ByteUtils.bytesToBase64(keyBytes) + '</Data>\n';
+        makeDataElPromise = Promise.resolve(dataElXml);
+    }
+    return makeDataElPromise.then((dataElXml) => {
+        var xml =
+            '<?xml version="1.0" encoding="utf-8"?>\n' +
+            '<KeyFile>\n' +
+            '    <Meta>\n' +
+            '        <Version>' +
+            xmlVersion +
+            '</Version>\n' +
+            '    </Meta>\n' +
+            '    <Key>\n' +
+            dataElXml +
+            '    </Key>\n' +
+            '</KeyFile>';
+        return ByteUtils.stringToBytes(xml);
+    });
 };
 
 module.exports = KdbxCredentials;

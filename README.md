@@ -74,9 +74,10 @@ db.meta
 ```javascript
 kdbxweb.Kdbx.load(data, credentials).then(db => {
     db.credentials.setPassword(kdbxweb.ProtectedValue.fromString('newPass'));
-    let randomKeyFile = kdbxweb.Credentials.createRandomKeyFile();
-    db.credentials.setKeyFile(randomKeyFile);
-    db.save();
+    kdbxweb.Credentials.createRandomKeyFile().then(randomKeyFile => {
+        db.credentials.setKeyFile(randomKeyFile);
+        db.save();
+    });
 });
 ```
 

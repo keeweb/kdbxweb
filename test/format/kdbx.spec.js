@@ -410,44 +410,61 @@ describe('Kdbx', function () {
     });
 
     it('creates new database', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
-        var entry = db.createEntry(subGroup);
-        db.meta.customData.key = 'val';
-        db.createDefaultGroup();
-        db.createRecycleBin();
-        entry.fields.Title = 'title';
-        entry.fields.UserName = 'user';
-        entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
-        entry.fields.Notes = 'notes';
-        entry.fields.URL = 'url';
-        return db
-            .createBinary(kdbxweb.ProtectedValue.fromString('bin.txt content'))
-            .then(function (binary) {
-                entry.binaries['bin.txt'] = binary;
-                entry.pushHistory();
-                entry.fields.Title = 'newtitle';
-                entry.fields.UserName = 'newuser';
-                entry.fields.Password = kdbxweb.ProtectedValue.fromString('newpass');
-                entry.fields.CustomPlain = 'custom-plain';
-                entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString(
-                    'custom-protected'
-                );
-                entry.times.update();
-                return db.save().then(function (ab) {
-                    return kdbxweb.Kdbx.load(ab, cred).then(function (db) {
-                        expect(db.meta.generator).to.be('KdbxWeb');
-                        expect(db.meta.customData.key).to.be('val');
-                        expect(db.groups.length).to.be(1);
-                        expect(db.groups[0].groups.length).to.be(2);
-                        expect(db.getGroup(db.meta.recycleBinUuid)).to.be(db.groups[0].groups[0]);
-                        // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
-                        // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
+        return kdbxweb.Credentials.createRandomKeyFile(1).then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+            var entry = db.createEntry(subGroup);
+            db.meta.customData.key = 'val';
+            db.createDefaultGroup();
+            db.createRecycleBin();
+            entry.fields.Title = 'title';
+            entry.fields.UserName = 'user';
+            entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
+            entry.fields.Notes = 'notes';
+            entry.fields.URL = 'url';
+            return db
+                .createBinary(kdbxweb.ProtectedValue.fromString('bin.txt content'))
+                .then(function (binary) {
+                    entry.binaries['bin.txt'] = binary;
+                    entry.pushHistory();
+                    entry.fields.Title = 'newtitle';
+                    entry.fields.UserName = 'newuser';
+                    entry.fields.Password = kdbxweb.ProtectedValue.fromString('newpass');
+                    entry.fields.CustomPlain = 'custom-plain';
+                    entry.fields.CustomProtected = kdbxweb.ProtectedValue.fromString(
+                        'custom-protected'
+                    );
+                    entry.times.update();
+                    return db.save().then(function (ab) {
+                        return kdbxweb.Kdbx.load(ab, cred).then(function (db) {
+                            expect(db.meta.generator).to.be('KdbxWeb');
+                            expect(db.meta.customData.key).to.be('val');
+                            expect(db.groups.length).to.be(1);
+                            expect(db.groups[0].groups.length).to.be(2);
+                            expect(db.getGroup(db.meta.recycleBinUuid)).to.be(
+                                db.groups[0].groups[0]
+                            );
+                            // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
+                            // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
+                        });
                     });
                 });
+        });
+    });
+
+    it('creates random keyfile v2', function () {
+        return kdbxweb.Credentials.createRandomKeyFile(2).then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var keyFileStr = kdbxweb.ByteUtils.bytesToString(keyFile).toString('utf8');
+            expect(keyFileStr).to.contain('<Version>2.0</Version>');
+            return db.save().then(function (ab) {
+                return kdbxweb.Kdbx.load(ab, cred).then(function (db) {
+                    expect(db.meta.generator).to.be('KdbxWeb');
+                });
             });
+        });
     });
 
     it('generates error for bad file', function () {
@@ -534,20 +551,21 @@ describe('Kdbx', function () {
     });
 
     it('generates error for saving bad version', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        db.header.setVersion(3);
-        db.header.versionMajor = 1;
-        return db
-            .save()
-            .then(function () {
-                throw 'Not expected';
-            })
-            .catch(function (e) {
-                expect(e).to.be.a(kdbxweb.KdbxError);
-                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
-            });
+        return kdbxweb.Credentials.createRandomKeyFile().then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            db.header.setVersion(3);
+            db.header.versionMajor = 1;
+            return db
+                .save()
+                .then(function () {
+                    throw 'Not expected';
+                })
+                .catch(function (e) {
+                    expect(e).to.be.a(kdbxweb.KdbxError);
+                    expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
+                });
+        });
     });
 
     it('generates error for bad credentials', function () {
@@ -741,124 +759,128 @@ describe('Kdbx', function () {
     });
 
     it('saves db to xml', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
-        var entry = db.createEntry(subGroup);
-        entry.fields.Title = 'title';
-        entry.fields.UserName = 'user';
-        entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
-        entry.fields.Notes = 'notes';
-        entry.fields.URL = 'url';
-        entry.times.update();
-        return db.saveXml().then(function (xml) {
-            expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
+        return kdbxweb.Credentials.createRandomKeyFile().then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+            var entry = db.createEntry(subGroup);
+            entry.fields.Title = 'title';
+            entry.fields.UserName = 'user';
+            entry.fields.Password = kdbxweb.ProtectedValue.fromString('pass');
+            entry.fields.Notes = 'notes';
+            entry.fields.URL = 'url';
+            entry.times.update();
+            return db.saveXml().then(function (xml) {
+                expect(xml).to.contain('<Value ProtectInMemory="True">pass</Value>');
+            });
         });
     });
 
     it('cleanups by history rules', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
-        var entry = db.createEntry(subGroup);
-        var i;
-        for (i = 0; i < 3; i++) {
-            entry.fields.Title = i.toString();
-            entry.pushHistory();
-        }
-        expect(entry.history[0].fields.Title).to.be('0');
-        expect(entry.history.length).to.be(3);
-        db.cleanup({ historyRules: true });
-        expect(entry.history.length).to.be(3);
-        for (i = 3; i < 10; i++) {
-            entry.fields.Title = i.toString();
-            entry.pushHistory();
-        }
-        expect(entry.history[0].fields.Title).to.be('0');
-        expect(entry.history.length).to.be(10);
-        expect(entry.history[0].fields.Title).to.be('0');
-        db.cleanup({ historyRules: true });
-        expect(entry.history[0].fields.Title).to.be('0');
-        expect(entry.history.length).to.be(10);
-        for (i = 10; i < 11; i++) {
-            entry.fields.Title = i.toString();
-            entry.pushHistory();
-        }
-        expect(entry.history.length).to.be(11);
-        db.cleanup({ historyRules: true });
-        expect(entry.history[0].fields.Title).to.be('1');
-        expect(entry.history.length).to.be(10);
-        for (i = 11; i < 20; i++) {
-            entry.fields.Title = i.toString();
-            entry.pushHistory();
-        }
-        db.cleanup({ historyRules: true });
-        expect(entry.history[0].fields.Title).to.be('10');
-        expect(entry.history.length).to.be(10);
-        for (i = 20; i < 30; i++) {
-            entry.fields.Title = i.toString();
-            entry.pushHistory();
-        }
-        db.meta.historyMaxItems = -1;
-        db.cleanup({ historyRules: true });
-        expect(entry.history[0].fields.Title).to.be('10');
-        expect(entry.history.length).to.be(20);
-        db.cleanup();
-        db.cleanup({});
-        expect(entry.history.length).to.be(20);
-        db.meta.historyMaxItems = undefined;
-        db.cleanup({ historyRules: true });
-        expect(entry.history[0].fields.Title).to.be('10');
-        expect(entry.history.length).to.be(20);
+        return kdbxweb.Credentials.createRandomKeyFile().then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+            var entry = db.createEntry(subGroup);
+            var i;
+            for (i = 0; i < 3; i++) {
+                entry.fields.Title = i.toString();
+                entry.pushHistory();
+            }
+            expect(entry.history[0].fields.Title).to.be('0');
+            expect(entry.history.length).to.be(3);
+            db.cleanup({ historyRules: true });
+            expect(entry.history.length).to.be(3);
+            for (i = 3; i < 10; i++) {
+                entry.fields.Title = i.toString();
+                entry.pushHistory();
+            }
+            expect(entry.history[0].fields.Title).to.be('0');
+            expect(entry.history.length).to.be(10);
+            expect(entry.history[0].fields.Title).to.be('0');
+            db.cleanup({ historyRules: true });
+            expect(entry.history[0].fields.Title).to.be('0');
+            expect(entry.history.length).to.be(10);
+            for (i = 10; i < 11; i++) {
+                entry.fields.Title = i.toString();
+                entry.pushHistory();
+            }
+            expect(entry.history.length).to.be(11);
+            db.cleanup({ historyRules: true });
+            expect(entry.history[0].fields.Title).to.be('1');
+            expect(entry.history.length).to.be(10);
+            for (i = 11; i < 20; i++) {
+                entry.fields.Title = i.toString();
+                entry.pushHistory();
+            }
+            db.cleanup({ historyRules: true });
+            expect(entry.history[0].fields.Title).to.be('10');
+            expect(entry.history.length).to.be(10);
+            for (i = 20; i < 30; i++) {
+                entry.fields.Title = i.toString();
+                entry.pushHistory();
+            }
+            db.meta.historyMaxItems = -1;
+            db.cleanup({ historyRules: true });
+            expect(entry.history[0].fields.Title).to.be('10');
+            expect(entry.history.length).to.be(20);
+            db.cleanup();
+            db.cleanup({});
+            expect(entry.history.length).to.be(20);
+            db.meta.historyMaxItems = undefined;
+            db.cleanup({ historyRules: true });
+            expect(entry.history[0].fields.Title).to.be('10');
+            expect(entry.history.length).to.be(20);
+        });
     });
 
     it('cleanups custom icons', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
-        var entry = db.createEntry(subGroup);
-        var i;
-        for (i = 0; i < 3; i++) {
-            entry.fields.Title = i.toString();
-            entry.customIcon = 'i1';
-            entry.pushHistory();
-        }
-        entry.customIcon = 'i2';
-        subGroup.customIcon = 'i3';
-        db.meta.customIcons.i1 = 'icon1';
-        db.meta.customIcons.i2 = 'icon2';
-        db.meta.customIcons.i3 = 'icon3';
-        db.meta.customIcons.r1 = 'rem1';
-        db.meta.customIcons.r2 = 'rem2';
-        db.meta.customIcons.r3 = 'rem3';
-        db.cleanup({ customIcons: true });
-        expect(db.meta.customIcons).to.eql({ i1: 'icon1', i2: 'icon2', i3: 'icon3' });
+        return kdbxweb.Credentials.createRandomKeyFile().then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+            var entry = db.createEntry(subGroup);
+            var i;
+            for (i = 0; i < 3; i++) {
+                entry.fields.Title = i.toString();
+                entry.customIcon = 'i1';
+                entry.pushHistory();
+            }
+            entry.customIcon = 'i2';
+            subGroup.customIcon = 'i3';
+            db.meta.customIcons.i1 = 'icon1';
+            db.meta.customIcons.i2 = 'icon2';
+            db.meta.customIcons.i3 = 'icon3';
+            db.meta.customIcons.r1 = 'rem1';
+            db.meta.customIcons.r2 = 'rem2';
+            db.meta.customIcons.r3 = 'rem3';
+            db.cleanup({ customIcons: true });
+            expect(db.meta.customIcons).to.eql({ i1: 'icon1', i2: 'icon2', i3: 'icon3' });
+        });
     });
 
     it('cleanups binaries', function () {
-        var keyFile = kdbxweb.Credentials.createRandomKeyFile();
-        var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
-        var db = kdbxweb.Kdbx.create(cred, 'example');
-        var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
-        var entry = db.createEntry(subGroup);
-        var i;
-        for (i = 0; i < 3; i++) {
-            entry.fields.Title = i.toString();
-            entry.binaries.bin = { ref: 'b1' };
-            entry.pushHistory();
-        }
-        entry.binaries.bin = { ref: 'b2' };
-        var b1 = new Uint8Array([1]).buffer;
-        var b2 = new Uint8Array([2]).buffer;
-        var b3 = new Uint8Array([3]).buffer;
-        db.binaries.b1 = b1;
-        db.binaries.b2 = b2;
-        db.binaries.b3 = b3;
-        db.cleanup({ binaries: true });
-        expect(db.binaries).to.eql({ b1: b1, b2: b2 });
+        return kdbxweb.Credentials.createRandomKeyFile().then(function (keyFile) {
+            var cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'), keyFile);
+            var db = kdbxweb.Kdbx.create(cred, 'example');
+            var subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
+            var entry = db.createEntry(subGroup);
+            var i;
+            for (i = 0; i < 3; i++) {
+                entry.fields.Title = i.toString();
+                entry.binaries.bin = { ref: 'b1' };
+                entry.pushHistory();
+            }
+            entry.binaries.bin = { ref: 'b2' };
+            var b1 = new Uint8Array([1]).buffer;
+            var b2 = new Uint8Array([2]).buffer;
+            var b3 = new Uint8Array([3]).buffer;
+            db.binaries.b1 = b1;
+            db.binaries.b2 = b2;
+            db.binaries.b3 = b3;
+            db.cleanup({ binaries: true });
+            expect(db.binaries).to.eql({ b1: b1, b2: b2 });
+        });
     });
 
     it('imports an entry from another file', function () {
