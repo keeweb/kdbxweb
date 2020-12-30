@@ -51,6 +51,19 @@ describe('XmlUtils', function () {
                 expect(e.message).to.contain('bad xml');
             });
         });
+
+        it('parses bad characters', function () {
+            var chars = '';
+            for (var i = 0; i <= 0x20; i++) {
+                chars += String.fromCharCode(i);
+            }
+            for (var j = 0x80; j <= 0xff; j++) {
+                chars += String.fromCharCode(j);
+            }
+            var xml = XmlUtils.parse('<root><item><cd>' + chars + '</cd></item></root>');
+            expect(xml.documentElement.nodeName).to.be('root');
+            expect(xml.documentElement.firstChild.nodeName).to.be('item');
+        });
     });
 
     describe('serialize', function () {

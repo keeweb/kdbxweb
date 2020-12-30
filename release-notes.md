@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.14.0 (2020-12-30)
+`-` fixed parsing xml with bad characters  
+
 ##### v1.13.0 (2020-12-09)
 `+` possibility to generate a V2 keyfile  
 `*` createRandomKeyFile returns a promise  
