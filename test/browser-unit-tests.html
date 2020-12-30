@@ -9,11 +9,10 @@
         <div id="mocha"></div>
         <script src="../node_modules/mocha/mocha.js"></script>
         <script>
-            mocha.setup('bdd');
+            mocha.setup({ ui: 'bdd', checkLeaks: false });
         </script>
         <script src="../dist/kdbxweb.test.js"></script>
         <script>
-            mocha.checkLeaks();
             mocha.run();
         </script>
     </body>

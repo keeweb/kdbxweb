@@ -2,6 +2,9 @@
 
 function argon2(password, salt, memory, iterations, length, parallelism, type, version) {
     var Module = require('./argon2-asm.min');
+    if (Module.default) {
+        Module = Module.default;
+    }
     var passwordLen = password.byteLength;
     password = Module.allocate(new Uint8Array(password), 'i8', Module.ALLOC_NORMAL);
     var saltLen = salt.byteLength;
