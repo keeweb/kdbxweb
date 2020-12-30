@@ -1,4 +1,4 @@
-/*! kdbxweb v1.13.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.14.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -16,9 +16,6 @@ return /******/ (() => { // webpackBootstrap
 /*!****************************!*\
   !*** ./crypto/chacha20.js ***!
   \****************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 126:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -156,22 +153,6 @@ module.exports = ChaCha20;
 /*!*********************************!*\
   !*** ./crypto/crypto-engine.js ***!
   \*********************************/
-/*! default exports */
-/*! export Argon2TypeArgon2d [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export Argon2TypeArgon2id [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export argon2 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export chacha20 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export configure [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export createAesCbc [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export hmacSha256 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export nodeCrypto [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export random [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export sha256 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export sha512 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export subtle [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export webCrypto [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__, __webpack_require__.g, __webpack_require__.* */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -447,11 +428,6 @@ module.exports.configure = configure;
 /*!******************************************!*\
   !*** ./crypto/hashed-block-transform.js ***!
   \******************************************/
-/*! default exports */
-/*! export decrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -574,12 +550,6 @@ module.exports.encrypt = encrypt;
 /*!****************************************!*\
   !*** ./crypto/hmac-block-transform.js ***!
   \****************************************/
-/*! default exports */
-/*! export decrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getHmacKey [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -737,10 +707,6 @@ module.exports.encrypt = encrypt;
 /*!*************************************!*\
   !*** ./crypto/key-encryptor-aes.js ***!
   \*************************************/
-/*! default exports */
-/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -831,10 +797,6 @@ module.exports.encrypt = encrypt;
 /*!*************************************!*\
   !*** ./crypto/key-encryptor-kdf.js ***!
   \*************************************/
-/*! default exports */
-/*! export encrypt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -964,9 +926,6 @@ module.exports.encrypt = encrypt;
 /*!******************************************!*\
   !*** ./crypto/protect-salt-generator.js ***!
   \******************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 55:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1033,9 +992,6 @@ module.exports = ProtectSaltGenerator;
 /*!***********************************!*\
   !*** ./crypto/protected-value.js ***!
   \***********************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 146:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1193,10 +1149,6 @@ module.exports = ProtectedValue;
 /*!**************************!*\
   !*** ./crypto/random.js ***!
   \**************************/
-/*! default exports */
-/*! export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1242,9 +1194,6 @@ module.exports.getBytes = getBytes;
 /*!***************************!*\
   !*** ./crypto/salsa20.js ***!
   \***************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 289:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -1545,18 +1494,6 @@ module.exports = Salsa20;
 /*!************************!*\
   !*** ./defs/consts.js ***!
   \************************/
-/*! default exports */
-/*! export AutoTypeObfuscationOptions [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export CipherId [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export CompressionAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export CrsAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export Defaults [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export ErrorCodes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export Icons [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export KdfId [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export Signatures [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module */
 /***/ ((module) => {
 
 "use strict";
@@ -1695,9 +1632,6 @@ module.exports.Icons = {
 /*!***************************!*\
   !*** ./defs/xml-names.js ***!
   \***************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 3:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -1820,9 +1754,6 @@ module.exports = {
 /*!******************************!*\
   !*** ./errors/kdbx-error.js ***!
   \******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 11:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -1845,9 +1776,6 @@ module.exports = KdbxError;
 /*!*********************************!*\
   !*** ./format/kdbx-binaries.js ***!
   \*********************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 55:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1914,9 +1842,6 @@ module.exports = KdbxBinaries;
 /*!********************************!*\
   !*** ./format/kdbx-context.js ***!
   \********************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 26:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -1954,9 +1879,6 @@ module.exports = KdbxContext;
 /*!************************************!*\
   !*** ./format/kdbx-credentials.js ***!
   \************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 245:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2213,9 +2135,6 @@ module.exports = KdbxCredentials;
 /*!************************************!*\
   !*** ./format/kdbx-custom-data.js ***!
   \************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 62:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2289,9 +2208,6 @@ module.exports = KdbxCustomData;
 /*!***************************************!*\
   !*** ./format/kdbx-deleted-object.js ***!
   \***************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 54:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2357,9 +2273,6 @@ module.exports = KdbxDeletedObject;
 /*!******************************!*\
   !*** ./format/kdbx-entry.js ***!
   \******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 512:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -2883,9 +2796,6 @@ module.exports = KdbxEntry;
 /*!*******************************!*\
   !*** ./format/kdbx-format.js ***!
   \*******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 431:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -3328,9 +3238,6 @@ module.exports = KdbxFormat;
 /*!******************************!*\
   !*** ./format/kdbx-group.js ***!
   \******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 295:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -3637,9 +3544,6 @@ module.exports = KdbxGroup;
 /*!*******************************!*\
   !*** ./format/kdbx-header.js ***!
   \*******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 563:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4214,9 +4118,6 @@ module.exports = KdbxHeader;
 /*!*****************************!*\
   !*** ./format/kdbx-meta.js ***!
   \*****************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 512:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4740,9 +4641,6 @@ module.exports = KdbxMeta;
 /*!******************************!*\
   !*** ./format/kdbx-times.js ***!
   \******************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 121:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4875,9 +4773,6 @@ module.exports = KdbxTimes;
 /*!*****************************!*\
   !*** ./format/kdbx-uuid.js ***!
   \*****************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 69:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4958,9 +4853,6 @@ module.exports = KdbxUuid;
 /*!************************!*\
   !*** ./format/kdbx.js ***!
   \************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 572:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -5544,63 +5436,6 @@ module.exports = Kdbx;
 /*!******************!*\
   !*** ./index.js ***!
   \******************/
-/*! default exports */
-/*! export ByteUtils [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/byte-utils.js */
-/*!   export arrayBufferEquals [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export arrayToBuffer [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export base64ToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export bytesToBase64 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export bytesToHex [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export bytesToString [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export hexToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export stringToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export zeroBuffer [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   other exports [not provided] [no usage info] */
-/*! export Consts [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./defs/consts.js */
-/*!   export AutoTypeObfuscationOptions [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export CipherId [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export CompressionAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export CrsAlgorithm [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export Defaults [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export ErrorCodes [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export Icons [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export KdfId [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export Signatures [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   other exports [not provided] [no usage info] */
-/*! export Credentials [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx-credentials.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export CryptoEngine [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/crypto-engine.js */
-/*!   export Argon2TypeArgon2d [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export Argon2TypeArgon2id [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export argon2 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export chacha20 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export configure [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export createAesCbc [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export hmacSha256 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export nodeCrypto [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export random [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export sha256 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export sha512 [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export subtle [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   export webCrypto [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   other exports [not provided] [no usage info] */
-/*! export Int64 [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/int64.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export Kdbx [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export KdbxError [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./errors/kdbx-error.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export KdbxUuid [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./format/kdbx-uuid.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export ProtectedValue [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/protected-value.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! export Random [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./crypto/random.js */
-/*!   export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*!   other exports [not provided] [no usage info] */
-/*! export VarDictionary [provided] [maybe used in main (runtime-defined)] [usage and provision prevents renaming] -> ./utils/var-dictionary.js */
-/*!   exports [maybe provided (runtime-defined)] [no usage info] */
-/*! other exports [not provided] [maybe used in main (runtime-defined)] */
-/*! runtime requirements: module, __webpack_require__ */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports.Kdbx = __webpack_require__(/*! ./format/kdbx */ "./format/kdbx.js");
@@ -5622,9 +5457,6 @@ module.exports.CryptoEngine = __webpack_require__(/*! ./crypto/crypto-engine */ 
 /*!********************************!*\
   !*** ./utils/binary-stream.js ***!
   \********************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 111:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -5747,18 +5579,6 @@ module.exports = BinaryStream;
 /*!*****************************!*\
   !*** ./utils/byte-utils.js ***!
   \*****************************/
-/*! default exports */
-/*! export arrayBufferEquals [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export arrayToBuffer [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export base64ToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export bytesToBase64 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export bytesToHex [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export bytesToString [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export hexToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export stringToBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export zeroBuffer [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__.g, __webpack_require__, __webpack_require__.* */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -5934,9 +5754,6 @@ module.exports.zeroBuffer = zeroBuffer;
 /*!************************!*\
   !*** ./utils/int64.js ***!
   \************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 54:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -6002,9 +5819,6 @@ module.exports = Int64;
 /*!*********************************!*\
   !*** ./utils/var-dictionary.js ***!
   \*********************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 291:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -6307,36 +6121,6 @@ module.exports = VarDictionary;
 /*!****************************!*\
   !*** ./utils/xml-utils.js ***!
   \****************************/
-/*! default exports */
-/*! export addChildNode [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export create [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getBoolean [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getChildNode [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getDate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getNumber [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getProtectedBinary [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getProtectedText [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getText [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export getUuid [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export parse [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export protectPlainValues [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export protectUnprotectedValues [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export serialize [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setBoolean [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setBytes [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setDate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setNumber [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setProtectedBinary [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setProtectedText [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setProtectedValues [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setText [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export setUuid [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export strToBoolean [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export unprotectValues [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export updateProtectedValuesSalt [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: module, __webpack_require__, __webpack_require__.g, __webpack_require__.* */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -6378,6 +6162,8 @@ var EpochSeconds = 62135596800;
 function parse(xml) {
     var parser = domParserArg ? new dom.DOMParser(domParserArg) : new dom.DOMParser();
     var doc;
+    // eslint-disable-next-line no-control-regex
+    xml = xml.replace(/[\x00-\x1F]/g, '');
     try {
         doc = parser.parseFromString(xml, 'application/xml');
     } catch (e) {
@@ -6855,9 +6641,6 @@ module.exports.protectPlainValues = protectPlainValues;
 /*!*************************************!*\
   !*** ../node_modules/pako/index.js ***!
   \*************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: __webpack_require__, module */
-/*! CommonJS bailout: module.exports is used directly at 14:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -6883,13 +6666,6 @@ module.exports = pako;
 /*!*******************************************!*\
   !*** ../node_modules/pako/lib/deflate.js ***!
   \*******************************************/
-/*! default exports */
-/*! export Deflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateRaw [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export gzip [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -7301,13 +7077,6 @@ exports.gzip = gzip;
 /*!*******************************************!*\
   !*** ../node_modules/pako/lib/inflate.js ***!
   \*******************************************/
-/*! default exports */
-/*! export Inflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateRaw [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export ungzip [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -7737,13 +7506,6 @@ exports.ungzip  = inflate;
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/utils/common.js ***!
   \************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: __webpack_exports__ */
-/*! CommonJS bailout: exports.assign(...) prevents optimization as exports is passed as call context at 93:4-18 */
-/*! CommonJS bailout: exports is used directly at 93:19-26 */
-/*! CommonJS bailout: exports.assign(...) prevents optimization as exports is passed as call context at 98:4-18 */
-/*! CommonJS bailout: exports is used directly at 98:19-26 */
-/*! CommonJS bailout: exports.setTyped(...) prevents optimization as exports is passed as call context at 102:0-16 */
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -7857,14 +7619,6 @@ exports.setTyped(TYPED_OK);
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/utils/strings.js ***!
   \*************************************************/
-/*! default exports */
-/*! export binstring2buf [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export buf2binstring [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export buf2string [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export string2buf [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export utf8border [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -8061,9 +7815,6 @@ exports.utf8border = function (buf, max) {
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/adler32.js ***!
   \************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 32:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -8107,9 +7858,6 @@ module.exports = adler32;
 /*!**************************************************!*\
   !*** ../node_modules/pako/lib/zlib/constants.js ***!
   \**************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 4:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -8171,9 +7919,6 @@ module.exports = {
 /*!**********************************************!*\
   !*** ../node_modules/pako/lib/zlib/crc32.js ***!
   \**********************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 41:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -8226,18 +7971,6 @@ module.exports = crc32;
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/deflate.js ***!
   \************************************************/
-/*! default exports */
-/*! export deflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateEnd [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateInfo [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateInit [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateInit2 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateReset [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateResetKeep [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateSetDictionary [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export deflateSetHeader [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -10104,9 +9837,6 @@ exports.deflateTune = deflateTune;
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/zlib/gzheader.js ***!
   \*************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 40:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -10158,9 +9888,6 @@ module.exports = GZheader;
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/inffast.js ***!
   \************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 42:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -10498,19 +10225,6 @@ module.exports = function inflate_fast(strm, start) {
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/inflate.js ***!
   \************************************************/
-/*! default exports */
-/*! export inflate [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateEnd [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateGetHeader [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateInfo [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateInit [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateInit2 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateReset [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateReset2 [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateResetKeep [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export inflateSetDictionary [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -12060,9 +11774,6 @@ exports.inflateUndermine = inflateUndermine;
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/zlib/inftrees.js ***!
   \*************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 37:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -12401,9 +12112,6 @@ module.exports = function inflate_table(type, lens, lens_index, codes, table, ta
 /*!*************************************************!*\
   !*** ../node_modules/pako/lib/zlib/messages.js ***!
   \*************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 3:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -12428,14 +12136,6 @@ module.exports = {
 /*!**********************************************!*\
   !*** ../node_modules/pako/lib/zlib/trees.js ***!
   \**********************************************/
-/*! default exports */
-/*! export _tr_align [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export _tr_flush_block [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export _tr_init [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export _tr_stored_block [provided] [no usage info] [missing usage info prevents renaming] */
-/*! export _tr_tally [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_exports__, __webpack_require__ */
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -13649,9 +13349,6 @@ exports._tr_align = _tr_align;
 /*!************************************************!*\
   !*** ../node_modules/pako/lib/zlib/zstream.js ***!
   \************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module */
-/*! CommonJS bailout: module.exports is used directly at 29:0-14 */
 /***/ ((module) => {
 
 "use strict";
@@ -13692,9 +13389,6 @@ module.exports = ZStream;
 /*!**********************************************!*\
   !*** ../node_modules/text-encoding/index.js ***!
   \**********************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, __webpack_require__ */
-/*! CommonJS bailout: module.exports is used directly at 6:0-14 */
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 // This is free and unencumbered software released into the public domain.
@@ -13714,11 +13408,6 @@ module.exports = {
 /*!*****************************************************!*\
   !*** ../node_modules/text-encoding/lib/encoding.js ***!
   \*****************************************************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: module, top-level-this-exports */
-/*! CommonJS bailout: this is used directly at 933:2-6 */
-/*! CommonJS bailout: module.exports is used directly at 927:39-53 */
-/*! CommonJS bailout: module.exports is used directly at 928:4-18 */
 /***/ (function(module) {
 
 // This is free and unencumbered software released into the public domain.
@@ -14662,9 +14351,6 @@ module.exports = {
 /*!*************************!*\
   !*** external "crypto" ***!
   \*************************/
-/*! dynamic exports */
-/*! exports [maybe provided (runtime-defined)] [no usage info] */
-/*! runtime requirements: module */
 /***/ ((module) => {
 
 "use strict";
@@ -14676,9 +14362,6 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_crypto__;
 /*!*************************!*\
   !*** external "xmldom" ***!
   \*************************/
-/*! dynamic exports */
-/*! exports [maybe provided (runtime-defined)] [no usage info] */
-/*! runtime requirements: module */
 /***/ ((module) => {
 
 "use strict";
