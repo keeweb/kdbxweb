@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.14.0 (2020-12-31)
+`-` fixed new lines removal in non-encoded fields  
+
 ##### v1.14.0 (2020-12-30)
 `-` fixed parsing xml with bad characters  
 
