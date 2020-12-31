@@ -1,4 +1,4 @@
-/*! kdbxweb v1.14.0, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.14.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -6163,7 +6163,7 @@ function parse(xml) {
     var parser = domParserArg ? new dom.DOMParser(domParserArg) : new dom.DOMParser();
     var doc;
     // eslint-disable-next-line no-control-regex
-    xml = xml.replace(/[\x00-\x1F]/g, '');
+    xml = xml.replace(/[\x00-\x09\x0B-\x0C\x0E-\x1F]/g, '');
     try {
         doc = parser.parseFromString(xml, 'application/xml');
     } catch (e) {
