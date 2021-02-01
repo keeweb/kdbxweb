@@ -1,4 +1,4 @@
-/*! kdbxweb v1.14.1, (c) 2020 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.14.2, (c) 2021 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -2745,7 +2745,7 @@ KdbxEntry.prototype._mergeHistory = function (remoteHistory, remoteLastModTime) 
  * @returns {KdbxEntry}
  */
 KdbxEntry.create = function (meta, parentGroup) {
-    var entry = new KdbxEntry(parentGroup);
+    var entry = new KdbxEntry();
     entry.uuid = KdbxUuid.random();
     entry.icon = Consts.Icons.Key;
     entry.times = KdbxTimes.create();
@@ -3927,11 +3927,12 @@ KdbxHeader.prototype._createKdfParameters = function (algo) {
     }
     switch (algo) {
         case Consts.KdfId.Argon2d:
+        case Consts.KdfId.Argon2id:
             this.kdfParameters = new VarDictionary();
             this.kdfParameters.set(
                 '$UUID',
                 VarDictionary.ValueType.Bytes,
-                ByteUtils.base64ToBytes(Consts.KdfId.Argon2d)
+                ByteUtils.base64ToBytes(algo)
             );
             this.kdfParameters.set(
                 'S',
