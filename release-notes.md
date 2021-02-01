@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.14.1 (2021-02-01)
+`-` fixed setting KDF to Argon2id  
+
 ##### v1.14.0 (2020-12-31)
 `-` fixed new lines removal in non-encoded fields  
 
