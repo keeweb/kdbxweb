@@ -23,15 +23,10 @@ kdbxweb.Kdbx.load(file, cred)
 
         db.getDefaultGroup().forEach((entry) => {
             if (entry) {
-                const fieldsSize = Object.values(entry.fields)
-                    .map((f) => f.length || f.byteLength || 0)
-                    .reduce((s, v) => s + v, 0);
-                const ebinSize = Object.values(entry.binaries)
-                    .map((b) => (b.value && b.value.byteLength) || 0)
-                    .reduce((s, v) => s + v, 0);
-                console.log(
-                    `Entry: "${entry.fields.Title}": ${fieldsSize} bytes fields, ${ebinSize} bytes binaries`
-                );
+                printEntry(entry);
+                for (const histEntry of entry.history) {
+                    printEntry(histEntry, true);
+                }
             }
         });
     })
@@ -39,3 +34,17 @@ kdbxweb.Kdbx.load(file, cred)
         console.error('Error', e);
         process.exit(2);
     });
+
+function printEntry(entry, isHistory) {
+    const fieldsSize = Object.values(entry.fields)
+        .map((f) => f.length || f.byteLength || 0)
+        .reduce((s, v) => s + v, 0);
+    const ebinSize = Object.values(entry.binaries)
+        .map((b) => (b.value && b.value.byteLength) || 0)
+        .reduce((s, v) => s + v, 0);
+    console.log(
+        `${isHistory ? 'history ' : ''}entry: "${
+            entry.fields.Title
+        }": ${fieldsSize} bytes fields, ${ebinSize} bytes binaries`
+    );
+}
