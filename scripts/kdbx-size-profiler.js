@@ -44,11 +44,15 @@ function printEntry(entry, isHistory) {
     const fieldsSize = Object.values(entry.fields)
         .map((f) => f.length || f.byteLength || 0)
         .reduce((s, v) => s + v, 0);
-    const ebinSize = Object.values(entry.binaries)
+    const binSize = Object.values(entry.binaries)
         .map((b) => (b.value && b.value.byteLength) || 0)
         .reduce((s, v) => s + v, 0);
 
-    const type = isHistory ? 'History entry' : 'Entry';
+    const type = isHistory ? '  History item' : 'Entry';
     const title = entry.fields.Title || '(no title)';
-    console.log(`${type}: "${title}": ${fieldsSize} bytes fields, ${ebinSize} bytes binaries`);
+    let sizeStr = `${fieldsSize} bytes fields`;
+    if (binSize) {
+        sizeStr += `, ${binSize} bytes binaries`;
+    }
+    console.log(`${type}: "${title}": ${sizeStr}`);
 }
