@@ -12,11 +12,13 @@ const password = process.argv[3];
 const file = new Uint8Array(fs.readFileSync(filePath)).buffer;
 const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(password));
 
-kdbxweb.Kdbx.load(file, cred).then(db => {
-    return db.saveXml(true).then(xml => {
-        fs.writeFileSync(filePath + '.xml', xml);
+kdbxweb.Kdbx.load(file, cred)
+    .then((db) => {
+        return db.saveXml(true).then((xml) => {
+            fs.writeFileSync(filePath + '.xml', xml);
+        });
+    })
+    .catch((e) => {
+        console.error('Error', e);
+        process.exit(2);
     });
-}).catch(e => {
-    console.error('Error', e);
-    process.exit(2);
-});

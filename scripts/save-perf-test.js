@@ -3,9 +3,7 @@ const argon2 = require('../test/test-support/argon2');
 
 kdbxweb.CryptoEngine.argon2 = argon2;
 
-const credentials = new kdbxweb.Credentials(
-    kdbxweb.ProtectedValue.fromString("")
-);
+const credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
 
 const db = kdbxweb.Kdbx.create(credentials, 'test');
 db.upgrade();
