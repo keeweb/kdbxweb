@@ -14,8 +14,13 @@ const password = process.argv[3];
 const file = new Uint8Array(fs.readFileSync(filePath)).buffer;
 const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(password));
 
-kdbxweb.Kdbx.load(file, cred)
-    .then((db) => {
+(async () => {
+    try {
+        const db = await kdbxweb.Kdbx.load(file, cred);
+        const xml = await db.saveXml(false);
+        console.log(`File size: ${file.byteLength} bytes`);
+        console.log(`XML: ${xml.length} characters`);
+
         const binSize = Object.values(db.binaries)
             .map((b) => b.byteLength)
             .reduce((s, v) => s + v, 0);
@@ -34,25 +39,25 @@ kdbxweb.Kdbx.load(file, cred)
                 }
             }
         });
-    })
-    .catch((e) => {
+    } catch (e) {
         console.error('Error', e);
         process.exit(2);
-    });
-
-function printEntry(entry, isHistory) {
-    const fieldsSize = Object.values(entry.fields)
-        .map((f) => f.length || f.byteLength || 0)
-        .reduce((s, v) => s + v, 0);
-    const binSize = Object.values(entry.binaries)
-        .map((b) => (b.value && b.value.byteLength) || 0)
-        .reduce((s, v) => s + v, 0);
-
-    const type = isHistory ? '  History item' : 'Entry';
-    const title = entry.fields.Title || '(no title)';
-    let sizeStr = `${fieldsSize} bytes fields`;
-    if (binSize) {
-        sizeStr += `, ${binSize} bytes binaries`;
     }
-    console.log(`${type}: "${title}": ${sizeStr}`);
-}
+
+    function printEntry(entry, isHistory) {
+        const fieldsSize = Object.values(entry.fields)
+            .map((f) => f.length || f.byteLength || 0)
+            .reduce((s, v) => s + v, 0);
+        const binSize = Object.values(entry.binaries)
+            .map((b) => (b.value && b.value.byteLength) || 0)
+            .reduce((s, v) => s + v, 0);
+
+        const type = isHistory ? '  History item' : 'Entry';
+        const title = entry.fields.Title || '(no title)';
+        let sizeStr = `${fieldsSize} bytes fields`;
+        if (binSize) {
+            sizeStr += `, ${binSize} bytes binaries`;
+        }
+        console.log(`${type}: "${title}": ${sizeStr}`);
+    }
+})();
