@@ -1,4 +1,4 @@
-/*! kdbxweb v1.14.2, (c) 2021 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.14.3, (c) 2021 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -2855,6 +2855,7 @@ KdbxFormat.prototype._loadV3 = function (stm) {
         return that._setProtectedValues().then(function () {
             return kdbx._loadFromXml(that.ctx).then(function () {
                 return that._checkHeaderHashV3(stm).then(function () {
+                    kdbx.xml = undefined;
                     return kdbx;
                 });
             });
@@ -2889,7 +2890,10 @@ KdbxFormat.prototype._loadV4 = function (stm) {
                             var xmlStr = ByteUtils.bytesToString(data);
                             that.kdbx.xml = XmlUtils.parse(xmlStr);
                             return that._setProtectedValues().then(function () {
-                                return that.kdbx._loadFromXml(that.ctx);
+                                return that.kdbx._loadFromXml(that.ctx).then((kdbx) => {
+                                    kdbx.xml = undefined;
+                                    return kdbx;
+                                });
                             });
                         });
                     }
@@ -14378,8 +14382,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_xmldom__;
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -14409,10 +14414,13 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_xmldom__;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("./index.js");
+/******/ 	// This entry module used 'module' so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./index.js");
+/******/ 	
+/******/ 	return __webpack_exports__;
 /******/ })()
 ;
 });
