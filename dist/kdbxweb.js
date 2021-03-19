@@ -1,4 +1,4 @@
-/*! kdbxweb v1.14.3, (c) 2021 Antelle, opensource.org/licenses/MIT */
+/*! kdbxweb v1.14.4, (c) 2021 Antelle, opensource.org/licenses/MIT */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("crypto"), require("xmldom"));
@@ -2890,7 +2890,7 @@ KdbxFormat.prototype._loadV4 = function (stm) {
                             var xmlStr = ByteUtils.bytesToString(data);
                             that.kdbx.xml = XmlUtils.parse(xmlStr);
                             return that._setProtectedValues().then(function () {
-                                return that.kdbx._loadFromXml(that.ctx).then((kdbx) => {
+                                return that.kdbx._loadFromXml(that.ctx).then(function (kdbx) {
                                     kdbx.xml = undefined;
                                     return kdbx;
                                 });
@@ -2915,7 +2915,10 @@ KdbxFormat.prototype.loadXml = function (xmlStr) {
         kdbx.header = KdbxHeader.create();
         kdbx.xml = XmlUtils.parse(xmlStr);
         XmlUtils.protectPlainValues(kdbx.xml.documentElement);
-        return kdbx._loadFromXml(ctx);
+        return kdbx._loadFromXml(ctx).then(function (kdbx) {
+            kdbx.xml = undefined;
+            return kdbx;
+        });
     });
 };
 
@@ -2953,6 +2956,7 @@ KdbxFormat.prototype._saveV3 = function (stm) {
         return that._getProtectSaltGenerator().then(function (gen) {
             XmlUtils.updateProtectedValuesSalt(that.kdbx.xml.documentElement, gen);
             return that._encryptXmlV3().then(function (data) {
+                that.kdbx.xml = undefined;
                 stm.writeBytes(data);
                 return stm.getWrittenBytes();
             });
@@ -2991,6 +2995,7 @@ KdbxFormat.prototype._saveV4 = function (stm) {
                             return HmacBlockTransform.encrypt(data, keys.hmacKey).then(function (
                                 data
                             ) {
+                                that.kdbx.xml = undefined;
                                 ByteUtils.zeroBuffer(keys.hmacKey);
                                 stm.writeBytes(data);
                                 return stm.getWrittenBytes();
@@ -3012,6 +3017,7 @@ KdbxFormat.prototype.saveXml = function (prettyPrint) {
         XmlUtils.unprotectValues(kdbx.xml.documentElement);
         var xml = XmlUtils.serialize(kdbx.xml, prettyPrint);
         XmlUtils.protectUnprotectedValues(kdbx.xml.documentElement);
+        kdbx.xml = undefined;
         return xml;
     });
 };
