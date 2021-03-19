@@ -31,7 +31,7 @@ const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(password)
 
         db.getDefaultGroup().forEach((entry, group) => {
             if (group) {
-                console.log(`Group: ${group.name}`);
+                console.log(`Group: "${group.name}"`);
             }
             if (entry) {
                 printEntry(entry);
