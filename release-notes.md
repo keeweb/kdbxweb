@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v1.14.3 (2021-03-19)
+`*` cleaning up kdbx.xml after load to save memory
+
 ##### v1.14.2 (2021-02-01)
 `-` fixed setting KDF to Argon2id  
 
