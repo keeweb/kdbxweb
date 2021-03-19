@@ -21,6 +21,11 @@ kdbxweb.Kdbx.load(file, cred)
             .reduce((s, v) => s + v, 0);
         console.log(`Binaries: ${binSize} bytes`);
 
+        const iconsSize = Object.values(db.meta.customIcons)
+            .map((b) => b.byteLength)
+            .reduce((s, v) => s + v, 0);
+        console.log(`Custom icons: ${iconsSize} bytes`);
+
         db.getDefaultGroup().forEach((entry) => {
             if (entry) {
                 printEntry(entry);
@@ -42,9 +47,8 @@ function printEntry(entry, isHistory) {
     const ebinSize = Object.values(entry.binaries)
         .map((b) => (b.value && b.value.byteLength) || 0)
         .reduce((s, v) => s + v, 0);
-    console.log(
-        `${isHistory ? 'history ' : ''}entry: "${
-            entry.fields.Title
-        }": ${fieldsSize} bytes fields, ${ebinSize} bytes binaries`
-    );
+
+    const type = isHistory ? 'History entry' : 'Entry';
+    const title = entry.fields.Title || '(no title)';
+    console.log(`${type}: "${title}": ${fieldsSize} bytes fields, ${ebinSize} bytes binaries`);
 }
