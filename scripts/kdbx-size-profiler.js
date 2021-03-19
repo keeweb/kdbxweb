@@ -29,7 +29,10 @@ const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(password)
             .reduce((s, v) => s + v, 0);
         console.log(`Custom icons: ${iconsSize} bytes`);
 
-        db.getDefaultGroup().forEach((entry) => {
+        db.getDefaultGroup().forEach((entry, group) => {
+            if (group) {
+                console.log(`Group: ${group.name}`);
+            }
             if (entry) {
                 printEntry(entry);
                 for (const histEntry of entry.history) {
@@ -56,6 +59,6 @@ const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(password)
         if (binSize) {
             sizeStr += `, ${binSize} bytes binaries`;
         }
-        console.log(`${type}: "${title}": ${sizeStr}`);
+        console.log(`  ${type}: "${title}": ${sizeStr}`);
     }
 })();
