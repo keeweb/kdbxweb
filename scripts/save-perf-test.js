@@ -1,7 +1,6 @@
 const kdbxweb = require('../lib');
-const argon2 = require('../test/test-support/argon2');
 
-kdbxweb.CryptoEngine.argon2 = argon2;
+kdbxweb.CryptoEngine.argon2 = require('../test/test-support/argon2');
 
 const credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
 

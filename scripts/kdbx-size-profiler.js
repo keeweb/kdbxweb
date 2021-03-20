@@ -2,6 +2,8 @@ const fs = require('fs');
 
 const kdbxweb = require('../lib');
 
+kdbxweb.CryptoEngine.argon2 = require('../test/test-support/argon2');
+
 if (process.argv.length < 4) {
     console.log('Usage: node kdbx-size-profiler.js path/to-file.kdbx password');
     process.exit(1);

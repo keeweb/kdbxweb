@@ -1,6 +1,8 @@
 const fs = require('fs');
 const kdbxweb = require('../lib');
 
+kdbxweb.CryptoEngine.argon2 = require('../test/test-support/argon2');
+
 const GroupsCount = 100;
 const EntriesCount = 10000;
 
