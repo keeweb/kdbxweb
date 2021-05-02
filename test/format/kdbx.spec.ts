@@ -31,6 +31,12 @@ describe('Kdbx', () => {
         kdbxweb.CryptoEngine.argon2 = cryptoEngineArgon2;
     });
 
+    it('sets all imports without issues', () => {
+        for (const value of Object.values(kdbxweb)) {
+            expect(value).to.be.ok();
+        }
+    });
+
     it('loads simple file', () => {
         const cred = new kdbxweb.Credentials(
             kdbxweb.ProtectedValue.fromString('demo'),
