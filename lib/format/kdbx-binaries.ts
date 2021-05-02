@@ -113,12 +113,12 @@ export class KdbxBinaries {
         return this._mapByHash.get(hash);
     }
 
-    static isKdbxBinaryRef(binary: KdbxBinaryOrRef): binary is KdbxBinaryRef {
+    static isKdbxBinaryRef(binary: KdbxBinaryOrRef | undefined): binary is KdbxBinaryRef {
         return !!(binary as KdbxBinaryRef)?.ref;
     }
 
     static isKdbxBinaryWithHash(
-        binary: KdbxBinaryOrRef | KdbxBinaryWithHash
+        binary: KdbxBinaryOrRef | KdbxBinaryWithHash | undefined
     ): binary is KdbxBinaryWithHash {
         return !!(binary as KdbxBinaryWithHash)?.hash;
     }
