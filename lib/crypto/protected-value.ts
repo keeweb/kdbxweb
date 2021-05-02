@@ -29,6 +29,9 @@ export class ProtectedValue {
         return new ProtectedValue(arrayToBuffer(bytes), arrayToBuffer(salt));
     }
 
+    /**
+     * Keep in mind that you're passing the ownership of this array, the contents will be destroyed
+     */
     static fromBinary(binary: ArrayBuffer): ProtectedValue {
         const bytes = new Uint8Array(binary),
             salt = CryptoEngine.random(bytes.length);
