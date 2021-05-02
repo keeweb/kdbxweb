@@ -69,14 +69,14 @@ export class KdbxCredentials {
                 const metaEl = XmlUtils.getChildNode(xml.documentElement, 'Meta');
                 if (!metaEl) {
                     return Promise.reject(
-                        new KdbxError(ErrorCodes.InvalidArg, 'Key file without meta')
+                        new KdbxError(ErrorCodes.InvalidArg, 'key file without meta')
                     );
                 }
 
                 const versionEl = XmlUtils.getChildNode(metaEl, 'Version');
                 if (!versionEl?.textContent) {
                     return Promise.reject(
-                        new KdbxError(ErrorCodes.InvalidArg, 'Key file without version')
+                        new KdbxError(ErrorCodes.InvalidArg, 'key file without version')
                     );
                 }
                 keyFileVersion = +versionEl.textContent.split('.')[0];
@@ -84,14 +84,14 @@ export class KdbxCredentials {
                 const keyEl = XmlUtils.getChildNode(xml.documentElement, 'Key');
                 if (!keyEl) {
                     return Promise.reject(
-                        new KdbxError(ErrorCodes.InvalidArg, 'Key file without key')
+                        new KdbxError(ErrorCodes.InvalidArg, 'key file without key')
                     );
                 }
 
                 dataEl = <Element>XmlUtils.getChildNode(keyEl, 'Data');
                 if (!dataEl?.textContent) {
                     return Promise.reject(
-                        new KdbxError(ErrorCodes.InvalidArg, 'Key file without key')
+                        new KdbxError(ErrorCodes.InvalidArg, 'key file without key data')
                     );
                 }
             } catch (e) {
@@ -124,7 +124,7 @@ export class KdbxCredentials {
                 }
                 default: {
                     return Promise.reject(
-                        new KdbxError(ErrorCodes.FileCorrupt, 'Bad keyfile version')
+                        new KdbxError(ErrorCodes.FileCorrupt, 'bad keyfile version')
                     );
                 }
             }

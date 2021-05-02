@@ -416,7 +416,7 @@ export class KdbxMeta {
         const binary = XmlUtils.getProtectedBinary(node);
         if (id && binary) {
             if (KdbxBinaries.isKdbxBinaryRef(binary)) {
-                throw new KdbxError(ErrorCodes.FileCorrupt, 'Binary ref in meta');
+                throw new KdbxError(ErrorCodes.FileCorrupt, 'binary ref in meta');
             }
             ctx.kdbx.binaries.addWithId(id, binary);
         }

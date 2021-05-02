@@ -288,7 +288,7 @@ describe('CryptoEngine', () => {
                     throw 'No error generated';
                 })
                 .catch((e) => {
-                    expect(e.message).to.be('Error NotImplemented: Argon2 not implemented');
+                    expect(e.message).to.be('Error NotImplemented: argon2 not implemented');
                 });
         });
     });

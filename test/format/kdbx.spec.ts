@@ -159,7 +159,7 @@ describe('Kdbx', () => {
             .catch((e) => {
                 expect(e).to.be.a(kdbxweb.KdbxError);
                 expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
-                expect(e.message).to.contain('Bad keyfile version');
+                expect(e.message).to.contain('bad keyfile version');
             });
     });
 

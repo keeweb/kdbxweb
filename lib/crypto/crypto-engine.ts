@@ -220,7 +220,7 @@ export function argon2(
             version
         ).then(arrayToBuffer);
     }
-    return Promise.reject(new KdbxError(ErrorCodes.NotImplemented, 'Argon2 not implemented'));
+    return Promise.reject(new KdbxError(ErrorCodes.NotImplemented, 'argon2 not implemented'));
 }
 
 export function setArgon2Impl(impl: Argon2Fn): void {
