@@ -1,5 +1,22 @@
 Release notes
 -------------
+##### v2.0.0 (2021-05-02)
+`*` the library rewritten in TypeScript  
+`*` dist files removed from the repo  
+`*` browser support limited to two latest versions  
+`*` `Random` removed, use `CryptoEngine.random` instead  
+`*` creating `KdbxUuid` with bad values produces an error  
+`*` all library modules added to exports  
+`*` underscore removed from 'private' class methods  
+`*` some object exports replaced with ES6 exports  
+`*` binaries interface changed completely, see kdbx-binary.js  
+`*` replaced `forEach` with `*allItems` `*allGroups` `*allEntries`    
+`*` `object {}` => `Map<>`:
+  - *.customData
+  - meta.customIcons
+  - entry.fields
+  - entry.binaries
+
 ##### v1.14.4 (2021-03-19)
 `*` cleaning up kdbx.xml after save to save memory
 

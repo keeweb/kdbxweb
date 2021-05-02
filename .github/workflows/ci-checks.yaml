@@ -14,8 +14,8 @@ jobs:
           fetch-depth: 0
       - name: NPM install
         run: npm ci
-      - name: Run CI checks
-        run: npm run cichecks
+      - name: Build
+        run: npm start
       - name: Coveralls
         uses: coverallsapp/github-action@master
         with:

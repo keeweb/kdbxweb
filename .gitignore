@@ -1,11 +1,9 @@
 workspace.xml
 .DS_Store
 node_modules/
-dist/*
-!dist/kdbxweb.js
-!dist/kdbxweb.js.map
-!dist/kdbxweb.min.js
+dist/
 coverage/
 *.log
 .idea/
 *.iml
+.nyc_output/

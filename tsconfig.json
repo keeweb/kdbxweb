@@ -1,0 +1,8 @@
+{
+  "extends": "./conf/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node", "mocha"],
+    "esModuleInterop": true
+  },
+  "include": ["test/**/*.ts", "scripts/**/*.ts"]
+}

@@ -12,6 +12,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - protected values are stored in memory XOR'ed
 - conflict-free merge support
 - high code coverage
+- strict TypeScript
 
 ## Browser support
 
@@ -26,16 +27,16 @@ Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb file
 
 Kdbx4 has introduced Argon2, a new hashing function. Due to complex calculations, you have to implement it manually and export to kdbxweb, if you want to support such files. Here's how:
 
-```javascript
-kdbxweb.CryptoEngine.argon2 = (password, salt,
+```ts
+kdbxweb.CryptoEngine.setArgon2Impl((password, salt,
     memory, iterations, length, parallelism, type, version
 ) => {
     // your implementation makes hash (Uint8Array, 'length' bytes)
     return Promise.resolve(hash);
-};
+});
 ```
 
-You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.js).  
+You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
 
 It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you, to choose the best one.
 
@@ -43,47 +44,45 @@ It's not compiled into the library because there's no universal way to provide a
 
 ##### Loading
 
-```javascript
+```ts
 let credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'),
     keyFileArrayBuffer, challengeResponseFunction);
-kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials).then(db => ...);
-kdbxweb.Kdbx.loadXml(dataAsString, credentials).then(db => ...);
+const db1 = await kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials);
+const db2 = await kdbxweb.Kdbx.loadXml(dataAsString, credentials);
 ```
 
 ##### Saving
 
-```javascript
-db.save().then(dataAsArrayBuffer => ...);
-db.saveXml().then(xmlAsString => ...);
+```ts
+const dataAsArrayBuffer = await db.save();
+const xmlAsString = await db.saveXml();
 ```
 
 You can also pretty-print XML:
-```javascript
-db.saveXml(true).then(xmlAsString => ...);
+```ts
+const prettyPrintedXml = await db.saveXml(true);
 ```
 
 ##### File info
 [Header object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
 [Meta object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
-```javascript
+```ts
 db.header
 db.meta
 ```
 
 ##### Changing credentials
-```javascript
-kdbxweb.Kdbx.load(data, credentials).then(db => {
-    db.credentials.setPassword(kdbxweb.ProtectedValue.fromString('newPass'));
-    kdbxweb.Credentials.createRandomKeyFile().then(randomKeyFile => {
-        db.credentials.setKeyFile(randomKeyFile);
-        db.save();
-    });
-});
+```ts
+const db = await kdbxweb.Kdbx.load(data, credentials);
+db.credentials.setPassword(kdbxweb.ProtectedValue.fromString('newPass'));
+const randomKeyFile = await kdbxweb.Credentials.createRandomKeyFile();
+db.credentials.setKeyFile(randomKeyFile);
+await db.save();
 ```
 
 ##### Creation
 
-```javascript
+```ts
 let newDb = kdbxweb.Kdbx.create(credentials, 'My new db');
 let group = newDb.createGroup(newDb.getDefaultGroup(), 'subgroup');
 let entry = newDb.createEntry(group);
@@ -91,7 +90,7 @@ let entry = newDb.createEntry(group);
 
 ##### Maintenance
 
-```javascript
+```ts
 db.cleanup({
     historyRules: true,
     customIcons: true,
@@ -113,7 +112,7 @@ db.setKdf(kdbxweb.Consts.KdfId.Aes);
 Entries, groups and meta are consistent against merging in any direction with any state.  
 Due to format limitations, p2p entry history merging and some non-critical fields in meta can produce phantom records or deletions, 
 so correct entry history merging is supported only with one central replica. Items order is not guaranteed but the algorithm tries to preserve it.
-```javascript
+```ts
 let db = await kdbxweb.Kdbx.load(data, credentials); // load local db
 // work with db
 db.save(); // save local db
@@ -127,7 +126,7 @@ db.merge(remoteDb); // merge remote into local
 delete remoteDb; // don't use remoteDb anymore
 let saved = await db.save(); // save local db
 editStateBeforeSave = db.getLocalEditState(); // save local editing state again
-let pushedOk = pushToUpstream(saved); { // push db to upstream
+let pushedOk = pushToUpstream(saved); // push db to upstream
 if (pushedOk) {
     db.removeLocalEditState(); // clear local editing state
     editStateBeforeSave = null; // and discard it
@@ -136,31 +135,31 @@ if (pushedOk) {
 
 ##### Groups
 [Group object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
-```javascript
+```ts
 let defaultGroup = db.getDefaultGroup();
 let anotherGroup = db.getGroup(uuid);
 let deepGroup = defaultGroup.groups[1].groups[2];
 ```
 
 ##### Group creation
-```javascript
+```ts
 let group = db.createGroup(db.getDefaultGroup(), 'New group');
 let anotherGroup = db.createGroup(group, 'Subgroup');
 ```
 
 ##### Group deletion
-```javascript
+```ts
 db.remove(group);
 ```
 
 ##### Group move
-```javascript
+```ts
 db.move(group, toGroup);
 db.move(group, toGroup, atIndex);
 ```
 
 ##### Recycle Bin
-```javascript
+```ts
 let recycleBin = db.getGroup(db.meta.recycleBinUuid);
 if (!recycleBin) {
     db.createRecycleBin();
@@ -168,26 +167,28 @@ if (!recycleBin) {
 ```
 
 ##### Recursive traverse
-```javascript
-group.forEach((entry, group) => { /* will be called for each entry or group */ });
+```ts
+for (const entry of group.allEntries()) { /* ... */ }
+for (const group of group.allGroups()) { /* ... */ }
+for (const entryOrGroup of group.allGroupsAndEntries()) { /* ... */ }
 ```
 
 ##### Entries
 [Entry object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
 [Entry.times fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
-```javascript
+```ts
 let entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
 entry.fields.Pin = kdbxweb.ProtectedValue.fromString('4321');
 ```
 
 ##### Entry creation
-```javascript
+```ts
 let entry = db.createEntry(group);
 ```
 
 ##### Entry modification
-```javascript
+```ts
 // push current state to history stack
 entry.pushHistory();
 // change something
@@ -200,23 +201,23 @@ entry.removeHistory(index, count);
 Important: don't modify history states directly, this will break merge.
 
 ##### Entry deletion
-```javascript
+```ts
 db.remove(entry);
 ```
 
 ##### Entry move
-```javascript
+```ts
 db.move(entry, toGroup);
 ```
 
 If you're moving an entry from another file, this is called _import_:
-```javascript
+```ts
 db.importEntry(entry, toGroup, sourceFile);
 ```
 
 ##### ProtectedValue
 Used for passwords and custom fields, stored the value in memory XOR'ed  
-```javascript
+```ts
 let value = new kdbxweb.ProtectedValue(xoredByted, saltBytes);
 let valueFromString = kdbxweb.ProtectedValue.fromString('str');
 let valueFromBinary = kdbxweb.ProtectedValue.fromBinary(data);
@@ -226,28 +227,31 @@ let includesSubString = value.includes('foo');
 ```
 
 ##### Errors
-```javascript
-kdbxweb.Kdbx.load(data, credentials).then(...)
-    .catch(e => {
-        if (e.code === kdbxweb.Consts.ErrorCodes.BadSignature) { /* ... */ }
-    });
+```ts
+try {
+    await kdbxweb.Kdbx.load(data, credentials);
+} catch (e) {
+    if (e instanceof kdbxweb.KdbxError && e.code === kdbxweb.Consts.ErrorCodes.BadSignature) {
+        /* ... */
+    }
+}
 ```
 
 ##### Consts
 [Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.js)  
-```javascript
+```ts
 kdbxweb.Consts.ErrorCodes // all thrown errors have code property
 kdbxweb.Consts.Defaults // default db settings
 kdbxweb.Consts.Icons // icons map
 ```
 
 ##### Random
-```javascript
-let randomArray = kdbxweb.Random.getBytes(/* desired length */ 100);
+```ts
+let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
 ```
 
 ##### ByteUtils
-```javascript
+```ts
 kdbxweb.ByteUtils.bytesToString(bytes);
 kdbxweb.ByteUtils.stringToBytes(str);
 kdbxweb.ByteUtils.bytesToBase64(bytes);
@@ -259,18 +263,19 @@ kdbxweb.ByteUtils.hexToBytes(str);
 ## Building
 
 Use npm to build this project:  
-`> npm run build`  
-`> npm run build:debug`  
-
+```sh
+npm run build
+```  
 
 To run tests:  
-`> npm test`  
+```sh
+npm test
+```  
 
 ## 3rd party libs
 
 kdbxweb includes these 3rd party libraries:
 - [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
-- [text-encoding](https://github.com/inexorabletash/text-encoding) ([fork](https://github.com/keeweb/text-encoding))
 - [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
 
 ## See it in action

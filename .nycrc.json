@@ -1,0 +1,10 @@
+{
+  "extends": "@istanbuljs/nyc-config-typescript",
+  "all": true,
+  "include": [
+    "lib/**/*.ts"
+  ],
+  "exclude": [
+    "*.js"
+  ]
+}

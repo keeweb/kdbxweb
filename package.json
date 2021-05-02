@@ -1,24 +1,30 @@
 {
   "name": "kdbxweb",
-  "version": "1.14.4",
+  "version": "2.0.0",
   "description": "Kdbx KeePass database reader for web",
   "repository": {
     "type": "git",
     "url": "https://github.com/keeweb/kdbxweb.git"
   },
   "main": "dist/kdbxweb.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "test": "npm run tests:cover",
+    "test": "npm run tests:node",
     "start": "npm run eslint && npm run build",
-    "eslint": "eslint lib test",
-    "build": "npm run clean && npm run pack:tests && npm run tests:cover && npm run pack:dist-debug && npm run pack:dist-pro",
-    "cichecks": "npm run clean && npm run eslint && npm run pack:tests && npm run tests:cover",
-    "clean": "rimraf dist",
-    "pack:dist-pro": "webpack --progress --mode=production --config build/config/webpack.config.js",
-    "pack:dist-debug": "webpack --progress --mode=development --devtool source-map --config build/config/webpack.config.js",
-    "pack:tests": "webpack --progress --config build/config/webpack.tests.config.js",
-    "tests:plain": "mocha --recursive -R spec",
-    "tests:cover": "istanbul cover -x 'lib/support/**' node_modules/mocha/bin/_mocha -- --recursive -R spec"
+    "tsc": "tsc",
+    "eslint": "eslint lib test conf scripts",
+    "build": "npm run clean && npm run tests:cover && npm run pack:tests && npm run pack:dist-debug && npm run pack:dist-prod",
+    "clean": "rimraf dist .nyc_output coverage",
+    "pack:dist-prod": "webpack --progress --mode=production --config conf/webpack.config.js",
+    "pack:dist-debug": "webpack --progress --mode=development --devtool source-map --config conf/webpack.config.js",
+    "pack:tests": "webpack --progress --config conf/webpack.tests.config.js",
+    "tests:node": "mocha --require ts-node/register --recursive --reporter spec test/**/*.spec.ts",
+    "tests:cover": "nyc --reporter=lcov npm run tests:node",
+    "script:dump-header": "ts-node scripts/dump-header",
+    "script:kdbx-size-profiler": "ts-node scripts/kdbx-size-profiler",
+    "script:kdbx-to-xml": "ts-node scripts/kdbx-to-xml",
+    "script:make-big-files": "ts-node scripts/make-big-files",
+    "script:save-perf-test": "ts-node scripts/save-perf-test"
   },
   "keywords": [
     "kdbx",
@@ -27,6 +33,12 @@
   "author": "Antelle",
   "license": "MIT",
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/expect.js": "^0.3.29",
+    "@types/mocha": "^8.2.2",
+    "@types/pako": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "base64-loader": "^1.0.0",
     "eslint": "^7.25.0",
     "eslint-config-prettier": "^8.3.0",
@@ -39,18 +51,21 @@
     "expect.js": "^0.3.1",
     "exports-loader": "^2.0.0",
     "fs-walk": "0.0.2",
-    "istanbul": "^0.4.5",
     "mocha": "^8.3.2",
+    "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
+    "source-map-support": "^0.5.19",
     "stats-webpack-plugin": "^0.7.0",
     "terser-webpack-plugin": "^5.1.1",
-    "webpack": "^5.36.1",
+    "ts-loader": "^9.1.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
   "dependencies": {
     "pako": "github:keeweb/pako#653c0b00d8941c89d09ed4546d2179001ec44efc",
-    "text-encoding": "github:keeweb/text-encoding#4dfb7cb0954c222852092f8b06ae4f6b4f60bfbb",
     "xmldom": "github:keeweb/xmldom#ec8f61f723e2f403adaf7a1bbf55ced4ff1ea0c6"
   }
 }
