@@ -209,7 +209,16 @@ export function argon2(
     version: Argon2Version
 ): Promise<ArrayBuffer> {
     if (argon2impl) {
-        return argon2impl(password, salt, memory, iterations, length, parallelism, type, version);
+        return argon2impl(
+            password,
+            salt,
+            memory,
+            iterations,
+            length,
+            parallelism,
+            type,
+            version
+        ).then(arrayToBuffer);
     }
     return Promise.reject(new KdbxError(ErrorCodes.NotImplemented, 'Argon2 not implemented'));
 }
