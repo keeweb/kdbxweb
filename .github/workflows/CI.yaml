@@ -23,6 +23,7 @@ jobs:
       - name: Build
         run: npm start
       - name: Coveralls
+        if: !startsWith(github.ref, 'refs/tags/')
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
