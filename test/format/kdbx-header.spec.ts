@@ -72,7 +72,7 @@ describe('KdbxHeader', () => {
         header.encryptionIV = new Uint32Array([5, 5]).buffer;
         header.kdfParameters!.set('S', ValueType.Bytes, new Uint32Array([6, 6, 6, 6]).buffer);
         header.publicCustomData = new VarDictionary();
-        header.publicCustomData!.set('custom', ValueType.String, 'val');
+        header.publicCustomData.set('custom', ValueType.String, 'val');
 
         const headerStm = new BinaryStream();
         const innerHeaderStm = new BinaryStream();

@@ -214,7 +214,7 @@ export class KdbxGroup {
 
             if (item && remoteItem.locationChanged > item.locationChanged) {
                 item.parentGroup = this; // item moved to this group remotely later than local
-                newItems.splice(KdbxGroup.findInsertIx(newItems, remoteCollection, ix), 0, <T>item);
+                newItems.splice(KdbxGroup.findInsertIx(newItems, remoteCollection, ix), 0, item);
             } else if (!item) {
                 // item created remotely
                 let newItem: T;

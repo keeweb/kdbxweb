@@ -28,8 +28,7 @@
       "@typescript-eslint/no-unused-vars": "error",
       "@typescript-eslint/no-misused-promises": ["error", {
         "checksVoidReturn": false
-      }],
-      "@typescript-eslint/no-unnecessary-type-assertion": "off"
+      }]
     }
   }],
   "plugins": [
