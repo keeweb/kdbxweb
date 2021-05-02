@@ -60,6 +60,8 @@ export class VarDictionary {
     private _items: VarDictionaryItem[] = [];
     private readonly _map = new Map<string, VarDictionaryItem>();
 
+    static readonly ValueType = ValueType;
+
     keys(): string[] {
         return this._items.map((item) => item.key);
     }

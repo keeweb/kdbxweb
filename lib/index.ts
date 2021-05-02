@@ -13,17 +13,31 @@ import * as XmlNames from './defs/xml-names';
 
 import { KdbxError } from './errors/kdbx-error';
 
-import { Kdbx } from './format/kdbx';
-import { KdbxBinaries } from './format/kdbx-binaries';
+import { Kdbx, KdbxEditState } from './format/kdbx';
+import {
+    KdbxBinaries,
+    KdbxBinary,
+    KdbxBinaryIn,
+    KdbxBinaryOrRef,
+    KdbxBinaryRef,
+    KdbxBinaryRefWithValue,
+    KdbxBinaryWithHash
+} from './format/kdbx-binaries';
 import { KdbxContext } from './format/kdbx-context';
-import { KdbxCredentials } from './format/kdbx-credentials';
-import { KdbxCustomData } from './format/kdbx-custom-data';
+import { KdbxChallengeResponseFn, KdbxCredentials } from './format/kdbx-credentials';
+import { KdbxCustomData, KdbxCustomDataMap } from './format/kdbx-custom-data';
 import { KdbxDeletedObject } from './format/kdbx-deleted-object';
-import { KdbxEntry } from './format/kdbx-entry';
+import {
+    KdbxAutoTypeItem,
+    KdbxEntry,
+    KdbxEntryAutoType,
+    KdbxEntryEditState,
+    KdbxEntryField
+} from './format/kdbx-entry';
 import { KdbxFormat } from './format/kdbx-format';
 import { KdbxGroup } from './format/kdbx-group';
 import { KdbxHeader } from './format/kdbx-header';
-import { KdbxMeta } from './format/kdbx-meta';
+import { KdbxMemoryProtection, KdbxMeta, KdbxMetaEditState } from './format/kdbx-meta';
 import { KdbxTimes } from './format/kdbx-times';
 import { KdbxUuid } from './format/kdbx-uuid';
 
@@ -47,17 +61,32 @@ export {
     XmlNames,
     KdbxError,
     Kdbx,
+    KdbxEditState,
     KdbxBinaries,
+    KdbxBinaryRef,
+    KdbxBinaryRefWithValue,
+    KdbxBinaryWithHash,
+    KdbxBinary,
+    KdbxBinaryOrRef,
+    KdbxBinaryIn,
     KdbxContext,
     KdbxCredentials,
     KdbxCredentials as Credentials,
+    KdbxChallengeResponseFn,
     KdbxCustomData,
+    KdbxCustomDataMap,
     KdbxDeletedObject,
     KdbxEntry,
+    KdbxEntryEditState,
+    KdbxEntryField,
+    KdbxAutoTypeItem,
+    KdbxEntryAutoType,
     KdbxFormat,
     KdbxGroup,
     KdbxHeader,
     KdbxMeta,
+    KdbxMetaEditState,
+    KdbxMemoryProtection,
     KdbxTimes,
     KdbxUuid,
     BinaryStream,
