@@ -36,7 +36,7 @@ kdbxweb.CryptoEngine.setArgon2Impl((password, salt,
 });
 ```
 
-You can find implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
+You can find an implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
 
 It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you, to choose the best one.
 
@@ -64,12 +64,12 @@ const prettyPrintedXml = await db.saveXml(true);
 ```
 
 ##### File info
-[Header object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-header.js#L26)  
-[Meta object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-meta.js#L15)  
 ```ts
 db.header
 db.meta
 ```
+
+See the corresponding type fields inside, they should be obvious.
 
 ##### Changing credentials
 ```ts
