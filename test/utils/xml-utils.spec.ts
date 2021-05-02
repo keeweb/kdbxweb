@@ -15,6 +15,8 @@ describe('XmlUtils', () => {
         return str.replace(/\s/g, '');
     }
 
+    const isNode = !!global.process?.versions?.node;
+
     describe('parse', () => {
         it('parses XML document', () => {
             const xml = XmlUtils.parse('<root><item><cd>&lt;&gt;</cd></item></root>');
@@ -23,6 +25,28 @@ describe('XmlUtils', () => {
             expect(xml.documentElement.firstChild!.firstChild!.nodeName).to.be('cd');
             expect(xml.documentElement.firstChild!.firstChild!.textContent).to.be('<>');
         });
+
+        if (isNode) {
+            it('uses the global DOMParser if possible', () => {
+                const doc = {
+                    documentElement: 'hello',
+                    getElementsByTagName: () => []
+                };
+                try {
+                    // @ts-ignore
+                    global.DOMParser = class {
+                        parseFromString() {
+                            return doc;
+                        }
+                    };
+                    const xml = XmlUtils.parse('<root><item><cd>&lt;&gt;</cd></item></root>');
+                    expect(xml).to.be(doc);
+                } finally {
+                    // @ts-ignore
+                    delete global.DOMParser;
+                }
+            });
+        }
 
         it('throws error for non-xml document', () => {
             expect(() => {
@@ -82,6 +106,25 @@ describe('XmlUtils', () => {
                 '<root>\n    <item>\n        <cd>123</cd>\n        <e/>\n    </item>\n</root>'
             );
         });
+
+        if (isNode) {
+            it('uses the global XMLSerializer if possible', () => {
+                try {
+                    // @ts-ignore
+                    global.XMLSerializer = class {
+                        serializeToString() {
+                            return 'xml';
+                        }
+                    };
+                    const doc = XmlUtils.parse('<root><item><cd>123</cd><e></e></item></root>');
+                    const xml = XmlUtils.serialize(doc, true);
+                    expect(xml).to.be('xml');
+                } finally {
+                    // @ts-ignore
+                    delete global.XMLSerializer;
+                }
+            });
+        }
 
         it('pretty prints processing instructions', () => {
             const doc = XmlUtils.parse(

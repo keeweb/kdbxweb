@@ -139,6 +139,12 @@ describe('CryptoEngine', () => {
                 const rand1 = CryptoEngine.random(20);
                 expect(rand1.length).to.be(20);
             });
+
+            it('can fill more than 65536 bytes', () => {
+                useSubtleMock();
+                const rand1 = CryptoEngine.random(77111);
+                expect(rand1.length).to.be(77111);
+            });
         }
     });
 
