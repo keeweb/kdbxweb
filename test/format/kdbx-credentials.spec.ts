@@ -1,6 +1,5 @@
 import expect from 'expect.js';
-import { ByteUtils, KdbxCredentials, ProtectedValue } from '../../lib';
-import * as kdbxweb from '../../lib';
+import { ByteUtils, Consts, KdbxCredentials, KdbxError, ProtectedValue } from '../../lib';
 
 describe('KdbxCredentials', () => {
     it('calculates hash for null password', async () => {
@@ -105,8 +104,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
             expect(e.message).to.contain('key file without meta');
             return;
         }
@@ -119,8 +118,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
             expect(e.message).to.contain('key file without version');
             return;
         }
@@ -135,8 +134,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.FileCorrupt);
             expect(e.message).to.contain('bad keyfile version');
             return;
         }
@@ -151,8 +150,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
             expect(e.message).to.contain('key file without key');
             return;
         }
@@ -167,8 +166,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidArg);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.InvalidArg);
             expect(e.message).to.contain('key file without key data');
             return;
         }
@@ -205,8 +204,8 @@ describe('KdbxCredentials', () => {
         try {
             await cred.getHash();
         } catch (e) {
-            expect(e).to.be.a(kdbxweb.KdbxError);
-            expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
+            expect(e).to.be.a(KdbxError);
+            expect(e.code).to.be(Consts.ErrorCodes.FileCorrupt);
             expect(e.message).to.contain('key file data hash mismatch');
             return;
         }
