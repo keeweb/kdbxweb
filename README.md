@@ -134,7 +134,6 @@ if (pushedOk) {
 ```
 
 ##### Groups
-[Group object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-group.js#L14)
 ```ts
 let defaultGroup = db.getDefaultGroup();
 let anotherGroup = db.getGroup(uuid);
@@ -174,8 +173,6 @@ for (const entryOrGroup of group.allGroupsAndEntries()) { /* ... */ }
 ```
 
 ##### Entries
-[Entry object fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-entry.js#L16)  
-[Entry.times fields](https://github.com/keeweb/kdbxweb/blob/master/lib/format/kdbx-times.js#L10)  
 ```ts
 let entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
@@ -238,7 +235,7 @@ try {
 ```
 
 ##### Consts
-[Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.js)  
+[Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.ts)  
 ```ts
 kdbxweb.Consts.ErrorCodes // all thrown errors have code property
 kdbxweb.Consts.Defaults // default db settings
