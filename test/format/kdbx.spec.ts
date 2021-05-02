@@ -150,32 +150,6 @@ describe('Kdbx', () => {
         });
     });
 
-    it('generates error for bad keyfile version', () => {
-        const cred = new kdbxweb.Credentials(null, TestResources.badVersionKeyFile);
-        return kdbxweb.Kdbx.load(TestResources.keyV2, cred)
-            .then(() => {
-                throw 'Not expected';
-            })
-            .catch((e) => {
-                expect(e).to.be.a(kdbxweb.KdbxError);
-                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
-                expect(e.message).to.contain('bad keyfile version');
-            });
-    });
-
-    it('generates error for keyfile hash mismatch', () => {
-        const cred = new kdbxweb.Credentials(null, TestResources.badHashV2KeyFile);
-        return kdbxweb.Kdbx.load(TestResources.keyV2, cred)
-            .then(() => {
-                throw 'Not expected';
-            })
-            .catch((e) => {
-                expect(e).to.be.a(kdbxweb.KdbxError);
-                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.FileCorrupt);
-                expect(e.message).to.contain('Key file data hash mismatch');
-            });
-    });
-
     it('successfully loads saved file', () => {
         const cred = new kdbxweb.Credentials(
             kdbxweb.ProtectedValue.fromString('demo'),

@@ -116,7 +116,7 @@ export class KdbxCredentials {
                         if (computedHashStr !== keyFileDataHash) {
                             throw new KdbxError(
                                 ErrorCodes.FileCorrupt,
-                                'Key file data hash mismatch'
+                                'key file data hash mismatch'
                             );
                         }
                         this._keyFileHash = ProtectedValue.fromBinary(keyFileData);
@@ -152,11 +152,7 @@ export class KdbxCredentials {
                     buffers.push(this._keyFileHash.getBinary());
                 }
                 if (chalResp) {
-                    if (chalResp instanceof Uint8Array) {
-                        buffers.push(chalResp);
-                    } else {
-                        buffers.push(new Uint8Array(chalResp));
-                    }
+                    buffers.push(new Uint8Array(chalResp));
                 }
                 const totalLength = buffers.reduce((acc, buf) => acc + buf.byteLength, 0);
                 const allBytes = new Uint8Array(totalLength);

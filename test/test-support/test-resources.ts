@@ -20,8 +20,6 @@ export const TestResources = {
     keyWithBomKeyFile: readFile('KeyWithBom.key'),
     keyV2: readFile('KeyV2.kdbx'),
     keyV2KeyFile: readFile('KeyV2.keyx'),
-    badVersionKeyFile: readFile('KeyBadVersion.keyx'),
-    badHashV2KeyFile: readFile('KeyBadHashV2.keyx'),
     argon2: readFile('Argon2.kdbx'),
     argon2id: readFile('Argon2id.kdbx'),
     argon2ChaCha: readFile('Argon2ChaCha.kdbx'),
