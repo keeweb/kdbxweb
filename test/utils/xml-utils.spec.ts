@@ -360,6 +360,42 @@ describe('XmlUtils', () => {
             const bool = XmlUtils.getBoolean(xml.documentElement);
             expect(bool).to.be(undefined);
         });
+
+        it('returns undefined for closed node', () => {
+            const xml = XmlUtils.parse('<item />');
+            const bool = XmlUtils.getBoolean(xml.documentElement);
+            expect(bool).to.be(undefined);
+        });
+    });
+
+    describe('strToBoolean', () => {
+        it('converts "true" to boolean', () => {
+            expect(XmlUtils.strToBoolean('true')).to.be(true);
+        });
+
+        it('converts "false" to boolean', () => {
+            expect(XmlUtils.strToBoolean('false')).to.be(false);
+        });
+
+        it('converts "null" to boolean', () => {
+            expect(XmlUtils.strToBoolean('null')).to.be(null);
+        });
+
+        it('converts a bad string to null', () => {
+            expect(XmlUtils.strToBoolean('bad')).to.be(undefined);
+        });
+
+        it('converts an empty string to undefined', () => {
+            expect(XmlUtils.strToBoolean('')).to.be(undefined);
+        });
+
+        it('converts null to undefined', () => {
+            expect(XmlUtils.strToBoolean(null)).to.be(undefined);
+        });
+
+        it('converts undefined to undefined', () => {
+            expect(XmlUtils.strToBoolean(undefined)).to.be(undefined);
+        });
     });
 
     describe('setBoolean', () => {
