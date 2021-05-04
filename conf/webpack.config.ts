@@ -1,21 +1,14 @@
-const path = require('path'),
-    webpack = require('webpack'),
-    pkg = require('../package.json');
+import * as path from 'path';
+import * as webpack from 'webpack';
+import TerserPlugin from 'terser-webpack-plugin';
+
+import * as pkg from '../package.json';
 
 const debug = process.argv.indexOf('--mode=development') > 0;
 
-const StatsPlugin = require('stats-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-
-const banner =
-    'kdbxweb v' +
-    pkg.version +
-    ', (c) ' +
-    new Date().getFullYear() +
-    ' ' +
-    pkg.author +
-    ', opensource.org/licenses/' +
-    pkg.license;
+const license = `opensource.org/licenses/${pkg.license}`;
+const copyright = `(c) ${new Date().getFullYear()} ${pkg.author}, ${license}`;
+const banner = `kdbxweb v${pkg.version}, ${copyright}`;
 
 module.exports = {
     context: path.join(__dirname, '../lib'),
@@ -55,12 +48,7 @@ module.exports = {
             zlib: false
         }
     },
-    plugins: [
-        new webpack.BannerPlugin({
-            banner
-        }),
-        new StatsPlugin('stats.json', { chunkModules: true })
-    ],
+    plugins: [new webpack.BannerPlugin({ banner })],
     node: {
         __filename: false,
         __dirname: false

@@ -1,13 +1,8 @@
-const path = require('path'),
-    walk = require('fs-walk');
+import * as path from 'path';
+import { walkSync } from '@nodelib/fs.walk';
 
-const entry = [];
-
-walk.walkSync('test', (basedir, filename, stat) => {
-    if (stat.isFile() && path.extname(filename) === '.ts') {
-        entry.push(path.join(basedir, filename).replace('test', '.'));
-    }
-});
+const files = walkSync('test', { entryFilter: (e) => e.name.endsWith('.ts') });
+const entry = files.map((f) => f.path.replace('test', '.'));
 
 module.exports = {
     mode: 'production',
