@@ -55,6 +55,7 @@ export const Elem = {
     OverrideUrl: 'OverrideURL',
     Times: 'Times',
     Tags: 'Tags',
+    QualityCheck: 'QualityCheck',
 
     CreationTime: 'CreationTime',
     LastModTime: 'LastModificationTime',

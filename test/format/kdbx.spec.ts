@@ -1037,6 +1037,14 @@ describe('Kdbx', () => {
             expect(groupWithTags).to.be.ok();
             expect(groupWithTags.name).to.be('With tags');
             expect(groupWithTags.tags).to.eql(['Another tag', 'Tag1']);
+
+            const regularEntry = db.groups[0].entries[0];
+            expect(regularEntry.qualityCheck).to.be(undefined);
+
+            const entryWithDisabledPasswordQuality = db.groups[0].entries[1];
+            expect(entryWithDisabledPasswordQuality).to.be.ok();
+            expect(entryWithDisabledPasswordQuality.fields.get('Title')).to.be('DisabledQ');
+            expect(entryWithDisabledPasswordQuality.qualityCheck).to.be(false);
         }
     });
 

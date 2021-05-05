@@ -49,6 +49,7 @@ export class KdbxEntry {
     history: KdbxEntry[] = [];
     parentGroup: KdbxGroup | undefined;
     customData: KdbxCustomDataMap | undefined;
+    qualityCheck: boolean | undefined;
     _editState: KdbxEntryEditState | undefined;
 
     get lastModTime(): number {
@@ -99,6 +100,9 @@ export class KdbxEntry {
                 break;
             case XmlNames.Elem.CustomData:
                 this.readCustomData(node);
+                break;
+            case XmlNames.Elem.QualityCheck:
+                this.qualityCheck = XmlUtils.getBoolean(node) ?? undefined;
                 break;
         }
     }
@@ -282,6 +286,12 @@ export class KdbxEntry {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.BgColor), this.bgColor);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.OverrideUrl), this.overrideUrl);
         XmlUtils.setTags(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags);
+        if (typeof this.qualityCheck === 'boolean') {
+            XmlUtils.setBoolean(
+                XmlUtils.addChildNode(node, XmlNames.Elem.QualityCheck),
+                this.qualityCheck
+            );
+        }
         this.times.write(node, ctx);
         this.writeFields(node);
         this.writeBinaries(node, ctx);
