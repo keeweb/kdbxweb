@@ -48,6 +48,7 @@ export class KdbxEntry {
     };
     history: KdbxEntry[] = [];
     parentGroup: KdbxGroup | undefined;
+    previousParentGroup: KdbxUuid | undefined;
     customData: KdbxCustomDataMap | undefined;
     qualityCheck: boolean | undefined;
     _editState: KdbxEntryEditState | undefined;
@@ -103,6 +104,9 @@ export class KdbxEntry {
                 break;
             case XmlNames.Elem.QualityCheck:
                 this.qualityCheck = XmlUtils.getBoolean(node) ?? undefined;
+                break;
+            case XmlNames.Elem.PreviousParentGroup:
+                this.previousParentGroup = XmlUtils.getUuid(node);
                 break;
         }
     }
@@ -290,6 +294,12 @@ export class KdbxEntry {
             XmlUtils.setBoolean(
                 XmlUtils.addChildNode(node, XmlNames.Elem.QualityCheck),
                 this.qualityCheck
+            );
+        }
+        if (this.previousParentGroup !== undefined) {
+            XmlUtils.setUuid(
+                XmlUtils.addChildNode(node, XmlNames.Elem.PreviousParentGroup),
+                this.previousParentGroup
             );
         }
         this.times.write(node, ctx);

@@ -56,6 +56,7 @@ export const Elem = {
     Times: 'Times',
     Tags: 'Tags',
     QualityCheck: 'QualityCheck',
+    PreviousParentGroup: 'PreviousParentGroup',
 
     CreationTime: 'CreationTime',
     LastModTime: 'LastModificationTime',

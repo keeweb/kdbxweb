@@ -2,13 +2,10 @@ import expect from 'expect.js';
 import * as kdbxweb from '../../lib';
 import { argon2 } from '../test-support/argon2';
 import { TestResources } from '../test-support/test-resources';
-import { KdbxChallengeResponseFn } from '../../lib/format/kdbx-credentials';
-import { KdbxBinaryWithHash } from '../../lib/format/kdbx-binaries';
-import { Kdbx } from '../../lib';
 
 describe('Kdbx', () => {
     const cryptoEngineArgon2 = kdbxweb.CryptoEngine.argon2;
-    const challengeResponse: KdbxChallengeResponseFn = function (challenge) {
+    const challengeResponse: kdbxweb.KdbxChallengeResponseFn = function (challenge) {
         const responses = new Map<string, string>([
             [
                 '011ed85afa703341893596fba2da60b6cacabaa5468a0e9ea74698b901bc89ab',
@@ -1032,11 +1029,12 @@ describe('Kdbx', () => {
 
         check(db);
 
-        function check(db: Kdbx) {
+        function check(db: kdbxweb.Kdbx) {
             const groupWithTags = db.groups[0].groups[0].groups[0];
             expect(groupWithTags).to.be.ok();
             expect(groupWithTags.name).to.be('With tags');
             expect(groupWithTags.tags).to.eql(['Another tag', 'Tag1']);
+            expect(groupWithTags.previousParentGroup).to.be(undefined);
 
             const regularEntry = db.groups[0].entries[0];
             expect(regularEntry.qualityCheck).to.be(undefined);
@@ -1045,6 +1043,24 @@ describe('Kdbx', () => {
             expect(entryWithDisabledPasswordQuality).to.be.ok();
             expect(entryWithDisabledPasswordQuality.fields.get('Title')).to.be('DisabledQ');
             expect(entryWithDisabledPasswordQuality.qualityCheck).to.be(false);
+
+            const previousParentGroup = db.groups[0].groups[0].groups[1];
+            expect(previousParentGroup).to.be.ok();
+            expect(previousParentGroup.name).to.be('Inside');
+
+            const groupMovedFromInside = db.groups[0].groups[0].groups[2];
+            expect(groupMovedFromInside).to.be.ok();
+            expect(groupMovedFromInside.name).to.be('New group was inside');
+            expect(
+                previousParentGroup.uuid.equals(groupMovedFromInside.previousParentGroup)
+            ).to.be.ok();
+
+            const entryMovedFromInside = db.groups[0].groups[0].entries[0];
+            expect(entryMovedFromInside).to.be.ok();
+            expect(entryMovedFromInside.fields.get('Title')).to.be('Was inside');
+            expect(
+                previousParentGroup.uuid.equals(entryMovedFromInside.previousParentGroup)
+            ).to.be.ok();
         }
     });
 
@@ -1270,8 +1286,12 @@ describe('Kdbx', () => {
         }
         expect(entry.binaries.size).to.be(exp.binaries.size);
         for (const [field, value] of exp.binaries.entries()) {
-            expect((entry.binaries.get(field) as KdbxBinaryWithHash).hash).to.be(value.hash);
-            expect(!!(entry.binaries.get(field) as KdbxBinaryWithHash).value).to.be(!!value.value);
+            expect((entry.binaries.get(field) as kdbxweb.KdbxBinaryWithHash).hash).to.be(
+                value.hash
+            );
+            expect(!!(entry.binaries.get(field) as kdbxweb.KdbxBinaryWithHash).value).to.be(
+                !!value.value
+            );
         }
         expect(entry.autoType).to.be.eql(exp.autoType);
         expect(entry.history.length).to.be(exp.history);

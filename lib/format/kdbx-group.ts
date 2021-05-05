@@ -24,6 +24,7 @@ export class KdbxGroup {
     groups: KdbxGroup[] = [];
     entries: KdbxEntry[] = [];
     parentGroup: KdbxGroup | undefined;
+    previousParentGroup: KdbxUuid | undefined;
     customData: KdbxCustomDataMap | undefined;
 
     get lastModTime(): number {
@@ -81,6 +82,9 @@ export class KdbxGroup {
             case XmlNames.Elem.CustomData:
                 this.customData = KdbxCustomData.read(node);
                 break;
+            case XmlNames.Elem.PreviousParentGroup:
+                this.previousParentGroup = XmlUtils.getUuid(node);
+                break;
         }
     }
 
@@ -97,6 +101,12 @@ export class KdbxGroup {
             XmlUtils.setUuid(
                 XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID),
                 this.customIcon
+            );
+        }
+        if (this.previousParentGroup !== undefined) {
+            XmlUtils.setUuid(
+                XmlUtils.addChildNode(node, XmlNames.Elem.PreviousParentGroup),
+                this.previousParentGroup
             );
         }
         if (this.customData) {
