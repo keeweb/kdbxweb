@@ -35,7 +35,7 @@ const cred = new Credentials(ProtectedValue.fromString(password));
         console.log(`Binaries: ${binSize} bytes`);
 
         const iconsSize = [...db.meta.customIcons.values()]
-            .map((b) => b.data.byteLength as number)
+            .map((b) => b.data.byteLength)
             .reduce((s, v) => s + v, 0);
         console.log(`Custom icons: ${iconsSize} bytes`);
 
