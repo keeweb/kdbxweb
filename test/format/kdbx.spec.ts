@@ -519,7 +519,7 @@ describe('Kdbx', () => {
             });
     });
 
-    it('generates error for max bad version', () => {
+    it('generates an error for too high major version', () => {
         const file = new Uint8Array(TestResources.demoKdbx.byteLength);
         file.set(new Uint8Array(TestResources.demoKdbx));
         file[10] = 5;
@@ -536,10 +536,27 @@ describe('Kdbx', () => {
             });
     });
 
-    it('generates error for min bad version', () => {
+    it('generates an error for too high major version', () => {
         const file = new Uint8Array(TestResources.demoKdbx.byteLength);
         file.set(new Uint8Array(TestResources.demoKdbx));
         file[10] = 2;
+        return kdbxweb.Kdbx.load(
+            file.buffer,
+            new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'))
+        )
+            .then(() => {
+                throw 'Not expected';
+            })
+            .catch((e) => {
+                expect(e).to.be.a(kdbxweb.KdbxError);
+                expect(e.code).to.be(kdbxweb.Consts.ErrorCodes.InvalidVersion);
+            });
+    });
+
+    it('generates an error for too high minor version', () => {
+        const file = new Uint8Array(TestResources.demoKdbx.byteLength);
+        file.set(new Uint8Array(TestResources.demoKdbx));
+        file[11] = 10;
         return kdbxweb.Kdbx.load(
             file.buffer,
             new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'))

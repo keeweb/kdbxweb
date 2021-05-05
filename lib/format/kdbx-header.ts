@@ -55,9 +55,7 @@ const InnerHeaderFields: HeaderField[] = [
 
 const HeaderConst = {
     DefaultFileVersionMajor: 4,
-    DefaultFileVersionMinor: 0,
-    MaxFileVersionMajor: 4,
-    MaxFileVersionMinor: 1,
+    MinSupportedVersion: 3,
     MaxSupportedVersion: 4,
     FlagBinaryProtected: 0x01,
     InnerHeaderBinaryFieldId: 0x03,
@@ -72,13 +70,18 @@ const HeaderConst = {
     EndOfHeader: 0x0d0ad0a
 } as const;
 
-const LastMinorVersions = {
+const DefaultMinorVersions = {
     3: 1,
     4: 0
 } as const;
 
+const LastMinorVersions: { [major: number]: number } = {
+    3: 1,
+    4: 1
+} as const;
+
 export class KdbxHeader {
-    static readonly MaxFileVersion = HeaderConst.MaxFileVersionMajor;
+    static readonly MaxFileVersion = HeaderConst.MaxSupportedVersion;
 
     versionMajor = 0;
     versionMinor = 0;
@@ -114,7 +117,13 @@ export class KdbxHeader {
     private readVersion(stm: BinaryStream): void {
         const versionMinor = stm.getUint16(true);
         const versionMajor = stm.getUint16(true);
-        if (versionMajor > HeaderConst.MaxSupportedVersion) {
+        if (
+            versionMajor > HeaderConst.MaxSupportedVersion ||
+            versionMajor < HeaderConst.MinSupportedVersion
+        ) {
+            throw new KdbxError(ErrorCodes.InvalidVersion);
+        }
+        if (versionMinor > LastMinorVersions[versionMajor]) {
             throw new KdbxError(ErrorCodes.InvalidVersion);
         }
         this.versionMinor = versionMinor;
@@ -601,7 +610,7 @@ export class KdbxHeader {
             throw new KdbxError(ErrorCodes.InvalidArg, 'bad file version');
         }
         this.versionMajor = version;
-        this.versionMinor = LastMinorVersions[version];
+        this.versionMinor = DefaultMinorVersions[version];
         if (this.versionMajor === 4) {
             if (!this.kdfParameters) {
                 this.createKdfParameters();
@@ -637,7 +646,7 @@ export class KdbxHeader {
     static create(): KdbxHeader {
         const header = new KdbxHeader();
         header.versionMajor = HeaderConst.DefaultFileVersionMajor;
-        header.versionMinor = HeaderConst.DefaultFileVersionMinor;
+        header.versionMinor = DefaultMinorVersions[HeaderConst.DefaultFileVersionMajor];
         header.dataCipherUuid = new KdbxUuid(CipherId.Aes);
         header.compression = CompressionAlgorithm.GZip;
         header.crsAlgorithm = CrsAlgorithm.ChaCha20;
