@@ -259,9 +259,9 @@ export class KdbxEntry {
         this.customData = KdbxCustomData.read(node);
     }
 
-    private writeCustomData(parentNode: Node) {
+    private writeCustomData(parentNode: Node, ctx: KdbxContext) {
         if (this.customData) {
-            KdbxCustomData.write(parentNode, this.customData);
+            KdbxCustomData.write(parentNode, ctx, this.customData);
         }
     }
 
@@ -306,7 +306,7 @@ export class KdbxEntry {
         this.writeFields(node);
         this.writeBinaries(node, ctx);
         this.writeAutoType(node);
-        this.writeCustomData(node);
+        this.writeCustomData(node, ctx);
         if (parentNode.tagName !== XmlNames.Elem.History) {
             this.writeHistory(node, ctx);
         }

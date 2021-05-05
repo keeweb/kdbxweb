@@ -1,7 +1,10 @@
 import expect from 'expect.js';
-import { KdbxCustomData, XmlUtils } from '../../lib';
+import { Kdbx, KdbxContext, KdbxCustomData, KdbxCustomDataItem, XmlUtils } from '../../lib';
 
 describe('KdbxCustomData', () => {
+    const kdbx = new Kdbx();
+    const ctx = new KdbxContext({ kdbx });
+
     it('reads custom data from xml', () => {
         const xml = XmlUtils.parse(
             '<CustomData>' +
@@ -11,8 +14,8 @@ describe('KdbxCustomData', () => {
         );
         const cd = KdbxCustomData.read(xml.documentElement);
         expect([...cd.entries()]).to.eql([
-            ['k1', 'v1'],
-            ['k2', 'v2']
+            ['k1', { value: 'v1' }],
+            ['k2', { value: 'v2' }]
         ]);
     });
 
@@ -27,7 +30,7 @@ describe('KdbxCustomData', () => {
             '<CustomData><Item><Key>k</Key><Value>v</Value><x></x></Item><Something></Something></CustomData>'
         );
         const cd = KdbxCustomData.read(xml.documentElement);
-        expect([...cd.entries()]).to.eql([['k', 'v']]);
+        expect([...cd.entries()]).to.eql([['k', { value: 'v' }]]);
     });
 
     it('skips empty keys', () => {
@@ -42,9 +45,10 @@ describe('KdbxCustomData', () => {
         const xml = XmlUtils.create('root');
         KdbxCustomData.write(
             xml.documentElement,
+            ctx,
             new Map([
-                ['k1', 'v1'],
-                ['k2', 'v2']
+                ['k1', { value: 'v1' }],
+                ['k2', { value: 'v2' }]
             ])
         );
         expect(XmlUtils.serialize(<Document>(<unknown>xml.documentElement))).to.eql(
@@ -57,7 +61,7 @@ describe('KdbxCustomData', () => {
 
     it('writes empty custom data to xml', () => {
         const xml = XmlUtils.create('root');
-        KdbxCustomData.write(xml.documentElement, new Map());
+        KdbxCustomData.write(xml.documentElement, ctx, new Map());
         expect(
             XmlUtils.serialize(<Document>(<unknown>xml.documentElement)).replace(/\s/g, '')
         ).to.eql('<root><CustomData/></root>');
@@ -65,7 +69,7 @@ describe('KdbxCustomData', () => {
 
     it('does not create tag for empty custom data', () => {
         const xml = XmlUtils.create('root');
-        KdbxCustomData.write(xml.documentElement, undefined);
+        KdbxCustomData.write(xml.documentElement, ctx, undefined);
         expect(
             XmlUtils.serialize(<Document>(<unknown>xml.documentElement)).replace(/\s/g, '')
         ).to.eql('<root/>');
@@ -75,10 +79,11 @@ describe('KdbxCustomData', () => {
         const xml = XmlUtils.create('root');
         KdbxCustomData.write(
             xml.documentElement,
-            new Map<string, string | null>([
-                ['k1', 'v1'],
-                ['k2', ''],
-                ['k3', null]
+            ctx,
+            new Map<string, KdbxCustomDataItem>([
+                ['k1', { value: 'v1' }],
+                ['k2', { value: '' }],
+                ['k3', { value: undefined }]
             ])
         );
         expect(XmlUtils.serialize(<Document>(<unknown>xml.documentElement))).to.eql(

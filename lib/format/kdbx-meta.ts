@@ -1,7 +1,7 @@
 import { KdbxUuid } from './kdbx-uuid';
 import * as XmlUtils from '../utils/xml-utils';
 import * as XmlNames from '../defs/xml-names';
-import { KdbxCustomData, KdbxCustomDataMap } from './kdbx-custom-data';
+import { KdbxCustomData, KdbxCustomDataItem, KdbxCustomDataMap } from './kdbx-custom-data';
 import { KdbxContext } from './kdbx-context';
 import { KdbxError } from '../errors/kdbx-error';
 import { Defaults, ErrorCodes } from '../defs/consts';
@@ -63,7 +63,7 @@ export class KdbxMeta {
     _lastSelectedGroup: KdbxUuid | undefined;
     _lastTopVisibleGroup: KdbxUuid | undefined;
     _memoryProtection: KdbxMemoryProtection = {};
-    customData: KdbxCustomDataMap = new Map<string, string | null>();
+    customData: KdbxCustomDataMap = new Map<string, KdbxCustomDataItem>();
     customIcons = new Map<string, KdbxCustomIcon>();
     _editState: KdbxMetaEditState | undefined;
 
@@ -387,7 +387,7 @@ export class KdbxMeta {
                 case XmlNames.Elem.CustomIconItemName:
                     name = XmlUtils.getText(childNode) ?? undefined;
                     break;
-                case XmlNames.Elem.CustomIconItemLastModified:
+                case XmlNames.Elem.LastModTime:
                     lastModified = XmlUtils.getDate(childNode);
                     break;
             }
@@ -419,10 +419,7 @@ export class KdbxMeta {
                     }
                     if (lastModified) {
                         XmlUtils.setDate(
-                            XmlUtils.addChildNode(
-                                itemNode,
-                                XmlNames.Elem.CustomIconItemLastModified
-                            ),
+                            XmlUtils.addChildNode(itemNode, XmlNames.Elem.LastModTime),
                             lastModified
                         );
                     }
@@ -465,8 +462,8 @@ export class KdbxMeta {
         this.customData = KdbxCustomData.read(node);
     }
 
-    private writeCustomData(parentNode: Element) {
-        KdbxCustomData.write(parentNode, this.customData);
+    private writeCustomData(parentNode: Element, ctx: KdbxContext) {
+        KdbxCustomData.write(parentNode, ctx, this.customData);
     }
 
     write(parentNode: Node, ctx: KdbxContext): void {
@@ -551,7 +548,7 @@ export class KdbxMeta {
         if (ctx.exportXml || ctx.kdbx.versionMajor < 4) {
             this.writeBinaries(node, ctx);
         }
-        this.writeCustomData(node);
+        this.writeCustomData(node, ctx);
     }
 
     merge(remote: KdbxMeta, objectMap: MergeObjectMap): void {
@@ -582,25 +579,8 @@ export class KdbxMeta {
             this._entryTemplatesGroup = remote.entryTemplatesGroup;
             this.entryTemplatesGroupChanged = remote.entryTemplatesGroupChanged;
         }
-        for (const [key, value] of remote.customData) {
-            if (!this.customData.has(key) && !objectMap.deleted.has(key)) {
-                this.customData.set(key, value);
-            }
-        }
-        for (const [key, remoteIcon] of remote.customIcons) {
-            const existingIcon = this.customIcons.get(key);
-            if (existingIcon) {
-                if (
-                    existingIcon.lastModified &&
-                    remoteIcon.lastModified &&
-                    remoteIcon.lastModified > existingIcon.lastModified
-                ) {
-                    this.customIcons.set(key, remoteIcon);
-                }
-            } else if (!objectMap.deleted.has(key)) {
-                this.customIcons.set(key, remoteIcon);
-            }
-        }
+        this.mergeMapWithDates(this.customData, remote.customData, objectMap);
+        this.mergeMapWithDates(this.customIcons, remote.customIcons, objectMap);
         if (!this._editState?.historyMaxItemsChanged) {
             this.historyMaxItems = remote.historyMaxItems;
         }
@@ -618,6 +598,27 @@ export class KdbxMeta {
         }
         if (!this._editState?.colorChanged) {
             this.color = remote.color;
+        }
+    }
+
+    private mergeMapWithDates<T extends { lastModified?: Date }>(
+        local: Map<string, T>,
+        remote: Map<string, T>,
+        objectMap: MergeObjectMap
+    ) {
+        for (const [key, remoteItem] of remote) {
+            const existingItem = local.get(key);
+            if (existingItem) {
+                if (
+                    existingItem.lastModified &&
+                    remoteItem.lastModified &&
+                    remoteItem.lastModified > existingItem.lastModified
+                ) {
+                    local.set(key, remoteItem);
+                }
+            } else if (!objectMap.deleted.has(key)) {
+                local.set(key, remoteItem);
+            }
         }
     }
 

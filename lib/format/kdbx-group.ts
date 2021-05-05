@@ -110,7 +110,7 @@ export class KdbxGroup {
             );
         }
         if (this.customData) {
-            KdbxCustomData.write(node, this.customData);
+            KdbxCustomData.write(node, ctx, this.customData);
         }
         this.times.write(node, ctx);
         XmlUtils.setBoolean(XmlUtils.addChildNode(node, XmlNames.Elem.IsExpanded), this.expanded);

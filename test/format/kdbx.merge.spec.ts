@@ -1,5 +1,6 @@
 import expect from 'expect.js';
 import * as kdbxweb from '../../lib/index';
+import { KdbxCustomDataItem } from '../../lib/index';
 
 describe('Kdbx.merge', () => {
     const dt = {
@@ -273,13 +274,24 @@ describe('Kdbx.merge', () => {
     it('merges custom data', () => {
         const db = getTestDb(),
             remote = getTestDb();
-        const customData = new Map([
-            ['cd1', 'data1'],
-            ['dLocal', 'local'],
-            ['dRemote', 'remote']
+
+        const dOld = new Date();
+        dOld.setSeconds(-1);
+        const dNew = new Date();
+
+        const customData = new Map<string, KdbxCustomDataItem>([
+            ['cd1', { value: 'data1' }],
+            ['dLocal', { value: 'local' }],
+            ['1', { value: 'remoteNew', lastModified: dNew }],
+            ['2', { value: 'new', lastModified: dNew }],
+            ['dRemote', { value: 'remote' }]
         ]);
-        db.meta.customData.set('dLocal', 'local');
-        remote.meta.customData.set('dRemote', 'remote');
+        db.meta.customData.set('dLocal', { value: 'local' });
+        db.meta.customData.set('1', { value: 'old', lastModified: dOld });
+        db.meta.customData.set('2', { value: 'new', lastModified: dNew });
+        remote.meta.customData.set('dRemote', { value: 'remote' });
+        remote.meta.customData.set('1', { value: 'remoteNew', lastModified: dNew });
+        remote.meta.customData.set('2', { value: 'remoteOld', lastModified: dOld });
         db.merge(remote);
         assertDbEquals(db, { meta: { customData } });
     });
@@ -975,7 +987,9 @@ describe('Kdbx.merge', () => {
                 historyMaxItems: 10,
                 historyMaxSize: 10000,
                 customIcons: new Map<string, kdbxweb.KdbxCustomIcon>(),
-                customData: new Map([['cd1', 'data1']])
+                customData: new Map<string, kdbxweb.KdbxCustomDataItem>([
+                    ['cd1', { value: 'data1' }]
+                ])
             },
             binaries: new kdbxweb.KdbxBinaries(),
             del: {} as { [id: string]: Date },
@@ -1108,7 +1122,7 @@ describe('Kdbx.merge', () => {
         db.meta._historyMaxSize = 10000;
         db.meta.customIcons.set(id.icon1.id, { data: bin.icon1 });
         db.meta.customIcons.set(id.icon2.id, { data: bin.icon2 });
-        db.meta.customData.set('cd1', 'data1');
+        db.meta.customData.set('cd1', { value: 'data1' });
         db.meta._editState = undefined;
         db.binaries.addWithHash({ hash: id.bin1.id, value: bin.bin1 });
 

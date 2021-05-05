@@ -25,7 +25,7 @@ import {
 } from './format/kdbx-binaries';
 import { KdbxContext } from './format/kdbx-context';
 import { KdbxChallengeResponseFn, KdbxCredentials } from './format/kdbx-credentials';
-import { KdbxCustomData, KdbxCustomDataMap } from './format/kdbx-custom-data';
+import { KdbxCustomData, KdbxCustomDataMap, KdbxCustomDataItem } from './format/kdbx-custom-data';
 import { KdbxDeletedObject } from './format/kdbx-deleted-object';
 import {
     KdbxAutoTypeItem,
@@ -80,6 +80,7 @@ export {
     KdbxChallengeResponseFn,
     KdbxCustomData,
     KdbxCustomDataMap,
+    KdbxCustomDataItem,
     KdbxDeletedObject,
     KdbxEntry,
     KdbxEntryEditState,

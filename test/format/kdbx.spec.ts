@@ -420,20 +420,20 @@ describe('Kdbx', () => {
             expect(db).to.be.a(kdbxweb.Kdbx);
             checkDb(db);
             db.upgrade();
-            db.getDefaultGroup().groups[0].customData = new Map([['custom', 'group']]);
+            db.getDefaultGroup().groups[0].customData = new Map([['custom', { value: 'group' }]]);
             db.getDefaultGroup().groups[0].customIcon = iconId;
-            db.getDefaultGroup().entries[0].customData = new Map([['custom', 'entry']]);
+            db.getDefaultGroup().entries[0].customData = new Map([['custom', { value: 'entry' }]]);
             return db.save().then((ab) => {
                 return kdbxweb.Kdbx.load(ab, cred).then((db) => {
                     expect(db.header.versionMajor).to.be(4);
                     expect([...db.getDefaultGroup().groups[0].customData!]).to.eql([
-                        ['custom', 'group']
+                        ['custom', { value: 'group' }]
                     ]);
                     expect(db.getDefaultGroup().groups[0].customIcon!.toString()).to.eql(
                         iconId.toString()
                     );
                     expect([...db.getDefaultGroup().entries[0].customData!]).to.eql([
-                        ['custom', 'entry']
+                        ['custom', { value: 'entry' }]
                     ]);
                     checkDb(db);
                 });
@@ -450,7 +450,7 @@ describe('Kdbx', () => {
             const db = kdbxweb.Kdbx.create(cred, 'example');
             const subGroup = db.createGroup(db.getDefaultGroup(), 'subgroup');
             const entry = db.createEntry(subGroup);
-            db.meta.customData.set('key', 'val');
+            db.meta.customData.set('key', { value: 'val' });
             db.createDefaultGroup();
             db.createRecycleBin();
             entry.fields.set('Title', 'title');
@@ -475,14 +475,12 @@ describe('Kdbx', () => {
                     return db.save().then((ab) => {
                         return kdbxweb.Kdbx.load(ab, cred).then((db) => {
                             expect(db.meta.generator).to.be('KdbxWeb');
-                            expect(db.meta.customData.get('key')).to.be('val');
+                            expect(db.meta.customData.get('key')?.value).to.be('val');
                             expect(db.groups.length).to.be(1);
                             expect(db.groups[0].groups.length).to.be(2);
                             expect(db.getGroup(db.meta.recycleBinUuid!)).to.be(
                                 db.groups[0].groups[0]
                             );
-                            // require('fs').writeFileSync('resources/test.kdbx', Buffer.from(ab));
-                            // require('fs').writeFileSync('resources/test.key', Buffer.from(keyFile));
                         });
                     });
                 });
@@ -1101,6 +1099,12 @@ describe('Kdbx', () => {
             expect(icon1).to.be.ok();
             expect(icon1!.name).to.be('Bulb icon');
             expect(icon1!.lastModified?.toISOString()).to.be('2021-05-05T18:28:34.000Z');
+
+            expect(db.meta.customData.size).to.be(4);
+            expect(db.meta.customData.get('Test_A')).to.eql({
+                value: 'NmL56onQIqdk1WSt',
+                lastModified: new Date('2021-01-20T18:10:44.000Z')
+            });
         }
     });
 
