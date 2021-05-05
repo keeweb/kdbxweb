@@ -47,6 +47,23 @@ describe('Kdbx', () => {
         });
     });
 
+    it('checks versions', async () => {
+        const cred = new kdbxweb.Credentials(
+            kdbxweb.ProtectedValue.fromString('demo'),
+            TestResources.demoKey
+        );
+        const db = await kdbxweb.Kdbx.load(TestResources.demoKdbx, cred);
+        expect(db.versionMajor).to.be(3);
+        expect(db.versionMinor).to.be(1);
+        expect(db.versionIsAtLeast(1, 0)).to.be(true);
+        expect(db.versionIsAtLeast(3, 0)).to.be(true);
+        expect(db.versionIsAtLeast(3, 1)).to.be(true);
+        expect(db.versionIsAtLeast(3, 2)).to.be(false);
+        expect(db.versionIsAtLeast(4, 0)).to.be(false);
+        expect(db.versionIsAtLeast(4, 1)).to.be(false);
+        expect(db.versionIsAtLeast(4, 2)).to.be(false);
+    });
+
     it('loads simple xml file', () => {
         const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(''));
         const xml = kdbxweb.ByteUtils.bytesToString(TestResources.demoXml).toString();

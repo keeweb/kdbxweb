@@ -615,4 +615,10 @@ export class Kdbx {
         }
         this.xml = xml;
     }
+
+    versionIsAtLeast(major: number, minor: number): boolean {
+        return (
+            this.versionMajor > major || (this.versionMajor === major && this.versionMinor >= minor)
+        );
+    }
 }

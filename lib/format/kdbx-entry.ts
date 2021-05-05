@@ -290,13 +290,13 @@ export class KdbxEntry {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.BgColor), this.bgColor);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.OverrideUrl), this.overrideUrl);
         XmlUtils.setTags(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags);
-        if (typeof this.qualityCheck === 'boolean') {
+        if (typeof this.qualityCheck === 'boolean' && ctx.kdbx.versionIsAtLeast(4, 1)) {
             XmlUtils.setBoolean(
                 XmlUtils.addChildNode(node, XmlNames.Elem.QualityCheck),
                 this.qualityCheck
             );
         }
-        if (this.previousParentGroup !== undefined) {
+        if (this.previousParentGroup !== undefined && ctx.kdbx.versionIsAtLeast(4, 1)) {
             XmlUtils.setUuid(
                 XmlUtils.addChildNode(node, XmlNames.Elem.PreviousParentGroup),
                 this.previousParentGroup

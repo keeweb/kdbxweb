@@ -94,7 +94,7 @@ export class KdbxGroup {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Name), this.name);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Notes), this.notes);
         XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon);
-        if (this.tags.length) {
+        if (this.tags.length && ctx.kdbx.versionIsAtLeast(4, 1)) {
             XmlUtils.setTags(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags);
         }
         if (this.customIcon) {
@@ -103,7 +103,7 @@ export class KdbxGroup {
                 this.customIcon
             );
         }
-        if (this.previousParentGroup !== undefined) {
+        if (this.previousParentGroup !== undefined && ctx.kdbx.versionIsAtLeast(4, 1)) {
             XmlUtils.setUuid(
                 XmlUtils.addChildNode(node, XmlNames.Elem.PreviousParentGroup),
                 this.previousParentGroup
