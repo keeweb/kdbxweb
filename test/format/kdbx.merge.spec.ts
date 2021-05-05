@@ -1,6 +1,5 @@
 import expect from 'expect.js';
 import * as kdbxweb from '../../lib/index';
-import { KdbxEntryField } from '../../lib/format/kdbx-entry';
 
 describe('Kdbx.merge', () => {
     const dt = {
@@ -26,6 +25,7 @@ describe('Kdbx.merge', () => {
         bin1: kdbxweb.KdbxUuid.random(),
         bin2: kdbxweb.KdbxUuid.random(),
         bin3: kdbxweb.KdbxUuid.random(),
+        bin4: kdbxweb.KdbxUuid.random(),
         gRoot: kdbxweb.KdbxUuid.random(),
         g1: kdbxweb.KdbxUuid.random(),
         g11: kdbxweb.KdbxUuid.random(),
@@ -44,6 +44,7 @@ describe('Kdbx.merge', () => {
         bin1: kdbxweb.ByteUtils.stringToBytes('bin1'),
         bin2: kdbxweb.ByteUtils.stringToBytes('bin2'),
         bin3: kdbxweb.ByteUtils.stringToBytes('bin3'),
+        bin4: kdbxweb.ByteUtils.stringToBytes('bin4'),
         icon1: kdbxweb.ByteUtils.stringToBytes('icon1'),
         icon2: kdbxweb.ByteUtils.stringToBytes('icon2')
     } as const;
@@ -240,17 +241,31 @@ describe('Kdbx.merge', () => {
     it('merges custom icons', () => {
         const db = getTestDb(),
             remote = getTestDb();
-        const customIcons = new Map([
-            [id.icon2.id, bin.icon2],
-            [id.bin1.id, bin.bin1],
-            [id.bin2.id, bin.bin2]
+        const d1 = new Date();
+        d1.setSeconds(-1);
+        const d2 = new Date();
+        const customIcons = new Map<string, kdbxweb.KdbxCustomIcon>([
+            [id.icon2.id, { data: bin.icon2 }],
+            [id.bin1.id, { data: bin.bin1 }],
+            [id.bin3.id, { data: bin.bin3, name: 'i3', lastModified: d1 }],
+            [id.bin4.id, { data: bin.bin4, name: 'i4', lastModified: d2 }],
+            [id.bin2.id, { data: bin.bin2 }]
         ]);
-        db.meta.customIcons.set(id.bin1.id, bin.bin1);
+        db.meta.customIcons.set(id.bin1.id, { data: bin.bin1 });
+        db.meta.customIcons.set(id.bin3.id, { data: bin.bin3, name: 'i3', lastModified: d1 });
+        db.meta.customIcons.set(id.bin4.id, { data: bin.bin3, name: 'i3', lastModified: d1 });
         db.groups[0].customIcon = id.bin1;
         db.groups[0].times.update();
-        remote.meta.customIcons.set(id.bin2.id, bin.bin2);
+        db.groups[0].groups[0].customIcon = id.bin3;
+        db.groups[0].groups[0].times.update();
+        db.groups[0].groups[1].customIcon = id.bin4;
+        db.groups[0].groups[1].times.update();
+        remote.meta.customIcons.set(id.bin2.id, { data: bin.bin2 });
+        remote.meta.customIcons.set(id.bin4.id, { data: bin.bin4, name: 'i4', lastModified: d2 });
         remote.groups[0].entries[0].customIcon = id.bin2;
         remote.groups[0].entries[0].times.update();
+        db.groups[0].groups[1].customIcon = id.bin4;
+        db.groups[0].groups[1].times.update();
         db.merge(remote);
         assertDbEquals(db, { meta: { customIcons } });
     });
@@ -636,7 +651,7 @@ describe('Kdbx.merge', () => {
         entry.fields.set('added', 'field');
         db.merge(remote);
         const exp = getTestDbStructure();
-        exp.root.entries.push({ fields: new Map([['added', 'field']]) });
+        exp.root.entries.push({ fields: entry.fields });
         assertDbEquals(db, exp);
     });
 
@@ -704,7 +719,7 @@ describe('Kdbx.merge', () => {
         entry.overrideUrl = '1234';
         entry.tags = ['tags1'];
         entry.times.lastModTime = dt.upd4;
-        entry.fields = new Map<string, KdbxEntryField>([
+        entry.fields = new Map<string, kdbxweb.KdbxEntryField>([
             ['Password', 'pass'],
             ['Another', 'field'],
             ['Protected', prVal]
@@ -720,7 +735,7 @@ describe('Kdbx.merge', () => {
         exp.root.entries[0].overrideUrl = '1234';
         exp.root.entries[0].tags = ['tags1'];
         exp.root.entries[0].modified = dt.upd4;
-        exp.root.entries[0].fields = new Map<string, KdbxEntryField>([
+        exp.root.entries[0].fields = new Map<string, kdbxweb.KdbxEntryField>([
             ['Password', 'pass'],
             ['Another', 'field'],
             ['Protected', prVal]
@@ -743,7 +758,7 @@ describe('Kdbx.merge', () => {
         entry.bgColor = '#00aa00';
         entry.overrideUrl = '1234';
         entry.tags = ['tags1'];
-        entry.fields = new Map<string, KdbxEntryField>([
+        entry.fields = new Map<string, kdbxweb.KdbxEntryField>([
             ['Password', 'pass'],
             ['Another', 'field'],
             ['Protected', prVal]
@@ -769,7 +784,7 @@ describe('Kdbx.merge', () => {
         entry.overrideUrl = '1234';
         entry.tags = ['tags1'];
         entry.times.lastModTime = dt.upd4;
-        entry.fields = new Map<string, KdbxEntryField>([
+        entry.fields = new Map<string, kdbxweb.KdbxEntryField>([
             ['Password', 'pass'],
             ['Another', 'field'],
             ['Protected', prVal]
@@ -785,7 +800,7 @@ describe('Kdbx.merge', () => {
         exp.root.entries[0].overrideUrl = '1234';
         exp.root.entries[0].tags = ['tags1'];
         exp.root.entries[0].modified = dt.upd4;
-        exp.root.entries[0].fields = new Map<string, KdbxEntryField>([
+        exp.root.entries[0].fields = new Map<string, kdbxweb.KdbxEntryField>([
             ['Password', 'pass'],
             ['Another', 'field'],
             ['Protected', prVal]
@@ -959,7 +974,7 @@ describe('Kdbx.merge', () => {
                 entryTemplatesGroupChanged: dt.created,
                 historyMaxItems: 10,
                 historyMaxSize: 10000,
-                customIcons: new Map(),
+                customIcons: new Map<string, kdbxweb.KdbxCustomIcon>(),
                 customData: new Map([['cd1', 'data1']])
             },
             binaries: new kdbxweb.KdbxBinaries(),
@@ -1064,8 +1079,8 @@ describe('Kdbx.merge', () => {
         };
         exp.del[id.eDel.id] = dt.upd1;
         exp.binaries.addWithHash({ hash: id.bin1.id, value: bin.bin1 });
-        exp.meta.customIcons.set(id.icon1.id, bin.icon1);
-        exp.meta.customIcons.set(id.icon2.id, bin.icon2);
+        exp.meta.customIcons.set(id.icon1.id, { data: bin.icon1 });
+        exp.meta.customIcons.set(id.icon2.id, { data: bin.icon2 });
         return exp;
     }
 
@@ -1091,8 +1106,8 @@ describe('Kdbx.merge', () => {
         db.meta.entryTemplatesGroupChanged = dt.created;
         db.meta._historyMaxItems = 10;
         db.meta._historyMaxSize = 10000;
-        db.meta.customIcons.set(id.icon1.id, bin.icon1);
-        db.meta.customIcons.set(id.icon2.id, bin.icon2);
+        db.meta.customIcons.set(id.icon1.id, { data: bin.icon1 });
+        db.meta.customIcons.set(id.icon2.id, { data: bin.icon2 });
         db.meta.customData.set('cd1', 'data1');
         db.meta._editState = undefined;
         db.binaries.addWithHash({ hash: id.bin1.id, value: bin.bin1 });
@@ -1232,10 +1247,14 @@ describe('Kdbx.merge', () => {
                 expect(db.meta.historyMaxSize).to.eql(exp.meta.historyMaxSize);
             }
             if (exp.meta.customData) {
-                expect(db.meta.customData.entries()).to.eql(exp.meta.customData.entries());
+                expect([...db.meta.customData.entries()]).to.eql([
+                    ...exp.meta.customData.entries()
+                ]);
             }
             if (exp.meta.customIcons) {
-                expect(db.meta.customIcons.entries()).to.eql(exp.meta.customIcons.entries());
+                expect([...db.meta.customIcons.entries()]).to.eql([
+                    ...exp.meta.customIcons.entries()
+                ]);
             }
         }
         if (exp.binaries) {
@@ -1331,7 +1350,7 @@ describe('Kdbx.merge', () => {
             expect(entry.times.lastModTime).to.eql(exp.modified);
         }
         if (exp.fields) {
-            expect(entry.fields.entries()).to.eql(exp.fields.entries());
+            expect([...entry.fields.entries()]).to.eql([...exp.fields.entries()]);
         }
         if (exp.binaries) {
             expect(entry.binaries).to.eql(exp.binaries);

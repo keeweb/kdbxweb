@@ -37,7 +37,12 @@ import {
 import { KdbxFormat } from './format/kdbx-format';
 import { KdbxGroup } from './format/kdbx-group';
 import { KdbxHeader } from './format/kdbx-header';
-import { KdbxMemoryProtection, KdbxMeta, KdbxMetaEditState } from './format/kdbx-meta';
+import {
+    KdbxMemoryProtection,
+    KdbxMeta,
+    KdbxMetaEditState,
+    KdbxCustomIcon
+} from './format/kdbx-meta';
 import { KdbxTimes } from './format/kdbx-times';
 import { KdbxUuid } from './format/kdbx-uuid';
 
@@ -86,6 +91,7 @@ export {
     KdbxHeader,
     KdbxMeta,
     KdbxMetaEditState,
+    KdbxCustomIcon,
     KdbxMemoryProtection,
     KdbxTimes,
     KdbxUuid,

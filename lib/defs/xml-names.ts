@@ -41,6 +41,8 @@ export const Elem = {
     CustomIconItem: 'Icon',
     CustomIconItemID: 'UUID',
     CustomIconItemData: 'Data',
+    CustomIconItemName: 'Name',
+    CustomIconItemLastModified: 'LastModificationTime',
 
     AutoType: 'AutoType',
     History: 'History',

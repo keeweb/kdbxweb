@@ -944,17 +944,17 @@ describe('Kdbx', () => {
             const rem2 = new Uint8Array([5]).buffer;
             const rem3 = new Uint8Array([6]).buffer;
 
-            db.meta.customIcons.set(ids[0].id, icon1);
-            db.meta.customIcons.set(ids[1].id, icon2);
-            db.meta.customIcons.set(ids[2].id, icon3);
-            db.meta.customIcons.set(ids[3].id, rem1);
-            db.meta.customIcons.set(ids[4].id, rem2);
-            db.meta.customIcons.set(ids[5].id, rem3);
+            db.meta.customIcons.set(ids[0].id, { data: icon1 });
+            db.meta.customIcons.set(ids[1].id, { data: icon2 });
+            db.meta.customIcons.set(ids[2].id, { data: icon3 });
+            db.meta.customIcons.set(ids[3].id, { data: rem1 });
+            db.meta.customIcons.set(ids[4].id, { data: rem2 });
+            db.meta.customIcons.set(ids[5].id, { data: rem3 });
             db.cleanup({ customIcons: true });
             expect([...db.meta.customIcons]).to.eql([
-                [ids[0].id, icon1],
-                [ids[1].id, icon2],
-                [ids[2].id, icon3]
+                [ids[0].id, { data: icon1 }],
+                [ids[1].id, { data: icon2 }],
+                [ids[2].id, { data: icon3 }]
             ]);
         });
     });
@@ -1095,6 +1095,12 @@ describe('Kdbx', () => {
             expect(
                 previousParentGroup.uuid.equals(entryMovedFromInside.previousParentGroup)
             ).to.be.ok();
+
+            expect(db.meta.customIcons.size).to.be(2);
+            const icon1 = db.meta.customIcons.get('3q2nWI0en0W/wvhaCFJsnw==');
+            expect(icon1).to.be.ok();
+            expect(icon1!.name).to.be('Bulb icon');
+            expect(icon1!.lastModified?.toISOString()).to.be('2021-05-05T18:28:34.000Z');
         }
     });
 

@@ -32,6 +32,12 @@ export interface KdbxMemoryProtection {
     notes?: boolean;
 }
 
+export interface KdbxCustomIcon {
+    data: ArrayBuffer;
+    name?: string;
+    lastModified?: Date;
+}
+
 export class KdbxMeta {
     generator: string | undefined;
     headerHash: ArrayBuffer | undefined;
@@ -58,7 +64,7 @@ export class KdbxMeta {
     _lastTopVisibleGroup: KdbxUuid | undefined;
     _memoryProtection: KdbxMemoryProtection = {};
     customData: KdbxCustomDataMap = new Map<string, string | null>();
-    customIcons = new Map<string, ArrayBuffer>();
+    customIcons = new Map<string, KdbxCustomIcon>();
     _editState: KdbxMetaEditState | undefined;
 
     get editState(): KdbxMetaEditState | undefined {
@@ -368,7 +374,7 @@ export class KdbxMeta {
     }
 
     private readCustomIcon(node: Element) {
-        let uuid, data;
+        let uuid, data, name, lastModified;
         for (let i = 0, cn = node.childNodes, len = cn.length; i < len; i++) {
             const childNode = <Element>cn[i];
             switch (childNode.tagName) {
@@ -378,16 +384,22 @@ export class KdbxMeta {
                 case XmlNames.Elem.CustomIconItemData:
                     data = XmlUtils.getBytes(childNode);
                     break;
+                case XmlNames.Elem.CustomIconItemName:
+                    name = XmlUtils.getText(childNode) ?? undefined;
+                    break;
+                case XmlNames.Elem.CustomIconItemLastModified:
+                    lastModified = XmlUtils.getDate(childNode);
+                    break;
             }
         }
         if (uuid && data) {
-            this.customIcons.set(uuid.id, data);
+            this.customIcons.set(uuid.id, { data, name, lastModified });
         }
     }
 
-    private writeCustomIcons(parentNode: Element) {
+    private writeCustomIcons(parentNode: Element, ctx: KdbxContext) {
         const node = XmlUtils.addChildNode(parentNode, XmlNames.Elem.CustomIcons);
-        for (const [uuid, data] of this.customIcons) {
+        for (const [uuid, { data, name, lastModified }] of this.customIcons) {
             if (data) {
                 const itemNode = XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconItem);
                 XmlUtils.setUuid(
@@ -398,6 +410,23 @@ export class KdbxMeta {
                     XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemData),
                     data
                 );
+                if (ctx.kdbx.versionIsAtLeast(4, 1)) {
+                    if (name) {
+                        XmlUtils.setText(
+                            XmlUtils.addChildNode(itemNode, XmlNames.Elem.CustomIconItemName),
+                            name
+                        );
+                    }
+                    if (lastModified) {
+                        XmlUtils.setDate(
+                            XmlUtils.addChildNode(
+                                itemNode,
+                                XmlNames.Elem.CustomIconItemLastModified
+                            ),
+                            lastModified
+                        );
+                    }
+                }
             }
         }
     }
@@ -518,7 +547,7 @@ export class KdbxMeta {
             this.lastTopVisibleGroup
         );
         this.writeMemoryProtection(node);
-        this.writeCustomIcons(node);
+        this.writeCustomIcons(node, ctx);
         if (ctx.exportXml || ctx.kdbx.versionMajor < 4) {
             this.writeBinaries(node, ctx);
         }
@@ -558,9 +587,18 @@ export class KdbxMeta {
                 this.customData.set(key, value);
             }
         }
-        for (const [key, value] of remote.customIcons) {
-            if (!this.customIcons.has(key) && !objectMap.deleted.has(key)) {
-                this.customIcons.set(key, value);
+        for (const [key, remoteIcon] of remote.customIcons) {
+            const existingIcon = this.customIcons.get(key);
+            if (existingIcon) {
+                if (
+                    existingIcon.lastModified &&
+                    remoteIcon.lastModified &&
+                    remoteIcon.lastModified > existingIcon.lastModified
+                ) {
+                    this.customIcons.set(key, remoteIcon);
+                }
+            } else if (!objectMap.deleted.has(key)) {
+                this.customIcons.set(key, remoteIcon);
             }
         }
         if (!this._editState?.historyMaxItemsChanged) {

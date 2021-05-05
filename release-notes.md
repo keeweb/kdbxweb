@@ -13,6 +13,7 @@ Release notes
 `*` replaced `forEach` with `*allItems` `*allGroups` `*allEntries`    
 `*` `object {}` => `Map<>`: `*.customData`, `meta.customIcons`, `entry.fields`, `entry.binaries`  
 `*` KDBX 4.1 support  
+`*` custom icons contain name and lastModified when possible  
 `*` error for files with too high minor version  
 
 ##### v1.14.4 (2021-03-19)
