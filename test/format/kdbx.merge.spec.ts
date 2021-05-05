@@ -1,6 +1,5 @@
 import expect from 'expect.js';
 import * as kdbxweb from '../../lib/index';
-import { KdbxCustomDataItem } from '../../lib/index';
 
 describe('Kdbx.merge', () => {
     const dt = {
@@ -279,7 +278,7 @@ describe('Kdbx.merge', () => {
         dOld.setSeconds(-1);
         const dNew = new Date();
 
-        const customData = new Map<string, KdbxCustomDataItem>([
+        const customData = new Map<string, kdbxweb.KdbxCustomDataItem>([
             ['cd1', { value: 'data1' }],
             ['dLocal', { value: 'local' }],
             ['1', { value: 'remoteNew', lastModified: dNew }],
