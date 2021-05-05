@@ -229,6 +229,7 @@ export class Kdbx {
                 }
             }
         }
+        object.previousParentGroup = object.parentGroup?.uuid;
         object.parentGroup = toGroup ?? undefined;
         object.times.locationChanged = new Date();
     }
