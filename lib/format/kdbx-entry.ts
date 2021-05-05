@@ -11,8 +11,6 @@ import { KdbxMeta } from './kdbx-meta';
 import { KdbxGroup } from './kdbx-group';
 import { MergeObjectMap } from './kdbx';
 
-const TagsSplitRegex = /\s*[;,:]\s*/;
-
 export type KdbxEntryField = string | ProtectedValue;
 
 export interface KdbxAutoTypeItem {
@@ -82,7 +80,7 @@ export class KdbxEntry {
                 this.overrideUrl = XmlUtils.getText(node);
                 break;
             case XmlNames.Elem.Tags:
-                this.tags = KdbxEntry.stringToTags(XmlUtils.getText(node) ?? '');
+                this.tags = XmlUtils.getTags(node);
                 break;
             case XmlNames.Elem.Times:
                 this.times = KdbxTimes.read(node);
@@ -162,13 +160,6 @@ export class KdbxEntry {
             XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Key), id);
             XmlUtils.setProtectedBinary(XmlUtils.addChildNode(node, XmlNames.Elem.Value), bin);
         }
-    }
-
-    private static stringToTags(str: string) {
-        if (!str) {
-            return [];
-        }
-        return str.split(TagsSplitRegex).filter((s) => s);
     }
 
     private readAutoType(node: Node) {
@@ -290,7 +281,7 @@ export class KdbxEntry {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.FgColor), this.fgColor);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.BgColor), this.bgColor);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.OverrideUrl), this.overrideUrl);
-        XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags.join(','));
+        XmlUtils.setTags(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags);
         this.times.write(node, ctx);
         this.writeFields(node);
         this.writeBinaries(node, ctx);

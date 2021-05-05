@@ -27,7 +27,8 @@ export const TestResources = {
     aesKdfKdbx4: readFile('AesKdfKdbx4.kdbx'),
     yubikey3: readFile('YubiKey3.kdbx'),
     yubikey4: readFile('YubiKey4.kdbx'),
-    emptyUuidXml: readFile('empty-uuid.xml')
+    emptyUuidXml: readFile('empty-uuid.xml'),
+    kdbx41: readFile('KDBX4.1.kdbx')
 };
 
 function readFile(name: string) {

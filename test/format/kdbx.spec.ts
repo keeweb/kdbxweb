@@ -4,6 +4,7 @@ import { argon2 } from '../test-support/argon2';
 import { TestResources } from '../test-support/test-resources';
 import { KdbxChallengeResponseFn } from '../../lib/format/kdbx-credentials';
 import { KdbxBinaryWithHash } from '../../lib/format/kdbx-binaries';
+import { Kdbx } from '../../lib';
 
 describe('Kdbx', () => {
     const cryptoEngineArgon2 = kdbxweb.CryptoEngine.argon2;
@@ -1018,6 +1019,25 @@ describe('Kdbx', () => {
                 expect(he.uuid.id).to.be(entry.uuid.id);
             }
         });
+    });
+
+    it('supports KDBX4.1 features', async () => {
+        const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'));
+        let db = await kdbxweb.Kdbx.load(TestResources.kdbx41, cred);
+
+        check(db);
+
+        const xml = await db.saveXml();
+        db = await kdbxweb.Kdbx.loadXml(xml, cred);
+
+        check(db);
+
+        function check(db: Kdbx) {
+            const groupWithTags = db.groups[0].groups[0].groups[0];
+            expect(groupWithTags).to.be.ok();
+            expect(groupWithTags.name).to.be('With tags');
+            expect(groupWithTags.tags).to.eql(['Another tag', 'Tag1']);
+        }
     });
 
     function checkDb(db: any) {

@@ -246,6 +246,48 @@ describe('XmlUtils', () => {
         });
     });
 
+    describe('getTags', () => {
+        it('returns node tags', () => {
+            const xml = XmlUtils.parse('<item>Tag1 ; Tag2, Another tag  , more tags </item>');
+            const tags = XmlUtils.getTags(xml.documentElement);
+            expect(tags).to.eql(['Tag1', 'Tag2', 'Another tag', 'more tags']);
+        });
+
+        it('returns empty tags for an empty node', () => {
+            const xml = XmlUtils.parse('<item></item>');
+            const tags = XmlUtils.getTags(xml.documentElement);
+            expect(tags).to.eql([]);
+        });
+
+        it('returns empty tags for a closed node', () => {
+            const xml = XmlUtils.parse('<item />');
+            const tags = XmlUtils.getTags(xml.documentElement);
+            expect(tags).to.eql([]);
+        });
+
+        it('returns empty tags for a node with blank text', () => {
+            const xml = XmlUtils.parse('<item>   </item>');
+            const tags = XmlUtils.getTags(xml.documentElement);
+            expect(tags).to.eql([]);
+        });
+    });
+
+    describe('setTags', () => {
+        it('sets node tags', () => {
+            const xml = XmlUtils.parse('<item>text</item>');
+            XmlUtils.setTags(xml.documentElement, ['Tag1', 'Tag2', 'Another tag', 'more tags']);
+            expect(XmlUtils.serialize(xml)).to.be(
+                '<item>Tag1, Tag2, Another tag, more tags</item>'
+            );
+        });
+
+        it('sets node empty tags', () => {
+            const xml = XmlUtils.parse('<item>text</item>');
+            XmlUtils.setTags(xml.documentElement, []);
+            expect(removeSpaces(XmlUtils.serialize(xml))).to.be('<item/>');
+        });
+    });
+
     describe('getBytes', () => {
         it('returns node bytes', () => {
             const xml = XmlUtils.parse('<item>YWJj</item>');

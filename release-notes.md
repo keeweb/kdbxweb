@@ -11,7 +11,8 @@ Release notes
 `*` some object exports replaced with ES6 exports  
 `*` binaries interface changed completely, see kdbx-binary.js  
 `*` replaced `forEach` with `*allItems` `*allGroups` `*allEntries`    
-`*` `object {}` => `Map<>`: `*.customData`, `meta.customIcons`, `entry.fields`, `entry.binaries`
+`*` `object {}` => `Map<>`: `*.customData`, `meta.customIcons`, `entry.fields`, `entry.binaries`  
+`*` KDBX 4.1 support  
 
 ##### v1.14.4 (2021-03-19)
 `*` cleaning up kdbx.xml after save to save memory

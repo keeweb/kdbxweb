@@ -9,9 +9,9 @@ import { ProtectSaltGenerator } from '../crypto/protect-salt-generator';
 import * as pako from 'pako';
 import { KdbxBinaries, KdbxBinaryOrRef } from '../format/kdbx-binaries';
 
-const dateRegex = /\.\d\d\d/;
-
+const DateRegex = /\.\d\d\d/;
 const EpochSeconds = 62135596800;
+const TagsSplitRegex = /\s*[;,:]\s*/;
 
 declare global {
     interface Node {
@@ -168,6 +168,21 @@ export function setText(node: Node, text: string | undefined): void {
     node.textContent = text || '';
 }
 
+export function getTags(node: Node): string[] {
+    const text = getText(node);
+    if (!text) {
+        return [];
+    }
+    return text
+        .split(TagsSplitRegex)
+        .map((t) => t.trim())
+        .filter((s) => s);
+}
+
+export function setTags(node: Node, tags: string[]): void {
+    setText(node, tags.join(', '));
+}
+
 export function getBytes(node: Node): ArrayBuffer | undefined {
     const text = getText(node);
     return text ? arrayToBuffer(base64ToBytes(text)) : undefined;
@@ -204,7 +219,7 @@ export function setDate(node: Node, date: Date | undefined, binary = false): voi
             bytes.setUint32(4, val64.hi, true);
             setText(node, bytesToBase64(bytes.buffer));
         } else {
-            setText(node, date.toISOString().replace(dateRegex, ''));
+            setText(node, date.toISOString().replace(DateRegex, ''));
         }
     } else {
         setText(node, '');

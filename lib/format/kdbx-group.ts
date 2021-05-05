@@ -14,6 +14,7 @@ export class KdbxGroup {
     notes: string | undefined;
     icon: number | undefined;
     customIcon: KdbxUuid | undefined;
+    tags: string[] = [];
     times = new KdbxTimes();
     expanded: boolean | undefined;
     defaultAutoTypeSeq: string | undefined;
@@ -49,6 +50,9 @@ export class KdbxGroup {
                 break;
             case XmlNames.Elem.CustomIconID:
                 this.customIcon = XmlUtils.getUuid(node);
+                break;
+            case XmlNames.Elem.Tags:
+                this.tags = XmlUtils.getTags(node);
                 break;
             case XmlNames.Elem.Times:
                 this.times = KdbxTimes.read(node);
@@ -86,6 +90,9 @@ export class KdbxGroup {
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Name), this.name);
         XmlUtils.setText(XmlUtils.addChildNode(node, XmlNames.Elem.Notes), this.notes);
         XmlUtils.setNumber(XmlUtils.addChildNode(node, XmlNames.Elem.Icon), this.icon);
+        if (this.tags.length) {
+            XmlUtils.setTags(XmlUtils.addChildNode(node, XmlNames.Elem.Tags), this.tags);
+        }
         if (this.customIcon) {
             XmlUtils.setUuid(
                 XmlUtils.addChildNode(node, XmlNames.Elem.CustomIconID),
