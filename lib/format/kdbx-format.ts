@@ -25,6 +25,8 @@ export class KdbxFormat {
     readonly kdbx: Kdbx;
     readonly ctx: KdbxContext;
 
+    preserveXml = false;
+
     constructor(kdbx: Kdbx) {
         this.kdbx = kdbx;
         this.ctx = new KdbxContext({ kdbx });
@@ -53,7 +55,7 @@ export class KdbxFormat {
             return this.setProtectedValues().then(() => {
                 return this.kdbx.loadFromXml(this.ctx).then(() => {
                     return this.checkHeaderHashV3(stm).then(() => {
-                        this.kdbx.xml = undefined;
+                        this.cleanXml();
                         return this.kdbx;
                     });
                 });
@@ -88,7 +90,7 @@ export class KdbxFormat {
                                 this.kdbx.xml = XmlUtils.parse(xmlStr);
                                 return this.setProtectedValues().then(() => {
                                     return this.kdbx.loadFromXml(this.ctx).then((kdbx) => {
-                                        kdbx.xml = undefined;
+                                        this.cleanXml();
                                         return kdbx;
                                     });
                                 });
@@ -106,7 +108,7 @@ export class KdbxFormat {
             this.kdbx.xml = XmlUtils.parse(xmlStr);
             XmlUtils.protectPlainValues(this.kdbx.xml.documentElement);
             return this.kdbx.loadFromXml(this.ctx).then(() => {
-                this.kdbx.xml = undefined;
+                this.cleanXml();
                 return this.kdbx;
             });
         });
@@ -140,7 +142,7 @@ export class KdbxFormat {
                 }
                 XmlUtils.updateProtectedValuesSalt(this.kdbx.xml.documentElement, gen);
                 return this.encryptXmlV3().then((data) => {
-                    this.kdbx.xml = undefined;
+                    this.cleanXml();
                     stm.writeBytes(data);
                     return stm.getWrittenBytes();
                 });
@@ -179,7 +181,7 @@ export class KdbxFormat {
                                 zeroBuffer(keys.cipherKey);
                                 return HmacBlockTransform.encrypt(data, keys.hmacKey).then(
                                     (data) => {
-                                        this.kdbx.xml = undefined;
+                                        this.cleanXml();
                                         zeroBuffer(keys.hmacKey);
                                         stm.writeBytes(data);
                                         return stm.getWrittenBytes();
@@ -204,7 +206,7 @@ export class KdbxFormat {
             XmlUtils.unprotectValues(this.kdbx.xml.documentElement);
             const xml = XmlUtils.serialize(this.kdbx.xml, prettyPrint);
             XmlUtils.protectUnprotectedValues(this.kdbx.xml.documentElement);
-            this.kdbx.xml = undefined;
+            this.cleanXml();
             return xml;
         });
     }
@@ -457,5 +459,11 @@ export class KdbxFormat {
             throw new KdbxError(ErrorCodes.FileCorrupt, 'no encryption IV');
         }
         return CryptoEngine.chacha20(data, cipherKey, iv);
+    }
+
+    private cleanXml() {
+        if (!this.preserveXml) {
+            this.kdbx.xml = undefined;
+        }
     }
 }

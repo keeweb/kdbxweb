@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { Credentials, CryptoEngine, Kdbx, ProtectedValue } from '../lib';
+import { Credentials, CryptoEngine, Kdbx, ProtectedValue, XmlUtils } from '../lib';
 import { argon2 } from '../test/test-support/argon2';
 
 CryptoEngine.setArgon2Impl(argon2);
@@ -14,12 +14,14 @@ const password = process.argv[3];
 const file = new Uint8Array(fs.readFileSync(filePath)).buffer;
 const cred = new Credentials(ProtectedValue.fromString(password));
 
-Kdbx.load(file, cred)
+Kdbx.load(file, cred, { preserveXml: true })
     .then((db) => {
-        return db.saveXml(true).then((xml) => {
-            fs.writeFileSync(filePath + '.xml', xml);
-            console.log('Done, written', filePath + '.xml');
-        });
+        if (!db.xml) {
+            throw new Error('XML not read');
+        }
+        const xml = XmlUtils.serialize(db.xml);
+        fs.writeFileSync(filePath + '.xml', xml);
+        console.log('Done, written', filePath + '.xml');
     })
     .catch((e) => {
         console.error('Error', e);

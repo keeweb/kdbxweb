@@ -66,7 +66,11 @@ export class Kdbx {
      * Load a kdbx file
      * If there was an error loading file, throws an exception
      */
-    static load(data: ArrayBuffer, credentials: KdbxCredentials): Promise<Kdbx> {
+    static load(
+        data: ArrayBuffer,
+        credentials: KdbxCredentials,
+        options?: { preserveXml?: boolean }
+    ): Promise<Kdbx> {
         if (!(data instanceof ArrayBuffer)) {
             return Promise.reject(new KdbxError(ErrorCodes.InvalidArg, 'data'));
         }
@@ -76,6 +80,7 @@ export class Kdbx {
         const kdbx = new Kdbx();
         kdbx.credentials = credentials;
         const format = new KdbxFormat(kdbx);
+        format.preserveXml = options?.preserveXml || false;
         return format.load(data);
     }
 
