@@ -275,6 +275,30 @@ kdbxweb includes these 3rd party libraries:
 - [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
 - [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
 
+## Tools
+
+The library provides a number of scripts to work with KDBX files:
+
+Dump the binary header:
+```sh
+npm run script:dump-header my-db.kdbx
+```
+
+Print detailed size information about internal objects:
+```sh
+npm run script:kdbx-size-profiler my-db.kdbx password
+```
+
+Dump the internal XML:
+```sh
+npm run script:kdbx-to-xml my-db.kdbx password
+```
+
+Generate big files for load testing:
+```sh
+npm run script:make-big-files
+```
+
 ## See it in action
 
 This library is used in [KeeWeb](https://app.keeweb.info)
