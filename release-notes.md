@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v2.0.1 (2021-05-08)
+`+` added `passwordHash` and `keyFileHash` to credentials  
+
 ##### v2.0.0 (2021-05-08)
 `*` the library rewritten in TypeScript  
 `*` dist files removed from the repo  

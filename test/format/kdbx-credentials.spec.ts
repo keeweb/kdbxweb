@@ -211,4 +211,23 @@ describe('KdbxCredentials', () => {
         }
         expect().fail();
     });
+
+    it('sets passwordHash and keyFileHash', async () => {
+        const keyFile = new TextEncoder().encode(
+            '<KeyFile><Meta><Version>2.0</Version></Meta><Key><Data Hash="FE2949B8">A7007945 D07D54BA 28DF6434 1B4500FC 9750DFB1 D36ADA2D 9C32DC19 4C7AB01B</Data></Key></KeyFile>'
+        );
+        const cred = new KdbxCredentials(ProtectedValue.fromString('123'), keyFile);
+        const hash = await cred.getHash();
+        expect(ByteUtils.bytesToHex(hash)).to.be(
+            '4ecd13e7ea764ce2909e460864f4d4a513b07f612a1adb013770a40bb1cf77fc'
+        );
+        expect(cred.passwordHash).to.be.ok();
+        expect(cred.keyFileHash).to.be.ok();
+        expect(ByteUtils.bytesToHex(cred.passwordHash!.getBinary())).to.be(
+            'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
+        );
+        expect(ByteUtils.bytesToHex(cred.keyFileHash!.getBinary())).to.be(
+            'a7007945d07d54ba28df64341b4500fc9750dfb1d36ada2d9c32dc194c7ab01b'
+        );
+    });
 });

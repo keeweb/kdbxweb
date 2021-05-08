@@ -34,6 +34,14 @@ export class KdbxCredentials {
         ]).then(() => this);
     }
 
+    get passwordHash(): ProtectedValue | undefined {
+        return this._passwordHash;
+    }
+
+    get keyFileHash(): ProtectedValue | undefined {
+        return this._keyFileHash;
+    }
+
     setPassword(password: ProtectedValue | null): Promise<void> {
         if (!password) {
             this._passwordHash = undefined;
