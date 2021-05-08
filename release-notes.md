@@ -1,6 +1,6 @@
 Release notes
 -------------
-##### v2.0.0 (2021-05-02)
+##### v2.0.0 (2021-05-08)
 `*` the library rewritten in TypeScript  
 `*` dist files removed from the repo  
 `*` browser support limited to two latest versions  
