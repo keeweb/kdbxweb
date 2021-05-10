@@ -37,10 +37,12 @@ function presentValue(value: any): any {
     } else if (value instanceof VarDictionary) {
         const obj: { [name: string]: any } = {};
         for (const key of value.keys()) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             obj[key] = presentValue(value.get(key));
         }
         return obj;
     } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return value;
     }
 }
