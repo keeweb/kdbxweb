@@ -70,4 +70,14 @@ describe('ProtectedValue', () => {
         const value = ProtectedValue.fromString('test').clone();
         expect(value.getText()).to.be('test');
     });
+
+    it('creates a value from base64', () => {
+        const value = ProtectedValue.fromBase64('aGVsbG8=');
+        expect(value.getText()).to.be('hello');
+    });
+
+    it('returns base64 of the value', () => {
+        const value = ProtectedValue.fromString('hello');
+        expect(value.toBase64()).to.be('aGVsbG8=');
+    });
 });

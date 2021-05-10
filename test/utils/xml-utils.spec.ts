@@ -728,10 +728,8 @@ describe('XmlUtils', () => {
             }
 
             XmlUtils.updateProtectedValuesSalt(xml.documentElement, new TestPSG());
-            // @ts-ignore
-            expect(new Uint8Array(inner!.protectedValue._salt)).to.be.eql([1, 1, 1]);
-            // @ts-ignore
-            expect(new Uint8Array(item2!.protectedValue._salt)).to.be.eql([2, 2, 2]);
+            expect(new Uint8Array(inner!.protectedValue.salt)).to.be.eql([1, 1, 1]);
+            expect(new Uint8Array(item2!.protectedValue.salt)).to.be.eql([2, 2, 2]);
         });
     });
 

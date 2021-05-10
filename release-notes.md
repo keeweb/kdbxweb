@@ -1,5 +1,10 @@
 Release notes
 -------------
+##### v2.0.1 (2021-05-10)
+`+` exposed `ProtectedValue.salt` and `ProtectedValue.value`  
+`+` new static method: `ProtectedValue.fromBase64`
+`+` new instance method: `ProtectedValue::toBase64`  
+
 ##### v2.0.1 (2021-05-08)
 `+` added `passwordHash` and `keyFileHash` to credentials  
 

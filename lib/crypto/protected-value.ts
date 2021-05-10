@@ -1,6 +1,7 @@
 import * as CryptoEngine from './crypto-engine';
 import {
     arrayToBuffer,
+    base64ToBytes,
     bytesToBase64,
     bytesToString,
     stringToBytes,
@@ -8,16 +9,16 @@ import {
 } from '../utils/byte-utils';
 
 export class ProtectedValue {
-    private readonly _value: Uint8Array;
-    private readonly _salt: Uint8Array;
+    readonly value: Uint8Array;
+    readonly salt: Uint8Array;
 
     constructor(value: ArrayBuffer, salt: ArrayBuffer) {
-        this._value = new Uint8Array(value);
-        this._salt = new Uint8Array(salt);
+        this.value = new Uint8Array(value);
+        this.salt = new Uint8Array(salt);
     }
 
     toString(): string {
-        return bytesToBase64(this._value);
+        return bytesToBase64(this.value);
     }
 
     static fromString(str: string): ProtectedValue {
@@ -27,6 +28,18 @@ export class ProtectedValue {
             bytes[i] ^= salt[i];
         }
         return new ProtectedValue(arrayToBuffer(bytes), arrayToBuffer(salt));
+    }
+
+    toBase64(): string {
+        const binary = this.getBinary();
+        const base64 = bytesToBase64(binary);
+        zeroBuffer(binary);
+        return base64;
+    }
+
+    static fromBase64(base64: string): ProtectedValue {
+        const bytes = base64ToBytes(base64);
+        return ProtectedValue.fromBinary(bytes);
     }
 
     /**
@@ -45,8 +58,8 @@ export class ProtectedValue {
         if (str.length === 0) {
             return false;
         }
-        const source = this._value,
-            salt = this._salt,
+        const source = this.value,
+            salt = this.salt,
             search = stringToBytes(str),
             sourceLen = source.length,
             searchLen = search.length,
@@ -78,8 +91,8 @@ export class ProtectedValue {
     }
 
     getBinary(): Uint8Array {
-        const value = this._value,
-            salt = this._salt;
+        const value = this.value,
+            salt = this.salt;
         const bytes = new Uint8Array(value.byteLength);
         for (let i = bytes.length - 1; i >= 0; i--) {
             bytes[i] = value[i] ^ salt[i];
@@ -89,8 +102,8 @@ export class ProtectedValue {
 
     setSalt(newSalt: ArrayBuffer): void {
         const newSaltArr = new Uint8Array(newSalt);
-        const value = this._value,
-            salt = this._salt;
+        const value = this.value,
+            salt = this.salt;
         for (let i = 0, len = value.length; i < len; i++) {
             value[i] = value[i] ^ salt[i] ^ newSaltArr[i];
             salt[i] = newSaltArr[i];
@@ -98,10 +111,10 @@ export class ProtectedValue {
     }
 
     clone(): ProtectedValue {
-        return new ProtectedValue(this._value, this._salt);
+        return new ProtectedValue(this.value, this.salt);
     }
 
     get byteLength(): number {
-        return this._value.byteLength;
+        return this.value.byteLength;
     }
 }
