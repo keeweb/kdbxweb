@@ -1,9 +1,9 @@
 Release notes
 -------------
-##### v2.0.2 (2021-05-14)
+##### v2.0.3 (2021-05-14)
 `-` fixed a crash in Electron when KDBX3 contains large attachments  
 
-##### v2.0.1 (2021-05-10)
+##### v2.0.2 (2021-05-10)
 `+` exposed `ProtectedValue.salt` and `ProtectedValue.value`  
 `+` new static method: `ProtectedValue.fromBase64`
 `+` new instance method: `ProtectedValue::toBase64`  
