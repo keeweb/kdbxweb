@@ -162,7 +162,7 @@ export class KdbxHeader {
     }
 
     private writeCompressionFlags(stm: BinaryStream): void {
-        if (!this.compression) {
+        if (typeof this.compression !== 'number') {
             throw new KdbxError(ErrorCodes.InvalidState, 'compression is not set');
         }
         this.writeFieldSize(stm, 4);

@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v2.0.4 (2021-05-19)
+`-` fixed saving KDBX3 files without compression  
+
 ##### v2.0.3 (2021-05-14)
 `-` fixed a crash in Electron when KDBX3 contains large attachments  
 
