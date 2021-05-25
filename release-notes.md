@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v2.0.5 (2021-05-25)
+`-` writable `passwordHash` and `keyFileHash` credentials properties  
+
 ##### v2.0.4 (2021-05-19)
 `-` fixed saving KDBX3 files without compression  
 

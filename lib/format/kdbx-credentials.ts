@@ -18,8 +18,8 @@ export type KdbxChallengeResponseFn = (challenge: ArrayBuffer) => Promise<ArrayB
 
 export class KdbxCredentials {
     readonly ready: Promise<KdbxCredentials>;
-    private _passwordHash: ProtectedValue | undefined;
-    private _keyFileHash: ProtectedValue | undefined;
+    passwordHash: ProtectedValue | undefined;
+    keyFileHash: ProtectedValue | undefined;
     private _challengeResponse: KdbxChallengeResponseFn | undefined;
 
     constructor(
@@ -34,21 +34,13 @@ export class KdbxCredentials {
         ]).then(() => this);
     }
 
-    get passwordHash(): ProtectedValue | undefined {
-        return this._passwordHash;
-    }
-
-    get keyFileHash(): ProtectedValue | undefined {
-        return this._keyFileHash;
-    }
-
     setPassword(password: ProtectedValue | null): Promise<void> {
         if (!password) {
-            this._passwordHash = undefined;
+            this.passwordHash = undefined;
             return Promise.resolve();
         } else if (password instanceof ProtectedValue) {
             return password.getHash().then((hash) => {
-                this._passwordHash = ProtectedValue.fromBinary(hash);
+                this.passwordHash = ProtectedValue.fromBinary(hash);
             });
         } else {
             return Promise.reject(new KdbxError(ErrorCodes.InvalidArg, 'password'));
@@ -61,7 +53,7 @@ export class KdbxCredentials {
         }
         if (keyFile) {
             if (keyFile.byteLength === 32) {
-                this._keyFileHash = ProtectedValue.fromBinary(arrayToBuffer(keyFile));
+                this.keyFileHash = ProtectedValue.fromBinary(arrayToBuffer(keyFile));
                 return Promise.resolve();
             }
             let keyFileVersion;
@@ -70,7 +62,7 @@ export class KdbxCredentials {
                 const keyFileStr = bytesToString(arrayToBuffer(keyFile));
                 if (/^[a-f\d]{64}$/i.exec(keyFileStr)) {
                     const bytes = hexToBytes(keyFileStr);
-                    this._keyFileHash = ProtectedValue.fromBinary(bytes);
+                    this.keyFileHash = ProtectedValue.fromBinary(bytes);
                     return Promise.resolve();
                 }
                 const xml = XmlUtils.parse(keyFileStr.trim());
@@ -104,15 +96,13 @@ export class KdbxCredentials {
                 }
             } catch (e) {
                 return CryptoEngine.sha256(keyFile).then((hash) => {
-                    this._keyFileHash = ProtectedValue.fromBinary(hash);
+                    this.keyFileHash = ProtectedValue.fromBinary(hash);
                 });
             }
 
             switch (keyFileVersion) {
                 case 1:
-                    this._keyFileHash = ProtectedValue.fromBinary(
-                        base64ToBytes(dataEl.textContent)
-                    );
+                    this.keyFileHash = ProtectedValue.fromBinary(base64ToBytes(dataEl.textContent));
                     break;
                 case 2: {
                     const keyFileData = hexToBytes(dataEl.textContent.replace(/\s+/g, ''));
@@ -127,7 +117,7 @@ export class KdbxCredentials {
                                 'key file data hash mismatch'
                             );
                         }
-                        this._keyFileHash = ProtectedValue.fromBinary(keyFileData);
+                        this.keyFileHash = ProtectedValue.fromBinary(keyFileData);
                     });
                 }
                 default: {
@@ -137,7 +127,7 @@ export class KdbxCredentials {
                 }
             }
         } else {
-            this._keyFileHash = undefined;
+            this.keyFileHash = undefined;
         }
         return Promise.resolve();
     }
@@ -153,11 +143,11 @@ export class KdbxCredentials {
         return this.ready.then(() => {
             return this.getChallengeResponse(challenge).then((chalResp) => {
                 const buffers: Uint8Array[] = [];
-                if (this._passwordHash) {
-                    buffers.push(this._passwordHash.getBinary());
+                if (this.passwordHash) {
+                    buffers.push(this.passwordHash.getBinary());
                 }
-                if (this._keyFileHash) {
-                    buffers.push(this._keyFileHash.getBinary());
+                if (this.keyFileHash) {
+                    buffers.push(this.keyFileHash.getBinary());
                 }
                 if (chalResp) {
                     buffers.push(new Uint8Array(chalResp));
