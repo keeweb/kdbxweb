@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v2.1.0 (2021-06-17)
+`-` replaced `pako` with `fflate` to reduce bundle size  
+
 ##### v2.0.5 (2021-05-25)
 `-` writable `passwordHash` and `keyFileHash` credentials properties  
 

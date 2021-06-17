@@ -1,3 +1,4 @@
+import { gunzipSync } from 'fflate';
 import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 import * as XmlNames from '../defs/xml-names';
@@ -6,7 +7,6 @@ import { Int64 } from './int64';
 import { KdbxUuid } from '../format/kdbx-uuid';
 import { ProtectedValue } from '../crypto/protected-value';
 import { ProtectSaltGenerator } from '../crypto/protect-salt-generator';
-import * as pako from 'pako';
 import { KdbxBinaries, KdbxBinaryOrRef } from '../format/kdbx-binaries';
 
 const DateRegex = /\.\d\d\d/;
@@ -300,7 +300,7 @@ export function getProtectedBinary(node: Node): KdbxBinaryOrRef | undefined {
     const compressed = strToBoolean((<Element>node).getAttribute(XmlNames.Attr.Compressed));
     let bytes = base64ToBytes(text);
     if (compressed) {
-        bytes = pako.ungzip(bytes);
+        bytes = gunzipSync(bytes);
     }
     return arrayToBuffer(bytes);
 }

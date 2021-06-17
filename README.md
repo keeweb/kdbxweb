@@ -7,7 +7,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - runs in browser or node.js
 - no native addons
 - fast encryption with WebCrypto
-- total ≈150kB with dependencies
+- total ≈130kB with dependencies
 - full support of Kdbx features
 - protected values are stored in memory XOR'ed
 - conflict-free merge support
@@ -272,7 +272,7 @@ npm test
 ## 3rd party libs
 
 kdbxweb includes these 3rd party libraries:
-- [pako](https://github.com/nodeca/pako) ([fork](https://github.com/keeweb/pako))
+- [fflate](https://github.com/101arrowz/fflate)
 - [xmldom](https://github.com/jindw/xmldom) ([fork](https://github.com/keeweb/xmldom))
 
 ## Tools
