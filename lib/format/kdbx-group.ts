@@ -239,10 +239,12 @@ export class KdbxGroup {
                     const group = new KdbxGroup();
                     group.copyFrom(remoteItem);
                     newItem = <T>group;
-                } else {
+                } else if (remoteItem instanceof KdbxEntry) {
                     const entry = new KdbxEntry();
-                    entry.copyFrom(<KdbxEntry>remoteItem);
+                    entry.copyFrom(remoteItem);
                     newItem = <T>entry;
+                } else {
+                    continue;
                 }
                 newItem.parentGroup = this;
                 newItems.splice(KdbxGroup.findInsertIx(newItems, remoteCollection, ix), 0, newItem);
