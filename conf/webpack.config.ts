@@ -66,7 +66,7 @@ module.exports = {
     externals: {
         fs: true,
         path: true,
-        xmldom: true,
+        '@xmldom/xmldom': true,
         crypto: true,
         zlib: true
     },
