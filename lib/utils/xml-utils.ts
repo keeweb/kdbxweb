@@ -40,7 +40,7 @@ function createDOMParser() {
     };
 
     /* eslint-disable @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
-    const { DOMParser } = require('xmldom');
+    const { DOMParser } = require('@xmldom/xmldom');
     return <typeof global.DOMParser>new DOMParser(parserArg);
     /* eslint-enable */
 }
@@ -51,7 +51,7 @@ function createXMLSerializer() {
     }
 
     /* eslint-disable @typescript-eslint/no-var-requires,@typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-call */
-    const { XMLSerializer } = require('xmldom');
+    const { XMLSerializer } = require('@xmldom/xmldom');
     return <typeof global.XMLSerializer>new XMLSerializer();
     /* eslint-enable */
 }

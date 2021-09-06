@@ -66,8 +66,8 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
-    "fflate": "^0.7.1",
-    "xmldom": "^0.6.0"
+    "@xmldom/xmldom": "^0.7.3",
+    "fflate": "^0.7.1"
   },
   "funding": {
     "type": "github",
