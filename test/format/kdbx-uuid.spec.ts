@@ -26,7 +26,7 @@ describe('KdbxUuid', () => {
             const uuid = new KdbxUuid(new Uint16Array([123]).buffer);
             throw new Error(`Expected an error to be thrown, got UUID instead: ${uuid}`);
         } catch (e) {
-            expect(e.message).to.contain('FileCorrupt: bad UUID length: 2');
+            expect((e as Error).message).to.contain('FileCorrupt: bad UUID length: 2');
         }
     });
 

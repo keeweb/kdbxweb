@@ -188,7 +188,7 @@ describe('CryptoEngine', () => {
             try {
                 await aes.encrypt(new ArrayBuffer(0), new ArrayBuffer(0));
             } catch (e) {
-                expect(e.message).to.contain('no key');
+                expect((e as Error).message).to.contain('no key');
                 return;
             }
             throw new Error('Not expected');
@@ -232,7 +232,7 @@ describe('CryptoEngine', () => {
                 try {
                     await aes.encrypt(new ArrayBuffer(0), new ArrayBuffer(0));
                 } catch (e) {
-                    expect(e.message).to.contain('no key');
+                    expect((e as Error).message).to.contain('no key');
                     return;
                 }
                 throw new Error('Not expected');

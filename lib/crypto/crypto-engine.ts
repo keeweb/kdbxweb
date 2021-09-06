@@ -85,13 +85,17 @@ class AesCbcSubtle extends AesCbc {
     }
 
     encrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer> {
-        return global.crypto.subtle.encrypt({ name: 'AES-CBC', iv }, this.key, data);
+        return global.crypto.subtle.encrypt(
+            { name: 'AES-CBC', iv },
+            this.key,
+            data
+        ) as Promise<ArrayBuffer>;
     }
 
     decrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer> {
         return global.crypto.subtle.decrypt({ name: 'AES-CBC', iv }, this.key, data).catch(() => {
             throw new KdbxError(ErrorCodes.InvalidKey, 'invalid key');
-        });
+        }) as Promise<ArrayBuffer>;
     }
 }
 

@@ -1,5 +1,8 @@
 Release notes
 -------------
+##### v2.1.1 (2021-09-06)
+`-` updated dependencies
+
 ##### v2.1.0 (2021-06-17)
 `-` replaced `pako` with `fflate` to reduce bundle size  
 
