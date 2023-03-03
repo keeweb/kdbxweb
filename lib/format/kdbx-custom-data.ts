@@ -35,7 +35,8 @@ export class KdbxCustomData {
                 if (item.lastModified && ctx.kdbx.versionIsAtLeast(4, 1)) {
                     XmlUtils.setDate(
                         XmlUtils.addChildNode(itemNode, XmlNames.Elem.LastModTime),
-                        item.lastModified
+                        item.lastModified,
+                        true
                     );
                 }
             }
