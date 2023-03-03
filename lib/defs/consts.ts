@@ -92,7 +92,7 @@ export const Icons = {
     WorldComputer: 35,
     Archive: 36,
     Homebanking: 37,
-    DriveWindows: 39,
+    DriveWindows: 38,
     Clock: 39,
     EMailSearch: 40,
     PaperFlag: 41,
