@@ -23,7 +23,7 @@
     "funding": {
         "type": "github",
         "url": "https://github.com/sponsors/antelle"
-    }
+    },
     "scripts": {
         "test": "npm run tests:node",
         "start": "npm run eslint && npm run build",
@@ -58,7 +58,7 @@
       "base64-loader": "^1.0.0",
       "eslint": "^9.17.0",
       "eslint-plugin-import": "^2.31.0",
-      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-n": "17.15.0",
       "eslint-plugin-prettier": "^5.2.1",
       "eslint-plugin-promise": "^7.2.1",
       "eslint-plugin-standard": "^4.1.0",
