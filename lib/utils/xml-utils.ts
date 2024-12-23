@@ -164,7 +164,7 @@ export function getText(node: Node | null): string | undefined {
     if (!node?.childNodes) {
         return undefined;
     }
-    return node.protectedValue ? node.protectedValue.getText() : node.textContent ?? undefined;
+    return node.protectedValue ? node.protectedValue.getText() : (node.textContent ?? undefined);
 }
 
 export function setText(node: Node, text: string | undefined): void {

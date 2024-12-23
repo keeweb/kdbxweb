@@ -30,6 +30,7 @@ const pluginNode = require('eslint-plugin-n');
 const pluginPrettier = require('eslint-plugin-prettier');
 const pluginPromise = require('eslint-plugin-promise');
 const mochaPlugin = require('eslint-plugin-mocha');
+const tsPlugin = require('@typescript-eslint/eslint-plugin');
 
 /*
     Globals
@@ -70,7 +71,8 @@ module.exports = [{
             'mocha': mochaPlugin,
             'n': pluginNode,
             'prettier': pluginPrettier,
-            'promise': pluginPromise
+            'promise': pluginPromise,
+            '@typescript-eslint': tsPlugin
         },
 
         linterOptions: {
@@ -100,7 +102,17 @@ module.exports = [{
             sourceType: 'module',
         },
         rules: {
-            // eslint / js rules
+
+            /*
+                Turn off original and add back typescript version
+            */
+
+            "no-unused-vars": 'off',
+            "@typescript-eslint/no-unused-vars": ["error"],
+
+            "no-redeclare": 'off',
+            "@typescript-eslint/no-redeclare": "error",
+
             'array-callback-return': 'error',
             'curly': 'error',
             'eqeqeq': 'error',
@@ -118,7 +130,6 @@ module.exports = [{
             'no-throw-literal': 'off',
             'no-unneeded-ternary': 'error',
             'no-unused-expressions': 'off',
-            'no-unused-vars': 'error',
             'no-useless-constructor': 'error',
             'no-useless-escape': 'off',
             'no-var': 'error',

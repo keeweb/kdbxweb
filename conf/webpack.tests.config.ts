@@ -36,10 +36,7 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        modules: [
-            path.join(__dirname, '../test'),
-            path.join(__dirname, '../node_modules')
-        ],
+        modules: [path.join(__dirname, '../test'), path.join(__dirname, '../node_modules')],
         alias: {
             '@': path.resolve(__dirname, '../')
         },

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as XmlUtils from '../utils/xml-utils';
 import * as CryptoEngine from '../crypto/crypto-engine';
 import { ProtectedValue } from '../crypto/protected-value';
