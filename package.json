@@ -64,6 +64,7 @@
       "eslint-plugin-prettier": "^5.2.1",
       "eslint-plugin-promise": "^7.2.1",
       "eslint-plugin-standard": "^4.1.0",
+      "eslint-plugin-mocha": "^10.5.0",
       "expect.js": "^0.3.1",
       "exports-loader": "^3.0.0",
       "mocha": "^9.1.1",
