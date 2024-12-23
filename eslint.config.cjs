@@ -59,10 +59,10 @@ module.exports = [{
     ignores: [
         '**/argon2-asm.min.js',
         '**/test-support',
-        'eslint.config.cjs'
+        '**/eslint.config.cjs'
     ],
 }, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'), {
-        files: ['**/*.ts'],
+        files: ['**/*.{ts,tsx}'],
         plugins: {
             'chai-friendly': pluginChaiFriendly,
             'import': pluginImport,
@@ -77,6 +77,14 @@ module.exports = [{
 
         languageOptions: {
             parser: parserTS,
+            ecmaVersion: 13,
+            parserOptions: {
+                project: [
+                    'tsconfig.json',
+                    'jsconfig.json',
+                ],
+                tsconfigRootDir: __dirname,
+            },
             globals: {
                 ...customGlobals,
                 ...globals.browser,
@@ -87,14 +95,6 @@ module.exports = [{
                 $: true
             },
             sourceType: 'module',
-            ecmaVersion: 11,
-            parserOptions: {
-                project: [
-                    'tsconfig.json',
-                    'jsconfig.json',
-                ],
-                tsconfigRootDir: __dirname,
-            }
         },
         rules: {
             // eslint / js rules
@@ -229,7 +229,7 @@ module.exports = [{
                     proseWrap: 'preserve',
                     htmlWhitespaceSensitivity: 'ignore',
                     endOfLine: 'auto',
-                    parser: 'flow',
+                    parser: 'typescript',
                     embeddedLanguageFormatting: 'auto',
                     singleAttributePerLine: true
                 }
