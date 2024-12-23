@@ -29,6 +29,7 @@ const pluginImport = require('eslint-plugin-import');
 const pluginNode = require('eslint-plugin-n');
 const pluginPrettier = require('eslint-plugin-prettier');
 const pluginPromise = require('eslint-plugin-promise');
+const mochaPlugin = require('eslint-plugin-mocha');
 
 /*
     Globals
@@ -66,6 +67,7 @@ module.exports = [{
         plugins: {
             'chai-friendly': pluginChaiFriendly,
             'import': pluginImport,
+            'mocha': mochaPlugin,
             'n': pluginNode,
             'prettier': pluginPrettier,
             'promise': pluginPromise
@@ -91,6 +93,7 @@ module.exports = [{
                 ...globals.node,
                 ...globals.jest,
                 ...globals.jquery,
+                ...globals.mocha,
                 _: true,
                 $: true
             },
@@ -209,6 +212,9 @@ module.exports = [{
 
             /*
                 @plugin         eslint-plugin-prettier
+
+                prettier parser options:
+                    - https://prettier.io/docs/en/options.html
             */
 
             'prettier/prettier': [
