@@ -5,7 +5,6 @@ import TerserPlugin from 'terser-webpack-plugin';
 import * as pkg from '../package.json';
 
 const debug = process.argv.indexOf('--mode=development') > 0;
-
 const license = `opensource.org/licenses/${pkg.license}`;
 const copyright = `(c) ${new Date().getFullYear()} ${pkg.author}, ${license}`;
 const banner = `kdbxweb v${pkg.version}, ${copyright}`;
@@ -39,7 +38,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        modules: [path.join(__dirname, '../lib'), path.join(__dirname, '../node_modules')],
+        modules: [
+            path.join(__dirname, '../util'),
+            path.join(__dirname, '../node_modules')
+        ],
         fallback: {
             console: false,
             process: false,
@@ -66,11 +68,26 @@ module.exports = {
     externals: {
         fs: true,
         path: true,
-        '@xmldom/xmldom': true,
         crypto: true,
-        zlib: true
+        zlib: true,
+        '@xmldom/xmldom': true
     },
     performance: {
         hints: false
+    },
+    stats: {
+        builtAt: false,
+        env: false,
+        hash: false,
+        colors: true,
+        modules: true,
+        reasons: true,
+        children: true,
+        warnings: false,
+        errorDetails: false,
+        errorStack: false,
+        errorsCount: false,
+        logging: false, // false, 'none' | 'error' | 'warn' | 'info' | 'log' | 'verbose'
+        loggingTrace: false
     }
 };

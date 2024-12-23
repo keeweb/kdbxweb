@@ -4,6 +4,12 @@ import { walkSync } from '@nodelib/fs.walk';
 const files = walkSync('test', { entryFilter: (e) => e.name.endsWith('.ts') });
 const entry = files.map((f) => f.path.replace('test', '.'));
 
+/*
+    resolve:
+        path.join(__dirname, '../test'),                tests
+        path.join(__dirname, '../node_modules')         expect.js
+*/
+
 module.exports = {
     mode: 'production',
     context: path.join(__dirname, '../test'),
@@ -30,7 +36,10 @@ module.exports = {
     },
     resolve: {
         extensions: ['.ts', '.js'],
-        modules: [path.join(__dirname, '../lib'), path.join(__dirname, '../node_modules')],
+        modules: [
+            path.join(__dirname, '../test'),
+            path.join(__dirname, '../node_modules')
+        ],
         fallback: {
             console: false,
             process: false,
@@ -46,11 +55,26 @@ module.exports = {
     externals: {
         fs: true,
         path: true,
-        '@xmldom/xmldom': true,
         crypto: true,
-        zlib: true
+        zlib: true,
+        '@xmldom/xmldom': true
     },
     performance: {
         hints: false
+    },
+    stats: {
+        builtAt: false,
+        env: false,
+        hash: false,
+        colors: true,
+        modules: true,
+        reasons: true,
+        children: true,
+        warnings: false,
+        errorDetails: false,
+        errorStack: false,
+        errorsCount: false,
+        logging: false, // false, 'none' | 'error' | 'warn' | 'info' | 'log' | 'verbose'
+        loggingTrace: false
     }
 };
