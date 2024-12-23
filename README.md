@@ -2,6 +2,55 @@
 
 KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 databases (kdbx) in node.js or browser.
 
+<br />
+
+---
+
+<br />
+
+- [KdbxWeb  ](#kdbxweb--)
+  - [Features](#features)
+  - [Browser support](#browser-support)
+  - [Compatibility](#compatibility)
+  - [Kdbx4](#kdbx4)
+  - [Usage](#usage)
+        - [Loading](#loading)
+        - [Saving](#saving)
+        - [File info](#file-info)
+        - [Changing credentials](#changing-credentials)
+        - [Creation](#creation)
+        - [Maintenance](#maintenance)
+        - [Merge](#merge)
+        - [Groups](#groups)
+        - [Group creation](#group-creation)
+        - [Group deletion](#group-deletion)
+        - [Group move](#group-move)
+        - [Recycle Bin](#recycle-bin)
+        - [Recursive traverse](#recursive-traverse)
+        - [Entries](#entries)
+        - [Entry creation](#entry-creation)
+        - [Entry modification](#entry-modification)
+        - [Entry deletion](#entry-deletion)
+        - [Entry move](#entry-move)
+        - [ProtectedValue](#protectedvalue)
+        - [Errors](#errors)
+        - [Consts](#consts)
+        - [Random](#random)
+        - [ByteUtils](#byteutils)
+  - [Building](#building)
+  - [3rd party libs](#3rd-party-libs)
+  - [Tools](#tools)
+  - [See it in action](#see-it-in-action)
+  - [Extras](#extras)
+  - [License](#license)
+
+
+<br />
+
+---
+
+<br />
+
 ## Features
 
 - runs in browser or node.js
@@ -14,14 +63,32 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 - high code coverage
 - strict TypeScript
 
+<br />
+
+---
+
+<br />
+
 ## Browser support
 
 - modern browsers: Chrome, Firefox, Safari, Opera, Edge
 - node.js
 
+<br />
+
+---
+
+<br />
+
 ## Compatibility
 
 Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb files (for KeePass v1) are out of scope of this library.
+
+<br />
+
+---
+
+<br />
 
 ## Kdbx4
 
@@ -39,6 +106,12 @@ kdbxweb.CryptoEngine.setArgon2Impl((password, salt,
 You can find an implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
 
 It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you, to choose the best one.
+
+<br />
+
+---
+
+<br />
 
 ## Usage
 
@@ -62,6 +135,8 @@ You can also pretty-print XML:
 ```ts
 const prettyPrintedXml = await db.saveXml(true);
 ```
+
+<br />
 
 ##### File info
 ```ts
@@ -88,6 +163,8 @@ let group = newDb.createGroup(newDb.getDefaultGroup(), 'subgroup');
 let entry = newDb.createEntry(group);
 ```
 
+<br />
+
 ##### Maintenance
 
 ```ts
@@ -106,6 +183,8 @@ db.setVersion(3);
 // set KDF to AES
 db.setKdf(kdbxweb.Consts.KdfId.Aes);
 ```
+
+<br />
 
 ##### Merge
 
@@ -133,6 +212,8 @@ if (pushedOk) {
 }
 ```
 
+<br />
+
 ##### Groups
 ```ts
 let defaultGroup = db.getDefaultGroup();
@@ -140,22 +221,30 @@ let anotherGroup = db.getGroup(uuid);
 let deepGroup = defaultGroup.groups[1].groups[2];
 ```
 
+<br />
+
 ##### Group creation
 ```ts
 let group = db.createGroup(db.getDefaultGroup(), 'New group');
 let anotherGroup = db.createGroup(group, 'Subgroup');
 ```
 
+<br />
+
 ##### Group deletion
 ```ts
 db.remove(group);
 ```
+
+<br />
 
 ##### Group move
 ```ts
 db.move(group, toGroup);
 db.move(group, toGroup, atIndex);
 ```
+
+<br />
 
 ##### Recycle Bin
 ```ts
@@ -165,12 +254,16 @@ if (!recycleBin) {
 }
 ```
 
+<br />
+
 ##### Recursive traverse
 ```ts
 for (const entry of group.allEntries()) { /* ... */ }
 for (const group of group.allGroups()) { /* ... */ }
 for (const entryOrGroup of group.allGroupsAndEntries()) { /* ... */ }
 ```
+
+<br />
 
 ##### Entries
 ```ts
@@ -179,10 +272,14 @@ entry.fields.AccountNumber = '1234 5678';
 entry.fields.Pin = kdbxweb.ProtectedValue.fromString('4321');
 ```
 
+<br />
+
 ##### Entry creation
 ```ts
 let entry = db.createEntry(group);
 ```
+
+<br />
 
 ##### Entry modification
 ```ts
@@ -197,10 +294,14 @@ entry.removeHistory(index, count);
 ```
 Important: don't modify history states directly, this will break merge.
 
+<br />
+
 ##### Entry deletion
 ```ts
 db.remove(entry);
 ```
+
+<br />
 
 ##### Entry move
 ```ts
@@ -211,6 +312,8 @@ If you're moving an entry from another file, this is called _import_:
 ```ts
 db.importEntry(entry, toGroup, sourceFile);
 ```
+
+<br />
 
 ##### ProtectedValue
 Used for passwords and custom fields, stored the value in memory XOR'ed  
@@ -234,6 +337,8 @@ try {
 }
 ```
 
+<br />
+
 ##### Consts
 [Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.ts)  
 ```ts
@@ -242,10 +347,14 @@ kdbxweb.Consts.Defaults // default db settings
 kdbxweb.Consts.Icons // icons map
 ```
 
+<br />
+
 ##### Random
 ```ts
 let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
 ```
+
+<br />
 
 ##### ByteUtils
 ```ts
@@ -256,6 +365,12 @@ kdbxweb.ByteUtils.base64ToBytes(str);
 kdbxweb.ByteUtils.bytesToHex(bytes);
 kdbxweb.ByteUtils.hexToBytes(str);
 ```
+
+<br />
+
+---
+
+<br />
 
 ## Building
 
@@ -269,11 +384,23 @@ To run tests:
 npm test
 ```  
 
+<br />
+
+---
+
+<br />
+
 ## 3rd party libs
 
 kdbxweb includes these 3rd party libraries:
 - [fflate](https://github.com/101arrowz/fflate)
 - [xmldom](https://github.com/xmldom/xmldom)
+
+<br />
+
+---
+
+<br />
 
 ## Tools
 
@@ -284,30 +411,54 @@ Dump the binary header:
 npm run script:dump-header my-db.kdbx
 ```
 
+<br />
+
 Print detailed size information about internal objects:
 ```sh
 npm run script:kdbx-size-profiler my-db.kdbx password
 ```
+
+<br />
 
 Dump the internal XML:
 ```sh
 npm run script:kdbx-to-xml my-db.kdbx password
 ```
 
+<br />
+
 Generate big files for load testing:
 ```sh
 npm run script:make-big-files
 ```
 
+<br />
+
+---
+
+<br />
+
 ## See it in action
 
 This library is used in [KeeWeb](https://app.keeweb.info)
+
+<br />
+
+---
+
+<br />
 
 ## Extras
 
 We also provide a template for [HexFiend](https://github.com/ridiculousfish/HexFiend)
 to explore the contents of KDBX files, you can find it
 [here](format).
+
+<br />
+
+---
+
+<br />
 
 ## License
 
