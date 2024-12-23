@@ -1,3 +1,12 @@
+/*
+    @note           Disable typescript checking for this file since we are explicity trying to check for
+                    invalid types. this became a requirement in typescript v5x
+
+    @ref            'throws error for bad value type on set'
+*/
+
+// @ts-nocheck
+
 import expect from 'expect.js';
 import { BinaryStream, ByteUtils, Consts, Int64, VarDictionary } from '../../lib';
 import { ValueType } from '../../lib/utils/var-dictionary';

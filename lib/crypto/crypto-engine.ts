@@ -1,3 +1,14 @@
+/*
+    @note           as of node 19, webcrypto is now global.
+                    update script to work with node 19, until then, build with node 18
+                        - https://nodejs.org/id/blog/announcements/v19-release-announce#stable-webcrypto
+
+                        - The WebCrypto API is now stable (with the exception of the following algorithms:
+                            Ed25519, Ed448, X25519, and X448)
+
+                        - Use globalThis.crypto or require('node:crypto').webcrypto to access this module.
+*/
+
 import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 import { arrayToBuffer, hexToBytes } from '../utils/byte-utils';
