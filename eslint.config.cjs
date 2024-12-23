@@ -58,7 +58,8 @@ const compat = new FlatCompat({
 module.exports = [{
     ignores: [
         '**/argon2-asm.min.js',
-        '**/test-support'
+        '**/test-support',
+        'eslint.config.cjs'
     ],
 }, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'), {
         files: ['**/*.ts'],
