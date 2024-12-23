@@ -40,6 +40,9 @@ module.exports = {
             path.join(__dirname, '../test'),
             path.join(__dirname, '../node_modules')
         ],
+        alias: {
+            '@': path.resolve(__dirname, '../')
+        },
         fallback: {
             console: false,
             process: false,
