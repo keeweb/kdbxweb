@@ -55,21 +55,18 @@ const compat = new FlatCompat({
     Eslint > Flat Config
 */
 
-module.exports = [
-    ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'),
-    {
-        ignores: [
-            'test',
-            'test-support',
-            'argon2-asm.min.js',
-            'eslint.config.cjs'
-        ],
+module.exports = [{
+    ignores: [
+        "**/argon2-asm.min.js",
+        "**/test-support"
+    ],
+}, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'), {
         files: ['**/*.ts'],
         plugins: {
+            'chai-friendly': pluginChaiFriendly,
+            'import': pluginImport,
             'n': pluginNode,
             'prettier': pluginPrettier,
-            'import': pluginImport,
-            'chai-friendly': pluginChaiFriendly,
             'promise': pluginPromise
         },
 
@@ -238,14 +235,24 @@ module.exports = [
         }
     },
     {
-        files: ['package/osx/*.js'],
+        files: ['test/**/*.ts'],
         languageOptions: {
-            ecmaVersion: 5
+            ecmaVersion: 11,
+            parserOptions: {
+                project: [
+                    "tsconfig.json"
+                ]
+            },
         },
         rules: {
-            'no-console': 'off',
-            'no-undef': 'off',
-            'no-var': 'off'
+            '@typescript-eslint/no-unsafe-call': 'off',
+            '@typescript-eslint/no-unsafe-member-access': 'off',
+            '@typescript-eslint/ban-ts-comment': 'off',
+            '@typescript-eslint/no-non-null-assertion': 'off',
+            '@typescript-eslint/no-unsafe-assignment': 'off',
+            '@typescript-eslint/no-unsafe-return': 'off',
+            '@typescript-eslint/no-var-requires': 'off',
+            '@typescript-eslint/no-explicit-any': 'off'
         }
     }
 ];
