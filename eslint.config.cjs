@@ -92,7 +92,8 @@ module.exports = [{
                 project: [
                     'tsconfig.json',
                     'jsconfig.json',
-                ]
+                ],
+                tsconfigRootDir: __dirname,
             }
         },
         rules: {
