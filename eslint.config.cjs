@@ -57,8 +57,8 @@ const compat = new FlatCompat({
 
 module.exports = [{
     ignores: [
-        "**/argon2-asm.min.js",
-        "**/test-support"
+        '**/argon2-asm.min.js',
+        '**/test-support'
     ],
 }, ...compat.extends('eslint:recommended', 'plugin:prettier/recommended', 'plugin:chai-friendly/recommended'), {
         files: ['**/*.ts'],
@@ -89,8 +89,8 @@ module.exports = [{
             ecmaVersion: 11,
             parserOptions: {
                 project: [
-                    "tsconfig.json",
-                    "jsconfig.json",
+                    'tsconfig.json',
+                    'jsconfig.json',
                 ]
             }
         },
@@ -240,7 +240,7 @@ module.exports = [{
             ecmaVersion: 11,
             parserOptions: {
                 project: [
-                    "tsconfig.json"
+                    'tsconfig.json'
                 ]
             },
         },
