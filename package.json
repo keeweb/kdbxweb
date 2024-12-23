@@ -1,74 +1,84 @@
 {
-  "name": "kdbxweb",
-  "version": "2.1.1",
-  "description": "Kdbx KeePass database reader for web",
-  "repository": {
-      "type": "git",
-      "url": "https://github.com/keeweb/kdbxweb.git"
-  },
-  "main": "dist/kdbxweb.js",
-  "types": "dist/types/index.d.ts",
-  "scripts": {
-      "test": "npm run tests:node",
-      "start": "npm run eslint && npm run build",
-      "tsc": "tsc",
-      "eslint": "eslint lib test conf scripts",
-      "build": "npm run clean && npm run tests:cover && npm run pack:tests && npm run pack:dist-debug && npm run pack:dist-prod",
-      "clean": "rimraf dist .nyc_output coverage",
-      "pack:dist-prod": "webpack --progress --mode=production --config conf/webpack.config.ts --mode production",
-      "pack:dist-debug": "webpack --progress --mode=development --devtool source-map --config conf/webpack.config.ts --mode development",
-      "webpack-stats": "webpack --mode=production --json --config conf/webpack.config.ts > dist/stats.json",
-      "pack:tests": "webpack --progress --config conf/webpack.tests.config.ts",
-      "tests:node": "mocha --require ts-node/register --recursive --reporter spec test/**/*.spec.ts",
-      "tests:cover": "nyc --reporter=lcov npm run tests:node",
-      "script:dump-header": "ts-node scripts/dump-header",
-      "script:kdbx-size-profiler": "ts-node scripts/kdbx-size-profiler",
-      "script:kdbx-to-xml": "ts-node scripts/kdbx-to-xml",
-      "script:make-big-files": "ts-node scripts/make-big-files",
-      "script:save-perf-test": "ts-node scripts/save-perf-test"
-  },
-  "keywords": [
-      "kdbx",
-      "keepass"
-  ],
-  "author": "Antelle",
-  "license": "MIT",
-  "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^1.0.1",
-    "@nodelib/fs.walk": "^1.2.8",
-    "@types/expect.js": "^0.3.29",
-    "@types/mocha": "^9.0.0",
-    "@types/terser-webpack-plugin": "^5.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.18.1",
-    "@typescript-eslint/parser": "^8.18.1",
-    "base64-loader": "^1.0.0",
-    "eslint": "^9.17.0",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-promise": "^7.2.1",
-    "eslint-plugin-standard": "^4.1.0",
-    "expect.js": "^0.3.1",
-    "exports-loader": "^3.0.0",
-    "mocha": "^9.1.1",
-    "nyc": "^15.1.0",
-    "prettier": "^3.4.2",
-    "rimraf": "^3.0.2",
-    "source-map-support": "^0.5.19",
-    "stats-webpack-plugin": "^0.7.0",
-    "terser-webpack-plugin": "^5.2.3",
-    "ts-loader": "^9.2.5",
-    "ts-node": "^10.2.1",
-    "typescript": "^5.7.2",
-    "webpack": "^5.97.1",
-    "webpack-cli": "^6.0.1"
-  },
-  "dependencies": {
-      "@xmldom/xmldom": "^0.8.10",
-      "fflate": "^0.7.1"
-  },
-  "funding": {
-      "type": "github",
-      "url": "https://github.com/sponsors/antelle"
-  }
+    "name": "kdbxweb",
+    "version": "2.2.0",
+    "description": "Kdbx KeePass database reader for web",
+    "main": "dist/kdbxweb.js",
+    "private": false,
+    "types": "dist/types/index.d.ts",
+    "homepage": "https://keeweb.info",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/keeweb/kdbxweb.git"
+    },
+    "author": {
+        "name": "Antelle",
+        "email": "keeweb@keeweb.info",
+        "url": "https://antelle.net"
+    },
+    "engines": {
+        "node": "^18.18.0"
+    },
+    "license": "MIT",
+    "readme": "README.md",
+    "funding": {
+        "type": "github",
+        "url": "https://github.com/sponsors/antelle"
+    }
+    "scripts": {
+        "test": "npm run tests:node",
+        "start": "npm run eslint && npm run build",
+        "tsc": "tsc",
+        "eslint": "eslint lib test conf scripts",
+        "build": "npm run clean && npm run tests:cover && npm run pack:tests && npm run pack:dist-debug && npm run pack:dist-prod",
+        "clean": "rimraf dist .nyc_output coverage",
+        "pack:dist-prod": "webpack --progress --mode=production --config conf/webpack.config.ts --mode production",
+        "pack:dist-debug": "webpack --progress --mode=development --devtool source-map --config conf/webpack.config.ts --mode development",
+        "webpack-stats": "webpack --mode=production --json --config conf/webpack.config.ts > dist/stats.json",
+        "pack:tests": "webpack --progress --config conf/webpack.tests.config.ts",
+        "tests:node": "mocha --require ts-node/register --recursive --reporter spec test/**/*.spec.ts",
+        "tests:cover": "nyc --reporter=lcov npm run tests:node",
+        "script:dump-header": "ts-node scripts/dump-header",
+        "script:kdbx-size-profiler": "ts-node scripts/kdbx-size-profiler",
+        "script:kdbx-to-xml": "ts-node scripts/kdbx-to-xml",
+        "script:make-big-files": "ts-node scripts/make-big-files",
+        "script:save-perf-test": "ts-node scripts/save-perf-test"
+    },
+    "keywords": [
+        "kdbx",
+        "keepass"
+    ],
+    "devDependencies": {
+      "@istanbuljs/nyc-config-typescript": "^1.0.1",
+      "@nodelib/fs.walk": "^1.2.8",
+      "@types/expect.js": "^0.3.29",
+      "@types/mocha": "^9.0.0",
+      "@types/terser-webpack-plugin": "^5.0.3",
+      "@typescript-eslint/eslint-plugin": "^8.18.1",
+      "@typescript-eslint/parser": "^8.18.1",
+      "base64-loader": "^1.0.0",
+      "eslint": "^9.17.0",
+      "eslint-plugin-import": "^2.31.0",
+      "eslint-plugin-node": "^11.1.0",
+      "eslint-plugin-prettier": "^5.2.1",
+      "eslint-plugin-promise": "^7.2.1",
+      "eslint-plugin-standard": "^4.1.0",
+      "expect.js": "^0.3.1",
+      "exports-loader": "^3.0.0",
+      "mocha": "^9.1.1",
+      "nyc": "^15.1.0",
+      "prettier": "^3.4.2",
+      "rimraf": "^3.0.2",
+      "source-map-support": "^0.5.19",
+      "stats-webpack-plugin": "^0.7.0",
+      "terser-webpack-plugin": "^5.2.3",
+      "ts-loader": "^9.2.5",
+      "ts-node": "^10.2.1",
+      "typescript": "^5.7.2",
+      "webpack": "^5.97.1",
+      "webpack-cli": "^6.0.1"
+    },
+    "dependencies": {
+        "@xmldom/xmldom": "^0.8.10",
+        "fflate": "^0.7.1"
+    }
 }
