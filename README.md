@@ -17,21 +17,21 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
     - [Loading](#loading)
     - [Saving](#saving)
     - [File info](#file-info)
-    - [Changing credentials](#changing-credentials)
+    - [Changing Credentials](#changing-credentials)
     - [Creation](#creation)
     - [Maintenance](#maintenance)
     - [Merge](#merge)
     - [Groups](#groups)
-    - [Group creation](#group-creation)
-    - [Group deletion](#group-deletion)
-    - [Group move](#group-move)
+    - [Group Creation](#group-creation)
+    - [Group Deletion](#group-deletion)
+    - [Group Move](#group-move)
     - [Recycle Bin](#recycle-bin)
-    - [Recursive traverse](#recursive-traverse)
+    - [Recursive Traverse](#recursive-traverse)
     - [Entries](#entries)
-    - [Entry creation](#entry-creation)
-    - [Entry modification](#entry-modification)
-        - [Entry deletion](#entry-deletion)
-    - [Entry move](#entry-move)
+    - [Entry Creation](#entry-creation)
+    - [Entry Modification](#entry-modification)
+    - [Entry Deletion](#entry-deletion)
+    - [Entry Move](#entry-move)
     - [ProtectedValue](#protectedvalue)
     - [Errors](#errors)
     - [Consts](#consts)
@@ -158,7 +158,7 @@ db.meta
 
 See the corresponding type fields inside, they should be obvious.
 
-### Changing credentials
+### Changing Credentials
 
 ```ts
 const db = await kdbxweb.Kdbx.load(data, credentials);
@@ -211,14 +211,18 @@ let db = await kdbxweb.Kdbx.load(data, credentials); // load local db
 db.save(); // save local db
 let editStateBeforeSave = db.getLocalEditState(); // save local editing state (serializable to JSON)
 db.close(); // close local db
+
 db = kdbxweb.Kdbx.load(data, credentials); // reopen it again
 db.setLocalEditState(editStateBeforeSave); // assign edit state obtained before save
+
 // work with db
 let remoteDb = await kdbxweb.Kdbx.load(remoteData, credentials); // load remote db
 db.merge(remoteDb); // merge remote into local
 delete remoteDb; // don't use remoteDb anymore
+
 let saved = await db.save(); // save local db
 editStateBeforeSave = db.getLocalEditState(); // save local editing state again
+
 let pushedOk = pushToUpstream(saved); // push db to upstream
 if (pushedOk) {
     db.removeLocalEditState(); // clear local editing state
@@ -238,7 +242,7 @@ let deepGroup = defaultGroup.groups[1].groups[2];
 
 <br />
 
-### Group creation
+### Group Creation
 
 ```ts
 let group = db.createGroup(db.getDefaultGroup(), 'New group');
@@ -247,7 +251,7 @@ let anotherGroup = db.createGroup(group, 'Subgroup');
 
 <br />
 
-### Group deletion
+### Group Deletion
 
 ```ts
 db.remove(group);
@@ -255,7 +259,7 @@ db.remove(group);
 
 <br />
 
-### Group move
+### Group Move
 
 ```ts
 db.move(group, toGroup);
@@ -275,7 +279,7 @@ if (!recycleBin) {
 
 <br />
 
-### Recursive traverse
+### Recursive Traverse
 
 ```ts
 for (const entry of group.allEntries()) { /* ... */ }
@@ -295,7 +299,7 @@ entry.fields.Pin = kdbxweb.ProtectedValue.fromString('4321');
 
 <br />
 
-### Entry creation
+### Entry Creation
 
 ```ts
 let entry = db.createEntry(group);
@@ -303,7 +307,7 @@ let entry = db.createEntry(group);
 
 <br />
 
-### Entry modification
+### Entry Modification
 
 ```ts
 // push current state to history stack
@@ -326,7 +330,7 @@ entry.removeHistory(index, count);
 
 <br />
 
-##### Entry deletion
+### Entry Deletion
 
 ```ts
 db.remove(entry);
@@ -334,7 +338,7 @@ db.remove(entry);
 
 <br />
 
-### Entry move
+### Entry Move
 
 ```ts
 db.move(entry, toGroup);
