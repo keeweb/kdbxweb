@@ -139,6 +139,7 @@ const prettyPrintedXml = await db.saveXml(true);
 <br />
 
 ##### File info
+
 ```ts
 db.header
 db.meta
@@ -147,6 +148,7 @@ db.meta
 See the corresponding type fields inside, they should be obvious.
 
 ##### Changing credentials
+
 ```ts
 const db = await kdbxweb.Kdbx.load(data, credentials);
 db.credentials.setPassword(kdbxweb.ProtectedValue.fromString('newPass'));
@@ -215,6 +217,7 @@ if (pushedOk) {
 <br />
 
 ##### Groups
+
 ```ts
 let defaultGroup = db.getDefaultGroup();
 let anotherGroup = db.getGroup(uuid);
@@ -224,6 +227,7 @@ let deepGroup = defaultGroup.groups[1].groups[2];
 <br />
 
 ##### Group creation
+
 ```ts
 let group = db.createGroup(db.getDefaultGroup(), 'New group');
 let anotherGroup = db.createGroup(group, 'Subgroup');
@@ -232,6 +236,7 @@ let anotherGroup = db.createGroup(group, 'Subgroup');
 <br />
 
 ##### Group deletion
+
 ```ts
 db.remove(group);
 ```
@@ -239,6 +244,7 @@ db.remove(group);
 <br />
 
 ##### Group move
+
 ```ts
 db.move(group, toGroup);
 db.move(group, toGroup, atIndex);
@@ -247,6 +253,7 @@ db.move(group, toGroup, atIndex);
 <br />
 
 ##### Recycle Bin
+
 ```ts
 let recycleBin = db.getGroup(db.meta.recycleBinUuid);
 if (!recycleBin) {
@@ -257,6 +264,7 @@ if (!recycleBin) {
 <br />
 
 ##### Recursive traverse
+
 ```ts
 for (const entry of group.allEntries()) { /* ... */ }
 for (const group of group.allGroups()) { /* ... */ }
@@ -266,6 +274,7 @@ for (const entryOrGroup of group.allGroupsAndEntries()) { /* ... */ }
 <br />
 
 ##### Entries
+
 ```ts
 let entry = db.getDefaultGroup().entries[0];
 entry.fields.AccountNumber = '1234 5678';
@@ -275,6 +284,7 @@ entry.fields.Pin = kdbxweb.ProtectedValue.fromString('4321');
 <br />
 
 ##### Entry creation
+
 ```ts
 let entry = db.createEntry(group);
 ```
@@ -282,6 +292,7 @@ let entry = db.createEntry(group);
 <br />
 
 ##### Entry modification
+
 ```ts
 // push current state to history stack
 entry.pushHistory();
@@ -297,6 +308,7 @@ Important: don't modify history states directly, this will break merge.
 <br />
 
 ##### Entry deletion
+
 ```ts
 db.remove(entry);
 ```
@@ -304,6 +316,7 @@ db.remove(entry);
 <br />
 
 ##### Entry move
+
 ```ts
 db.move(entry, toGroup);
 ```
@@ -316,6 +329,7 @@ db.importEntry(entry, toGroup, sourceFile);
 <br />
 
 ##### ProtectedValue
+
 Used for passwords and custom fields, stored the value in memory XOR'ed  
 ```ts
 let value = new kdbxweb.ProtectedValue(xoredByted, saltBytes);
@@ -326,7 +340,10 @@ let binaryData = value.getBinary();
 let includesSubString = value.includes('foo');
 ```
 
+<br />
+
 ##### Errors
+
 ```ts
 try {
     await kdbxweb.Kdbx.load(data, credentials);
@@ -340,7 +357,9 @@ try {
 <br />
 
 ##### Consts
+
 [Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.ts)  
+
 ```ts
 kdbxweb.Consts.ErrorCodes // all thrown errors have code property
 kdbxweb.Consts.Defaults // default db settings
@@ -350,6 +369,7 @@ kdbxweb.Consts.Icons // icons map
 <br />
 
 ##### Random
+
 ```ts
 let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
 ```
@@ -357,6 +377,7 @@ let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
 <br />
 
 ##### ByteUtils
+
 ```ts
 kdbxweb.ByteUtils.bytesToString(bytes);
 kdbxweb.ByteUtils.stringToBytes(str);
@@ -374,12 +395,21 @@ kdbxweb.ByteUtils.hexToBytes(str);
 
 ## Building
 
-Use npm to build this project:  
+> [!NOTE]
+> This project requires node v18.18.0.
+
+<br />
+
+Use npm to build this project:
+
 ```sh
 npm run build
 ```  
 
-To run tests:  
+<br />
+
+To run tests:
+
 ```sh
 npm test
 ```  
@@ -407,6 +437,7 @@ kdbxweb includes these 3rd party libraries:
 The library provides a number of scripts to work with KDBX files:
 
 Dump the binary header:
+
 ```sh
 npm run script:dump-header my-db.kdbx
 ```
@@ -414,6 +445,7 @@ npm run script:dump-header my-db.kdbx
 <br />
 
 Print detailed size information about internal objects:
+
 ```sh
 npm run script:kdbx-size-profiler my-db.kdbx password
 ```
@@ -421,6 +453,7 @@ npm run script:kdbx-size-profiler my-db.kdbx password
 <br />
 
 Dump the internal XML:
+
 ```sh
 npm run script:kdbx-to-xml my-db.kdbx password
 ```
@@ -428,6 +461,7 @@ npm run script:kdbx-to-xml my-db.kdbx password
 <br />
 
 Generate big files for load testing:
+
 ```sh
 npm run script:make-big-files
 ```
