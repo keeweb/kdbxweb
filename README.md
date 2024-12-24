@@ -14,29 +14,29 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
   - [Compatibility](#compatibility)
   - [Kdbx4](#kdbx4)
   - [Usage](#usage)
-        - [Loading](#loading)
-        - [Saving](#saving)
-        - [File info](#file-info)
-        - [Changing credentials](#changing-credentials)
-        - [Creation](#creation)
-        - [Maintenance](#maintenance)
-        - [Merge](#merge)
-        - [Groups](#groups)
-        - [Group creation](#group-creation)
-        - [Group deletion](#group-deletion)
-        - [Group move](#group-move)
-        - [Recycle Bin](#recycle-bin)
-        - [Recursive traverse](#recursive-traverse)
-        - [Entries](#entries)
-        - [Entry creation](#entry-creation)
-        - [Entry modification](#entry-modification)
+    - [Loading](#loading)
+    - [Saving](#saving)
+    - [File info](#file-info)
+    - [Changing credentials](#changing-credentials)
+    - [Creation](#creation)
+    - [Maintenance](#maintenance)
+    - [Merge](#merge)
+    - [Groups](#groups)
+    - [Group creation](#group-creation)
+    - [Group deletion](#group-deletion)
+    - [Group move](#group-move)
+    - [Recycle Bin](#recycle-bin)
+    - [Recursive traverse](#recursive-traverse)
+    - [Entries](#entries)
+    - [Entry creation](#entry-creation)
+    - [Entry modification](#entry-modification)
         - [Entry deletion](#entry-deletion)
-        - [Entry move](#entry-move)
-        - [ProtectedValue](#protectedvalue)
-        - [Errors](#errors)
-        - [Consts](#consts)
-        - [Random](#random)
-        - [ByteUtils](#byteutils)
+    - [Entry move](#entry-move)
+    - [ProtectedValue](#protectedvalue)
+    - [Errors](#errors)
+    - [Consts](#consts)
+    - [Random](#random)
+    - [ByteUtils](#byteutils)
   - [Building](#building)
   - [3rd party libs](#3rd-party-libs)
   - [Tools](#tools)
@@ -52,6 +52,8 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 <br />
 
 ## Features
+
+kdbxweb offers the following feature sets:
 
 - runs in browser or node.js
 - no native addons
@@ -71,8 +73,13 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ## Browser support
 
-- modern browsers: Chrome, Firefox, Safari, Opera, Edge
-- node.js
+- All modern browsers
+  - Chrome / Chromium
+  - Firefox
+  - Safari
+  - Opera
+  - Edge
+- NodeJS
 
 <br />
 
@@ -82,7 +89,7 @@ KdbxWeb is a high-performance javascript library for reading/writing KeePass v2 
 
 ## Compatibility
 
-Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb files (for KeePass v1) are out of scope of this library.
+Supported formats are Kdbx3 and Kdbx4, current KeePass file format. Old kdb files (for KeePass v1) are out of scope of this library. We currently have no plans to support the older formats.
 
 <br />
 
@@ -105,7 +112,7 @@ kdbxweb.CryptoEngine.setArgon2Impl((password, salt,
 
 You can find an implementation example in [tests](https://github.com/keeweb/kdbxweb/blob/master/test/test-support/argon2.ts).  
 
-It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you, to choose the best one.
+It's not compiled into the library because there's no universal way to provide a fast implementation, so it's up to you to choose the best one.
 
 <br />
 
@@ -115,7 +122,11 @@ It's not compiled into the library because there's no universal way to provide a
 
 ## Usage
 
-##### Loading
+This section gives usage examples on how you can implement kdbxweb into your project.
+
+<br />
+
+### Loading
 
 ```ts
 let credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('demo'),
@@ -124,7 +135,7 @@ const db1 = await kdbxweb.Kdbx.load(dataAsArrayBuffer, credentials);
 const db2 = await kdbxweb.Kdbx.loadXml(dataAsString, credentials);
 ```
 
-##### Saving
+### Saving
 
 ```ts
 const dataAsArrayBuffer = await db.save();
@@ -138,7 +149,7 @@ const prettyPrintedXml = await db.saveXml(true);
 
 <br />
 
-##### File info
+### File info
 
 ```ts
 db.header
@@ -147,7 +158,7 @@ db.meta
 
 See the corresponding type fields inside, they should be obvious.
 
-##### Changing credentials
+### Changing credentials
 
 ```ts
 const db = await kdbxweb.Kdbx.load(data, credentials);
@@ -157,7 +168,7 @@ db.credentials.setKeyFile(randomKeyFile);
 await db.save();
 ```
 
-##### Creation
+### Creation
 
 ```ts
 let newDb = kdbxweb.Kdbx.create(credentials, 'My new db');
@@ -167,7 +178,7 @@ let entry = newDb.createEntry(group);
 
 <br />
 
-##### Maintenance
+### Maintenance
 
 ```ts
 db.cleanup({
@@ -188,11 +199,12 @@ db.setKdf(kdbxweb.Consts.KdfId.Aes);
 
 <br />
 
-##### Merge
+### Merge
 
 Entries, groups and meta are consistent against merging in any direction with any state.  
 Due to format limitations, p2p entry history merging and some non-critical fields in meta can produce phantom records or deletions, 
 so correct entry history merging is supported only with one central replica. Items order is not guaranteed but the algorithm tries to preserve it.
+
 ```ts
 let db = await kdbxweb.Kdbx.load(data, credentials); // load local db
 // work with db
@@ -216,7 +228,7 @@ if (pushedOk) {
 
 <br />
 
-##### Groups
+### Groups
 
 ```ts
 let defaultGroup = db.getDefaultGroup();
@@ -226,7 +238,7 @@ let deepGroup = defaultGroup.groups[1].groups[2];
 
 <br />
 
-##### Group creation
+### Group creation
 
 ```ts
 let group = db.createGroup(db.getDefaultGroup(), 'New group');
@@ -235,7 +247,7 @@ let anotherGroup = db.createGroup(group, 'Subgroup');
 
 <br />
 
-##### Group deletion
+### Group deletion
 
 ```ts
 db.remove(group);
@@ -243,7 +255,7 @@ db.remove(group);
 
 <br />
 
-##### Group move
+### Group move
 
 ```ts
 db.move(group, toGroup);
@@ -252,7 +264,7 @@ db.move(group, toGroup, atIndex);
 
 <br />
 
-##### Recycle Bin
+### Recycle Bin
 
 ```ts
 let recycleBin = db.getGroup(db.meta.recycleBinUuid);
@@ -263,7 +275,7 @@ if (!recycleBin) {
 
 <br />
 
-##### Recursive traverse
+### Recursive traverse
 
 ```ts
 for (const entry of group.allEntries()) { /* ... */ }
@@ -273,7 +285,7 @@ for (const entryOrGroup of group.allGroupsAndEntries()) { /* ... */ }
 
 <br />
 
-##### Entries
+### Entries
 
 ```ts
 let entry = db.getDefaultGroup().entries[0];
@@ -283,7 +295,7 @@ entry.fields.Pin = kdbxweb.ProtectedValue.fromString('4321');
 
 <br />
 
-##### Entry creation
+### Entry creation
 
 ```ts
 let entry = db.createEntry(group);
@@ -291,19 +303,26 @@ let entry = db.createEntry(group);
 
 <br />
 
-##### Entry modification
+### Entry modification
 
 ```ts
 // push current state to history stack
 entry.pushHistory();
+
 // change something
 entry.fgColor = '#ff0000';
+
 // update entry modification and access time
 entry.times.update();
+
 // remove states from entry history
 entry.removeHistory(index, count);
 ```
-Important: don't modify history states directly, this will break merge.
+
+<br />
+
+> [!WARNING]
+> Do **not** modify history states directly; this will break merge.
 
 <br />
 
@@ -315,22 +334,24 @@ db.remove(entry);
 
 <br />
 
-##### Entry move
+### Entry move
 
 ```ts
 db.move(entry, toGroup);
 ```
 
 If you're moving an entry from another file, this is called _import_:
+
 ```ts
 db.importEntry(entry, toGroup, sourceFile);
 ```
 
 <br />
 
-##### ProtectedValue
+### ProtectedValue
 
-Used for passwords and custom fields, stored the value in memory XOR'ed  
+Used for passwords and custom fields, stored the value in memory XOR'ed
+
 ```ts
 let value = new kdbxweb.ProtectedValue(xoredByted, saltBytes);
 let valueFromString = kdbxweb.ProtectedValue.fromString('str');
@@ -342,7 +363,7 @@ let includesSubString = value.includes('foo');
 
 <br />
 
-##### Errors
+### Errors
 
 ```ts
 try {
@@ -356,7 +377,7 @@ try {
 
 <br />
 
-##### Consts
+### Consts
 
 [Consts definition](https://github.com/keeweb/kdbxweb/blob/master/lib/defs/consts.ts)  
 
@@ -368,7 +389,7 @@ kdbxweb.Consts.Icons // icons map
 
 <br />
 
-##### Random
+### Random
 
 ```ts
 let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
@@ -376,7 +397,7 @@ let randomArray = kdbxweb.Crypto.random(/* desired length */ 100);
 
 <br />
 
-##### ByteUtils
+### ByteUtils
 
 ```ts
 kdbxweb.ByteUtils.bytesToString(bytes);
@@ -474,7 +495,7 @@ npm run script:make-big-files
 
 ## See it in action
 
-This library is used in [KeeWeb](https://app.keeweb.info)
+This library is used in **[KeeWeb](https://app.keeweb.info)**
 
 <br />
 
@@ -484,9 +505,7 @@ This library is used in [KeeWeb](https://app.keeweb.info)
 
 ## Extras
 
-We also provide a template for [HexFiend](https://github.com/ridiculousfish/HexFiend)
-to explore the contents of KDBX files, you can find it
-[here](format).
+We also provide a template for **[HexFiend](https://github.com/ridiculousfish/HexFiend)** to explore the contents of KDBX files, you can find it **[here](format)**.
 
 <br />
 
