@@ -32,8 +32,10 @@ export interface KdbxMemoryProtection {
     notes?: boolean;
 }
 
+import { Bytes } from '../defs/bytes';
+
 export interface KdbxCustomIcon {
-    data: ArrayBuffer;
+    data: Bytes;
     name?: string;
     lastModified?: Date;
 }

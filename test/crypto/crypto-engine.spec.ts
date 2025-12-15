@@ -16,15 +16,34 @@ function toHex(bytes: ArrayBuffer) {
 
 function useDefaultImpl() {
     if (isNode) {
-        // @ts-ignore
-        global.crypto = undefined;
+        try {
+            // @ts-ignore
+            global.crypto = undefined;
+        } catch (e) {
+            try {
+                Object.defineProperty(global, 'crypto', { value: undefined, configurable: true });
+            } catch (e2) {
+                // ignore if we can't override global.crypto
+            }
+        }
     }
 }
 
 function useSubtleMock() {
     if (isNode) {
-        // @ts-ignore
-        global.crypto = require('../test-support/subtle-mock-node').SubtleMockNode;
+        try {
+            // @ts-ignore
+            global.crypto = require('../test-support/subtle-mock-node').SubtleMockNode;
+        } catch (e) {
+            try {
+                Object.defineProperty(global, 'crypto', {
+                    value: require('../test-support/subtle-mock-node').SubtleMockNode,
+                    configurable: true
+                });
+            } catch (e2) {
+                // ignore if we can't override global.crypto
+            }
+        }
     }
 }
 

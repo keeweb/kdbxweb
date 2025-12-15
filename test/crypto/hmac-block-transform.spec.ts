@@ -10,8 +10,8 @@ describe('HmacBlockTransform', () => {
         const src = new Uint8Array([1, 2, 3, 4, 5]);
         return HmacBlockTransform.encrypt(src.buffer, key).then((enc) => {
             return HmacBlockTransform.decrypt(enc, key).then((dec) => {
-                dec = new Uint8Array(dec);
-                expect(dec).to.be.eql(src);
+                const out = new Uint8Array(dec as ArrayBuffer);
+                expect(out).to.be.eql(src);
             });
         });
     });

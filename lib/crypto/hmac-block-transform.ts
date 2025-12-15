@@ -2,14 +2,16 @@ import { Int64 } from '../utils/int64';
 import { arrayBufferEquals, arrayToBuffer, zeroBuffer } from '../utils/byte-utils';
 import * as CryptoEngine from '../crypto/crypto-engine';
 import { BinaryStream } from '../utils/binary-stream';
+import { Bytes } from '../defs/bytes';
 import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 
 const BlockSize = 1024 * 1024;
 
-export function getHmacKey(key: ArrayBuffer, blockIndex: Int64): Promise<ArrayBuffer> {
-    const shaSrc = new Uint8Array(8 + key.byteLength);
-    shaSrc.set(new Uint8Array(key), 8);
+export function getHmacKey(key: Bytes, blockIndex: Int64): Promise<ArrayBuffer> {
+    const keyArr = key instanceof ArrayBuffer ? new Uint8Array(key) : key;
+    const shaSrc = new Uint8Array(8 + keyArr.byteLength);
+    shaSrc.set(keyArr, 8);
     const view = new DataView(shaSrc.buffer);
     view.setUint32(0, blockIndex.lo, true);
     view.setUint32(4, blockIndex.hi, true);
@@ -20,23 +22,24 @@ export function getHmacKey(key: ArrayBuffer, blockIndex: Int64): Promise<ArrayBu
 }
 
 function getBlockHmac(
-    key: ArrayBuffer,
+    key: Bytes,
     blockIndex: number,
     blockLength: number,
-    blockData: ArrayBuffer
+    blockData: Bytes
 ): Promise<ArrayBuffer> {
     return getHmacKey(key, new Int64(blockIndex)).then((blockKey) => {
-        const blockDataForHash = new Uint8Array(blockData.byteLength + 4 + 8);
+        const blockDataArr = blockData instanceof ArrayBuffer ? new Uint8Array(blockData) : blockData;
+        const blockDataForHash = new Uint8Array(blockDataArr.byteLength + 4 + 8);
         const blockDataForHashView = new DataView(blockDataForHash.buffer);
-        blockDataForHash.set(new Uint8Array(blockData), 4 + 8);
+        blockDataForHash.set(blockDataArr, 4 + 8);
         blockDataForHashView.setInt32(0, blockIndex, true);
         blockDataForHashView.setInt32(8, blockLength, true);
-        return CryptoEngine.hmacSha256(blockKey, blockDataForHash.buffer);
+        return CryptoEngine.hmacSha256(blockKey, arrayToBuffer(blockDataForHash));
     });
 }
 
-export function decrypt(data: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffer> {
-    const stm = new BinaryStream(data);
+export function decrypt(data: Bytes, key: Bytes): Promise<ArrayBuffer> {
+    const stm = new BinaryStream(arrayToBuffer(data));
     return Promise.resolve().then(() => {
         const buffers: ArrayBuffer[] = [];
         let blockIndex = 0,
@@ -75,9 +78,10 @@ export function decrypt(data: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffe
     });
 }
 
-export function encrypt(data: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffer> {
+export function encrypt(data: Bytes, key: Bytes): Promise<ArrayBuffer> {
     return Promise.resolve().then(() => {
-        let bytesLeft = data.byteLength;
+        const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+        let bytesLeft = dataArr.byteLength;
         let currentOffset = 0,
             blockIndex = 0,
             totalLength = 0;
@@ -87,7 +91,7 @@ export function encrypt(data: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffe
             const blockLength = Math.min(BlockSize, bytesLeft);
             bytesLeft -= blockLength;
 
-            const blockData = data.slice(currentOffset, currentOffset + blockLength);
+            const blockData = dataArr.subarray(currentOffset, currentOffset + blockLength);
             return getBlockHmac(key, blockIndex, blockLength, blockData).then((blockHash) => {
                 const blockBuffer = new ArrayBuffer(32 + 4);
                 const stm = new BinaryStream(blockBuffer);
@@ -98,7 +102,7 @@ export function encrypt(data: ArrayBuffer, key: ArrayBuffer): Promise<ArrayBuffe
                 totalLength += blockBuffer.byteLength;
 
                 if (blockData.byteLength > 0) {
-                    buffers.push(blockData);
+                    buffers.push(arrayToBuffer(blockData));
                     totalLength += blockData.byteLength;
                     blockIndex++;
                     currentOffset += blockLength;

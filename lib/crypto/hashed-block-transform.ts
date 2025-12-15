@@ -1,14 +1,16 @@
 import { BinaryStream } from '../utils/binary-stream';
 import * as CryptoEngine from '../crypto/crypto-engine';
 import { KdbxError } from '../errors/kdbx-error';
-import { arrayBufferEquals } from '../utils/byte-utils';
+import { arrayBufferEquals, arrayToBuffer } from '../utils/byte-utils';
 import { ErrorCodes } from '../defs/consts';
 
 const BlockSize = 1024 * 1024;
 
-export function decrypt(data: ArrayBuffer): Promise<ArrayBuffer> {
+import { Bytes } from '../defs/bytes';
+
+export function decrypt(data: Bytes): Promise<ArrayBuffer> {
     return Promise.resolve().then(() => {
-        const stm = new BinaryStream(data);
+        const stm = new BinaryStream(arrayToBuffer(data));
         const buffers: ArrayBuffer[] = [];
         let // blockIndex = 0,
             blockLength = 0,
@@ -44,9 +46,10 @@ export function decrypt(data: ArrayBuffer): Promise<ArrayBuffer> {
     });
 }
 
-export function encrypt(data: ArrayBuffer): Promise<ArrayBuffer> {
+export function encrypt(data: Bytes): Promise<ArrayBuffer> {
     return Promise.resolve().then(() => {
-        let bytesLeft = data.byteLength;
+        const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+        let bytesLeft = dataArr.byteLength;
         let currentOffset = 0,
             blockIndex = 0,
             totalLength = 0;
@@ -57,8 +60,8 @@ export function encrypt(data: ArrayBuffer): Promise<ArrayBuffer> {
                 const blockLength = Math.min(BlockSize, bytesLeft);
                 bytesLeft -= blockLength;
 
-                const blockData = data.slice(currentOffset, currentOffset + blockLength);
-                return CryptoEngine.sha256(blockData).then((blockHash) => {
+                const blockData = dataArr.subarray(currentOffset, currentOffset + blockLength);
+                return CryptoEngine.sha256(arrayToBuffer(blockData)).then((blockHash) => {
                     const blockBuffer = new ArrayBuffer(4 + 32 + 4);
                     const stm = new BinaryStream(blockBuffer);
                     stm.setUint32(blockIndex, true);
@@ -67,7 +70,7 @@ export function encrypt(data: ArrayBuffer): Promise<ArrayBuffer> {
 
                     buffers.push(blockBuffer);
                     totalLength += blockBuffer.byteLength;
-                    buffers.push(blockData);
+                    buffers.push(arrayToBuffer(blockData));
                     totalLength += blockData.byteLength;
 
                     blockIndex++;

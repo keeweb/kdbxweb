@@ -15,7 +15,7 @@ import { KdbxUuid } from './kdbx-uuid';
 import { ValueType, VarDictionary } from '../utils/var-dictionary';
 import { BinaryStream } from '../utils/binary-stream';
 import { KdbxError } from '../errors/kdbx-error';
-import { base64ToBytes, zeroBuffer } from '../utils/byte-utils';
+import { base64ToBytes, zeroBuffer, arrayToBuffer } from '../utils/byte-utils';
 import * as CryptoEngine from '../crypto/crypto-engine';
 import { Int64 } from '../utils/int64';
 import { KdbxContext } from './kdbx-context';
@@ -530,11 +530,15 @@ export class KdbxHeader {
             case KdfId.Argon2d:
             case KdfId.Argon2id:
                 this.kdfParameters = new VarDictionary();
-                this.kdfParameters.set('$UUID', ValueType.Bytes, base64ToBytes(algo));
+                this.kdfParameters.set(
+                    '$UUID',
+                    ValueType.Bytes,
+                    arrayToBuffer(base64ToBytes(algo))
+                );
                 this.kdfParameters.set(
                     'S',
                     ValueType.Bytes,
-                    CryptoEngine.random(HeaderConst.DefaultKdfSaltLength)
+                    arrayToBuffer(CryptoEngine.random(HeaderConst.DefaultKdfSaltLength))
                 );
                 this.kdfParameters.set('P', ValueType.UInt32, HeaderConst.DefaultKdfParallelism);
                 this.kdfParameters.set(
@@ -551,11 +555,15 @@ export class KdbxHeader {
                 break;
             case KdfId.Aes:
                 this.kdfParameters = new VarDictionary();
-                this.kdfParameters.set('$UUID', ValueType.Bytes, base64ToBytes(KdfId.Aes));
+                this.kdfParameters.set(
+                    '$UUID',
+                    ValueType.Bytes,
+                    arrayToBuffer(base64ToBytes(KdfId.Aes))
+                );
                 this.kdfParameters.set(
                     'S',
                     ValueType.Bytes,
-                    CryptoEngine.random(HeaderConst.DefaultKdfSaltLength)
+                    arrayToBuffer(CryptoEngine.random(HeaderConst.DefaultKdfSaltLength))
                 );
                 this.kdfParameters.set(
                     'R',
@@ -588,20 +596,20 @@ export class KdbxHeader {
     }
 
     generateSalts(): void {
-        this.masterSeed = CryptoEngine.random(32);
+        this.masterSeed = arrayToBuffer(CryptoEngine.random(32));
         if (this.versionMajor < 4) {
-            this.transformSeed = CryptoEngine.random(32);
-            this.streamStartBytes = CryptoEngine.random(32);
-            this.protectedStreamKey = CryptoEngine.random(32);
-            this.encryptionIV = CryptoEngine.random(16);
+            this.transformSeed = arrayToBuffer(CryptoEngine.random(32));
+            this.streamStartBytes = arrayToBuffer(CryptoEngine.random(32));
+            this.protectedStreamKey = arrayToBuffer(CryptoEngine.random(32));
+            this.encryptionIV = arrayToBuffer(CryptoEngine.random(16));
         } else {
-            this.protectedStreamKey = CryptoEngine.random(64);
+            this.protectedStreamKey = arrayToBuffer(CryptoEngine.random(64));
             if (!this.kdfParameters || !this.dataCipherUuid) {
                 throw new KdbxError(ErrorCodes.InvalidState, 'no kdf params');
             }
-            this.kdfParameters.set('S', ValueType.Bytes, CryptoEngine.random(32));
+            this.kdfParameters.set('S', ValueType.Bytes, arrayToBuffer(CryptoEngine.random(32)));
             const ivLength = this.dataCipherUuid.toString() === CipherId.ChaCha20 ? 12 : 16;
-            this.encryptionIV = CryptoEngine.random(ivLength);
+            this.encryptionIV = arrayToBuffer(CryptoEngine.random(ivLength));
         }
     }
 

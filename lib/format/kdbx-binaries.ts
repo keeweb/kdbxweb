@@ -1,12 +1,13 @@
 import * as CryptoEngine from './../crypto/crypto-engine';
 import { ProtectedValue } from '../crypto/protected-value';
 import { arrayToBuffer, bytesToHex } from '../utils/byte-utils';
+import { Bytes } from '../defs/bytes';
 
 export type KdbxBinaryRef = { ref: string };
 export type KdbxBinaryRefWithValue = { ref: string; value: KdbxBinary };
 export type KdbxBinaryWithHash = { hash: string; value: KdbxBinary };
 
-export type KdbxBinary = ProtectedValue | ArrayBuffer;
+export type KdbxBinary = ProtectedValue | Bytes;
 export type KdbxBinaryOrRef = KdbxBinary | KdbxBinaryRef;
 export type KdbxBinaryIn = KdbxBinary | Uint8Array;
 
@@ -20,13 +21,18 @@ export class KdbxBinaries {
 
     computeHashes(): Promise<void> {
         // this method is called after the file is loaded
-        const promises = [...this._mapById].map(([id, binary]) =>
-            KdbxBinaries.getBinaryHash(binary).then((hash) => {
+        // Preserve insertion order when filling _mapByHash by collecting
+        // hashes first and applying them after all async hash computations
+        // finish — Promise.all preserves input order in results.
+        const entries = [...this._mapById];
+        const promises = entries.map(([id, binary]) =>
+            KdbxBinaries.getBinaryHash(binary).then((hash) => ({ id, hash, binary }))
+        );
+        return Promise.all(promises).then((results) => {
+            for (const { id, hash, binary } of results) {
                 this._idToHash.set(id, hash);
                 this._mapByHash.set(hash, binary);
-            })
-        );
-        return Promise.all(promises).then(() => {
+            }
             // it won't be used anymore
             this._mapById.clear();
         });

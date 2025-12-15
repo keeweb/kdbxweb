@@ -1,11 +1,14 @@
+import { arrayToBuffer } from './byte-utils';
+import { Bytes } from '../defs/bytes';
+
 export class BinaryStream {
     private _arrayBuffer: ArrayBuffer;
     private _dataView: DataView;
     private _pos: number;
     private readonly _canExpand: boolean;
 
-    constructor(arrayBuffer?: ArrayBuffer) {
-        this._arrayBuffer = arrayBuffer || new ArrayBuffer(1024);
+    constructor(arrayBuffer?: Bytes) {
+        this._arrayBuffer = arrayBuffer ? arrayToBuffer(arrayBuffer) : new ArrayBuffer(1024);
         this._dataView = new DataView(this._arrayBuffer);
         this._pos = 0;
         this._canExpand = !arrayBuffer;

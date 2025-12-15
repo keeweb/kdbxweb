@@ -665,7 +665,8 @@ describe('XmlUtils', () => {
 
                 getSalt(): ArrayBuffer {
                     count++;
-                    return new Uint8Array([count, count, count]);
+                    const arr = new Uint8Array([count, count, count]);
+                    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
                 }
             }
 
@@ -723,7 +724,8 @@ describe('XmlUtils', () => {
 
                 getSalt(): ArrayBuffer {
                     count++;
-                    return new Uint8Array([count, count, count]);
+                    const arr = new Uint8Array([count, count, count]);
+                    return arr.buffer.slice(arr.byteOffset, arr.byteOffset + arr.byteLength);
                 }
             }
 

@@ -12,6 +12,7 @@
 import { KdbxError } from '../errors/kdbx-error';
 import { ErrorCodes } from '../defs/consts';
 import { arrayToBuffer, hexToBytes } from '../utils/byte-utils';
+import { Bytes } from '../defs/bytes';
 import { ChaCha20 } from './chacha20';
 import * as nodeCrypto from 'crypto';
 
@@ -24,57 +25,61 @@ const EmptySha512 =
 // https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues
 const MaxRandomQuota = 65536;
 
-export function sha256(data: ArrayBuffer): Promise<ArrayBuffer> {
-    if (!data.byteLength) {
+export function sha256(data: Bytes): Promise<ArrayBuffer> {
+    const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+    if (!dataArr.byteLength) {
         return Promise.resolve(arrayToBuffer(hexToBytes(EmptySha256)));
     }
     if (global.crypto?.subtle) {
-        return global.crypto.subtle.digest({ name: 'SHA-256' }, data);
+        return global.crypto.subtle.digest({ name: 'SHA-256' }, arrayToBuffer(dataArr));
     } else {
         return new Promise((resolve) => {
             const sha = nodeCrypto.createHash('sha256');
-            const hash = sha.update(Buffer.from(data)).digest();
+            const hash = sha.update(Buffer.from(dataArr)).digest();
             resolve(hash.buffer);
         });
     }
 }
 
-export function sha512(data: ArrayBuffer): Promise<ArrayBuffer> {
-    if (!data.byteLength) {
+export function sha512(data: Bytes): Promise<ArrayBuffer> {
+    const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+    if (!dataArr.byteLength) {
         return Promise.resolve(arrayToBuffer(hexToBytes(EmptySha512)));
     }
     if (global.crypto?.subtle) {
-        return global.crypto.subtle.digest({ name: 'SHA-512' }, data);
+        return global.crypto.subtle.digest({ name: 'SHA-512' }, arrayToBuffer(dataArr));
     } else {
         return new Promise((resolve) => {
             const sha = nodeCrypto.createHash('sha512');
-            const hash = sha.update(Buffer.from(data)).digest();
+            const hash = sha.update(Buffer.from(dataArr)).digest();
             resolve(hash.buffer);
         });
     }
 }
 
-export function hmacSha256(key: ArrayBuffer, data: ArrayBuffer): Promise<ArrayBuffer> {
+export function hmacSha256(key: Bytes, data: Bytes): Promise<ArrayBuffer> {
+    const keyArr = key instanceof ArrayBuffer ? new Uint8Array(key) : key;
+    const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
     if (global.crypto?.subtle) {
         const algo = { name: 'HMAC', hash: { name: 'SHA-256' } };
         return global.crypto.subtle
-            .importKey('raw', key, algo, false, ['sign'])
+            .importKey('raw', arrayToBuffer(keyArr), algo, false, ['sign'])
             .then((subtleKey) => {
-                return global.crypto.subtle.sign(algo, subtleKey, data);
+                return global.crypto.subtle.sign(algo, subtleKey, arrayToBuffer(dataArr));
             });
     } else {
         return new Promise((resolve) => {
-            const hmac = nodeCrypto.createHmac('sha256', Buffer.from(key));
-            const hash = hmac.update(Buffer.from(data)).digest();
+            const hmac = nodeCrypto.createHmac('sha256', Buffer.from(keyArr));
+            const hash = hmac.update(Buffer.from(dataArr)).digest();
             resolve(hash.buffer);
         });
     }
 }
 
 export abstract class AesCbc {
-    abstract importKey(key: ArrayBuffer): Promise<void>;
-    abstract encrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer>;
-    abstract decrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer>;
+    abstract importKey(key: Bytes): Promise<void>;
+    abstract encrypt(data: Bytes, iv: Bytes): Promise<ArrayBuffer>;
+    abstract decrypt(data: Bytes, iv: Bytes): Promise<ArrayBuffer>;
 }
 
 class AesCbcSubtle extends AesCbc {
@@ -87,24 +92,29 @@ class AesCbcSubtle extends AesCbc {
         return this._key;
     }
 
-    importKey(key: ArrayBuffer): Promise<void> {
+    importKey(key: Bytes): Promise<void> {
+        const keyArr = key instanceof ArrayBuffer ? new Uint8Array(key) : key;
         return global.crypto.subtle
-            .importKey('raw', key, { name: 'AES-CBC' }, false, ['encrypt', 'decrypt'])
+            .importKey('raw', arrayToBuffer(keyArr), { name: 'AES-CBC' }, false, ['encrypt', 'decrypt'])
             .then((key) => {
                 this._key = key;
             });
     }
 
-    encrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer> {
+    encrypt(data: Bytes, iv: Bytes): Promise<ArrayBuffer> {
+        const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+        const ivArr = iv instanceof ArrayBuffer ? new Uint8Array(iv) : iv;
         return global.crypto.subtle.encrypt(
-            { name: 'AES-CBC', iv },
+            { name: 'AES-CBC', iv: arrayToBuffer(ivArr) },
             this.key,
-            data
+            arrayToBuffer(dataArr)
         ) as Promise<ArrayBuffer>;
     }
 
-    decrypt(data: ArrayBuffer, iv: ArrayBuffer): Promise<ArrayBuffer> {
-        return global.crypto.subtle.decrypt({ name: 'AES-CBC', iv }, this.key, data).catch(() => {
+    decrypt(data: Bytes, iv: Bytes): Promise<ArrayBuffer> {
+        const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+        const ivArr = iv instanceof ArrayBuffer ? new Uint8Array(iv) : iv;
+        return global.crypto.subtle.decrypt({ name: 'AES-CBC', iv: arrayToBuffer(ivArr) }, this.key, arrayToBuffer(dataArr)).catch(() => {
             throw new KdbxError(ErrorCodes.InvalidKey, 'invalid key');
         }) as Promise<ArrayBuffer>;
     }
@@ -183,14 +193,13 @@ export function random(len: number): Uint8Array {
     }
 }
 
-export function chacha20(
-    data: ArrayBuffer,
-    key: ArrayBuffer,
-    iv: ArrayBuffer
-): Promise<ArrayBuffer> {
+export function chacha20(data: Bytes, key: Bytes, iv: Bytes): Promise<ArrayBuffer> {
     return Promise.resolve().then(() => {
-        const algo = new ChaCha20(new Uint8Array(key), new Uint8Array(iv));
-        return arrayToBuffer(algo.encrypt(new Uint8Array(data)));
+        const keyArr = key instanceof ArrayBuffer ? new Uint8Array(key) : key;
+        const ivArr = iv instanceof ArrayBuffer ? new Uint8Array(iv) : iv;
+        const dataArr = data instanceof ArrayBuffer ? new Uint8Array(data) : data;
+        const algo = new ChaCha20(keyArr, ivArr);
+        return arrayToBuffer(algo.encrypt(dataArr));
     });
 }
 
@@ -201,8 +210,8 @@ export type Argon2Type = typeof Argon2TypeArgon2d | typeof Argon2TypeArgon2id;
 export type Argon2Version = 0x10 | 0x13;
 
 export type Argon2Fn = (
-    password: ArrayBuffer,
-    salt: ArrayBuffer,
+    password: Bytes,
+    salt: Bytes,
     memory: number,
     iterations: number,
     length: number,
@@ -214,8 +223,8 @@ export type Argon2Fn = (
 let argon2impl: Argon2Fn | undefined;
 
 export function argon2(
-    password: ArrayBuffer,
-    salt: ArrayBuffer,
+    password: Bytes,
+    salt: Bytes,
     memory: number,
     iterations: number,
     length: number,
