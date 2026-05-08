@@ -178,7 +178,7 @@ describe('KdbxCustomData', () => {
         //
         // This test loads a real KDBX 4.1 file, writes its custom data using
         // a binary-save context (exportXml=false), and checks the raw encoding.
-        it('corrupts LastModificationTime with ISO string when saving real KDBX 4.1 file', async () => {
+        it('writes LastModificationTime as Base64 binary when saving real KDBX 4.1 file', async () => {
             // Arrange
             const cred = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString('test'));
             const db = await kdbxweb.Kdbx.load(TestResources.kdbx41, cred);
@@ -195,11 +195,10 @@ describe('KdbxCustomData', () => {
                 allLastModTimes.push(m[1]);
             }
 
-            // Assert — with the bug, values are ISO strings (rejected by KeePass);
-            // after the fix they must all be Base64 binary
+            // Assert — all values must be Base64 binary, never ISO strings
             expect(allLastModTimes.length).to.be.greaterThan(0);
-            expect(allLastModTimes.some((v) => ISO_DATE_RE.test(v))).to.be(true);
-            expect(allLastModTimes.every((v) => BASE64_RE.test(v))).to.be(false);
+            expect(allLastModTimes.every((v) => BASE64_RE.test(v))).to.be(true);
+            expect(allLastModTimes.some((v) => ISO_DATE_RE.test(v))).to.be(false);
         });
     });
 });
