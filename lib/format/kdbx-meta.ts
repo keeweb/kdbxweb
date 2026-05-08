@@ -420,7 +420,8 @@ export class KdbxMeta {
                     if (lastModified) {
                         XmlUtils.setDate(
                             XmlUtils.addChildNode(itemNode, XmlNames.Elem.LastModTime),
-                            lastModified
+                            lastModified,
+                            true
                         );
                     }
                 }
