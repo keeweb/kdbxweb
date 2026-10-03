@@ -33,7 +33,7 @@ export class KdbxCustomData {
                 XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Key), key);
                 XmlUtils.setText(XmlUtils.addChildNode(itemNode, XmlNames.Elem.Value), item.value);
                 if (item.lastModified && ctx.kdbx.versionIsAtLeast(4, 1)) {
-                    XmlUtils.setDate(
+                    ctx.setXmlDate(
                         XmlUtils.addChildNode(itemNode, XmlNames.Elem.LastModTime),
                         item.lastModified
                     );
