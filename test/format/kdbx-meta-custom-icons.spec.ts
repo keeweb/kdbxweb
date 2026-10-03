@@ -30,7 +30,11 @@ describe('KdbxMeta — custom icons LastModificationTime encoding', () => {
             const { kdbx, ctx } = makeKdbx41();
             const testDate = new Date('2021-01-20T18:10:44.000Z');
             const iconId = KdbxUuid.random().id;
-            kdbx.meta.customIcons.set(iconId, { data: ICON_DATA, name: 'test', lastModified: testDate });
+            kdbx.meta.customIcons.set(iconId, {
+                data: ICON_DATA,
+                name: 'test',
+                lastModified: testDate
+            });
             const xml = XmlUtils.create('root');
 
             // Act
