@@ -89,6 +89,10 @@ describe('XmlUtils', () => {
             const xml = XmlUtils.parse('<root><item><cd>' + chars + '</cd></item></root>');
             expect(xml.documentElement.nodeName).to.be('root');
             expect(xml.documentElement.firstChild!.nodeName).to.be('item');
+            const content = xml.documentElement.firstChild!.firstChild!.textContent!;
+            expect(content).to.contain('\t');
+            expect(content).not.to.contain('\x00');
+            expect(content).not.to.contain('\x0b');
         });
     });
 

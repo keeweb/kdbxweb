@@ -61,7 +61,7 @@ export function parse(xml: string): Document {
 
     let doc;
     // eslint-disable-next-line no-control-regex
-    xml = xml.replace(/[\x00-\x09\x0B-\x0C\x0E-\x1F]/g, '');
+    xml = xml.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F]/g, '');
     try {
         doc = parser.parseFromString(xml, 'application/xml');
     } catch (e) {
